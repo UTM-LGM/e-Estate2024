@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "Hash": "sHTffLuOF3+JOH3XpkhFTzAA4DYykhXrEpthrM2wfL4=",
+  "Source": "E-EstateV2 API",
+  "BasePath": "_content/E-EstateV2 API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "E-EstateV2 API\\wwwroot",
+      "Source": "E-EstateV2 API",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\Annoucement 1.png",
+      "SourceId": "E-EstateV2 API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "RelativePath": "api/Images/Annoucement 1.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\api\\Images\\Annoucement 1.png"
+    },
+    {
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\Annoucement 2.png",
+      "SourceId": "E-EstateV2 API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "RelativePath": "api/Images/Annoucement 2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\api\\Images\\Annoucement 2.png"
+    },
+    {
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\Annoucement 3.jpg",
+      "SourceId": "E-EstateV2 API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "RelativePath": "api/Images/Annoucement 3.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\api\\Images\\Annoucement 3.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\Annoucement 4.jpeg",
+      "SourceId": "E-EstateV2 API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "RelativePath": "api/Images/Annoucement 4.jpeg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\api\\Images\\Annoucement 4.jpeg"
+    }
+  ]
+}

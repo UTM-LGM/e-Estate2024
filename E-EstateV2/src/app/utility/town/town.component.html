@@ -1,0 +1,61 @@
+<br />
+<h1>Town Utility</h1>
+<form>
+  <label>State : </label>
+  <mat-select placeholder="Please Choose" name="state" [(ngModel)]="town.stateId">
+    <mat-option *ngFor="let state of states" [value]="state.id">
+      {{ state.state }}
+    </mat-option>
+  </mat-select>
+  <label>Town : </label>
+  <input type="text" name="town" [(ngModel)]="town.town" />
+</form>
+
+<button style="float: right" class="btn-add" (click)="submit()">
+  Add &nbsp; <i class="fa fa-plus"></i>
+</button>
+
+<br /><br />
+<hr />
+
+<h1>List of Town</h1>
+<div class="box-container">
+  <input type="text" [(ngModel)]="term" placeholder="Filter Town" />
+  <table style="width: 100%">
+    <tr>
+      <th width="30px">No</th>
+      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="towns"
+        [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+        {{ column.displayText }}
+        <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
+      </th>
+      <th width="90px">Action</th>
+    </tr>
+
+    <tr *ngIf="isLoading">
+      <td colspan="4">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+        </ngx-skeleton-loader>
+      </td>
+    </tr>
+
+    <tr
+      *ngFor="let town of towns | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ town.state }}</td>
+      <td>{{ town.town }}</td>
+      <td>
+        <button (click)="status(town)" [ngClass]="{
+            'active-btn': town.isActive == true,
+            'inactive-btn': town.isActive == false
+          }">
+          {{ town.isActive == true ? "Active" : "Inactive" }}
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+</div>

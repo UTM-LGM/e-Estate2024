@@ -1,0 +1,9 @@
+.detail {
+  border-bottom: none;
+  text-align: left;
+  padding: 3px;
+}
+
+th {
+  cursor: pointer;
+}

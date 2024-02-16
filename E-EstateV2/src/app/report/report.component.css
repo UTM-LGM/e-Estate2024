@@ -1,0 +1,11 @@
+.active {
+  background-color: rgb(84, 84, 218);
+}
+
+.display {
+  display: block;
+}
+
+.none {
+  display: none;
+}

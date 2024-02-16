@@ -1,0 +1,19 @@
+span {
+  font-size: 15px;
+}
+
+::ng-deep .mat-toolbar-row {
+  width: auto !important;
+}
+
+.mat-toolbar-row {
+  height: 86px;
+  /* padding-top: 5px; */
+}
+
+.manual {
+  color: white;
+  float: right;
+  margin-top: -40px;
+  cursor: pointer;
+}

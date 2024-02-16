@@ -1,0 +1,212 @@
+<div *ngIf="isLoading">
+  <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>
+</div>
+
+<div class="box-container" *ngIf="!isLoading">
+  <h1>{{ company.companyName }}</h1>
+  <hr />
+
+  <div style="float:right;" *ngIf="userRole == 'Admin'">
+    <button (click)="statusCompany(company)" style="float: right; margin-right:8px; padding: 10px 13px;" [ngClass]="{
+      'active-btn': company.isActive == true,
+      'inactive-btn': company.isActive == false
+    }">
+      {{ company.isActive == true ? "Activate" : "Deactivate" }}
+    </button>
+    <br /><br />
+    <button class="btn-update" (click)="openDialog(company)">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+
+  <div style="float:right;" *ngIf="userRole == 'CompanyAdmin'">
+    <button style="float: right; margin-right:8px; padding: 10px 13px; border-radius: 0;" [ngClass]="{
+      'active-btn': company.isActive == true,
+      'inactive-btn': company.isActive == false
+    }">
+      {{ company.isActive == true ? "Active" : "Inactive" }}
+    </button>
+    <br /><br />
+    <button class="btn-update" (click)="openDialog(company)">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+
+  <div>
+    <table>
+      <tr>
+        <td class="detail">Company Name</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.companyName }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Address</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">
+          {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
+        </td>
+      </tr>
+
+      <tr>
+        <td class="detail">Postcode</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail" *ngFor="let town of company.towns">{{ company.postcode }}, {{ town.town }}, {{ company.state
+          }} </td>
+      </tr>
+
+      <tr>
+        <td class="detail">Ownership</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail" *ngFor="let ownership of company.ownerships">{{ ownership.ownership }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Phone No</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.phone }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Fax No</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.fax }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Email</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.email }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Liaison Officer</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.managerName }}</td>
+      </tr>
+
+      <tr>
+        <td class="detail">Contact No</td>
+        <td class="detail"><span>:</span></td>
+        <td class="detail">{{ company.contactNo }}</td>
+      </tr>
+
+    </table>
+  </div>
+
+  <br />
+
+  <div class="box-container" *ngIf="userRole == 'Admin'">
+    <h1>List of Estates</h1>
+    <hr />
+    <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
+      Add New Estate &nbsp; <i class="fa fa-plus"></i>
+    </button>
+
+    <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.estates" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+              <i class="fa"
+                [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
+            </th>
+            <th width="90px">Status</th>
+            <th width="30px">Action</th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="7">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tbody
+          *ngFor="let estate of company.estates | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <tr class="list" style="cursor: default;">
+            <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
+              <a>{{estate.estateName}}</a></td>
+            <td>{{ estate.state }}</td>
+            <td>{{ estate.town1 }}</td>
+            <td>{{ estate.email }} </td>
+            <td>{{ estate.licenseNo }}</td>
+            <td>{{ estate.totalArea }}</td>
+            <td>{{ estate.membership }}</td>
+            <td>
+              <button style="cursor: pointer;" (click)="statusEstate(estate)" [ngClass]="{
+                'active-btn': estate.isActive == true,
+                'inactive-btn': estate.isActive == false
+              }">
+                {{ estate.isActive == true ? "Active" : "Inactive" }}
+              </button>
+            </td>
+            <td *ngIf="selectedEstate !== estate"><i class="fa fa-chevron-down" style="cursor:pointer"
+                (click)="toggleSelectedEstate(estate)"></i></td>
+            <td *ngIf="selectedEstate === estate"><i class="fa fa-chevron-up" style="cursor:pointer"
+                (click)="toggleSelectedEstate(estate)"></i></td>
+          </tr>
+
+          <tr *ngIf="selectedEstate === estate && estate.fields.length != 0">
+            <td colspan="9">
+              <table style="width: 100%; background-color: antiquewhite;">
+                <tr>
+                  <th class="th">Field / Block</th>
+                  <th class="th">Field Area (Ha)</th>
+                  <th class="th">Maturity</th>
+                  <th class="th">Field Status</th>
+                  <th class="th">Year Planted</th>
+                  <th class="th">Date Open Tapping</th>
+                  <th class="th">Initial Tree Stand</th>
+                  <th class="th">Total Task</th>
+                  <th class="th" width="90px">Status</th>
+                </tr>
+
+                <tr *ngFor="let fields of estate.fields | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+                  <td class="td">{{ fields.fieldName }}</td>
+                  <td class="td">{{ fields.area }}</td>
+                  <td class="td">
+                    {{ fields.isMature == true ? "Mature" : "Immature" }}
+                  </td>
+                  <td class="td" *ngFor="let category of fields.fieldStatuses">{{ category.fieldStatus }}</td>
+                  <td class="td">{{ fields.yearPlanted }}</td>
+                  <td class="td">{{ fields.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+                  <td class="td">{{ fields.initialTreeStand}}</td>
+                  <td class="td">{{ fields.totalTask}}</td>
+                  <td class="td">
+                    <button style="cursor: pointer;" (click)="statusField(fields)" [ngClass]="{
+                      'active-btn': fields.isActive == true,
+                      'inactive-btn': fields.isActive == false
+                    }">
+                      {{ fields.isActive == true ? "Active" : "Inactive" }}
+                    </button>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <tr *ngIf="selectedEstate === estate && estate.fields.length == 0">
+            <td style="width: 100%; background-color: antiquewhite;" colspan="9"> <b> No field data found </b> </td>
+          <tr>
+
+        </tbody>
+      </table>
+
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+    </div>
+  </div><br />
+  <div>
+    <button class="btn-back" (click)="back()" *ngIf="userRole == 'Admin'">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+  <br />
+</div>

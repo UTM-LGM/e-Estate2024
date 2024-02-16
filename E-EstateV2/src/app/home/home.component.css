@@ -1,0 +1,41 @@
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.column {
+  width: 50%;
+  margin: 0 10px;
+  text-align: center;
+  color: white;
+}
+
+.color1 {
+  background-color: #59788e;
+}
+
+.color2 {
+  background-color: #0492c2;
+}
+
+.color3 {
+  background-color: #48aaad;
+}
+
+.mat-h1 {
+  margin-bottom: 0px !important;
+}
+
+.tittle {
+  font-size: 24px !important;
+  text-align: center;
+}
+
+.display {
+  display: block;
+}
+
+.none {
+  display: none;
+}

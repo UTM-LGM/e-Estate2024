@@ -1,0 +1,34 @@
+<div class="box-container">
+  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>{{estate.estateName}}</h1>
+
+  <hr />
+
+  <span style="color: #DC4C64;font-weight: bold;">**All information is from January to December of the selected year & specific for RUBBER only</span>
+
+
+  <form style="margin-top: 10px;">
+    <div style="display: flex; width: 60%; align-items: center; justify-content: space-between;">
+      <div style="width: 40%; margin-right: 10px;">
+        <label>Year :</label>
+        <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear" [(ngModel)]="selectedYear" (change)="yearSelected()" />
+      </div>
+      
+      <div style="width: 60%; display: flex; flex-wrap: wrap; align-items: center;">
+        <label style="width: 100%;">Cost Type :</label>
+        <button *ngFor="let costType of costType" class="btn" (click)="buttonClicked(costType.costType, costType.id)" [ngClass]="{ 'active': activeButton === costType.costType }" style="margin-bottom: 5px;">
+          {{costType.costType}}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="activeButton =='DIRECT' || activeButton == 'DIRECT COST' ">
+    <app-direct-cost [costTypeId]="clickedCostTypeId" [selectedYear]="selectedYear"></app-direct-cost>
+  </div>
+
+  <div *ngIf="activeButton == 'INDIRECT' || activeButton == 'INDIRECT COST'">
+    <app-indirect-cost [costTypeId]="clickedCostTypeId" [selectedYear]="selectedYear"></app-indirect-cost>
+  </div>
+</div>

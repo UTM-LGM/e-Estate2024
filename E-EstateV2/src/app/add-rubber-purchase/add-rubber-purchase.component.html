@@ -1,0 +1,58 @@
+<div class="box-container col-md-6">
+  <h1>Rubber Purchase Information</h1>
+  <hr />
+
+  <div style="columns: 2" class="column">
+    <label>Date :</label>
+    <input type="date" #date name="date" value="{{currentDate}}" (change)="selectedDate(date.value)" />
+    <label>Project :</label>
+    <input type="text" disabled [(ngModel)]="rubberPurchase.project" />
+  </div>
+
+  <div style="columns: 2">
+    <label>Seller :</label>
+    <mat-select name="seller" placeholder="Please Choose" [(ngModel)]="rubberPurchase.sellerId" >
+      <mat-option *ngFor="let seller of sellers" [value]="seller.id">
+        {{seller.sellerName}}
+      </mat-option>
+    </mat-select>
+    <label>Rubber Type :</label>
+    <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberPurchase.rubberType">
+      <mat-option value="Cuplump">Cuplump</mat-option>
+      <mat-option value="Latex">Latex</mat-option>
+    </mat-select>
+  </div>
+
+  <div style="columns: 2">
+    <label>Authorization Letter (Form 1) :</label>
+    <input type="text" name="letter" [(ngModel)]="rubberPurchase.authorizationLetter" />
+    <label>Weight (Kg) :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberPurchase.weight" placeholder="0.00" />
+  </div>
+
+  <div style="columns: 2">
+    <label>DRC (%) :</label>
+    <input type="number" name="DRC" [(ngModel)]="rubberPurchase.drc" placeholder="0.00" />
+    <label>Price (RM/Kg) :</label>
+    <input type="text" name="amount" [(ngModel)]="rubberPurchase.price" placeholder="0.00" (change)="calculateTotalPrice()" />
+  </div>
+
+  <div style="columns: 2">
+    <label>Total Price (RM) :</label>
+    <input type="text" name="amount" disabled value="{{rubberPurchase.totalPrice | number:'1.2-2'}}" placeholder="0.00" />
+  </div>
+
+  <div style="margin-top: 10px">
+    <button style="float: right" class="btn-add" (click)="addPurchase()">
+      Add &nbsp; <i class="fa fa-plus"></i>
+    </button>
+  </div>
+
+  <div style="margin-top: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+
+  <br />
+</div>

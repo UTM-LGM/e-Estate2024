@@ -1,0 +1,89 @@
+<div style="columns:2" [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+    <label>Company : </label>
+    <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId" (selectionChange)="companySelected()">
+        <mat-option *ngFor="let company of filteredCompanies" [value]="company.id">
+            {{company.companyName}}
+        </mat-option>
+      </mat-select>
+</div>
+
+<div style="columns:2">
+
+    <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+        <label>Estate : </label>
+
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+            <mat-option *ngFor="let estate of filterEstatesAdmin" [value]="estate.id">
+                {{estate.estateName}}
+            </mat-option>
+          </mat-select>
+    </div>
+
+    <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+        <label>Estate : </label>
+        <select disabled [(ngModel)]="estate.id">
+            <option value="0" disabled selected>Please Choose</option>
+            <option *ngFor="let estate of filterEstatesClerk">{{estate.estateName}} </option>
+        </select>
+    </div>
+
+    <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+        <label>Estate : </label>
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+            <mat-option *ngFor="let estate of filterEstatesCompanyAdmin" [value]="estate.id">
+                {{estate.estateName}}
+            </mat-option>
+          </mat-select>
+    </div>
+
+    <label>Please choose year : </label>
+    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+</div>
+
+<div *ngIf="isLoading">
+    <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'150px'}"> </ngx-skeleton-loader>
+</div>
+
+<div *ngIf="filterProductionYearly.length != 0">
+
+
+
+    <h1>Crop Productivity by Field yearly Report</h1>
+    <span *ngFor="let monthYear of monthYear">Last updated at: <b>{{monthYear.monthYear}}</b></span>
+
+    <br /> <br />
+
+    <div class="box-container">
+        <input type="text" [(ngModel)]="term" placeholder="Filter Report" />
+        <div style="overflow-x: auto">
+            <table class="table">
+                <tr>
+                    <th> Field Name </th>
+                    <th> Field Area </th>
+                    <th> Total Task </th>
+                    <th> Total Task Tap </th>
+                    <th> Tapped Area (Ha/yr) (FieldArea * (TaskTap/TotalTask)) </th>
+                    <th> Total Crop (Kg/yr) (CuplumpDry+LatexDry+USSDry+OthersDry) </th>
+                    <th> Total Productivity (Kg/Ha/yr) (Total Crop/Tapped Area) </th>
+
+                </tr>
+
+                <tr
+                    *ngFor="let production of filterProductionYearly | filter : term | paginate: { itemsPerPage: 12, currentPage: pageNumber }; let i = index">
+                    <td> {{ production.fieldName }} </td>
+                    <td> {{ production.fieldArea }} </td>
+                    <td> {{ production.totalTask }} </td>
+                    <td> {{ production.noTaskTap }} </td>
+                    <td> {{ production.tappedAreaPerHa | number: '1.2-2' }} </td>
+                    <td> {{ totalDry[i] | number: '1.2-2' }} </td>
+                    <td> {{ totalProductivity[i] | number: '1.2-2' }}</td>
+                </tr>
+            </table>
+
+
+            <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+        </div>
+    </div>
+
+</div>

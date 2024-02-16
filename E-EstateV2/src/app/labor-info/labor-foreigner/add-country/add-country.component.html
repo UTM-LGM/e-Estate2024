@@ -1,0 +1,21 @@
+<div style="padding: 15px;">
+  <h1>Country Information</h1>
+  <hr />
+
+  <div>
+    <label>Country Name: </label>
+    <input type="text" [(ngModel)]="email.country" />
+  </div>
+
+  <div style="padding-right: 10px">
+    <button style="float: right" class="btn-update" type="submit" (click)="sendEmail()">
+      Send Email &nbsp; <i class="fa fa-paper-plane"></i>
+    </button>
+  </div>
+  <div style="padding-left: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+
+</div>

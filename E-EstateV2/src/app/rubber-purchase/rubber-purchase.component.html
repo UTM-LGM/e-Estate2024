@@ -1,0 +1,69 @@
+<div class="box-container">
+  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>{{estate.estateName}}</h1>
+  <hr />
+
+  <div class="box-container">
+    <div style="margin-top: -10px">
+      <button class="btn-add" routerLink="/e-estate/add-rubber-purchase/{{estate.id}}">
+        Add Rubber Purchase &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div>
+    <input type="text" [(ngModel)]="term" placeholder="Filter Rubber Purchase" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="filterPurchase" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+              <i class="fa"
+                [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                        'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
+            </th>
+            <th width="90px">Status</th>
+            <th width="30px">Action</th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="11">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr class="list"
+          *ngFor="let purchase of filterPurchase | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <td>{{purchase.date | date : "dd/MM/YYYY"}}</td>
+          <td>{{purchase.sellerName}}</td>
+          <td>{{purchase.project}}</td>
+          <td>{{purchase.rubberType}}</td>
+          <td>{{purchase.authorizationLetter}}</td>
+          <td>{{purchase.weight }}</td>
+          <td>{{purchase.drc| number : "1.2-2"}}</td>
+          <td>{{purchase.price| number : "1.2-2"}}</td>
+          <td>{{purchase.totalPrice | number : "1.2-2"}}</td>
+          <td>
+            <button (click)="status(purchase)" style="cursor: pointer;" [ngClass]="{
+                  'active-btn': purchase.isActive == true,
+                  'inactive-btn': purchase.isActive == false
+                }">
+              {{ purchase.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+          <td>
+            <button class="btn-update" (click)="openDialog(purchase)">
+              <i class="fa fa fa-pencil"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+    </div>
+  </div>
+
+</div>

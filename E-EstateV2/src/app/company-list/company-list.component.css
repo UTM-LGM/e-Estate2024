@@ -1,0 +1,22 @@
+th,
+td {
+  text-align: left;
+  padding: 3px;
+  border-bottom: none;
+}
+
+.column {
+  columns: 2;
+}
+
+.column > * {
+  break-inside: avoid-column;
+}
+
+.selectedActivebtn {
+  background-color: #002b5c;
+}
+
+.selectedInactivebtn {
+  background-color: #002b5c;
+}

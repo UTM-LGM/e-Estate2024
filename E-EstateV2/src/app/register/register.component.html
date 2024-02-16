@@ -1,0 +1,45 @@
+<div class="cont">
+  <div class="container">
+    <div class="form-container">
+      <h1>Create New Account</h1>
+      <hr>
+      <form>
+        <div class="column">
+          <label>Full Name :</label>
+          <input type="text" name="fullName" [(ngModel)]="register.fullName" />
+          <label>License No :</label>
+          <input type="text" name="licenseNo" [(ngModel)]="register.licenseNo" (change)="checkLicenseNo($event)" />
+        </div>
+
+        <div class="column">
+          <label>Company Name :</label>
+          <input type="text" name="companyName" [(ngModel)]="result.companyName" disabled>
+          <label>Estate Name :</label>
+          <input type="text" name="estateName" [(ngModel)]="result.estateName" disabled />
+        </div>
+
+        <div class="column">
+          <label>Email :</label>
+          <input type="email" name="email" [(ngModel)]="register.email" />
+          <label>Position :</label>
+          <input type="text" name="position" [(ngModel)]="register.position" />
+        </div>
+
+        <div class="column">
+          <label>Username :</label>
+          <input type="text" name="username" [(ngModel)]="register.userName" (change)="checkUsername($event)" />
+          <label>Password :</label>
+          <div class="password-toggle">
+            <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
+            <span (click)="togglePasswordVisibility()">
+              <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+            </span>
+          </div>
+        </div>
+      </form>
+      <br />
+
+      <button (click)="submitRegister()">Sign Up</button><br /><br />
+      <span>Already have account ? <a routerLink="/login">Log in</a></span>
+    </div>
+  </div>

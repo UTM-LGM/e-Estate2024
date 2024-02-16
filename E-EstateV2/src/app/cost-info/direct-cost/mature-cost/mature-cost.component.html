@@ -1,0 +1,129 @@
+<br />
+<div class="center-div"
+  *ngIf="this.filterMatureDirectCostAmount.length == 0 && draftFilterMatureDirectCostAmount.length == 0">
+  <div class="box-container">
+    <h1>Direct Mature Cost</h1>
+    <hr>
+    <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+      [theme]="{height:'50px', width:'100%'}"> </ngx-skeleton-loader>
+    <div *ngFor="let cat of costCategories">
+      <h1>{{ cat.costCategory }}</h1>
+      <table class="table">
+        <tr>
+          <td><b>Subcategory Item 1</b></td>
+          <td><b>Subcategory Item 2</b></td>
+          <td><b>Amount (RM)</b></td>
+        </tr>
+
+        <ng-container *ngFor="let sub of subCategories1; let i=index">
+          <tr *ngIf="sub.costCategoryId == cat.costCategoryId">
+            <td class="td"
+              *ngIf="i == 0 || (sub.costSubcategory1 !== null && sub.costSubcategory1 !== subCategories1[i-1].costSubcategory1)"
+              [attr.rowspan]="getRowCount1(sub.costSubcategory1)">{{sub.costSubcategory1}}</td>
+            <ng-container *ngIf="i != 0 && (sub.costSubcategory1 === null)">
+              <td class="td"></td>
+            </ng-container>
+            <td class="td">{{sub.costSubcategory2}}</td>
+            <td class="td"><input class="amount" type="number" placeholder="0.00" [(ngModel)]="sub.amount"
+              (input)="calculateTotalMatureAmount()" /></td>
+          </tr>
+        </ng-container>
+      </table>
+    </div>
+    <div >
+    <table>
+      <tr>
+        <td><b>Total Amount for Mature Cost (RM) </b></td>
+        <td><input class="amount" type="text" [value]="totalMatureAmount| number:'1.2-2'" disabled /></td>
+      </tr>
+    </table>
+    </div><br>
+
+    <div *ngIf="!isLoading">
+      <button (click)="addMatureCost()" style="float: right" class="btn-add" type="submit" [disabled]="isDisable">
+        Save &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div>
+    <br />
+  </div>
+</div>
+
+<div *ngIf="filterMatureDirectCostAmount.length != 0">
+  <mat-tab-group>
+    <mat-tab *ngIf="draftFilterMatureDirectCostAmount.length != 0">
+      <ng-template mat-tab-label>
+        <i class="fa fa-pencil"></i> Draft
+      </ng-template><br />
+
+      <div class="center-div">
+        <div class="box-container" *ngIf="draftFilterMatureDirectCostAmount.length != 0">
+          <h1>Direct Mature Cost</h1>
+          <hr>
+          <table class="table">
+            <tr>
+              <td><b>Subcategory Item 1</b></td>
+              <td><b>Subcategory Item 2</b></td>
+              <td><b>Amount (RM)</b></td>
+            </tr>
+
+            <tr *ngFor="let amount of draftFilterMatureDirectCostAmount; let i = index">
+              <td class="td"
+                *ngIf="i == 0 || amount.costSubcategory1 != draftFilterMatureDirectCostAmount[i-1].costSubcategory1"
+                [attr.rowspan]="getRowCount(amount.costSubcategory1)">{{amount.costSubcategory1 }}</td>
+              <td class="td">{{amount.costSubcategory2}}</td>
+              <td class="td"><input class="amount" type="number" [(ngModel)]="amount.amount" name="amount"
+                (change)="calculateDraftAmount()"></td>
+            </tr>
+
+            <tr>
+              <td colspan="2"><b>Total Amount for Mature Cost</b></td>
+              <td><input class="total" class="amount" type="text" [value]="totalMatureCostAmount| number:'1.2-2'" disabled /></td>
+            </tr>
+          </table>
+
+          <div *ngIf="draftFilterMatureDirectCostAmount.length != 0">
+            <button (click)="submitMatureCost()" style="float: right" class="btn-add" type="submit">
+              Submit &nbsp; <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <br />
+        </div>
+      </div>
+      <br />
+    </mat-tab>
+
+    <mat-tab *ngIf="submitFilterMatureDirectCostAmount.length != 0">
+      <ng-template mat-tab-label>
+        <i class="fa fa-check"></i> Submitted
+      </ng-template><br />
+
+      <div class="center-div">
+        <div class="box-container">
+          <h1>Direct Mature Cost</h1>
+          <hr>
+          <table class="table">
+            <tr>
+              <td><b>Subcategory Item 1</b></td>
+              <td><b>Subcategory Item 2</b></td>
+              <td style="text-align: right !important;"><b>Amount (RM)</b></td>
+            </tr>
+
+            <tr *ngFor="let amount of submitFilterMatureDirectCostAmount; let i = index">
+              <td class="td"
+                *ngIf="i == 0 || amount.costSubcategory1 != submitFilterMatureDirectCostAmount[i-1].costSubcategory1"
+                [attr.rowspan]="getRowCount(amount.costSubcategory1)">{{amount.costSubcategory1}}</td>
+              <td class="td">{{amount.costSubcategory2}}</td>
+              <td class="td" style="text-align: right !important;">{{amount.amount | number: '1.2-2'}}</td>
+            </tr>
+
+            <tr>
+              <td colspan="2"><b>Total Amount for Mature Cost</b></td>
+              <td style="text-align: right !important;"><b>{{ totalMatureCostAmount | number: '1.2-2' }}</b></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

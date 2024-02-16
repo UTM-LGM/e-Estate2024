@@ -1,0 +1,12 @@
+<div class="box-container">  
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="Pending User Role">
+        <app-pending-role></app-pending-role>
+      </mat-tab>
+        <mat-tab label="Manage User">
+          <ng-template matTabContent>
+            <app-manage-user></app-manage-user>
+          </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+  </div>

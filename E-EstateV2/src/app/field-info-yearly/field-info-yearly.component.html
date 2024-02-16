@@ -1,0 +1,46 @@
+<div class="box-container">
+  <h1>Field Information Yearly : {{yearNow}}</h1>
+  <hr>
+
+  <div class="center-div">
+    <div class="box-container center-div" style="width: 50%;">
+      <table class="table">
+        <tr>
+          <td><b>No</b> </td>
+          <td><b>Fields/Blocks</b> </td>
+          <td><b>Current Tree Stand</b></td>
+          <td><b>Tapping system used</b></td>
+
+        </tr>
+
+        <tr *ngFor="let field of filterFields; let i = index">
+          <td>{{i+1}}</td>
+          <td>{{field.fieldName}}</td>
+          <td class="td"><input class="total" type="number" placeholder="0"
+              [(ngModel)]="fieldInfo[i].currentTreeStand" /></td>
+          <td class="td">
+            <mat-select name="tappingsystem" placeholder="Please Choose" [(ngModel)]="fieldInfo[i].tappingSystemId" >
+              <mat-option *ngFor="let tappingSystem of tappingSystems" [value]="tappingSystem.id">
+                {{tappingSystem.tappingSystem}}
+              </mat-option>
+            </mat-select>
+
+            <!-- <input class="total" type="text" [(ngModel)]="fieldInfo[i].tappingSystem" /> -->
+          </td>
+        </tr>
+      </table><br />
+
+      <div>
+
+      </div>
+      <button (click)="add()" style="align-self: flex-end;" class="btn-add">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+
+      <button (click)="back()" style=" align-self: flex-start; margin-top: -36px;" class="btn-back">
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
+    </div>
+  </div>
+
+</div>

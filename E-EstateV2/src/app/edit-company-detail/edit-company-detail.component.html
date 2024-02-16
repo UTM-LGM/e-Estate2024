@@ -1,0 +1,70 @@
+<div class="box-container">
+  <h1>Company Information</h1>
+  <hr />
+
+  <div style="columns: 2" class="column">
+    <label>Company Name :</label>
+    <input type="text" name="companyName" [(ngModel)]="company.companyName" disabled />
+    <label>Address 1 :</label>
+    <input type="text" name="address1" [(ngModel)]="company.address1" />
+  </div>
+  <div style="columns: 2">
+    <label>Address 2 :</label>
+    <input type="text" name="address2" [(ngModel)]="company.address2" />
+    <label>Address 3 :</label>
+    <input type="text" name="address3" [(ngModel)]="company.address3" />
+  </div>
+  <div style="columns: 2">
+    <label>Postcode : </label>
+    <input type="text" name="postcode" [(ngModel)]="company.postcode" />
+    <label>State : </label>
+    <mat-select name="state" placeholder="Please Choose" [(ngModel)]="company.stateId" (selectionChange)="gettown($event)" >
+      <mat-option *ngFor="let state of filterStates" [value]="state.id">
+        {{ state.state }}
+      </mat-option>
+    </mat-select>
+  </div>
+  <div style="columns: 2">
+    <label>Town :</label>
+    <mat-select name="town" placeholder="Please Choose" [(ngModel)]="company.townId" [disabled]="town" >
+      <mat-option *ngFor="let town of filterTowns" [value]="town.id">
+        {{ town.town }}
+      </mat-option>
+    </mat-select>
+    <label>Ownership :</label>
+    <mat-select name="ownership" placeholder="Please Choose" [(ngModel)]="company.ownershipId" >
+      <mat-option *ngFor="let ownership of ownership" [value]="ownership.id">
+        {{ownership.ownership}}
+      </mat-option>
+    </mat-select>
+  </div>
+  <div style="columns: 2">
+    <label>Email :</label>
+    <input type="text" name="email" [(ngModel)]="company.email" />
+    <label>Fax :</label>
+    <input type="text" name="fax" [(ngModel)]="company.fax" />
+    
+  </div>
+  <div style="columns: 2">
+    <label>Phone :</label>
+    <input type="text" name="phone" [(ngModel)]="company.phone" />
+    <label>Liaison Officer :</label>
+    <input type="text" name="managerName" [(ngModel)]="company.managerName" />
+  </div>
+  <div style="columns: 2">
+    <label>Contact No :</label>
+    <input type="text" name="phone" [(ngModel)]="company.contactNo" />
+  </div>
+
+  <div style="padding-right: 10px">
+    <button style="float: right" class="btn-update" type="submit" (click)="update()">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+  <div style="padding-left: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+
+</div>

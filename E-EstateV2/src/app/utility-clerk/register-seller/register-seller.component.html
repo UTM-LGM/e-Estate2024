@@ -1,0 +1,58 @@
+<br />
+<h1>Register Seller Utility</h1>
+<form>
+  <label>Lisence No : </label>
+  <input type="text" name="lisenceNo" [(ngModel)]="seller.licenseNo" />
+  <label>Seller Name : </label>
+  <input type="text" name="name" [(ngModel)]="seller.sellerName" />
+
+</form>
+
+<button style="float: right" class="btn-add" (click)="submit()">
+  Add &nbsp; <i class="fa fa-plus"></i>
+</button>
+
+<br /><br />
+<hr />
+
+<h1>List of Seller</h1>
+<div class="box-container">
+  <input type="text" [(ngModel)]="term" placeholder="Filter Seller" />
+  <table style="width: 100%">
+    <tr>
+      <th width="30px">No</th>
+      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="sellers"
+        [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+        {{ column.displayText }}
+        <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
+      </th>
+      <th width="90px">Action</th>
+    </tr>
+
+    <tr *ngIf="isLoading">
+      <td colspan="4">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+        </ngx-skeleton-loader>
+      </td>
+    </tr>
+
+    <tr
+      *ngFor="let seller of sellers | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ seller.licenseNo }}</td>
+      <td>{{ seller.sellerName }}</td>
+      <td>
+        <button (click)="status(seller)" [ngClass]="{
+            'active-btn': seller.isActive == true,
+            'inactive-btn': seller.isActive == false
+          }">
+          {{ seller.isActive == true ? "Active" : "Inactive" }}
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+</div>

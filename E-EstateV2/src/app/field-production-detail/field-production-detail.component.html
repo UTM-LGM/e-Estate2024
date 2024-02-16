@@ -1,0 +1,46 @@
+<br />
+<h1 style="padding-left: 17px">{{ product.fieldName }}</h1>
+<span style="color: red;padding-left: 17px">*If there is no production, please insert 0</span>
+<div style="overflow-x: auto; padding: 10px">
+  <table style="width: 100%">
+    <tr>
+      <th>Cuplump Production (Kg)</th>
+      <th>Cuplump DRC (%)</th>
+      <th>Latex Production (Kg)</th>
+      <th>Latex DRC (%)</th>
+      <th>USS Production (Kg)</th>
+      <th>USS DRC (%)</th>
+      <th>Others (Kg)</th>
+      <th>Others DRC (%)</th>
+      <th>No of Task Tap</th>
+      <th>No of Task UnTap</th>
+      <th>Remark Untap</th>
+    </tr>
+
+    <tr>
+      <td><input type="number" name="cuplump" [(ngModel)]="product.cuplump" (input)="initialZeroCuplump(product.cuplump)"/></td>
+      <td><input type="number" name="cuplumpDRC" [(ngModel)]="product.cuplumpDRC"/></td>
+      <td><input type="number" name="latex" [(ngModel)]="product.latex" (input)="initialZeroLatex(product.latex)"/></td>
+      <td><input type="number" name="latexDRC" [(ngModel)]="product.latexDRC" /></td>
+      <td><input type="number" name="USS" [(ngModel)]="product.uss" (input)="initialZeroUSS(product.uss)"/></td>
+      <td><input type="number" name="USSDRC" [(ngModel)]="product.ussDRC"  /></td>
+      <td><input type="number" name="others" [(ngModel)]="product.others" (input)="initialZeroOthers(product.others)" /></td>
+      <td><input type="number" name="othersDRC" [(ngModel)]="product.othersDRC" /></td>
+      <td><input type="number" name="noTaskTap" [(ngModel)]="product.noTaskTap"
+          (change)="taskTap(product.noTaskTap, product.totalTask)" /></td>
+      <td><input type="number" name="noTaskUntap" [(ngModel)]="product.noTaskUntap" disabled /></td>
+      <td><input type="text" name="remarkUntap" [(ngModel)]="product.remarkUntap"></td>
+    </tr>
+  </table>
+</div>
+<br />
+<div style="padding-right: 10px">
+  <button style="float: right" class="btn-update" type="submit" (click)="update()">
+    Update &nbsp; <i class="fa fa-pencil"></i>
+  </button>
+</div>
+<div style="padding-left: 10px">
+  <button class="btn-back" (click)="back()">
+    <i class="fa fa-arrow-left"></i> &nbsp; Back
+  </button>
+</div>

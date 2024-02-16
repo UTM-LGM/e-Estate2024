@@ -1,0 +1,17 @@
+label {
+  font-size: 15px;
+  flex-basis: 130px;
+}
+
+.btn-update {
+  padding: 5px 13px !important;
+}
+
+.header {
+  background-color: #002b5c !important;
+  color: white;
+}
+
+th {
+  cursor: pointer;
+}

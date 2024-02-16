@@ -1,0 +1,55 @@
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.column {
+  width: 50%;
+  margin: 0 10px;
+  text-align: center;
+  color: black;
+}
+
+.color1 {
+  background-color: #59788e96;
+  height: 55px;
+}
+
+.color2 {
+  background-color: #0492c259;
+  height: 55px;
+}
+
+.color3 {
+  background-color: #48aaad91;
+  height: 90px;
+}
+
+.mat-h1 {
+  margin-bottom: 0px !important;
+}
+
+.tittle {
+  font-size: 20px !important;
+  text-align: center;
+}
+
+@media (max-width: 1152px) {
+  .box span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 922px) {
+  .color1 {
+    height: 65px;
+  }
+  .color2 {
+    height: 65px;
+  }
+}
+
+.box-container {
+  padding: 5px !important;
+}

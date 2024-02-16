@@ -1,0 +1,17 @@
+<div class="box-container">
+    <h1>Notification </h1>
+    <hr>
+
+    <span *ngIf="showEmptyMessage"><b>You have no new notification</b> </span>
+
+    <div class="alert" *ngIf="showAlertField">
+        <i class="fa fa-exclamation"></i> &nbsp; Please update field information for {{yearNow}}, Click <a
+            [routerLink]="['/e-estate/field-info-yearly/', estateId]">here</a>
+    </div>
+
+    <div class="alert" *ngIf="showAlertProduction">
+        <i class="fa fa-exclamation"></i> &nbsp; Your current year production is <b>{{ message }}</b> than previous
+        year, Please state the reason <a
+            (click)="openDialog(sumTotalDryCurrentMonthYear, sumTotalDryPreviousMonthYear )">here</a>
+    </div>
+</div>

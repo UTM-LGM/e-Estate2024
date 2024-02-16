@@ -1,0 +1,27 @@
+.display {
+  display: block;
+}
+
+.none {
+  display: none;
+}
+
+.active {
+  background-color: rgb(84, 84, 218);
+  border-radius: 5px;
+}
+
+hr {
+  border-color: rgb(100, 96, 96);
+}
+
+.fixed {
+  text-align: left;
+  background-color: #63b3ba3b;
+  height: 25px;
+}
+
+.sidebar-container {
+  height: 100%;
+  overflow-y: auto;
+}

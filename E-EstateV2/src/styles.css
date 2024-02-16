@@ -1,0 +1,278 @@
+
+mat-toolbar {
+  background: #002b5c !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 70px;
+}
+
+body {
+  background-image: url("../src/assets/Images/1getah3.jpg");
+  background-color: rgba(0, 0, 0, 0.145);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100% !important;
+}
+
+.cont {
+  padding: 14px;
+}
+
+.btn-danger {
+  border: none;
+  background-color: #f32521;
+  padding: 5px 20px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn-filterStatus {
+  border: none;
+  background-color: aliceblue;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: black;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 65px);
+  background-image: url("../src/assets/Images/getah1.jpg");
+}
+
+.mat-sidenav-content {
+  height: 86% !important;
+}
+
+html,
+body {
+  height: 102% !important;
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: unset;
+}
+
+.active-btn {
+  border: none;
+  background-color: #2196f3;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.inactive-btn {
+  border: none;
+  background-color: #DC4C64;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.side-btn {
+  border: none;
+  background-color: transparent;
+  padding: 2px 20px;
+  cursor: pointer;
+  color: white;
+  width: 100%;
+  font-size: 12px;
+}
+
+.btn-back {
+  border: none;
+  background-color: grey;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn-update {
+  border: none;
+  background-color: blue;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn-del {
+  border: none;
+  background-color: #DC4C64ed;
+  padding: 5px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn {
+  border: none;
+  background-color: #002b5c;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.btn-add {
+  border: none;
+  background-color: #0b810f;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.container {
+  margin: 9px;
+  border-radius: 10px;
+  margin-left: 14px;
+  margin-top: 5px;
+}
+
+.box-container {
+  padding: 18px;
+  border-radius: 10px;
+  background-color: ghostwhite;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.box-container > hr {
+  margin-top: -10px;
+}
+
+h1 {
+  font-weight: bold !important;
+  font-size: 15px !important;
+}
+
+a {
+  color: #002b5c;
+  font-size: 12px !important;
+  margin-bottom: 0px !important;
+}
+
+a {
+  color: #002b5c;
+}
+
+.mat-drawer-backdrop {
+  position: fixed !important;
+}
+
+.mat-drawer-inner-container {
+  overflow: hidden !important;
+}
+
+input[type="text"],
+select,
+input[type="date"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+textarea {
+  width: 100%;
+  padding: 10px 7px;
+  margin: 7px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid rgb(233, 228, 228);
+  font-size: 12px;
+}
+
+th {
+  border-right: 1px solid rgb(233, 228, 228);
+  background-color: #002b5c;
+  color: white;
+  padding: 10px;
+}
+
+.list {
+  padding: 15px;
+  margin-bottom: 13px;
+  cursor: pointer;
+}
+
+.list:hover {
+  background-color: lightsteelblue;
+}
+
+pagination-controls {
+  text-align: center;
+}
+
+.mat-h3,
+.mat-subtitle-1,
+.mat-typography .mat-h3,
+.mat-typography .mat-subtitle-1,
+.mat-typography h3 {
+  margin: 0 0 0px !important;
+}
+
+.mat-drawer-content {
+  overflow-x: hidden !important;
+}
+
+label {
+  font-size: 12px !important;
+}
+
+button {
+  font-size: 12px;
+}
+
+.table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+a {
+  color: blue;
+}
+
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.password-toggle {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle input {
+  padding-right: 30px;
+}
+
+.password-toggle span {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}

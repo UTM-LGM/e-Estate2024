@@ -1,0 +1,33 @@
+<h1 class="tittle">Dashboard Admin</h1>
+<hr />
+
+<div class="box">
+  <div class="column box-container color1">
+    <span>Current Total Company</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingCompany">{{totalCompany}}</span>
+    <div *ngIf="isLoadingCompany">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+  <div class="column box-container color2">
+    <span>Current Total Estate</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingEstate">{{totalEstate}}</span>
+    <div *ngIf="isLoadingEstate">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+<br>
+
+<div class="box">
+  <div class="column box-container" style="color:black">
+    <span>Bar Chart (Power BI)</span>
+    <!-- <canvas id="barChart" >{{ barChart }}</canvas> -->
+  </div>
+  <div class="column box-container" style="color: black;">
+    <span>Line Chart (Power BI)</span>
+    <!-- <canvas  id="lineChart" >{{ lineChart }}</canvas> -->
+  </div>
+</div>

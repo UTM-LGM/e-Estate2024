@@ -1,0 +1,62 @@
+<div class="box-container">
+    <h1>User Information</h1>
+    <hr />
+
+    <div>   
+        <table>
+            <tr>
+                <td>User Full Name</td>
+                <td><span>:</span></td>
+                <td>{{ user.fullName }}</td>
+              </tr>
+              <tr> 
+                <td>Email</td>
+                <td><span>:</span></td>
+                <td>{{ user.email }}</td>
+              </tr>
+              <tr>
+                <td>Estate Name</td>
+                <td><span>:</span></td>
+                <td>{{ user.estateName }}</td>
+              </tr>
+              <tr>                
+                <td>Company Name</td>
+                <td><span>:</span></td>
+                <td>{{ user.companyName }}</td>
+              </tr>
+              <tr>
+                <td>Company Phone No</td>
+                <td><span>:</span></td>
+                <td>{{ user.companyPhoneNo }}</td>
+              </tr>
+              <tr>              
+                <td>Position</td>
+                <td><span>:</span></td>
+                <td>{{ user.position }}</td>
+              </tr>
+
+              <tr>              
+                <td>Role Name</td>
+                <td><span>:</span></td>
+                <td><mat-select name="roleName" placeholder="Please Choose" [(ngModel)]="user.roleId" >
+                  <mat-option *ngFor="let role of roles" [value]="role.id">
+                    {{role.name}}
+                  </mat-option>
+                </mat-select></td>
+              </tr>
+        </table>
+
+    </div>
+  
+    <div style="padding-right: 10px">
+      <button style="float: right" class="btn-update" type="submit" (click)="update()">
+        Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>
+    </div>
+    <div style="padding-left: 10px">
+      <button class="btn-back" (click)="back()">
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
+    </div>
+  
+  </div>

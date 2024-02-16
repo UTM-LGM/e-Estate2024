@@ -1,0 +1,12 @@
+<div class="box-container">
+  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' }">
+    <app-home-admin-lgm></app-home-admin-lgm>
+  </div>
+
+  <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'Admin' || role == 'EstateClerk' }">
+    <app-home-company-admin></app-home-company-admin>
+  </div>
+
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'Admin' || role == 'CompanyAdmin' }">
+    <app-home-estate-clerk></app-home-estate-clerk>
+  </div>

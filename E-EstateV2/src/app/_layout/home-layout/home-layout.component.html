@@ -1,0 +1,51 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <div>
+      <button mat-button class="menu-button" *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+        <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+        <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+      </button>
+    </div>
+    <span class="span"><img width="55px" style="padding: 5px" src="assets/Images/LGM-logo.png" /></span> &nbsp;
+    <span class="homelink" routerLink="/e-estate/home">Malaysian Rubber Board</span>
+
+    <span class="flexExpand"></span>
+    <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-2xl fa-address-card"></i></span> &nbsp;
+    &nbsp;
+    <span style="cursor: pointer;" routerLink="/e-estate/notification" *ngIf="role == 'EstateClerk'">
+      <i class="fa fa-envelope"></i>
+      <div class="badge" *ngIf="badgeCount > 0">
+        <span>{{ badgeCount }}</span>
+      </div>
+      &nbsp; &nbsp;
+    </span>
+
+    <mat-menu #profile="matMenu">
+      <div style="padding: 10px;overflow: hidden; font-size: 14px;">
+        <span><i class="fa fa-id-card"></i> Full Name: {{fullName}}</span><br />
+        <span><i class="fa fa-id-card"></i> Username: {{username}} </span><br />
+        <span><i class="fa fa-envelope"></i> Email: {{email}}</span><br />
+        <span><i class="fa fa-user"></i> Position : {{position}}</span><br />
+        <hr>
+        <div style="text-align: center;">
+          <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
+          <button class="btn-danger" (click)="logOut()">LOGOUT</button>
+        </div>
+
+      </div>
+    </mat-menu>
+
+    <!-- <div style="margin-top: -8px;">
+      <button class="btn-danger" (click)="logOut()">LOGOUT</button>
+    </div> -->
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav">
+    <app-sidenav></app-sidenav>
+  </mat-sidenav>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</mat-sidenav-container>

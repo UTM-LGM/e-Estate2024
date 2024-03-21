@@ -62,6 +62,8 @@ namespace E_EstateV2_API.Data
         public DbSet<FieldDisease> fieldDiseases { get; set; }
         public DbSet<CropType> cropTypes { get; set; }
         public DbSet<OtherField> otherFields { get; set; }
+        public DbSet<CompanyContact> companyContacts { get; set; }
+        public DbSet<EstateContact> estateContacts { get; set; }
     }
 
 }

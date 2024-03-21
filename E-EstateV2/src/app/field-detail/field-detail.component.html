@@ -18,8 +18,8 @@
           <input type="text" name="fieldname" value="{{ fields.fieldName }}" [(ngModel)]="fields.fieldName" />
           <label>Maturity :</label>
           <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="fields.isMature" disabled="{{disableInput}}" (selectionChange)="getcategory(fields)">
-            <mat-option [value]="true">Mature</mat-option>
-            <mat-option [value]="false">Immature</mat-option>
+            <mat-option [value]="true">MATURE</mat-option>
+            <mat-option [value]="false">IMMATURE</mat-option>
           </mat-select>
         </div>
 

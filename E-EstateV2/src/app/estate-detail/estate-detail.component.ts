@@ -11,6 +11,9 @@ import { Field } from '../_interface/field';
 import { FieldConversionService } from '../_services/field-conversion.service';
 import { FieldConversion } from '../_interface/fieldConversion';
 import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
+import { EstateContact } from '../_interface/estate-contact';
+import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
+import { EstateContactService } from '../_services/estate-contact.service';
 
 @Component({
   selector: 'app-estate-detail',
@@ -19,6 +22,8 @@ import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 })
 export class EstateDetailComponent implements OnInit {
   estate: Estate = {} as Estate
+
+  contacts:any = {} as any
 
   value: Field[] = []
 
@@ -44,6 +49,13 @@ export class EstateDetailComponent implements OnInit {
     { columnName: 'totalTask', displayText: 'Total Task' }
   ];
 
+  sortableColumnContacts = [
+    { columnName: 'name', displayText: 'Name' },
+    { columnName: 'position', displayText: 'Position' },
+    { columnName: 'phoneNo', displayText: 'Phone No' },
+    { columnName: 'email', displayText: 'Email' },
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private estateService: EstateService,
@@ -51,13 +63,14 @@ export class EstateDetailComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private fieldConversionService: FieldConversionService,
-    private auth: AuthGuard
+    private auth: AuthGuard,
+    private estateContactService:EstateContactService
   ) { }
 
   ngOnInit() {
     this.userRole = this.auth.getRole()
     this.getEstate()
-
+    this.getContact()
   }
 
   getEstate() {
@@ -76,7 +89,16 @@ export class EstateDetailComponent implements OnInit {
     }, 2000)
   }
 
-  status(estate: Estate) {
+  getContact(){
+    this.estateContactService.getCompanyContact()
+    .subscribe(
+      Response =>{
+        this.contacts = Response
+      }
+    )
+  }
+
+  statusEstate(estate: Estate) {
     estate.updatedBy = this.sharedService.userId.toString()
     estate.updatedDate = new Date()
     estate.isActive = !estate.isActive
@@ -93,6 +115,25 @@ export class EstateDetailComponent implements OnInit {
           this.getEstate()
         }
       );
+  }
+
+  statusContact(contact: EstateContact) {
+    contact.updatedBy = this.sharedService.userId.toString()
+    contact.updatedDate = new Date()
+    contact.isActive = !contact.isActive
+    this.estateContactService.updateEstateContact(contact)
+    .subscribe(
+      Response =>{
+        swal.fire({
+          title: 'Done!',
+          text: 'Contact Status successfully updated!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        });
+        this.ngOnInit()
+      }
+    )
   }
 
   back() {
@@ -143,5 +184,18 @@ export class EstateDetailComponent implements OnInit {
         }
       )
   }
+
+  openDialogContact(contact:EstateContact, estate:Estate)
+  {
+    const dialogRef = this.dialog.open(ContactDetailComponent, {
+      data:{contact: contact, estateId: estate.id},
+    })
+    dialogRef.afterClosed()
+      .subscribe(
+        Response => {
+          this.ngOnInit()
+        }
+      )
+  }
 
 }

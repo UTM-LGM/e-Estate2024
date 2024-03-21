@@ -32,10 +32,12 @@ export class UserService {
   getUser(username: string): Observable<User> {
     return this.http.get<User>(this.baseUrl + '/applicationusers/GetUser/' + username)
   }
-
+  
   getAllUser():Observable<User[]>{
     return this.http.get<User[]>(this.baseUrl + '/applicationusers/GetAllUser')
   }
+
+
 
   checkLicenseNo(licenseNo: string): Observable<any> {
     return this.http.get<any>(this.baseUrl + '/applicationusers/CheckLicenseNo/' + licenseNo)

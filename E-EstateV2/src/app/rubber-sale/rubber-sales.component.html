@@ -34,6 +34,10 @@
           </td>
         </tr>
 
+        <tr *ngIf="filterSales.length == 0 && !isLoading">
+          <td colspan="10"><b>No Rubber Sale Transaction</b></td>
+        </tr>
+
         <tr class="list"
           *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <td>{{sale.date | date : "dd/MM/YYYY"}}</td>

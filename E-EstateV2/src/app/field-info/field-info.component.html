@@ -92,6 +92,11 @@
             <th>Clone Name</th>
             <th width="90px">Action</th>
           </tr>
+
+          <tr *ngIf="selectedValues.length == 0">
+            <td colspan="3"><b>No Clone</b></td>
+          </tr>
+
           <tr *ngFor="let value of selectedValues; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ value.cloneName }}</td>
@@ -135,13 +140,17 @@
           </td>
         </tr>
 
+        <tr *ngIf="estate.fields?.length == 0 && !isLoading">
+          <td colspan="10"><b>No Field</b></td>
+        </tr>
+
         <tbody
           *ngFor="let field of estate.fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor:default;">
             <td style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{field.fieldName}}</a>
             </td>
             <td>{{ field.area }}</td>
-            <td>{{ field.isMature == true ? "Mature" : "Immature" }}</td>
+            <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
             <!-- <td *ngFor="let status of field.fieldStatus">{{ status.fieldStatus }}</td> -->
             <td>{{field.fieldStatus}}</td>
             <td>{{ field.yearPlanted }}</td>

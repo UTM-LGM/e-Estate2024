@@ -43,7 +43,7 @@ export class PendingRoleComponent implements OnInit {
     .subscribe(
       Response=>{
         const users = Response
-        this.users = users.filter(x=>x.roleId == null && x.isEmailVerified == true)
+        this.users = users.filter((x:any)=>x.roleId == null && x.isEmailVerified == true)
         this.isLoading = false
       })
     }, 1000)

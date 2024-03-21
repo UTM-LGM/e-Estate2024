@@ -81,7 +81,6 @@ export class HistoryLogInterceptor implements HttpInterceptor {
   //       this.historyLog.url = req.url;
   //       this.historyLog.userId = this.sharedService.userId.toString();
 
-  //       console.log(this.historyLog)
   //       this.historyLogService.addHistoryLog(this.historyLog)
   //       .subscribe(
   //         Response=>{

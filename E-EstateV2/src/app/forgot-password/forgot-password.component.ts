@@ -56,7 +56,6 @@ export class ForgotPasswordComponent implements OnInit {
             this.router.navigateByUrl('/login')
           },
           error: (Error) => {
-            console.log(Error)
             swal.fire({
               icon: 'error',
               title: Error.error.message,

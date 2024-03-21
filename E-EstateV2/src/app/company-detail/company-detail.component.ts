@@ -13,6 +13,9 @@ import { EstateService } from '../_services/estate.service';
 import { FieldService } from '../_services/field.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditCompanyDetailComponent } from '../edit-company-detail/edit-company-detail.component';
+import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
+import { CompanyContact } from '../_interface/company-contact';
+import { CompanyContactService } from '../_services/company-contact.service';
 
 @Component({
   selector: 'app-company-detail',
@@ -23,6 +26,8 @@ export class CompanyDetailComponent implements OnInit {
   company: Company = {} as Company
 
   activityLog: UserActivityLog = {} as UserActivityLog
+
+  contacts:any = {} as any
 
   estate: any = {} as any
 
@@ -46,6 +51,13 @@ export class CompanyDetailComponent implements OnInit {
     { columnName: 'membershipType', displayText: 'Membership Type' },
   ];
 
+  sortableColumnContacts = [
+    { columnName: 'name', displayText: 'Name' },
+    { columnName: 'position', displayText: 'Position' },
+    { columnName: 'phoneNo', displayText: 'Phone No' },
+    { columnName: 'email', displayText: 'Email' },
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private companyService: CompanyService,
@@ -55,11 +67,13 @@ export class CompanyDetailComponent implements OnInit {
     private sharedService: SharedService,
     private auth: AuthGuard,
     private dialog: MatDialog,
+    private companyContactService:CompanyContactService
   ) { }
 
   ngOnInit() {
     this.userRole = this.auth.getRole()
     this.getCompany()
+    this.getContact()
   }
 
   getCompany() {
@@ -76,6 +90,15 @@ export class CompanyDetailComponent implements OnInit {
       });
     }, 2000)
   }
+
+  getContact(){
+    this.companyContactService.getCompanyContact()
+    .subscribe(
+      Response =>{
+        this.contacts = Response
+      }
+    )
+  }
 
   statusCompany(company: Company) {
     company.updatedBy = this.sharedService.userId.toString()
@@ -94,6 +117,25 @@ export class CompanyDetailComponent implements OnInit {
           this.getCompany()
         }
       );
+  }
+
+  statusContact(contact: CompanyContact) {
+    contact.updatedBy = this.sharedService.userId.toString()
+    contact.updatedDate = new Date()
+    contact.isActive = !contact.isActive
+    this.companyContactService.updateCompanyContact(contact)
+    .subscribe(
+      Response =>{
+        swal.fire({
+          title: 'Done!',
+          text: 'Contact Status successfully updated!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        });
+        this.ngOnInit()
+      }
+    )
   }
 
   back() {
@@ -166,5 +208,18 @@ export class CompanyDetailComponent implements OnInit {
         }
       )
   }
+
+  openDialogCompanyContact(contact:CompanyContact, company:Company)
+  {
+    const dialogRef = this.dialog.open(ContactDetailComponent, {
+      data:{contact: contact, companyId: company.id},
+    })
+    dialogRef.afterClosed()
+      .subscribe(
+        Response => {
+          this.ngOnInit()
+        }
+      )
+  }
 
 }

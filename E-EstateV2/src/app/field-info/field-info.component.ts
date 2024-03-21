@@ -171,7 +171,6 @@ export class FieldInfoComponent implements OnInit {
     this.field.createdBy = this.sharedService.userId.toString()
     this.field.createdDate = new Date()
     this.field.dateOpenTapping = this.field.dateOpenTapping
-    // console.log(this.field)
     this.fieldService.addField(this.field)
       .subscribe(
         {

@@ -217,6 +217,51 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("companies");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("companyContacts");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>
                 {
                     b.Property<int>("Id")
@@ -619,6 +664,51 @@ namespace E_EstateV2_API.Migrations
                     b.HasIndex("townId");
 
                     b.ToTable("estates");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("EstateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstateId");
+
+                    b.ToTable("estateContacts");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Field", b =>
@@ -1907,6 +1997,17 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Town");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyContact", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.CostCategory", "CostCategory")
@@ -2002,6 +2103,17 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("MembershipType");
 
                     b.Navigation("Town");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateContact", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
+                        .WithMany()
+                        .HasForeignKey("EstateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Estate");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Field", b =>

@@ -10,7 +10,7 @@
 
   <div style="overflow-x: auto" *ngIf="filterProductions.length == 0">
     <span style="color: red;">*If there is no production, please insert 0</span>
-    <div *ngIf="products.length > 0">
+    <div>
       <table style="width: 100%">
         <tr>
           <th>Month and Year</th>
@@ -29,10 +29,14 @@
         </tr>
 
         <tr *ngIf="isLoading">
-          <td colspan="11">
+          <td colspan="13">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
+        </tr>
+
+        <tr *ngIf="filterFields.length == 0 && !isLoading">
+          <td colspan="13" style="color: red;"><b>No Field. Please insert field in Field Information</b></td>
         </tr>
 
         <tr *ngFor="let field of filterFields; let i = index">
@@ -102,9 +106,10 @@
             number: '1.2-2'}} Kg</b></span>
       </div>
 
-      <div style="float: left;">
+      <!-- <div style="float: left;">
         <button class="printBtn" (click)="downloadPDF()">Export to PDF</button>
-      </div>
+      </div> -->
+      
     </div><br />
 
     <!-- <span><button (click)="generatePdf()" >Print Summary <i class="fa fa-download"></i> </button></span> -->

@@ -9,3 +9,7 @@
 th {
   cursor: pointer;
 }
+
+.box-container{
+  box-shadow: none;
+}

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SpqBSHIiDAkLMkzo5rd7Qmkg1JdoxkJVKcdGM/2sflDaEx+ekYq1ppYS3/ZGHvqA0uE0tAhc9XnkfSjL9xewaw==",
+  "dgSpecHash": "KUKo39NJY373zR6RlbnBr1wh9PC4MniOzrnU8tBbi6IVL/7V+ca9CCfnp0J27lhy20KwtLBNwm3UDg8oed2FFA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
+  "projectFilePath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sabariah\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",
     "C:\\Users\\sabariah\\.nuget\\packages\\azure.identity\\1.10.4\\azure.identity.1.10.4.nupkg.sha512",

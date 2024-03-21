@@ -113,6 +113,7 @@ import { PendingRoleComponent } from './utility-manage-user/pending-role/pending
 import { PendingRoleDetailComponent } from './utility-manage-user/pending-role-detail/pending-role-detail.component';
 import { ManageUserComponent } from './utility-manage-user/manage-user/manage-user.component';
 import { AddUserComponent } from './utility-manage-user/add-user/add-user.component';
+import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 
 
 @NgModule({
@@ -198,6 +199,7 @@ import { AddUserComponent } from './utility-manage-user/add-user/add-user.compon
     PendingRoleDetailComponent,
     ManageUserComponent,
     AddUserComponent,
+    ContactDetailComponent,
   ],
   imports: [
     BrowserModule,

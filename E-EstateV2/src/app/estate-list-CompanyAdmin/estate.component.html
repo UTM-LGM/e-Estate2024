@@ -35,6 +35,10 @@
           </td>
         </tr>
 
+        <tr *ngIf="company.estates?.length == 0 && !isLoading">
+          <td colspan="8"><b>No Estate</b></td>
+        </tr>
+
         <tr class="list"
           *ngFor="let estate of company.estates | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
           routerLink="/e-estate/estate-detail/{{ estate.id }}">

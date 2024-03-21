@@ -33,7 +33,9 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "sweetalert2",
-              "base64-js"
+              "base64-js",
+              "html2canvas",
+              "jspdf"
             ]
           },
           "configurations": {

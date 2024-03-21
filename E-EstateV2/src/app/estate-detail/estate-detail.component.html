@@ -14,22 +14,22 @@
       {{ estate.isActive == true ? "Active" : "Inactive" }}
     </button>
     <br />
-    <button class="btn-update" (click)="openDialog(estate)">
+    <!-- <button class="btn-update" (click)="openDialog(estate)">
       Update &nbsp; <i class="fa fa-pencil"></i>
-    </button>
+    </button> -->
   </div>
 
   <div style="float:right;" *ngIf="userRole !== 'EstateClerk'">
-    <button (click)="status(estate)" style="float: right; margin-right:8px; padding: 10px 13px;" [ngClass]="{
+    <button (click)="statusEstate(estate)" style="float: right; margin-right:8px; padding: 10px 13px;" [ngClass]="{
       'active-btn': estate.isActive == true,
       'inactive-btn': estate.isActive == false
     }">
       {{ estate.isActive == true ? "Activate" : "Deactivate" }}
     </button>
     <br />
-    <button class="btn-update" (click)="openDialog(estate)">
+    <!-- <button class="btn-update" (click)="openDialog(estate)">
       Update &nbsp; <i class="fa fa-pencil"></i>
-    </button>
+    </button> -->
   </div>
 
   <div style="overflow-x: auto; " *ngIf="userRole !== 'EstateClerk'">
@@ -204,6 +204,67 @@
   </div>
 
   <br />
+  <hr/>
+
+  <div>
+    <h1>List of Additional Contact</h1>
+    <button style="margin-bottom: 10px" class="btn-add" (click)="openDialogContact(contacts, estate)">
+      Add New Contact &nbsp; <i class="fa fa-plus"></i>
+    </button>
+
+    <input type="text" [(ngModel)]="term" placeholder="Filter Contact" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumnContacts" scope="col" [appSort]="contacts" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+            </th>
+            <th width="90px">Status</th>
+            <th width="30px">Action</th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="6">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr *ngIf="contacts.length == 0">
+          <td colspan="6"><b>No Additional Contact</b></td>
+        </tr>
+
+        <tbody
+          *ngFor="let contact of contacts | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <tr class="list" style="cursor: default;">
+            <td style="cursor: pointer;">{{contact.name}}</td>
+            <td>{{ contact.position }}</td>
+            <td>{{ contact.phoneNo }}</td>
+            <td>{{ contact.email }} </td>
+            <td>
+              <button style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
+                'active-btn': contact.isActive == true,
+                'inactive-btn': contact.isActive == false
+              }">
+                {{ contact.isActive == true ? "Active" : "Inactive" }}
+              </button>
+            </td>
+            <td>
+              <button class="btn-update" (click)="openDialogContact(contact, estate)">
+                <i class="fa fa fa-pencil"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+    </div>
+  </div><br />
 
   <div class="box-container" *ngIf="userRole !== 'EstateClerk'">
     <h1>List of Fields</h1>
@@ -227,6 +288,10 @@
           </th>
           <th class="th" width="90px">Status</th>
           <th class="th" width="30px">Action</th>
+        </tr>
+
+        <tr *ngIf="estate.fields.length == 0">
+          <td colspan="10"><b>No Field</b></td>
         </tr>
 
         <tbody

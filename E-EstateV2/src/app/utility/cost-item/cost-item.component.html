@@ -12,8 +12,8 @@
   <div *ngIf="cost.costTypeId == 1">
     <label>Maturity : </label>
     <mat-select placeholder="Please Choose" name="maturity" [(ngModel)]="cost.isMature">
-      <mat-option [value]="true">Mature</mat-option>
-      <mat-option [value]="false">Immature</mat-option>
+      <mat-option [value]="true">MATURE</mat-option>
+      <mat-option [value]="false">IMMATURE</mat-option>
     </mat-select>
   </div>
 </div>
@@ -75,7 +75,7 @@
         *ngFor="let cost of costItem | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ cost.costTypes }}</td>
-        <td>{{ cost.isMature === null ? "N/A" : cost.isMature ? "Mature" : "Immature" }}</td>
+        <td>{{ cost.isMature === null ? "N/A" : cost.isMature ? "MATURE" : "IMMATURE" }}</td>
         <td>{{ cost.costCategory }}</td>
         <td>{{ cost.costSubcategory1 }}</td>
         <td>{{ cost.costSubcategory2 }}</td>

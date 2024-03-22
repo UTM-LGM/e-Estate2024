@@ -168,7 +168,7 @@
         <tr class="list" style="pointer-events: none">
           <td>{{ fields.fieldName }}</td>
           <td>{{ fields.area }}</td>
-          <td>{{ fields.isMature == true ? "Mature" : "Immature" }}</td>
+          <td>{{ fields.isMature == true ? "MATURE" : "IMMATURE" }}</td>
           <td *ngFor="let fieldStatus of fields.fieldStatuses">{{ fieldStatus.fieldStatus }}</td>
           <td>{{ fields.yearPlanted }}</td>
           <td>{{ fields.dateOpenTapping | date : "dd/MM/YYYY" }}</td>

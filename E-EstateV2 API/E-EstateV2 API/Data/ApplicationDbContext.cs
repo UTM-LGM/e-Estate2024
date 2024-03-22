@@ -64,6 +64,7 @@ namespace E_EstateV2_API.Data
         public DbSet<OtherField> otherFields { get; set; }
         public DbSet<CompanyContact> companyContacts { get; set; }
         public DbSet<EstateContact> estateContacts { get; set; }
+        public DbSet<PlantingMaterial> plantingMaterials { get; set; }
     }
 
 }

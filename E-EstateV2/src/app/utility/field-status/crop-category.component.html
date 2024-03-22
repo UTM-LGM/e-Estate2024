@@ -3,8 +3,8 @@
 <form>
   <label>Maturity : </label>
   <mat-select placeholder="Please Choose" name="maturity" [(ngModel)]="crop.isMature">
-    <mat-option [value]="true">Mature</mat-option>
-    <mat-option [value]="false">Immature</mat-option>
+    <mat-option [value]="true">MATURE</mat-option>
+    <mat-option [value]="false">IMMATURE</mat-option>
   </mat-select>
 
   <label>Field Status : </label>
@@ -41,7 +41,7 @@
 
     <tr *ngFor="let crop of cropCategories | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
       <td>{{ i + 1 }}</td>
-      <td>{{ crop.isMature == true ? "Mature" : "Immature" }}</td>
+      <td>{{ crop.isMature == true ? "MATURE" : "IMMATURE" }}</td>
       <td>{{ crop.fieldStatus }}</td>
       <td>
         <button (click)="status(crop)"

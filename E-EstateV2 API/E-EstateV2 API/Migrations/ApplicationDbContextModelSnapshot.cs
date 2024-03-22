@@ -1317,6 +1317,37 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("ownerships");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.PlantingMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("plantingMaterial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("plantingMaterials");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.ProductionComparison", b =>
                 {
                     b.Property<int>("Id")

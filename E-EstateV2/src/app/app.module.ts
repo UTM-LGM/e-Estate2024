@@ -114,7 +114,9 @@ import { PendingRoleDetailComponent } from './utility-manage-user/pending-role-d
 import { ManageUserComponent } from './utility-manage-user/manage-user/manage-user.component';
 import { AddUserComponent } from './utility-manage-user/add-user/add-user.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { register } from 'swiper/element/bundle';
 
+register()
 
 @NgModule({
   declarations: [

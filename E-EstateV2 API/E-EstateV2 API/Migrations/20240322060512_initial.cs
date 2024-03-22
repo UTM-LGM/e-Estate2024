@@ -10,6 +10,25 @@ namespace E_EstateV2_API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "announcements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    tittle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    filePath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_announcements", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -29,6 +48,10 @@ namespace E_EstateV2_API.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    fullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    licenseNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isEmailVerified = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -56,7 +79,6 @@ namespace E_EstateV2_API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     cloneName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    cloneCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -160,6 +182,24 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "cropTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    cropType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cropTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "establishments",
                 columns: table => new
                 {
@@ -175,6 +215,24 @@ namespace E_EstateV2_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_establishments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "fieldDiseases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    diseaseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fieldDiseases", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -215,6 +273,25 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "historyLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    entityType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    entityId = table.Column<int>(type: "int", nullable: false),
+                    method = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    body = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    dateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_historyLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "localLaborTypes",
                 columns: table => new
                 {
@@ -251,12 +328,48 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ownerships",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ownership = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ownerships", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "plantingMaterials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    plantingMaterial = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_plantingMaterials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "states",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    state = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    state = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -266,6 +379,24 @@ namespace E_EstateV2_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_states", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tappingSystems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    tappingSystem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tappingSystems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -485,15 +616,50 @@ namespace E_EstateV2_API.Migrations
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    townId = table.Column<int>(type: "int", nullable: false)
+                    townId = table.Column<int>(type: "int", nullable: false),
+                    ownershipId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_companies", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_companies_ownerships_ownershipId",
+                        column: x => x.ownershipId,
+                        principalTable: "ownerships",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_companies_towns_townId",
                         column: x => x.townId,
                         principalTable: "towns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "companyContacts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    phoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_companyContacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_companyContacts_companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -593,7 +759,7 @@ namespace E_EstateV2_API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    amount = table.Column<float>(type: "real", nullable: false),
+                    amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     year = table.Column<int>(type: "int", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -621,6 +787,34 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "estateContacts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    position = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    phoneNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EstateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_estateContacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_estateContacts_estates_EstateId",
+                        column: x => x.EstateId,
+                        principalTable: "estates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "fields",
                 columns: table => new
                 {
@@ -630,9 +824,9 @@ namespace E_EstateV2_API.Migrations
                     area = table.Column<int>(type: "int", nullable: false),
                     isMature = table.Column<bool>(type: "bit", nullable: false),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
-                    dateOpenTapping = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    dateOpenTapping = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    infectedPercentage = table.Column<int>(type: "int", nullable: false),
                     yearPlanted = table.Column<int>(type: "int", nullable: false),
-                    otherCrop = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     totalTask = table.Column<int>(type: "int", nullable: false),
                     initialTreeStand = table.Column<int>(type: "int", nullable: false),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -640,7 +834,8 @@ namespace E_EstateV2_API.Migrations
                     updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     fieldStatusId = table.Column<int>(type: "int", nullable: false),
-                    estateId = table.Column<int>(type: "int", nullable: false)
+                    estateId = table.Column<int>(type: "int", nullable: false),
+                    fieldDiseaseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -651,6 +846,11 @@ namespace E_EstateV2_API.Migrations
                         principalTable: "estates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_fields_fieldDiseases_fieldDiseaseId",
+                        column: x => x.fieldDiseaseId,
+                        principalTable: "fieldDiseases",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_fields_fieldStatus_fieldStatusId",
                         column: x => x.fieldStatusId,
@@ -670,7 +870,6 @@ namespace E_EstateV2_API.Migrations
                     tapperContractor = table.Column<int>(type: "int", nullable: false),
                     fieldCheckrole = table.Column<int>(type: "int", nullable: false),
                     fieldContractor = table.Column<int>(type: "int", nullable: false),
-                    workerNeeded = table.Column<int>(type: "int", nullable: false),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -728,6 +927,67 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "otherFields",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    fieldName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    area = table.Column<int>(type: "int", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    cropTypeId = table.Column<int>(type: "int", nullable: false),
+                    estateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_otherFields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_otherFields_cropTypes_cropTypeId",
+                        column: x => x.cropTypeId,
+                        principalTable: "cropTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_otherFields_estates_estateId",
+                        column: x => x.estateId,
+                        principalTable: "estates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "productionComparisons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    createdYear = table.Column<int>(type: "int", nullable: false),
+                    currentYear = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    previousYear = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    productionComparison = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    estateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_productionComparisons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_productionComparisons_estates_estateId",
+                        column: x => x.estateId,
+                        principalTable: "estates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "sellers",
                 columns: table => new
                 {
@@ -747,6 +1007,31 @@ namespace E_EstateV2_API.Migrations
                     table.PrimaryKey("PK_sellers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_sellers_estates_estateId",
+                        column: x => x.estateId,
+                        principalTable: "estates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "workerShortages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    monthYear = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    workerShortage = table.Column<int>(type: "int", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    estateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_workerShortages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_workerShortages_estates_estateId",
                         column: x => x.estateId,
                         principalTable: "estates",
                         principalColumn: "Id",
@@ -834,6 +1119,7 @@ namespace E_EstateV2_API.Migrations
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
                     fieldId = table.Column<int>(type: "int", nullable: false),
                     cloneId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -855,6 +1141,63 @@ namespace E_EstateV2_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "fieldConversions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    fieldId = table.Column<int>(type: "int", nullable: false),
+                    conversionCropName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    sinceYear = table.Column<int>(type: "int", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fieldConversions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_fieldConversions_fields_fieldId",
+                        column: x => x.fieldId,
+                        principalTable: "fields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "fieldInfoYearly",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    year = table.Column<int>(type: "int", nullable: false),
+                    currentTreeStand = table.Column<int>(type: "int", nullable: false),
+                    createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    updatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    fieldId = table.Column<int>(type: "int", nullable: false),
+                    tappingSystemId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_fieldInfoYearly", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_fieldInfoYearly_fields_fieldId",
+                        column: x => x.fieldId,
+                        principalTable: "fields",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_fieldInfoYearly_tappingSystems_tappingSystemId",
+                        column: x => x.tappingSystemId,
+                        principalTable: "tappingSystems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "fieldProductions",
                 columns: table => new
                 {
@@ -865,6 +1208,10 @@ namespace E_EstateV2_API.Migrations
                     cuplumpDRC = table.Column<float>(type: "real", nullable: false),
                     latex = table.Column<float>(type: "real", nullable: false),
                     latexDRC = table.Column<float>(type: "real", nullable: false),
+                    USS = table.Column<float>(type: "real", nullable: false),
+                    USSDRC = table.Column<float>(type: "real", nullable: false),
+                    others = table.Column<float>(type: "real", nullable: false),
+                    othersDRC = table.Column<float>(type: "real", nullable: false),
                     noTaskTap = table.Column<int>(type: "int", nullable: false),
                     noTaskUntap = table.Column<int>(type: "int", nullable: false),
                     remarkUntap = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -897,7 +1244,8 @@ namespace E_EstateV2_API.Migrations
                     authorizationLetter = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     weight = table.Column<float>(type: "real", nullable: false),
                     DRC = table.Column<float>(type: "real", nullable: false),
-                    price = table.Column<float>(type: "real", nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    totalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     isActive = table.Column<bool>(type: "bit", nullable: false),
                     createdBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     createdDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -921,7 +1269,7 @@ namespace E_EstateV2_API.Migrations
                         column: x => x.estateId,
                         principalTable: "estates",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);  
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_rubberPurchases_sellers_sellerId",
                         column: x => x.sellerId,
@@ -1011,9 +1359,19 @@ namespace E_EstateV2_API.Migrations
                 column: "estateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_companies_ownershipId",
+                table: "companies",
+                column: "ownershipId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_companies_townId",
                 table: "companies",
                 column: "townId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_companyContacts_CompanyId",
+                table: "companyContacts",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_costAmounts_costId",
@@ -1044,6 +1402,11 @@ namespace E_EstateV2_API.Migrations
                 name: "IX_costs_costTypeId",
                 table: "costs",
                 column: "costTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_estateContacts_EstateId",
+                table: "estateContacts",
+                column: "EstateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_estates_companyId",
@@ -1081,6 +1444,21 @@ namespace E_EstateV2_API.Migrations
                 column: "fieldId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_fieldConversions_fieldId",
+                table: "fieldConversions",
+                column: "fieldId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fieldInfoYearly_fieldId",
+                table: "fieldInfoYearly",
+                column: "fieldId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fieldInfoYearly_tappingSystemId",
+                table: "fieldInfoYearly",
+                column: "tappingSystemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_fieldProductions_fieldId",
                 table: "fieldProductions",
                 column: "fieldId");
@@ -1089,6 +1467,11 @@ namespace E_EstateV2_API.Migrations
                 name: "IX_fields_estateId",
                 table: "fields",
                 column: "estateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_fields_fieldDiseaseId",
+                table: "fields",
+                column: "fieldDiseaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_fields_fieldStatusId",
@@ -1114,6 +1497,21 @@ namespace E_EstateV2_API.Migrations
                 name: "IX_localLabors_laborTypeId",
                 table: "localLabors",
                 column: "laborTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_otherFields_cropTypeId",
+                table: "otherFields",
+                column: "cropTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_otherFields_estateId",
+                table: "otherFields",
+                column: "estateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_productionComparisons_estateId",
+                table: "productionComparisons",
+                column: "estateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_rubberPurchases_companyId",
@@ -1161,13 +1559,28 @@ namespace E_EstateV2_API.Migrations
                 column: "estateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_states_state",
+                table: "states",
+                column: "state",
+                unique: true,
+                filter: "[state] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_towns_stateId",
                 table: "towns",
                 column: "stateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_workerShortages_estateId",
+                table: "workerShortages",
+                column: "estateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "announcements");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -1187,10 +1600,22 @@ namespace E_EstateV2_API.Migrations
                 name: "buyerCompanies");
 
             migrationBuilder.DropTable(
+                name: "companyContacts");
+
+            migrationBuilder.DropTable(
                 name: "costAmounts");
 
             migrationBuilder.DropTable(
+                name: "estateContacts");
+
+            migrationBuilder.DropTable(
                 name: "fieldClones");
+
+            migrationBuilder.DropTable(
+                name: "fieldConversions");
+
+            migrationBuilder.DropTable(
+                name: "fieldInfoYearly");
 
             migrationBuilder.DropTable(
                 name: "fieldProductions");
@@ -1199,7 +1624,19 @@ namespace E_EstateV2_API.Migrations
                 name: "foreignLabors");
 
             migrationBuilder.DropTable(
+                name: "historyLogs");
+
+            migrationBuilder.DropTable(
                 name: "localLabors");
+
+            migrationBuilder.DropTable(
+                name: "otherFields");
+
+            migrationBuilder.DropTable(
+                name: "plantingMaterials");
+
+            migrationBuilder.DropTable(
+                name: "productionComparisons");
 
             migrationBuilder.DropTable(
                 name: "rubberPurchases");
@@ -1214,6 +1651,9 @@ namespace E_EstateV2_API.Migrations
                 name: "userActivityLogs");
 
             migrationBuilder.DropTable(
+                name: "workerShortages");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -1226,6 +1666,9 @@ namespace E_EstateV2_API.Migrations
                 name: "clones");
 
             migrationBuilder.DropTable(
+                name: "tappingSystems");
+
+            migrationBuilder.DropTable(
                 name: "fields");
 
             migrationBuilder.DropTable(
@@ -1233,6 +1676,9 @@ namespace E_EstateV2_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "localLaborTypes");
+
+            migrationBuilder.DropTable(
+                name: "cropTypes");
 
             migrationBuilder.DropTable(
                 name: "buyers");
@@ -1253,6 +1699,9 @@ namespace E_EstateV2_API.Migrations
                 name: "costTypes");
 
             migrationBuilder.DropTable(
+                name: "fieldDiseases");
+
+            migrationBuilder.DropTable(
                 name: "fieldStatus");
 
             migrationBuilder.DropTable(
@@ -1269,6 +1718,9 @@ namespace E_EstateV2_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "membershipTypes");
+
+            migrationBuilder.DropTable(
+                name: "ownerships");
 
             migrationBuilder.DropTable(
                 name: "towns");

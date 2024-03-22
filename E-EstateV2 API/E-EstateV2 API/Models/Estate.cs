@@ -20,6 +20,7 @@ namespace E_EstateV2_API.Models
         public bool isActive { get; set; }
         public string managerName { get; set; }
         public string latitudeLongitude { get; set; }
+        public string grantNo { get; set; }
         public string createdBy { get; set; }
         public DateTime createdDate { get; set; }
         public string updatedBy { get; set; }
@@ -44,5 +45,9 @@ namespace E_EstateV2_API.Models
         [ForeignKey("MembershipTypeId")]
         public int membershipTypeId { get; set; }
         public MembershipType MembershipType { get; set; }
+
+        [ForeignKey("PlantingMaterialId")]
+        public int plantingMaterialId { get; set; }
+        public PlantingMaterial PlantingMaterial { get; set; }
     }
 }

@@ -87,6 +87,8 @@ namespace E_EstateV2_API.Repository
                     town1 = _context.towns.Where(y => y.Id == e.townId).Select(y => y.town).FirstOrDefault(),
                     membership = _context.membershipTypes.Where(y => y.Id == e.membershipTypeId).Select(y => y.membershipType).FirstOrDefault(),
                     state = _context.states.Where(y => y.Id == _context.towns.Where(z => z.Id == e.townId).Select(x => x.stateId).FirstOrDefault()).Select(y => y.state).FirstOrDefault(),
+                    //plantingMaterial = _context.plantingMaterials.Where(y=>y.Id == e.plantingMaterialId).Select(x=>x.plantingMaterial).FirstOrDefault(),
+                    grantNo = e.grantNo,
                     fields = _context.fields.Where(y => y.estateId == e.Id).Select(f => new DTO_Field
                     {
                         id = f.Id,

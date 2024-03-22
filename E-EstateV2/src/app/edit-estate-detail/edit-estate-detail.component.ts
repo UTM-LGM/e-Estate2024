@@ -15,6 +15,8 @@ import { TownService } from '../_services/town.service';
 import { FinancialYearService } from '../_services/financial-year.service';
 import { MembershipService } from '../_services/membership.service';
 import { EstablishmentService } from '../_services/establishment.service';
+import { PlantingMaterialService } from '../_services/planting-material.service';
+import { PlantingMaterial } from '../_interface/planting-material';
 
 @Component({
   selector: 'app-edit-estate-detail',
@@ -24,6 +26,8 @@ import { EstablishmentService } from '../_services/establishment.service';
 export class EditEstateDetailComponent implements OnInit {
 
   estate: Estate = {} as Estate
+  filteredEstate: any = {} as any
+
 
   filterStates: State[] = []
 
@@ -37,6 +41,8 @@ export class EditEstateDetailComponent implements OnInit {
 
   filterEstablishments: Establishment[] = []
 
+  filterPlantingMaterial:PlantingMaterial[]=[]
+
   town = true
 
   constructor(
@@ -49,6 +55,7 @@ export class EditEstateDetailComponent implements OnInit {
     private establishmentService: EstablishmentService,
     private estateService: EstateService,
     private sharedService: SharedService,
+    private plantingMaterialService:PlantingMaterialService
   ) { }
 
   ngOnInit() {
@@ -58,6 +65,7 @@ export class EditEstateDetailComponent implements OnInit {
     this.getFinancialYear()
     this.getMembership()
     this.getEstablishment()
+    this.getPlantingMaterial()
   }
 
   getFinancialYear() {
@@ -67,6 +75,16 @@ export class EditEstateDetailComponent implements OnInit {
           const financialYears = Response
           this.filterFinancialYears = financialYears.filter(e => e.isActive == true)
         });
+  }
+
+  getPlantingMaterial(){
+    this.plantingMaterialService.getPlantingMaterial()
+    .subscribe(
+      Response =>{
+        const plantingMaterial = Response
+        this.filterPlantingMaterial = plantingMaterial.filter(p => p.isActive == true)
+      }
+    )
   }
 
   getMembership() {
@@ -119,7 +137,9 @@ export class EditEstateDetailComponent implements OnInit {
   update() {
     this.estate.updatedBy = this.sharedService.userId.toString()
     this.estate.updatedDate = new Date()
-    this.estateService.updateEstate(this.estate)
+    const {plantingMaterial, ...newObj} = this.estate
+    this.filteredEstate = newObj
+    this.estateService.updateEstate(this.filteredEstate)
       .subscribe(
         Response => {
           swal.fire({

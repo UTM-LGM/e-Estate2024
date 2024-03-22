@@ -3,6 +3,7 @@ import { Establishment } from "./establishment";
 import { Field } from "./field";
 import { FinancialYear } from "./financialYear";
 import { Town } from "./town";
+import { PlantingMaterial } from "./planting-material";
 
 export interface Estate {
     id: number
@@ -42,4 +43,7 @@ export interface Estate {
     updatedBy: string
     updatedDate: Date
     latitudeLongitude: string
+    plantingMaterialId:number
+    plantingMaterial:PlantingMaterial[]
+    grantNo:string
 }

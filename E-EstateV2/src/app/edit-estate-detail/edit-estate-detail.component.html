@@ -186,9 +186,12 @@
 
   <div style="columns: 2" class="column">
     <label>Ownership No (Grant) :</label>
-    <input type="text" name="ownershipNo"  />
+    <input type="text" name="ownershipNo" [(ngModel)]="estate.grantNo"  />
     <label>Planting Material :</label>
-    <mat-select name="platingMaterial" placeholder="Please Choose" >
+    <mat-select name="platingMaterial" placeholder="Please Choose" [(ngModel)]="estate.plantingMaterialId" >
+      <mat-option *ngFor="let planting of filterPlantingMaterial" [value]="planting.id">
+        {{planting.plantingMaterial}}
+      </mat-option>
     </mat-select>
   </div>
 

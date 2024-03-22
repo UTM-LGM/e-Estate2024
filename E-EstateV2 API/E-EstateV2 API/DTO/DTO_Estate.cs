@@ -1,4 +1,6 @@
-﻿namespace E_EstateV2_API.ViewModel
+﻿using E_EstateV2_API.Models;
+
+namespace E_EstateV2_API.ViewModel
 {
     public class DTO_Estate
     {
@@ -33,12 +35,17 @@
         public string membership { get; set; }
         public string state { get; set; }
         public int stateId { get; set; }
+        //public string plantingMaterial { get; set; }
+        public string grantNo { get; set; }
+        public int plantingMaterialId { get; set; }
+
+        public List<PlantingMaterial> plantingMaterial { get; set; }
 
         public List<DTO_Field> fields { get; set; }
         public List<DTO_Town> towns { get; set; }
         public List<DTO_FinancialYear> financialYears { get; set;}
         public List<DTO_Establishment> establishments { get; set;}
-
+        
 
     }
 }

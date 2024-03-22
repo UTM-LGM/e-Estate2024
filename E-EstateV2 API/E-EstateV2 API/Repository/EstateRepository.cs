@@ -40,7 +40,13 @@ namespace E_EstateV2_API.Repository
                 companyName = _context.companies.Where(y=>y.Id == x.companyId).Select(y=>y.companyName).FirstOrDefault(),
                 town = _context.towns.Where(y => y.Id == x.townId).Select(y => y.town).FirstOrDefault(),
                 state = _context.states.Where(y => y.Id == _context.towns.Where(z => z.Id == x.townId).Select(x => x.stateId).FirstOrDefault()).Select(y => y.state).FirstOrDefault(),
-                membership = _context.membershipTypes.Where(y => y.Id == x.membershipTypeId).Select(y => y.membershipType).FirstOrDefault()
+                membership = _context.membershipTypes.Where(y => y.Id == x.membershipTypeId).Select(y => y.membershipType).FirstOrDefault(),
+                plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(x => new PlantingMaterial
+                {
+                    Id = x.Id,
+                    plantingMaterial = x.plantingMaterial
+                }).ToList(),
+                grantNo = x.grantNo,
             }).ToListAsync();
             return estate;
         }
@@ -86,6 +92,13 @@ namespace E_EstateV2_API.Repository
                     id = e.Id,
                     establishment = e.establishment
                 }).ToList(),
+                plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(x => new PlantingMaterial
+                {
+                    Id = x.Id,
+                    plantingMaterial = x.plantingMaterial
+                }).ToList(),
+                grantNo = x.grantNo,
+                plantingMaterialId = x.plantingMaterialId,
                 fields = _context.fields.Where(y => y.estateId == id).Select(d => new DTO_Field
                 {
                     id = d.Id,
@@ -138,6 +151,8 @@ namespace E_EstateV2_API.Repository
                 existingEstate.totalArea = estate.totalArea;
                 existingEstate.managerName = estate.managerName;
                 existingEstate.latitudeLongitude = estate.latitudeLongitude;
+                existingEstate.grantNo = estate.grantNo;
+                existingEstate.plantingMaterialId = estate.plantingMaterialId;
                 existingEstate.updatedBy = estate.updatedBy;
                 existingEstate.updatedDate = DateTime.Now;
                 existingEstate.isActive = estate.isActive;

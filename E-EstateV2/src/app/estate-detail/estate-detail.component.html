@@ -3,7 +3,8 @@
 </div>
 
 <div class="box-container" *ngIf="!isLoading">
-  <h1>{{ estate.estateName }}</h1>
+  <!-- <h1>{{ estate.estateName }}</h1> -->
+  <h1>EstateName</h1>
   <hr />
 
   <div style="float:right;" *ngIf="userRole == 'EstateClerk'">
@@ -135,7 +136,7 @@
 
         <td>Ownership No (Grant)</td>
         <td><span>:</span></td>
-        <td>ESTATE</td>
+        <td>{{estate.grantNo}}</td>
 
       </tr>
 
@@ -143,7 +144,7 @@
 
         <td>Planting Material</td>
         <td><span>:</span></td>
-        <td>ESTATE</td>
+        <td *ngFor="let planting of estate.plantingMaterial">{{planting.plantingMaterial}}</td>
 
       </tr>
 

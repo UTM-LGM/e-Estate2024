@@ -14,9 +14,9 @@
       {{ estate.isActive == true ? "Active" : "Inactive" }}
     </button>
     <br />
-    <!-- <button class="btn-update" (click)="openDialog(estate)">
+    <button class="btn-update" (click)="openDialog(estate)">
       Update &nbsp; <i class="fa fa-pencil"></i>
-    </button> -->
+    </button>
   </div>
 
   <div style="float:right;" *ngIf="userRole !== 'EstateClerk'">
@@ -26,10 +26,10 @@
     }">
       {{ estate.isActive == true ? "Activate" : "Deactivate" }}
     </button>
-    <br />
-    <!-- <button class="btn-update" (click)="openDialog(estate)">
+    <br /><br/>
+    <button class="btn-update" (click)="openDialog(estate)">
       Update &nbsp; <i class="fa fa-pencil"></i>
-    </button> -->
+    </button>
   </div>
 
   <div style="overflow-x: auto; " *ngIf="userRole !== 'EstateClerk'">
@@ -37,77 +37,117 @@
       <tr>
         <td>Estate Name</td>
         <td><span>:</span></td>
-        <td>{{ estate.estateName }}</td>
-
-        <td>License No</td>
-        <td><span>:</span></td>
-        <td>{{ estate.licenseNo }}</td>
-
-      </tr>
-
-      <tr>
-        <td>Address</td>
-        <td><span>:</span></td>
-        <td>
-          {{ estate.address1 }}, {{ estate.address2 }}, {{ estate.address3 }},
-        </td>
+        <td>MYLESEN</td>
 
         <td>Company Name</td>
         <td><span>:</span></td>
-        <td>{{ estate.companyName }}</td>
+        <td>MYLESEN</td>
 
       </tr>
 
       <tr>
+        <td>License No</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <td>Area</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Address</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <td>District</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+        
+      </tr>
+
+      <tr>
+
         <td>Postcode</td>
         <td><span>:</span></td>
-        <td *ngFor="let town of estate.towns">{{ estate.postcode }}, {{ town.town }}, {{ estate.state }} </td>
+        <td>MYLESEN</td>
 
-        <td>Total Area (Ha)</td>
+        <td>Parliment</td>
         <td><span>:</span></td>
-        <td>{{ estate.totalArea }}</td>
+        <td>MYLESEN</td>
+
       </tr>
 
       <tr>
-        <td>Financial Year</td>
-        <td><span>:</span></td>
-        <td *ngFor="let financialYear of estate.financialYears">{{ financialYear.financialYear }}</td>
 
-        <td>Establishment Name</td>
+        <td>State</td>
         <td><span>:</span></td>
-        <td *ngFor="let establishment of estate.establishments">{{ establishment.establishment }}</td>
+        <td>MYLESEN</td>
+
+        <td>Dun</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
       </tr>
 
       <tr>
-        <td>Membership Type</td>
+        <td>Town</td>
         <td><span>:</span></td>
-        <td>{{ estate.membership }}</td>
+        <td>MYLESEN</td>
 
-        <td>Email</td>
+        <td>Latitude</td>
         <td><span>:</span></td>
-        <td>{{ estate.email }}</td>
+        <td>MYLESEN</td>
+
       </tr>
 
       <tr>
-        <td>Phone No</td>
-        <td><span>:</span></td>
-        <td>{{ estate.phone }}</td>
 
         <td>Estate Manager</td>
         <td><span>:</span></td>
-        <td>{{ estate.managerName }}</td>
+        <td>MYLESEN</td>
+
+        <td>Longitude</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+        
       </tr>
 
       <tr>
-        <td>Fax No</td>
-        <td><span>:</span></td>
-        <td>{{ estate.fax }}</td>
 
-        <td>Latitude-Longitude</td>
+        <td>Contact No</td>
         <td><span>:</span></td>
-        <td>{{ estate.latitudeLongitude }}</td>
+        <td>MYLESEN</td>
+
+        <td>Email</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
       </tr>
 
+      <tr>
+
+        <td>Estate Phone No</td>
+        <td><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <td>Ownership No (Grant)</td>
+        <td><span>:</span></td>
+        <td>ESTATE</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Planting Material</td>
+        <td><span>:</span></td>
+        <td>ESTATE</td>
+
+      </tr>
+
+      
     </table>
   </div>
 
@@ -301,7 +341,7 @@
                 fields.fieldName }}</a></td>
             <td class="td">{{ fields.area }}</td>
             <td class="td">
-              {{ fields.isMature == true ? "MATURE" : "IMMATURE" }}
+              {{ fields.isMature == true ? "Mature" : "Immature" }}
             </td>
             <!-- <td *ngFor="let status of fields.fieldStatus" class="td">{{ status.fieldStatus }}</td> -->
             <td class="td">{{fields.fieldStatus}}</td>

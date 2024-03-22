@@ -20,21 +20,22 @@
       *ngFor="let company of companies | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
       routerLink="/e-estate/company-profile/{{ company.id }}">
       <h3>
-        <a>{{company.companyName}}</a>
+        <!-- <a>{{company.companyName}}</a> -->
+        <a>CompanyName</a>
       </h3>
       <table>
         <tr>
           <td>Address</td>
           <td><span>:</span></td>
-          <td>
-            {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
-          </td>
+          <td>MYLESEN</td>
+          <!-- <td>{{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},</td> -->
         </tr>
 
         <tr>
           <td></td>
           <td><span>:</span></td>
-          <td *ngFor="let town of company.towns">{{ company.postcode }}, {{ town.town }}, {{ company.state }}</td>
+          <td>MYLESEN</td>
+          <!-- <td *ngFor="let town of company.towns">{{ company.postcode }}, {{ town.town }}, {{ company.state }}</td> -->
         </tr>
       </table>
       <button style="float: right; pointer-events: none; border-radius: 0px;" disabled [ngClass]="{

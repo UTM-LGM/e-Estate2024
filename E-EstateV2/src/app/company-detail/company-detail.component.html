@@ -3,7 +3,8 @@
 </div>
 
 <div class="box-container" *ngIf="!isLoading">
-  <h1>{{ company.companyName }}</h1>
+  <!-- <h1>{{ company.companyName }}</h1> -->
+  <h1>CompanyName</h1>
   <hr />
 
   <div style="float:right;" *ngIf="userRole == 'Admin'">
@@ -27,9 +28,9 @@
       {{ company.isActive == true ? "Active" : "Inactive" }}
     </button>
     <br /><br />
-    <!-- <button class="btn-update" (click)="openDialog(company)">
+    <button class="btn-update" (click)="openDialog(company)">
       Update &nbsp; <i class="fa fa-pencil"></i>
-    </button> -->
+    </button>
   </div>
 
   <div>
@@ -37,58 +38,75 @@
       <tr>
         <td class="detail">Company Name</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.companyName }}</td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">{{ company.companyName }}</td> -->
       </tr>
 
       <tr>
-        <td class="detail">Address</td>
+        <td class="detail">Company Registration No</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">
-          {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
-        </td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">{{ company.companyRegistrationNo }}</td> -->
       </tr>
 
       <tr>
-        <td class="detail">Postcode</td>
+        <td class="detail">Establishment</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail" *ngFor="let town of company.towns">{{ company.postcode }}, {{ town.town }}, {{ company.state
-          }} </td>
-      </tr>
+        <td>MYLESEN</td>
 
-      <tr>
-        <td class="detail">Ownership</td>
-        <td class="detail"><span>:</span></td>
-        <td class="detail" *ngFor="let ownership of company.ownerships">{{ ownership.ownership }}</td>
-      </tr>
-
-      <tr>
-        <td class="detail">Phone No</td>
-        <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.phone }}</td>
-      </tr>
-
-      <tr>
-        <td class="detail">Fax No</td>
-        <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.fax }}</td>
+        <!-- <td class="detail">{{ company.establishment }}</td> -->
       </tr>
 
       <tr>
         <td class="detail">Email</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.email }}</td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">{{ company.email }}</td> -->
       </tr>
 
       <tr>
-        <td class="detail">Liaison Officer</td>
+        <td class="detail">Phone No</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.managerName }}</td>
+        <td>MYLESEN</td>
+        
+        <!-- <td class="detail">{{ company.phone }}</td> -->
       </tr>
 
       <tr>
-        <td class="detail">Contact No</td>
+        <td class="detail">Official Company Website</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">{{ company.contactNo }}</td>
+        <td>MYLESEN</td>
+        
+        <!-- <td class="detail">{{ company.website }}</td> -->
+      </tr>
+
+      <tr>
+        <td class="detail">Address</td>
+        <td class="detail"><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">
+          {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
+        </td> -->
+      </tr>
+
+      <tr>
+        <td class="detail">Postcode</td>
+        <td class="detail"><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">{{ company.postcode }}</td> -->
+      </tr>
+
+      <tr>
+        <td class="detail">State</td>
+        <td class="detail"><span>:</span></td>
+        <td>MYLESEN</td>
+
+        <!-- <td class="detail">{{ company.state}} </td> -->
       </tr>
 
     </table>
@@ -240,7 +258,7 @@
                   <td class="td">{{ fields.fieldName }}</td>
                   <td class="td">{{ fields.area }}</td>
                   <td class="td">
-                    {{ fields.isMature == true ? "MATURE" : "IMMATURE" }}
+                    {{ fields.isMature == true ? "Mature" : "Immature" }}
                   </td>
                   <td class="td" *ngFor="let category of fields.fieldStatuses">{{ category.fieldStatus }}</td>
                   <td class="td">{{ fields.yearPlanted }}</td>

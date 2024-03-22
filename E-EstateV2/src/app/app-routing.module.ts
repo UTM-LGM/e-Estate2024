@@ -51,6 +51,7 @@ import { OwnershipComponent } from './utility/ownership/ownership.component';
 import { TappingSystemComponent } from './utility/tapping-system/tapping-system.component';
 import { FieldDiseaseComponent } from './utility/field-disease/field-disease.component';
 import { UtilityManageUserComponent } from './utility-manage-user/utility-manage-user.component';
+import { PlantingMaterialComponent } from './utility/planting-material/planting-material.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
@@ -127,6 +128,8 @@ const routes: Routes = [
           { path: 'ownership', component:OwnershipComponent },
           { path: 'tapping-system',component:TappingSystemComponent },
           { path: 'field-disease', component: FieldDiseaseComponent },
+          { path: 'planting-material', component: PlantingMaterialComponent },
+
         ],
       },
       { path : 'utility-manage-user', component: UtilityManageUserComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] }},

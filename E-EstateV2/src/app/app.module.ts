@@ -115,6 +115,7 @@ import { ManageUserComponent } from './utility-manage-user/manage-user/manage-us
 import { AddUserComponent } from './utility-manage-user/add-user/add-user.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { register } from 'swiper/element/bundle';
+import { PlantingMaterialComponent } from './utility/planting-material/planting-material.component';
 
 register()
 
@@ -202,6 +203,7 @@ register()
     ManageUserComponent,
     AddUserComponent,
     ContactDetailComponent,
+    PlantingMaterialComponent,
   ],
   imports: [
     BrowserModule,

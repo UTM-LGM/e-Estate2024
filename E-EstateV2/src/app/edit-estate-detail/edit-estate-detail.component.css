@@ -24,3 +24,11 @@ mat-option{
   font-size: 12px;
 }
 
+.detailAdmin td {
+  text-align: left;
+  padding: 6px;
+  border-bottom: none;
+  padding-right: 15px;
+}
+
+

@@ -20,27 +20,29 @@
       *ngFor="let estate of estates | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
       routerLink="/e-estate/estate-detail/{{ estate.id }}">
       <h3>
-        <a>{{estate.estateName}}</a>
+        <!-- <a>{{estate.estateName}}</a> -->
+        <a>EstateName</a>
       </h3>
       <table>
         <tr>
           <td>Address</td>
           <td><span>:</span></td>
-          <td>
-            {{ estate.address1 }}, {{ estate.address2 }}, {{ estate.address3 }},
-          </td>
+          <td>MYLESEN</td>
+          <!-- <td>{{ estate.address1 }}, {{ estate.address2 }}, {{ estate.address3 }},</td> -->
         </tr>
 
         <tr>
           <td></td>
           <td><span>:</span></td>
-          <td>{{ estate.postcode }}, {{ estate.town }}, {{ estate.state }}</td>
+          <td>MYLESEN</td>
+          <!-- <td>{{ estate.postcode }}, {{ estate.town }}, {{ estate.state }}</td> -->
         </tr>
 
         <tr>
           <td>Company Name </td>
           <td><span>:</span></td>
-          <td><b>{{ estate.companyName }}</b></td>
+          <td>MYLESEN</td>
+          <!-- <td><b>{{ estate.companyName }}</b></td> -->
         </tr>
 
       </table>

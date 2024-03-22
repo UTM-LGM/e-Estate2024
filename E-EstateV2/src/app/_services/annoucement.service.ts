@@ -16,7 +16,7 @@ export class AnnoucementService {
   addAnnouncement(announcement: Announcement, file: File): Observable<Announcement> {
     const formData = new FormData()
     formData.append('file', file, file.name)
-    formData.append('tittle', announcement.tittle)
+    formData.append('tittle', announcement.tittle.toUpperCase())
     formData.append('createdBy', announcement.createdBy)
     formData.append('isActive', announcement.isActive.toString())
     return this.http.post<Announcement>(this.baseUrl + '/announcements/AddAnnouncement', formData)

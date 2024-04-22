@@ -18,5 +18,6 @@
         public string Token { get; set; }
         public string OldPassword { get; set; }
         public bool isEmailVerified { get; set; }
+        public string licenseNo { get; set; }
     }
 }

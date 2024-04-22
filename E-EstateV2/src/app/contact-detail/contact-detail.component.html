@@ -16,14 +16,19 @@
         <input type="email" name="email" [(ngModel)]="companyContact.email" /> 
     </div> 
 
-    <div style="padding-right: 10px">
-    <button *ngIf="companyContact.id == null" style="float: right" class="btn-add" type="submit" (click)="addCompanyContact()">
-      Add Contact Company &nbsp; <i class="fa fa-plus"></i>
-    </button>
+    <div style="margin-top: 10px">
+      <button *ngIf="companyContact.id == null" style="float: right" class="btn-add" type="submit" (click)="addCompanyContact()">
+        Add Contact Company &nbsp; <i class="fa fa-plus"></i>
+      </button>
+      <button *ngIf="companyContact.id != null" style="float: right" class="btn-update" (click)="updateCompanyContact()">
+        Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>
+    </div>
 
-    <button *ngIf="companyContact.id != null" style="float: right" class="btn-update" (click)="updateCompanyContact()">
-      Update &nbsp; <i class="fa fa-pencil"></i>
-    </button>
+    <div style="margin-top: 10px">
+      <button class="btn-back" (click)="back()">
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
     </div>
   </div>
 
@@ -40,17 +45,22 @@
           <label>Email :</label>
           <input type="email" name="email" [(ngModel)]="estateContact.email" /> 
       </div> 
+
+      <div style="margin-top: 10px">
+        <button *ngIf="estateContact.id == null" style="float: right" class="btn-add" type="submit" (click)="addEstateContact()">
+          Add Contact Estate &nbsp; <i class="fa fa-plus"></i>
+        </button>
+        <button *ngIf="estateContact.id != null" style="float: right" class="btn-update" (click)="updateEstateContact()">
+          Update &nbsp; <i class="fa fa-pencil"></i>
+        </button>
+      </div>
   
-      <div style="padding-right: 10px">
-      <button *ngIf="estateContact.id == null" style="float: right" class="btn-add" type="submit" (click)="addEstateContact()">
-        Add Contact Estate &nbsp; <i class="fa fa-plus"></i>
-      </button>
-      <button *ngIf="estateContact.id != null" style="float: right" class="btn-update" (click)="updateEstateContact()">
-        Update &nbsp; <i class="fa fa-pencil"></i>
-      </button>
+      <div style="margin-top: 10px">
+        <button class="btn-back" (click)="back()">
+          <i class="fa fa-arrow-left"></i> &nbsp; Back
+        </button>
       </div>
       </div>
-    <br/><br/>
 
   </div>
 

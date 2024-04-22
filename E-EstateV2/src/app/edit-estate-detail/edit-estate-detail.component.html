@@ -80,22 +80,22 @@
     <tr>
       <td>Estate Name</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.name}}</td>
 
       <td>Company Name</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.company}}</td>
 
     </tr>
 
     <tr>
       <td>License No</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.licenseNo}}</td>
 
       <td>Area</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.area}}</td>
 
     </tr>
 
@@ -103,11 +103,11 @@
 
       <td>Address</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.add1}} {{estate.add2}} {{estate.add3}}</td>
 
       <td>District</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.district}}</td>
       
     </tr>
 
@@ -115,11 +115,11 @@
 
       <td>Postcode</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.postcode}}</td>
 
       <td>Parliment</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.parliament}}</td>
 
     </tr>
 
@@ -127,22 +127,22 @@
 
       <td>State</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.state}}</td>
 
       <td>Dun</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.dun}}</td>
 
     </tr>
 
     <tr>
       <td>Town</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.town}}</td>
 
       <td>Latitude</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.latitude}}</td>
 
     </tr>
 
@@ -150,11 +150,11 @@
 
       <td>Estate Manager</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.personInCharge}}</td>
 
       <td>Longitude</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.longitude}}</td>
       
     </tr>
 
@@ -162,11 +162,11 @@
 
       <td>Contact No</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.mobileCode}} {{estate.mobileNo}}</td>
 
       <td>Email</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.email}}</td>
 
     </tr>
 
@@ -174,7 +174,7 @@
 
       <td>Estate Phone No</td>
       <td><span>:</span></td>
-      <td>MYLESEN</td>
+      <td>{{estate.phoneCode}} {{estate.phoneNo}}</td>
 
     </tr>
 
@@ -185,10 +185,10 @@
   <hr>
 
   <div style="columns: 2" class="column">
-    <label>Ownership No (Grant) :</label>
-    <input type="text" name="ownershipNo" [(ngModel)]="estate.grantNo"  />
+    <label>Land tittle (Grant No) :</label>
+    <input type="text" name="ownershipNo" [(ngModel)]="estateDetail.grantNo"  />
     <label>Planting Material :</label>
-    <mat-select name="platingMaterial" placeholder="Please Choose" [(ngModel)]="estate.plantingMaterialId" >
+    <mat-select name="platingMaterial" placeholder="Please Choose" [(ngModel)]="estateDetail.plantingMaterialId" >
       <mat-option *ngFor="let planting of filterPlantingMaterial" [value]="planting.id">
         {{planting.plantingMaterial}}
       </mat-option>

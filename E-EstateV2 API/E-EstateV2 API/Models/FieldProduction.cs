@@ -23,6 +23,8 @@ namespace E_EstateV2_API.Models
         public DateTime createdDate { get; set; }
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
+        public string status { get; set; }
+
 
         [ForeignKey("FieldId")]
         public int fieldId { get; set; }

@@ -13,5 +13,6 @@ namespace E_EstateV2_API.IRepository
         Task<FieldClone> AddFieldClone(FieldClone clone);
         Task<FieldClone> GetFieldCloneById(int cloneId, int fieldId);
         Task DeleteFieldClone(FieldClone fieldClone);
+        Task<Field> UpdateFieldInfected(Field field);
     }
 }

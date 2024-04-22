@@ -18,6 +18,8 @@ import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { Location } from '@angular/common';
 import { FieldDiseaseService } from '../_services/field-disease.service';
 import { FieldDisease } from '../_interface/fieldDisease';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { FieldInfectedService } from '../_services/field-infected.service';
 
 @Component({
   selector: 'app-field-info',
@@ -27,7 +29,7 @@ import { FieldDisease } from '../_interface/fieldDisease';
 export class FieldInfoComponent implements OnInit {
   field: Field = {} as Field
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
   selectClone: FieldClone = {} as FieldClone
 
@@ -49,6 +51,8 @@ export class FieldInfoComponent implements OnInit {
   conversionField: FieldConversion[] = []
 
   filterFieldDisease : FieldDisease [] =[]
+  result:any = {} as any
+
 
   term = ''
   total = 0
@@ -83,7 +87,9 @@ export class FieldInfoComponent implements OnInit {
     private fieldConversionService: FieldConversionService,
     private authGuard: AuthGuard,
     private location: Location,
-    private fieldDiseaseService: FieldDiseaseService
+    private fieldDiseaseService: FieldDiseaseService,
+    private myLesenService:MyLesenIntegrationService,
+    private fieldInfectedService:FieldInfectedService
   ) { }
 
   ngOnInit() {
@@ -93,23 +99,44 @@ export class FieldInfoComponent implements OnInit {
     this.getEstate()
     this.getFieldDisease()
     this.role = this.authGuard.getRole()
-
   }
 
   getEstate() {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
-            .subscribe(
-              Response => {
-                this.estate = Response
-                this.sum(this.estate.fields)
-                this.isLoading = false
-              });
+          this.myLesenService.getOneEstate(routerParams['id'])
+          .subscribe(
+            Response =>{
+              this.estate = Response
+              this.getField()
+              this.isLoading = false
+            })
         }
       });
     }, 2000)
+  }
+
+  getField(){
+    this.fieldService.getField()
+    .subscribe(
+      Response =>{
+        const fields = Response
+        this.fields = fields.filter(x=>x.estateId == this.estate.id)
+
+        // Fetch all field infected data
+        this.fieldInfectedService.getFieldInfected().subscribe(
+        allFieldInfectedData => {
+          // Filter field infected data based on field id and store in result object
+          fields.forEach(field => {
+            const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
+            this.result[field.id] = filteredData;
+
+          });
+        })
+        this.sum(this.fields)
+      }
+    )
   }
 
   toggleSelectedField(field: Field) {
@@ -149,7 +176,7 @@ export class FieldInfoComponent implements OnInit {
   }
 
   checkFieldName(){
-    if(this.estate.fields.some(s=>s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())){
+    if(this.fields.some((s:any)=>s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())){
       swal.fire({
         text: 'Field/Block Name already exists!',
         icon: 'error'
@@ -203,10 +230,9 @@ export class FieldInfoComponent implements OnInit {
   }
 
   getcategory() {
-    this.fieldSick = false
     this.filterCropCategories = this.cropCategories.filter(c => c.isMature == this.field.isMature
       && c.isActive == true
-      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true))
+      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true ))
   }
 
   getFieldDisease(){
@@ -241,7 +267,7 @@ export class FieldInfoComponent implements OnInit {
       swal.fire({
         text: 'Please choose clone',
         icon: 'error'
-      });
+      })
     }
     else{
       const item = this.filterClones.find((x) => x.id == value.cloneId)
@@ -257,8 +283,10 @@ export class FieldInfoComponent implements OnInit {
   }
 
   sum(data: Field[]) {
-    this.value = data.filter(x => x.isActive == true)
-    this.total = this.value.reduce((acc, item) => acc + item.area, 0)
+    const filteredFields = data.filter(field => !this.result[field.id]);
+  // Calculate sum excluding filtered fields
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop'));
+    this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 
   back() {

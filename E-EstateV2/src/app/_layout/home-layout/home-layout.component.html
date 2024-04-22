@@ -12,13 +12,17 @@
     <span class="flexExpand"></span>
     <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-2xl fa-address-card"></i></span> &nbsp;
     &nbsp;
-    <span style="cursor: pointer;" routerLink="/e-estate/notification" *ngIf="role == 'EstateClerk'">
+    <div *ngIf="role == 'EstateClerk'">
+    <span style="cursor: pointer;" routerLink="/e-estate/notification" >
       <i class="fa fa-envelope"></i>
       <div class="badge" *ngIf="badgeCount > 0">
         <span>{{ badgeCount }}</span>
       </div>
-      &nbsp; &nbsp;
-    </span>
+    </span>&nbsp; &nbsp;
+  </div>
+
+    <span style="cursor: pointer;" [matMenuTriggerFor]="info"><i class="fa fa-2xl fa-info"></i></span> &nbsp;
+    &nbsp;
 
     <mat-menu #profile="matMenu">
       <div style="padding: 10px;overflow: hidden; font-size: 14px;">
@@ -31,6 +35,27 @@
           <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
           <button class="btn-danger" (click)="logOut()">LOGOUT</button>
         </div>
+
+      </div>
+    </mat-menu>
+
+    <mat-menu #info="matMenu">
+      <div style="padding: 10px;overflow: hidden; font-size: 14px; text-align: center;">
+        <div *ngIf="role == 'EstateClerk'">
+          <span style="font-weight: bold;">Estate Responsibility</span><br/>
+          <hr/>
+          <span>
+            The estate is responsible for filling in daily sales, monthly production, total workforce, stock
+            and annually rubber plantation area, production costs information.
+          </span>
+        <br/><br/>
+
+        </div>
+        
+        <span style="font-weight: bold;">e-Estate Info</span><br />
+        <hr/>
+        <span>Data, statistics and information obtained from the implementation of the e-Estate project are rubber production data,
+           rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate sector.</span>
 
       </div>
     </mat-menu>

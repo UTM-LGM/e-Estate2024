@@ -86,30 +86,31 @@ export class LaborLocalComponent implements OnInit {
     this.getNewArray();
     const localLabor = this.filterTypes.map(({ id, monthYear, createdBy, createdDate, totalWorker, estateId }) => ({ laborTypeId: id, monthYear, createdBy, createdDate, totalWorker, estateId })) as unknown as LocalLabor[]
     const filteredLabors = localLabor.filter(x => x !== null)
-    if (filteredLabors.length === localLabor.length) {
-      this.localLaborService.addLabor(localLabor)
-        .subscribe(
-          {
-            next: (Response) => {
-              swal.fire({
-                title: 'Done!',
-                text: 'Local Labor successfully submitted!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
-              this.getLocalLabor()
-              this.getLaborType()
-              this.totalWorker = 0
-            },
-            error: (Error) => {
-              swal.fire({
-                text: 'Please fil up the form',
-                icon: 'error'
-              });
-            }
-          })
-    }
+    console.log(localLabor)
+    // if (filteredLabors.length === localLabor.length) {
+    //   this.localLaborService.addLabor(localLabor)
+    //     .subscribe(
+    //       {
+    //         next: (Response) => {
+    //           swal.fire({
+    //             title: 'Done!',
+    //             text: 'Local Labor successfully submitted!',
+    //             icon: 'success',
+    //             showConfirmButton: false,
+    //             timer: 1000
+    //           });
+    //           this.getLocalLabor()
+    //           this.getLaborType()
+    //           this.totalWorker = 0
+    //         },
+    //         error: (Error) => {
+    //           swal.fire({
+    //             text: 'Please fil up the form',
+    //             icon: 'error'
+    //           });
+    //         }
+    //       })
+    // }
   }
 
   getLocalLabor() {

@@ -29,6 +29,10 @@ export class FieldService {
     return this.http.put<Field>(this.baseUrl + '/fields/updatefield', field)
   }
 
+  updateFieldInfected(field:Field):Observable<Field>{
+    return this.http.put<Field>(this.baseUrl + '/fields/UpdateFieldInfected', field)
+  }
+
   addClone(clone: FieldClone): Observable<FieldClone> {
     return this.http.post<FieldClone>(this.baseUrl + '/fields/addclone', clone)
   }

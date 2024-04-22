@@ -33,10 +33,10 @@ export class RubberSaleDetailComponent implements OnInit {
 
   ngOnInit() {
     this.rubberSale = this.data.data
-    this.formattedDate = this.datePipe.transform(this.rubberSale.date, 'yyyy-MM-dd') || ''
+    this.formattedDate = this.datePipe.transform(this.rubberSale.saleDateTime, 'yyyy-MM-dd') || ''
     if (this.formattedDate) {
       setTimeout(() => {
-        this.rubberSale.date = new Date(this.formattedDate)
+        this.rubberSale.saleDateTime = new Date(this.formattedDate)
       }, 0);
     }
     this.getBuyer();
@@ -44,7 +44,7 @@ export class RubberSaleDetailComponent implements OnInit {
 
   selectedDate(date: string) {
     if (date) {
-      this.rubberSale.date = new Date(date)
+      this.rubberSale.saleDateTime = new Date(date)
     }
   }
 
@@ -77,6 +77,11 @@ export class RubberSaleDetailComponent implements OnInit {
           this.dialogRef.close()
         }
       )
+  }
+
+  calculateTotalPrice(){
+    const total = this.rubberSale.unitPrice * (this.rubberSale.wetWeight*this.rubberSale.drc/100)
+    this.rubberSale.total = total.toFixed(2)
   }
 
 }

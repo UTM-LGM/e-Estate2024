@@ -1,0 +1,141 @@
+<div style="padding: 20px;" class="box-container">
+    <h1>{{fieldInfected.fieldName}}</h1>
+    <hr>
+
+    <div>
+    <h1>Status : </h1>
+    <button class="active-btn"> Active </button> ->
+    <button class="inactive-btn"> Inactive </button>
+    </div><br/>
+
+    <div style="columns: 2">
+      <label>Date Recovered :</label>
+      <input type="date" name="date" [(ngModel)]="fieldInfected.dateRecovered"/>
+    </div>
+
+    <label>Remark :</label>
+    <textarea [(ngModel)]="fieldInfected.remark"></textarea><br/><br/>
+
+    <div>
+      <button style="float: right" class="btn-update" type="submit" (click)="update()">
+        Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>
+    </div>
+
+    <div (click)="back()">
+      <button class="btn-back" >
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
+    </div>
+    <!-- <hr/>
+
+    <span>Please update the field information below : </span><br/><br/>
+
+    <div class="box">
+    <div class="column">
+    <div>
+        <div style="columns: 2">
+          <label>Field / Block :</label>
+          <b><input type="text" name="fieldname" [(ngModel)]="field.fieldName" disabled /></b>
+          <label>Maturity :</label>
+          <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature" (selectionChange)="getcategory(field)">
+            <mat-option [value]="true">MATURE</mat-option>
+            <mat-option [value]="false">IMMATURE</mat-option>
+          </mat-select>
+        </div>
+        <div style="columns: 2">
+          <label>Field Status :</label>
+          <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId" (selectionChange)="changeFieldStatus($event)">
+            <mat-option *ngFor="let category of filterFieldStatus" [value]="category.id">
+              {{ category.fieldStatus }}
+            </mat-option>
+          </mat-select>
+          <span style="color: red; font-size: 12px;">**Please update conversion at Field information</span><br/>
+
+          <label>Field Area (Ha) :</label>
+          <b><input type="number" name="fieldarea" [(ngModel)]="field.area" /></b>
+        </div>
+
+        <div *ngIf="conversion">
+            <div style="columns: 2;">
+              <label>Conversion Crop Name :</label>
+              <input type="text" name="crop" [(ngModel)]="field.conversionCropName" />
+  
+              <label>Since year :</label>
+              <input type="number" name="year" [(ngModel)]="field.sinceYear" />
+            </div>
+          </div>
+
+        <div *ngIf="!conversion" >
+        <div style="columns: 2" >
+          <label>Year Planted :</label>
+          <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
+
+          <label>Initial Tree Stand :</label>
+          <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
+
+        </div>
+        
+        <div style="columns: 2"  *ngIf="field.isMature == true">
+            <label>Date Open Tapping :</label>
+            <input name="dateopentapping" type="date" [(ngModel)]="field.dateOpenTappingFormatted " />
+
+          <label>Total task :</label>
+          <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
+          
+        </div>
+        </div>
+
+        <div>
+          <button style="float: right" class="btn-update" type="submit" (click)="update()">
+            Update &nbsp; <i class="fa fa-pencil"></i>
+          </button>
+        </div>
+
+        <div (click)="back()">
+          <button class="btn-back" >
+            <i class="fa fa-arrow-left"></i> &nbsp; Back
+          </button>
+        </div>
+
+    </div><br/>
+    </div>
+
+        <div>
+            <div style="columns: 2">
+              <label>Clone :</label>
+              <mat-select name="clone" class="clone" placeholder="Please Choose" [(ngModel)]="field.cloneId">
+                <mat-option *ngFor="let clone of availableClones" [value]="clone.id">
+                  {{ clone.cloneName }}
+                </mat-option>
+              </mat-select>
+              <div>
+                <button [disabled]="conversion" style="margin-top: 28px; margin-left: 60px" class="btn-add" (click)="addClone(field)" >
+                  Add Clone &nbsp; <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+        
+            <div class="box-container">
+              <h1>Clones planted</h1>
+              <hr />
+              <div style="overflow-x: auto; overflow-y: auto">
+                <table style="width: 100%">
+                  <tr>
+                    <th>No</th>
+                    <th>Clone Name</th>
+                    <th>Action</th>
+                  </tr>
+                  <tr *ngFor="let clone of fieldClones, let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{clone.cloneName}}</td>
+                    <td><button class="btn-del" [disabled]="conversion || disableInput" (click)="delete(clone.id, field.id)"><i
+                          class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
+    </div> -->
+  </div>

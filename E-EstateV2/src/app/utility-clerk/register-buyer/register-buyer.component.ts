@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Buyer } from 'src/app/_interface/buyer';
 import { BuyerService } from 'src/app/_services/buyer.service';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -20,6 +22,8 @@ export class RegisterBuyerComponent implements OnInit {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+  result = {} as any
+
 
   sortableColumns = [
     { columnName: 'licenseNo', displayText: 'Lisence No' },
@@ -28,28 +32,31 @@ export class RegisterBuyerComponent implements OnInit {
 
   constructor(
     private buyerService: BuyerService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
     this.getBuyer()
     this.buyer.licenseNo = ''
+    this.result.premiseName = ''
   }
 
   submit() {
-    if (this.buyer.licenseNo === '') {
+    if (this.buyer.licenseNo === '' && this.result.premiseName === '') {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Please fill up the form',
       });
-    } else if (this.buyers.some(s => s.buyerName.toLowerCase() === this.buyer.buyerName.toLowerCase())) {
+    } else if (this.buyers.some(s => s.licenseNo.toLowerCase() === this.buyer.licenseNo.toLowerCase())) {
       swal.fire({
-        text: 'Buyer name already exists!',
+        text: 'Buyer already exists!',
         icon: 'error'
       });
     }
     else {
+      this.buyer.buyerName = this.result.premiseName
       this.buyer.isActive = true
       this.buyer.createdBy = this.sharedService.userId.toString()
       this.buyer.createdDate = new Date()
@@ -79,7 +86,8 @@ export class RegisterBuyerComponent implements OnInit {
       this.buyerService.getBuyer()
         .subscribe(
           Response => {
-            this.buyers = Response
+            const buyers = Response
+            this.buyers = buyers.filter(x=>x.estateId == this.sharedService.estateId)
             this.isLoading = false
           });
     }, 2000)
@@ -112,5 +120,34 @@ export class RegisterBuyerComponent implements OnInit {
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
   }
+
+  checkLicenseNo(event: any) {
+    setTimeout(() => {
+    this.myLesenService.getLicenseNo(event.target.value.toString())
+      .subscribe(
+        {
+          next: (Response) => {
+            this.result = Response
+            swal.fire({
+              title: 'Done!',
+              text: 'Data found!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+          },
+          error: (Error) => {
+            swal.fire({
+              icon: 'error',
+              title: 'Error! License No does not exist',
+            });
+            this.buyer.licenseNo = ''
+            this.result = {}
+          }
+        })
+      },1000)
+  }
+
+  
 
 }

@@ -16,6 +16,8 @@ import { EditCompanyDetailComponent } from '../edit-company-detail/edit-company-
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { CompanyContact } from '../_interface/company-contact';
 import { CompanyContactService } from '../_services/company-contact.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { CompanyDetail } from '../_interface/company-detail';
 
 @Component({
   selector: 'app-company-detail',
@@ -23,15 +25,17 @@ import { CompanyContactService } from '../_services/company-contact.service';
   styleUrls: ['./company-detail.component.css'],
 })
 export class CompanyDetailComponent implements OnInit {
-  company: Company = {} as Company
+  company: any = {} as any
 
   activityLog: UserActivityLog = {} as UserActivityLog
 
-  contacts:any = {} as any
+  contacts:any[]=[]
 
   estate: any = {} as any
 
   isLoading = true
+
+  companyDetail:CompanyDetail = {} as CompanyDetail
 
   term = ''
   userRole = ''
@@ -42,13 +46,10 @@ export class CompanyDetailComponent implements OnInit {
   selectedEstate: any
 
   sortableColumns = [
-    { columnName: 'estateName', displayText: 'Estate Name' },
+    { columnName: 'name', displayText: 'Estate Name' },
     { columnName: 'state', displayText: 'State' },
-    { columnName: 'town1', displayText: 'Town' },
+    { columnName: 'town', displayText: 'Town' },
     { columnName: 'email', displayText: 'Email' },
-    { columnName: 'licenseNo', displayText: 'License No' },
-    { columnName: 'totalArea', displayText: 'Total Area (Ha)' },
-    { columnName: 'membershipType', displayText: 'Membership Type' },
   ];
 
   sortableColumnContacts = [
@@ -56,7 +57,7 @@ export class CompanyDetailComponent implements OnInit {
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
     { columnName: 'email', displayText: 'Email' },
-  ];
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -67,25 +68,27 @@ export class CompanyDetailComponent implements OnInit {
     private sharedService: SharedService,
     private auth: AuthGuard,
     private dialog: MatDialog,
-    private companyContactService:CompanyContactService
+    private companyContactService:CompanyContactService,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
     this.userRole = this.auth.getRole()
     this.getCompany()
-    this.getContact()
   }
 
   getCompany() {
     setTimeout(() => {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
-          this.companyService.getOneCompany(routeParams['id'])
-            .subscribe(
-              Response => {
-                this.company = Response
-                this.isLoading = false
-              });
+          this.myLesenService.getOneCompany(routeParams['id'])
+          .subscribe(
+            Response =>{
+              this.company = Response
+              this.getContact()
+              this.isLoading = false
+            }
+          )
         }
       });
     }, 2000)
@@ -95,10 +98,11 @@ export class CompanyDetailComponent implements OnInit {
     this.companyContactService.getCompanyContact()
     .subscribe(
       Response =>{
-        this.contacts = Response
-      }
-    )
-  }
+        const contacts = Response
+        this.contacts = contacts.filter(x=>x.companyId == this.company.id)
+      }
+    )
+  }
 
   statusCompany(company: Company) {
     company.updatedBy = this.sharedService.userId.toString()
@@ -134,8 +138,8 @@ export class CompanyDetailComponent implements OnInit {
           timer: 1000
         });
         this.ngOnInit()
-      }
-    )
+      }
+    )
   }
 
   back() {
@@ -197,9 +201,9 @@ export class CompanyDetailComponent implements OnInit {
     }
   }
 
-  openDialog(company: Company) {
+  openDialog(company: Company, companyDetail:CompanyDetail) {
     const dialogRef = this.dialog.open(EditCompanyDetailComponent, {
-      data: { data: company },
+      data: { data: company, companyDetail: companyDetail },
     });
     dialogRef.afterClosed()
       .subscribe(
@@ -209,7 +213,7 @@ export class CompanyDetailComponent implements OnInit {
       )
   }
 
-  openDialogCompanyContact(contact:CompanyContact, company:Company)
+  openDialogCompanyContact(contact:CompanyContact[], company:Company)
   {
     const dialogRef = this.dialog.open(ContactDetailComponent, {
       data:{contact: contact, companyId: company.id},
@@ -218,8 +222,8 @@ export class CompanyDetailComponent implements OnInit {
       .subscribe(
         Response => {
           this.ngOnInit()
-        }
-      )
-  }
+        }
+      )
+  }
 
 }

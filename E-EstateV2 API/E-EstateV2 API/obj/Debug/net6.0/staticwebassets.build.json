@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "5Tm9W9cDxWlzdFOsIgp4QE22floF9y2jGs1Y7hmC4Fc=",
+  "Hash": "IkXLjFiNE07a0lAC1oSb1nEotIAn1fG/W5TCTmykz1k=",
   "Source": "E-EstateV2 API",
   "BasePath": "_content/E-EstateV2 API",
   "Mode": "Default",
@@ -32,6 +32,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\api\\Images\\ANNOUCEMENT 1.png"
+    },
+    {
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 2.png",
+      "SourceId": "E-EstateV2 API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "BasePath": "_content/E-EstateV2 API",
+      "RelativePath": "api/Images/ANNOUCEMENT 2.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\api\\Images\\ANNOUCEMENT 2.png"
     }
   ]
 }

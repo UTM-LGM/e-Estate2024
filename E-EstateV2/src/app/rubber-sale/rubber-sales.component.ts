@@ -4,10 +4,11 @@ import swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { RubberSaleDetailComponent } from '../rubber-sale-detail/rubber-sale-detail.component';
 import { SharedService } from '../_services/shared.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Estate } from '../_interface/estate';
 import { RubberSaleService } from '../_services/rubber-sale.service';
 import { EstateService } from '../_services/estate.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-rubber-sales',
@@ -19,7 +20,7 @@ export class RubberSalesComponent implements OnInit {
   pageNumber = 1
   isLoading = true
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
   filterSales: RubberSale[] = []
 
@@ -30,11 +31,14 @@ export class RubberSalesComponent implements OnInit {
     { columnName: 'date', displayText: 'Date' },
     { columnName: 'buyerName', displayText: 'Buyer Name' },
     { columnName: 'rubberType', displayText: 'Rubber Type' },
-    { columnName: 'authorizationLetter', displayText: 'Authorization Letter' },
-    { columnName: 'receiptNo', displayText: 'Receipt No' },
-    { columnName: 'weight', displayText: 'Weight (Kg)' },
+    { columnName: 'letterOfConsentNo', displayText: 'Letter of Consent No (Form 1)' },
+    { columnName: 'wetWeight', displayText: 'Weight (Kg)' },
     { columnName: 'drc', displayText: 'DRC (%)' },
-    { columnName: 'amountPaid', displayText: 'Amount Paid (RM)' },
+    { columnName: 'unitPrice', displayText: 'Unit Price (RM/kg)' },
+    { columnName: 'total', displayText: 'Total Price (RM)'},
+    { columnName: 'transportPlateNo', displayText: 'Transport Plate No'},
+    { columnName: 'driverName', displayText: 'Driver Name'},
+    { columnName: 'remark', displayText: 'Remark'}
   ];
 
   constructor(
@@ -42,7 +46,9 @@ export class RubberSalesComponent implements OnInit {
     private dialog: MatDialog,
     private sharedService: SharedService,
     private route: ActivatedRoute,
-    private estateService: EstateService
+    private estateService: EstateService,
+    private myLesenService:MyLesenIntegrationService,
+    private router:Router
   ) { }
 
   ngOnInit() {
@@ -54,12 +60,12 @@ export class RubberSalesComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
-            .subscribe(
-              Response => {
-                this.estate = Response
-                this.isLoading = false
-              });
+          this.myLesenService.getOneEstate(routerParams['id'])
+          .subscribe(
+            Response =>{
+              this.estate = Response
+              this.isLoading = false
+            })
         }
       });
     }, 2000)
@@ -71,7 +77,7 @@ export class RubberSalesComponent implements OnInit {
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.companyId == this.sharedService.companyId && e.estateId == this.sharedService.estateId)
+            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId)
             this.isLoading = false
           })
     }, 2000)
@@ -114,6 +120,11 @@ export class RubberSalesComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  print(sale:RubberSale){
+    const url = 'generate-form-1/' + sale.id;
+    window.open(url, '_blank');
   }
 
 }

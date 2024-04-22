@@ -15,11 +15,9 @@ namespace E_EstateV2_API.Models
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
 
-        [ForeignKey("EstateId")]
-        public int? estateId { get; set; }
-        public Estate Estate { get; set; }
+        public int estateId { get; set; }
 
         //many to many relation
-        public ICollection <BuyerCompany> BuyerCompanies { get; set; }
+        //public ICollection <BuyerCompany> BuyerCompanies { get; set; }
     }
 }

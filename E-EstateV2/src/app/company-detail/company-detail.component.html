@@ -3,110 +3,71 @@
 </div>
 
 <div class="box-container" *ngIf="!isLoading">
-  <!-- <h1>{{ company.companyName }}</h1> -->
-  <h1>CompanyName</h1>
+  <h1>{{ company.name }}</h1>
   <hr />
 
-  <div style="float:right;" *ngIf="userRole == 'Admin'">
-    <button (click)="statusCompany(company)" style="float: right; margin-right:8px; padding: 10px 13px;" [ngClass]="{
-      'active-btn': company.isActive == true,
-      'inactive-btn': company.isActive == false
-    }">
-      {{ company.isActive == true ? "Activate" : "Deactivate" }}
-    </button>
-    <br /><br />
-    <!-- <button class="btn-update" (click)="openDialog(company)">
-      Update &nbsp; <i class="fa fa-pencil"></i>
-    </button> -->
-  </div>
-
-  <div style="float:right;" *ngIf="userRole == 'CompanyAdmin'">
-    <button style="float: right; margin-right:8px; padding: 10px 13px; border-radius: 0;" [ngClass]="{
-      'active-btn': company.isActive == true,
-      'inactive-btn': company.isActive == false
-    }">
-      {{ company.isActive == true ? "Active" : "Inactive" }}
-    </button>
-    <br /><br />
-    <button class="btn-update" (click)="openDialog(company)">
+  <div style="float:right;">
+    <button class="btn-update" (click)="openDialog(company,companyDetail)">
       Update &nbsp; <i class="fa fa-pencil"></i>
     </button>
-  </div>
+  </div> 
 
   <div>
     <table>
       <tr>
         <td class="detail">Company Name</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.companyName }}</td> -->
+        <td class="detail">{{ company.name }}</td>
       </tr>
 
       <tr>
         <td class="detail">Company Registration No</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.companyRegistrationNo }}</td> -->
+        <td class="detail">{{ company.registrationNumber }}</td>
       </tr>
 
       <tr>
         <td class="detail">Establishment</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.establishment }}</td> -->
+        <td class="detail">{{ company.category }}</td>
       </tr>
 
       <tr>
         <td class="detail">Email</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.email }}</td> -->
+        <td class="detail">{{ company.email }}</td>
       </tr>
 
       <tr>
         <td class="detail">Phone No</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-        
-        <!-- <td class="detail">{{ company.phone }}</td> -->
+        <td class="detail">{{company.phoneCode}} {{ company.phoneNo }}</td>
       </tr>
 
       <tr>
         <td class="detail">Official Company Website</td>
-        <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-        
-        <!-- <td class="detail">{{ company.website }}</td> -->
+        <td class="detail"><span>:</span></td>        
+        <td class="detail">{{ company.website }}</td>
       </tr>
 
       <tr>
         <td class="detail">Address</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">
-          {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
-        </td> -->
+        <td class="detail">
+          {{ company.add1 }} {{ company.add2 }} {{ company.add3 }}
+        </td>
       </tr>
 
       <tr>
         <td class="detail">Postcode</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.postcode }}</td> -->
+        <td class="detail">{{ company.postcode }}</td>
       </tr>
 
       <tr>
         <td class="detail">State</td>
         <td class="detail"><span>:</span></td>
-        <td>MYLESEN</td>
-
-        <!-- <td class="detail">{{ company.state}} </td> -->
+        <td class="detail">{{ company.state}} </td>
       </tr>
 
     </table>
@@ -182,24 +143,23 @@
   <div class="box-container" *ngIf="userRole == 'Admin'">
     <h1>List of Estates</h1>
     <hr />
-    <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
+    <!-- <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
       Add New Estate &nbsp; <i class="fa fa-plus"></i>
-    </button>
+    </button> -->
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>
           <tr>
-            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.estates" [attr.data-order]="order"
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises" [attr.data-order]="order"
               [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
               {{ column.displayText }}
               <i class="fa"
                 [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                                     'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
-            <th width="90px">Status</th>
-            <th width="30px">Action</th>
+            <!-- <th width="30px">Action</th> -->
           </tr>
         </thead>
 
@@ -210,36 +170,32 @@
           </td>
         </tr>
 
-        <tr *ngIf="company.estates.length == 0">
+        <tr *ngIf="company.premises.length == 0">
           <td colspan="9"><b>No Estate</b></td>
         </tr>
 
-        <tbody
-          *ngFor="let estate of company.estates | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tbody *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor: default;">
             <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
-              <a>{{estate.estateName}}</a></td>
+              <a>{{estate.name}}</a></td>
             <td>{{ estate.state }}</td>
-            <td>{{ estate.town1 }}</td>
+            <td>{{ estate.town }}</td>
             <td>{{ estate.email }} </td>
-            <td>{{ estate.licenseNo }}</td>
-            <td>{{ estate.totalArea }}</td>
-            <td>{{ estate.membership }}</td>
-            <td>
+            <!-- <td>
               <button style="cursor: pointer;" (click)="statusEstate(estate)" [ngClass]="{
                 'active-btn': estate.isActive == true,
                 'inactive-btn': estate.isActive == false
               }">
                 {{ estate.isActive == true ? "Active" : "Inactive" }}
               </button>
-            </td>
-            <td *ngIf="selectedEstate !== estate"><i class="fa fa-chevron-down" style="cursor:pointer"
+            </td> -->
+            <!-- <td *ngIf="selectedEstate !== estate"><i class="fa fa-chevron-down" style="cursor:pointer"
                 (click)="toggleSelectedEstate(estate)"></i></td>
             <td *ngIf="selectedEstate === estate"><i class="fa fa-chevron-up" style="cursor:pointer"
-                (click)="toggleSelectedEstate(estate)"></i></td>
+                (click)="toggleSelectedEstate(estate)"></i></td> -->
           </tr>
 
-          <tr *ngIf="selectedEstate === estate && estate.fields.length != 0">
+          <!-- <tr *ngIf="selectedEstate === estate && estate.fields.length != 0">
             <td colspan="9">
               <table style="width: 100%; background-color: antiquewhite;">
                 <tr>
@@ -281,7 +237,7 @@
 
           <tr *ngIf="selectedEstate === estate && estate.fields.length == 0">
             <td style="width: 100%; background-color: antiquewhite;" colspan="9"> <b> No field data found </b> </td>
-          <tr>
+          <tr>-->
 
         </tbody>
       </table>

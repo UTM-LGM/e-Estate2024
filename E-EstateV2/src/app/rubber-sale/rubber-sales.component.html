@@ -1,7 +1,7 @@
 <div class="box-container">
   <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{estate.estateName}}</h1>
+  <h1>{{estate.name}}</h1>
   <hr />
 
   <div class="box-container">
@@ -28,26 +28,30 @@
         </thead>
 
         <tr *ngIf="isLoading">
-          <td colspan="10">
+          <td colspan="13">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
         </tr>
 
         <tr *ngIf="filterSales.length == 0 && !isLoading">
-          <td colspan="10"><b>No Rubber Sale Transaction</b></td>
+          <td colspan="13"><b>No Rubber Sale Transaction</b></td>
         </tr>
 
-        <tr class="list"
-          *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-          <td>{{sale.date | date : "dd/MM/YYYY"}}</td>
+        <tbody
+        *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tr class="list" style="cursor: default;">
+          <td>{{sale.saleDateTime | date : "dd/MM/YYYY"}}</td>
           <td>{{sale.buyerName}}</td>
           <td>{{sale.rubberType}}</td>
-          <td>{{sale.authorizationLetter}}</td>
-          <td>{{sale.receiptNo}}</td>
-          <td>{{sale.weight }}</td>
-          <td>{{sale.drc| number : "1.2-2"}}</td>
-          <td>{{sale.amountPaid| number : "1.2-2"}}</td>
+          <td>{{sale.letterOfConsentNo}}</td>
+          <td>{{sale.wetWeight }}</td>
+          <td>{{sale.drc}}</td>
+          <td>{{sale.unitPrice| number : "1.2-2"}}</td>
+          <td>{{sale.total| number : "1.2-2"}}</td>
+          <td>{{sale.transportPlateNo}}</td>
+          <td>{{sale.driverName}}</td>
+          <td>{{sale.remark}}</td>
           <td>
             <button (click)="status(sale)" style="cursor: pointer;" [ngClass]="{
                 'active-btn': sale.isActive == true,
@@ -57,11 +61,17 @@
             </button>
           </td>
           <td>
-            <button class="btn-update" (click)="openDialog(sale)">
-              <i class="fa fa fa-pencil"></i>
-            </button>
+            <div style="display: flex;">
+              <button class="btn-update" (click)="openDialog(sale)">
+                <i class="fa fa-pencil"></i>
+              </button> &nbsp;
+              <button class="btn-update" (click)="print(sale)">
+                <i class="fa fa-print"></i>
+              </button>
+            </div>
           </td>
         </tr>
+      </tbody>
       </table>
 
       <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Company } from '../_interface/company';
 import { CompanyService } from '../_services/company.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-company-list',
@@ -8,7 +9,7 @@ import { CompanyService } from '../_services/company.service';
   styleUrls: ['./company-list.component.css'],
 })
 export class CompanyListComponent implements OnInit {
-  companies: Company[] = []
+  companies: any[] = []
   activeCompanies: Company[] = []
   inactiveCompanies: Company[] = []
 
@@ -23,6 +24,7 @@ export class CompanyListComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
+    private mylesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -31,12 +33,13 @@ export class CompanyListComponent implements OnInit {
 
   getCompany() {
     setTimeout(() => {
-      this.companyService.getCompany()
-        .subscribe(
-          Response => {
-            this.companies = Response
-            this.isLoading = false
-          });
+      this.mylesenService.getAllCompany()
+      .subscribe(
+        Response =>{
+          this.companies = Response
+          this.isLoading = false
+        } 
+      )
     }, 2000)
   }
 

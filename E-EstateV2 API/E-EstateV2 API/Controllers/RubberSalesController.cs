@@ -38,5 +38,13 @@ namespace E_EstateV2_API.Controllers
             var result = await _rubberSalesRepository.UpdateRubberSale(rubberSales);
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetRubberSaleById([FromRoute] int id)
+        {
+            var rubberSale = await _rubberSalesRepository.GetRubberSaleById(id);
+            return Ok(rubberSale);
+        }
     }
 }

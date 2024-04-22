@@ -56,6 +56,13 @@ namespace E_EstateV2_API.Controllers
             return Ok(updatedField);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateFieldInfected([FromBody] Field field)
+        {
+            var updatedField = await _fieldRepository.UpdateFieldInfected(field);
+            return Ok(updatedField);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddClone([FromBody] FieldClone clone)
         {

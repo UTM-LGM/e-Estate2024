@@ -21,50 +21,96 @@ namespace E_EstateV2_API.Repository
             await _context.rubberSales.AddAsync(sales);
             await _context.SaveChangesAsync();
 
-            var buyerCompany = new BuyerCompany
-            {
-                buyerId = sales.buyerId,
-                companyId = sales.companyId,
-            };
+            //var buyerCompany = new BuyerCompany
+            //{
+            //    buyerId = sales.buyerId,
+            //};
 
-            await _context.buyerCompanies.AddAsync(buyerCompany);
-            await _context.SaveChangesAsync();
+            //await _context.buyerCompanies.AddAsync(buyerCompany);
+            //await _context.SaveChangesAsync();
 
             return sales;
         }
+
         public async Task<List<DTO_RubberSale>> GetRubberSales()
         {
             var sales = await _context.rubberSales.Select(x => new DTO_RubberSale
             {
                 id = x.Id,
-                date = x.date,
+                saleDateTime = x.saleDateTime,
                 buyerName = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.buyerName).FirstOrDefault(),
                 rubberType = x.rubberType,
-                authorizationLetter = x.authorizationLetter,
+                letterOfConsentNo = x.letterOfConsentNo,
                 receiptNo = x.receiptNo,
-                weight = x.weight,
+                wetWeight = x.wetWeight,
+                buyerWetWeight = x.buyerWetWeight,
                 DRC = x.DRC,
-                amountPaid = x.amountPaid,
+                buyerDRC = x.buyerDRC,
+                unitPrice = x.unitPrice,
+                total = x.total,
+                weightSlipNo = x.weightSlipNo,
                 isActive = x.isActive,
                 buyerId = x.buyerId,
-                companyId = x.companyId,
-                estateId = x.estateId
-            }).OrderBy(x => x.date).ToListAsync();
+                buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y=>y.licenseNo).FirstOrDefault(),
+                paymentStatusId = x.paymentStatusId,
+                estateId = x.estateId,
+                transportPlateNo = x.transportPlateNo,
+                driverName = x.driverName,
+                remark = x.remark,
+            }).OrderBy(x => x.saleDateTime).ToListAsync();
             return sales;
         }
+
+        public async Task<DTO_RubberSale> GetRubberSaleById(int id)
+        {
+            var rubberSale = await _context.rubberSales.Where(x => x.Id == id).Select(x => new DTO_RubberSale
+            {
+                id = x.Id,
+                saleDateTime = x.saleDateTime,
+                buyerName = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.buyerName).FirstOrDefault(),
+                rubberType = x.rubberType,
+                letterOfConsentNo = x.letterOfConsentNo,
+                receiptNo = x.receiptNo,
+                wetWeight = x.wetWeight,
+                buyerWetWeight = x.buyerWetWeight,
+                DRC = x.DRC,
+                buyerDRC = x.buyerDRC,
+                unitPrice = x.unitPrice,
+                total = x.total,
+                weightSlipNo = x.weightSlipNo,
+                isActive = x.isActive,
+                buyerId = x.buyerId,
+                buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.licenseNo).FirstOrDefault(),
+                paymentStatusId = x.paymentStatusId,
+                estateId = x.estateId,
+                transportPlateNo = x.transportPlateNo,
+                driverName = x.driverName,
+                remark = x.remark,
+            }).FirstOrDefaultAsync();
+            return rubberSale;
+        }
+
         public async Task<RubberSales> UpdateRubberSale(RubberSales rubberSales)
         {
             var existingSale = await _context.rubberSales.FirstOrDefaultAsync(x => x.Id == rubberSales.Id);
             if (existingSale != null)
             {
-                existingSale.date = rubberSales.date;
-                existingSale.buyerId = rubberSales.buyerId;
+                existingSale.saleDateTime = rubberSales.saleDateTime;
+                //existingSale.buyerId = rubberSales.buyerId;
                 existingSale.rubberType = rubberSales.rubberType;
-                existingSale.authorizationLetter = rubberSales.authorizationLetter;
-                existingSale.receiptNo = rubberSales.receiptNo;
-                existingSale.weight = rubberSales.weight;
+                //existingSale.letterOfConsentNo = rubberSales.letterOfConsentNo;
+                //existingSale.receiptNo = rubberSales.receiptNo;
+                existingSale.wetWeight = rubberSales.wetWeight;
+                //existingSale.buyerWetWeight = rubberSales.buyerWetWeight;
                 existingSale.DRC = rubberSales.DRC;
-                existingSale.amountPaid = rubberSales.amountPaid;
+                //existingSale.buyerDRC = rubberSales.buyerDRC;
+                existingSale.unitPrice = rubberSales.unitPrice;
+                existingSale.total = rubberSales.total;
+                //existingSale.weightSlipNo = rubberSales.weightSlipNo;
+                //existingSale.paymentStatusId = rubberSales.paymentStatusId;
+                existingSale.transportPlateNo = rubberSales.transportPlateNo;
+                existingSale.driverName = rubberSales.driverName;
+                existingSale.remark = rubberSales.remark;
                 existingSale.updatedBy = rubberSales.updatedBy;
                 existingSale.updatedDate = DateTime.Now;
                 existingSale.isActive = rubberSales.isActive;

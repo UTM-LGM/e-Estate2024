@@ -1,0 +1,27 @@
+<div class="box-container">
+
+<ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+  [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+<h1>{{estate.name}}</h1>
+    
+<mat-tab-group mat-align-tabs="center" #tabGroup >
+    <mat-tab label="Production" [disabled]="isProductionTabDisabled" style="color:red">
+        <app-field-production-monthly (nextTabEvent)="goToNextTab()"></app-field-production-monthly>
+        <!-- <button mat-button (click)="goToNextTab(tabGroup)">Next</button> -->
+    </mat-tab>
+    
+    <mat-tab label="Labor" [disabled]="isLaborTabDisabled">
+      <app-labor-info-monthly (backTabEvent)="goToBackTab()" (nextTabEvent)="goToNextTab1()"></app-labor-info-monthly>
+    </mat-tab>
+
+    <mat-tab label="Labor Shortage" [disabled]="isLaborShortageTabDisabled">
+      <ng-template matTabContent>
+        <app-worker-shortage (backTabEvent)="goToBackTab1()" ></app-worker-shortage>
+      </ng-template>
+    </mat-tab>
+
+</mat-tab-group>
+
+</div>
+
+

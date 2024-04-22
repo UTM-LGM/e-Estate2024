@@ -6,6 +6,7 @@ import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { CompanyService } from 'src/app/_services/company.service';
 import { EstateService } from 'src/app/_services/estate.service';
 import { FieldProductionService } from 'src/app/_services/field-production.service';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class HomeCompanyAdminComponent implements OnInit {
 
   filterEstates: Estate[] = []
 
-  company: Company = {} as Company
+  company: any = {} as any
 
   filterProductions: FieldProduction[] = []
 
@@ -34,7 +35,8 @@ export class HomeCompanyAdminComponent implements OnInit {
     private sharedService: SharedService,
     private companyService: CompanyService,
     private fieldProductionService: FieldProductionService,
-    private authGuard: AuthGuard
+    private authGuard: AuthGuard,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -48,21 +50,21 @@ export class HomeCompanyAdminComponent implements OnInit {
   }
 
   getCompany() {
-    this.companyService.getOneCompany(parseInt(this.companyId))
-      .subscribe(
-        Response => {
-          this.company = Response
-          this.isLoadingEstateName = false
-        }
-      )
+    this.myLesenService.getOneCompany(parseInt(this.companyId))
+    .subscribe(
+      Response =>{
+        this.company = Response
+        this.isLoadingEstateName = false
+      }
+    )
   }
 
   getEstate() {
-    this.estateService.getEstate()
+    this.myLesenService.getAllEstate()
       .subscribe(
-        Response => {
+        Response =>{
           const estates = Response
-          this.filterEstates = estates.filter(x => x.companyId == this.sharedService.companyId && x.isActive == true)
+          this.filterEstates = estates.filter(x => x.companyId == this.sharedService.companyId)
           this.totalEstate = this.filterEstates.length
           this.isLoadingEstate = false
         }

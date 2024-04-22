@@ -23,4 +23,9 @@ export class FieldProductionService {
   updateProduction(production: FieldProduction): Observable<FieldProduction> {
     return this.http.put<FieldProduction>(this.baseUrl + '/fieldproductions/UpdateProduction', production)
   }
+
+  updateProductionDraft(production:FieldProduction[]):Observable<FieldProduction>{
+    return this.http.put<FieldProduction>(this.baseUrl + '/fieldproductions/UpdateProductionDraft', production)
+  }
+
 }

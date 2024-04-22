@@ -16,28 +16,35 @@
     </mat-select>
     <label>Rubber Type :</label>
     <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType">
-      <mat-option value="Cuplump">Cuplump</mat-option>
-      <mat-option value="Latex">Latex</mat-option>
+      <mat-option value="CUPLUMP">CUPLUMP</mat-option>
+      <mat-option value="LATEX">LATEX</mat-option>
     </mat-select>
   </div>
 
   <div style="columns: 2">
-    <label>Authorization Letter (Form 1) :</label>
-    <input type="text" name="letter" [(ngModel)]="rubberSale.authorizationLetter" />
-    <label>Receipt Number (Form 2) :</label>
-    <input type="text" name="reseiptNo" [(ngModel)]="rubberSale.receiptNo" />
+    <label>Transport Plate No :</label>
+    <input type="text" name="plateNo" [(ngModel)]="rubberSale.transportPlateNo" />
+    <label>Driver Name :</label>
+    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" />
   </div>
 
   <div style="columns: 2">
     <label>Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.weight" placeholder="0.00" />
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00" />
     <label>DRC (%) :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
   </div>
 
-  <div style="columns: 1">
-    <label>Amount Paid (RM) :</label>
-    <input type="text" name="amount" [(ngModel)]="rubberSale.amountPaid" placeholder="0.00" />
+  <div style="columns: 2">
+    <label>Price (RM/Kg) :</label>
+    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00" (input)="calculateTotalPrice()" />
+    <label>Total Price (RM) :</label>
+    <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
+  </div>
+
+  <div>
+    <label>Remark :</label>
+    <textarea name="remark" [(ngModel)]="rubberSale.remark"></textarea>
   </div>
 
   <div style="margin-top: 10px">

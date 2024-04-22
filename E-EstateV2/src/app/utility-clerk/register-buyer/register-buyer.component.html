@@ -2,9 +2,9 @@
 <h1>Register Buyer Utility</h1>
 <form>
   <label>Lisence No : </label>
-  <input type="text" name="lisenceNo" [(ngModel)]="buyer.licenseNo" />
+  <input type="text" name="lisenceNo" [(ngModel)]="buyer.licenseNo" (change)="checkLicenseNo($event)" />
   <label>Buyer Name : </label>
-  <input type="text" name="name" [(ngModel)]="buyer.buyerName" />
+  <input type="text" name="name" [(ngModel)]="result.premiseName" disabled />
 
 </form>
 
@@ -56,3 +56,5 @@
   <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 
 </div>
+
+<app-spinner></app-spinner>

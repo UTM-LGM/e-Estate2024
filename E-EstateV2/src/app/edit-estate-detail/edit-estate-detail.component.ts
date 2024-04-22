@@ -17,6 +17,8 @@ import { MembershipService } from '../_services/membership.service';
 import { EstablishmentService } from '../_services/establishment.service';
 import { PlantingMaterialService } from '../_services/planting-material.service';
 import { PlantingMaterial } from '../_interface/planting-material';
+import { EstateDetail } from '../_interface/estate-detail';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-edit-estate-detail',
@@ -25,8 +27,10 @@ import { PlantingMaterial } from '../_interface/planting-material';
 })
 export class EditEstateDetailComponent implements OnInit {
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
   filteredEstate: any = {} as any
+
+  estateDetail:EstateDetail = {} as EstateDetail
 
 
   filterStates: State[] = []
@@ -47,7 +51,7 @@ export class EditEstateDetailComponent implements OnInit {
 
   constructor(
     public dialog: MatDialogRef<Estate>,
-    @Inject(MAT_DIALOG_DATA) public data: { data: Estate },
+    @Inject(MAT_DIALOG_DATA) public data: { data: Estate, estateDetail:EstateDetail },
     private stateService: StateService,
     private townService: TownService,
     private financialYearService: FinancialYearService,
@@ -55,11 +59,13 @@ export class EditEstateDetailComponent implements OnInit {
     private establishmentService: EstablishmentService,
     private estateService: EstateService,
     private sharedService: SharedService,
-    private plantingMaterialService:PlantingMaterialService
+    private plantingMaterialService:PlantingMaterialService,
+    private estateDetailService:EstateDetailService
   ) { }
 
   ngOnInit() {
     this.estate = this.data.data
+    this.estateDetail = this.data.estateDetail
     this.getState()
     this.getTown()
     this.getFinancialYear()
@@ -135,11 +141,32 @@ export class EditEstateDetailComponent implements OnInit {
   }
 
   update() {
-    this.estate.updatedBy = this.sharedService.userId.toString()
-    this.estate.updatedDate = new Date()
-    const {plantingMaterial, ...newObj} = this.estate
-    this.filteredEstate = newObj
-    this.estateService.updateEstate(this.filteredEstate)
+    if(this.estateDetail.id == undefined){
+      this.estateDetail.estateId = this.estate.id
+      this.estateDetail.grantNo = this.estateDetail.grantNo
+      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
+      this.estateDetail.createdBy = this.sharedService.userId.toString()
+      this.estateDetail.createdDate = new Date()
+      this.estateDetailService.addEstateDetail(this.estateDetail)
+      .subscribe(
+            Response => {
+              swal.fire({
+                title: 'Done!',
+                text: 'Estate successfully updated!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+              this.dialog.close()
+            })
+    }else{
+      this.estateDetail.grantNo = this.estateDetail.grantNo
+      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
+      this.estateDetail.updatedBy = this.sharedService.userId.toString()
+      this.estateDetail.updatedDate = new Date()
+      const {plantingMaterial, ...newObj} = this.estateDetail
+      this.filteredEstate = newObj
+      this.estateDetailService.updateEstateDetail(this.filteredEstate)
       .subscribe(
         Response => {
           swal.fire({
@@ -150,8 +177,26 @@ export class EditEstateDetailComponent implements OnInit {
             timer: 1000
           });
           this.dialog.close()
-        }
-      )
+        })
+    }
+    
+    // this.estate.updatedBy = this.sharedService.userId.toString()
+    // this.estate.updatedDate = new Date()
+    // const {plantingMaterial, ...newObj} = this.estate
+    // this.filteredEstate = newObj
+    // this.estateService.updateEstate(this.filteredEstate)
+    //   .subscribe(
+    //     Response => {
+    //       swal.fire({
+    //         title: 'Done!',
+    //         text: 'Estate successfully updated!',
+    //         icon: 'success',
+    //         showConfirmButton: false,
+    //         timer: 1000
+    //       });
+    //       this.dialog.close()
+    //     }
+    //   )
   }
 
 }

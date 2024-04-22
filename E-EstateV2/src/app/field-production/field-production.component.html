@@ -1,20 +1,20 @@
 <div class="box-container">
   <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{estate.estateName}}</h1>
+  <h1>{{estate.name}}</h1>
   <hr />
   <div class="monthYear">
     <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
     <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
   </div>
 
-  <div style="overflow-x: auto" *ngIf="filterProductions.length == 0">
+  <div style="overflow-x: auto" *ngIf="filterProductions.length == 0 ">
     <span style="color: red;">*If there is no production, please insert 0</span>
     <div>
-      <table style="width: 100%">
+      <table style="width: 100%" >
         <tr>
           <th>Month and Year</th>
-          <th>Field Name</th>
+          <th>Field / Block</th>
           <th>Cuplump (Kg)</th>
           <th>Cuplump DRC (%)</th>
           <th>Latex (Kg)</th>
@@ -43,13 +43,13 @@
           <td>{{products[i].monthYear}}</td>
           <td class="td">{{ field.fieldName }}</td>
           <td class="td"><input type="number" name="cuplump" [(ngModel)]="products[i].cuplump" placeholder="0.00" (input)="initialZeroCuplump(products[i].cuplump, i)" /></td>
-          <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0.00"/></td>
+          <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0"/></td>
           <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00" (input)="initialZeroLatex(products[i].latex, i)" /></td>
-          <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0.00" /></td>
+          <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0" /></td>
           <td class="td"><input type="number" name="USS" [(ngModel)]="products[i].uss" placeholder="0.00" (input)="initialZeroUSS(products[i].uss, i)" /></td>
-          <td class="td"><input type="number" name="USSDRC" [(ngModel)]="products[i].ussDRC" placeholder="0.00" /></td>
+          <td class="td"><input type="number" name="USSDRC" [(ngModel)]="products[i].ussDRC" placeholder="0" /></td>
           <td class="td"><input type="number" name="others" [(ngModel)]="products[i].others" placeholder="0.00" (input)="initialZeroOthers(products[i].others, i)" /></td>
-          <td class="td"><input type="number" name="othersDRC" [(ngModel)]="products[i].othersDRC" placeholder="0.00" /></td>
+          <td class="td"><input type="number" name="othersDRC" [(ngModel)]="products[i].othersDRC" placeholder="0" /></td>
           <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="products[i].noTaskTap" placeholder="0"
               (change)="taskTap(products[i].noTaskTap, field.totalTask, i)" /></td>
           <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"[(ngModel)]="products[i].noTaskUntap" /></td>
@@ -102,7 +102,7 @@
       <span></span> &nbsp;
       <!-- <button (click)="scrollToBottom()" class="summaryBtn">Production Summary <i class="fa fa-file"></i></button> -->
       <div style="float: right;">
-        <span><b>Total Production (100%) Dry : {{totalCuplumpDry + totalLatexDry + totalUSSDry + totalOthersDry |
+        <span><b>Total Production 100% Dry : {{totalCuplumpDry + totalLatexDry + totalUSSDry + totalOthersDry |
             number: '1.2-2'}} Kg</b></span>
       </div>
 
@@ -117,7 +117,7 @@
       <table style="width: 100%">
         <tr>
           <th>Month and Year</th>
-          <th>Field Name</th>
+          <th>Field / Block</th>
           <th>Cuplump (Kg)</th>
           <th>Cuplump DRC (%)</th>
           <th>Cuplump Dry (Kg)</th>
@@ -140,16 +140,16 @@
           <td>{{ product.monthYear | date : "MMM-yyyy" }}</td>
           <td>{{ product.fieldName }}</td>
           <td>{{ product.cuplump | number : "1.2-2" }}</td>
-          <td>{{ product.cuplumpDRC | number : "1.2-2" }}</td>
+          <td>{{ product.cuplumpDRC }}</td>
           <td>{{ cuplump[i] | number : "1.2-2" }}</td>
           <td>{{ product.latex | number : "1.2-2" }}</td>
-          <td>{{ product.latexDRC | number : "1.2-2" }}</td>
+          <td>{{ product.latexDRC }}</td>
           <td>{{ latex[i] | number : "1.2-2" }}</td>
           <td>{{ product.uss | number : "1.2-2"}}</td>
-          <td>{{ product.ussDRC | number: "1.2-2"}}</td>
+          <td>{{ product.ussDRC }}</td>
           <td>{{ USS[i] | number: "1.2-2"}}</td>
           <td>{{ product.others | number: "1.2-2"}}</td>
-          <td>{{ product.othersDRC | number: "1.2-2"}}</td>
+          <td>{{ product.othersDRC }}</td>
           <td>{{ others[i] | number: "1.2-2"}}</td>
           <td>{{ product.noTaskTap }}</td>
           <td>{{ product.noTaskUntap }}</td>
@@ -166,3 +166,4 @@
     </div><br />
   </div>
 </div>
+

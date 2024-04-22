@@ -28,6 +28,7 @@
         public int estateId { get; set; }
         public string fieldName { get; set; }
         public int totalTask { get; set; }
+        public string status { get; set; }
         public List<DTO_Clone> cloneInfo { get; set; }
     }
 }

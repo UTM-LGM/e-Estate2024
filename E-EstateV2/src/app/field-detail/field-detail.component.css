@@ -53,3 +53,11 @@ mat-option{
 .clone{
   width: 140%;
 }
+
+.active-btn{
+  border-radius: 0px;
+}
+
+.inactive-btn{
+  border-radius: 0px;
+}

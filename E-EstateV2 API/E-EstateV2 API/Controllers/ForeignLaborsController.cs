@@ -19,7 +19,7 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddLabor([FromBody] ForeignLabor labor)
+        public async Task<IActionResult> AddLabor([FromBody] LaborInfo labor)
         {
             var addedForeignLabor = await _foreignLaborRepository.AddForeignLabor(labor);
             return Ok(addedForeignLabor);
@@ -33,7 +33,7 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateLabor([FromBody] ForeignLabor labor)
+        public async Task<IActionResult> UpdateLabor([FromBody] LaborInfo labor)
         {
            var updatedForeignLabor = await _foreignLaborRepository.UpdateForeignLabor(labor);   
             return Ok(updatedForeignLabor);

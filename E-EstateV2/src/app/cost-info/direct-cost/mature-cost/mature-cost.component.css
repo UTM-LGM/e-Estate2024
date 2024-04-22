@@ -53,6 +53,7 @@ p {
 
 td {
   text-align: left !important;
+  width: 120px;
 }
 
 .box-container {

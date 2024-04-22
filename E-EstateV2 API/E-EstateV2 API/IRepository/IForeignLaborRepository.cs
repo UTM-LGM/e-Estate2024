@@ -5,9 +5,9 @@ namespace E_EstateV2_API.IRepository
 {
     public interface IForeignLaborRepository
     {
-        Task<ForeignLabor> AddForeignLabor(ForeignLabor foreignLabor);  
-        Task<List<DTO_ForeignLabor>> GetForeignLabors();
-        Task<ForeignLabor> UpdateForeignLabor(ForeignLabor foreignLabor);
-        Task<ForeignLabor> DeleteForeignLabor(int id);
+        Task<LaborInfo> AddForeignLabor(LaborInfo foreignLabor);  
+        Task<List<DTO_LaborInfo>> GetForeignLabors();
+        Task<LaborInfo> UpdateForeignLabor(LaborInfo foreignLabor);
+        Task<LaborInfo> DeleteForeignLabor(int id);
     }
 }

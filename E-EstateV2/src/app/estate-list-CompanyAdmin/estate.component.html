@@ -1,15 +1,15 @@
 <div class="box-container">
   <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{company.companyName}}</h1>
+  <h1>{{company.name}}</h1>
   <hr />
 
   <div class="box-container">
-    <div style="margin-top: -10px">
+    <!-- <div style="margin-top: -10px">
       <button class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
         Add New Estate &nbsp; <i class="fa fa-plus"></i>
       </button>
-    </div>
+    </div> -->
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
 
@@ -24,7 +24,6 @@
                 [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                                     'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
-            <th width="90px">Action</th>
           </tr>
         </thead>
 
@@ -35,29 +34,18 @@
           </td>
         </tr>
 
-        <tr *ngIf="company.estates?.length == 0 && !isLoading">
+        <tr *ngIf="company.premises?.length == 0 && !isLoading">
           <td colspan="8"><b>No Estate</b></td>
         </tr>
 
         <tr class="list"
-          *ngFor="let estate of company.estates | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
+          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
           routerLink="/e-estate/estate-detail/{{ estate.id }}">
-          <td><a>{{estate.estateName}}</a></td>
+          <td><a>{{estate.name}}</a></td>
           <td>{{estate.state}}</td>
           <!-- <td *ngFor="let town of estate.towns">{{ town.town }}</td> -->
-          <td> {{estate.town1 }} </td>
+          <td> {{estate.town }} </td>
           <td>{{ estate.email }}</td>
-          <td>{{ estate.licenseNo }}</td>
-          <td>{{ estate.totalArea }}</td>
-          <td>{{ estate.membership }}</td>
-          <td>
-            <button style="pointer-events: none; border-radius: 0px;" [ngClass]="{
-                'active-btn': estate.isActive == true,
-                'inactive-btn': estate.isActive == false
-              }">
-              {{ estate.isActive == true ? "Active" : "Inactive" }}
-            </button>
-          </td>
         </tr>
       </table>
 

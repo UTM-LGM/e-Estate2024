@@ -31,6 +31,19 @@ namespace E_EstateV2_API.Models
         public int ownershipId { get; set; }
         public Ownership Ownership { get; set; }
 
+        [ForeignKey("EstablshmentId")]
+        public int establishmentId { get; set; }
+        public Establishment Establishment { get; set; }
+
+        [ForeignKey("MembershipTypeId")]
+        public int membershipTypeId { get; set; }
+        public MembershipType MembershipType { get; set; }
+
+
+        [ForeignKey("FinancialYearId")]
+        public int financialYearId { get; set; }
+        public FinancialYear FinancialYear { get; set; }
+
         //many to many relation
         public ICollection<BuyerCompany> BuyerCompanies { get; set; }
         public ICollection<SellerCompany> SellerCompanies { get; set; }

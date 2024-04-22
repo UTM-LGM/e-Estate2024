@@ -4,6 +4,7 @@ import { User } from 'src/app/_interface/user';
 import { UserService } from 'src/app/_services/user.service';
 import { PendingRoleDetailComponent } from '../pending-role-detail/pending-role-detail.component';
 import { AddUserComponent } from '../add-user/add-user.component';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-manage-user',
@@ -18,6 +19,7 @@ export class ManageUserComponent {
   currentSortedColumn = ''
   isLoading = true
   users:User []=[]
+  result:any = {} as any
 
 
   sortableColumns = [
@@ -32,6 +34,7 @@ export class ManageUserComponent {
 
   constructor(private userService:UserService,
     private dialog: MatDialog,
+    private myLesenService:MyLesenIntegrationService
     )
   {}
 
@@ -46,9 +49,20 @@ export class ManageUserComponent {
      Response=>{
        const users = Response
        this.users = users.filter(x=>x.roleId != null)
-       this.isLoading = false
-     })
-   }, 1000)
+       this.users.forEach((user: any) => {
+        this.myLesenService.getLicenseNo(user.licenseNo)
+        .subscribe(
+          {
+            next: (Response) => {
+              this.result[user.licenseNo] = Response;
+              this.isLoading = false
+            },
+            error: (error: any) => {
+              console.error("Error fetching license number:", error);
+            }
+          })})  
+    })
+  }, 1000)
   }
 
   toggleSort(columnName: string) {

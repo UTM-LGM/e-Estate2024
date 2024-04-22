@@ -6,16 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Repository
 {
-    public class ForeignLaborRepository:IForeignLaborRepository
+    public class ForeignLaborRepository
     {
-        private readonly ApplicationDbContext _context;
+        /**private readonly ApplicationDbContext _context;
 
         public ForeignLaborRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<ForeignLabor> AddForeignLabor(ForeignLabor foreignLabor)
+        public async Task<LaborInfo> AddForeignLabor(LaborInfo foreignLabor)
         {
             foreignLabor.createdDate = DateTime.Now;
             await _context.foreignLabors.AddAsync(foreignLabor);
@@ -23,9 +23,9 @@ namespace E_EstateV2_API.Repository
             return foreignLabor;
         }
 
-        public async Task<List<DTO_ForeignLabor>> GetForeignLabors()
+        public async Task<List<DTO_LaborInfo>> GetForeignLabors()
         {
-            var labor = await _context.foreignLabors.Select(x => new DTO_ForeignLabor
+            var labor = await _context.foreignLabors.Select(x => new DTO_LaborInfo
             {
                 id = x.Id,
                 monthYear = x.monthYear,
@@ -41,7 +41,7 @@ namespace E_EstateV2_API.Repository
             return labor;
         }
 
-        public async Task<ForeignLabor> UpdateForeignLabor(ForeignLabor foreignLabor)
+        public async Task<LaborInfo> UpdateForeignLabor(LaborInfo foreignLabor)
         {
             var existingLabor = await _context.foreignLabors.FirstOrDefaultAsync(x => x.Id == foreignLabor.Id);
             if (existingLabor != null)
@@ -59,7 +59,7 @@ namespace E_EstateV2_API.Repository
             return null;
         }
 
-        public async Task<ForeignLabor> DeleteForeignLabor(int id)
+        public async Task<LaborInfo> DeleteForeignLabor(int id)
         {
             var existingLabor = await _context.foreignLabors.FirstOrDefaultAsync(x => x.Id == id);
             if (existingLabor != null)
@@ -70,5 +70,6 @@ namespace E_EstateV2_API.Repository
             }
             return null;
         }
+    }**/
     }
 }

@@ -16,7 +16,6 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 
 
-
 namespace E_EstateV2_API.Repository
 {
     public class UserRepository : IUserRepository
@@ -115,6 +114,7 @@ namespace E_EstateV2_API.Repository
                     CompanyName = companyName,
                     EstateName = estateName,
                     CompanyPhoneNo = companyPhoneNo,
+                    licenseNo = user.licenseNo
                 };
 
                 usersWithRoles.Add(dtoUser);
@@ -125,8 +125,8 @@ namespace E_EstateV2_API.Repository
 
         public async Task<IdentityResult> RegisterUser(User user)
         {
-            var estateId = _context.estates.Where(x => x.licenseNo == user.licenseNo).Select(x => x.Id).FirstOrDefault();
-            var companyId = _context.estates.Where(x => x.Id == estateId).Select(x => x.companyId).FirstOrDefault();
+            var estateId = user.estateId;
+            var companyId = user.companyId;
 
             var applicationUser = new ApplicationUser()
             {

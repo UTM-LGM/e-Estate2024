@@ -40,5 +40,12 @@ namespace E_EstateV2_API.Controllers
             var updatedFieldProduction = await _fieldProductionRepository.UpdateFieldProduction(fieldProduction);
             return Ok(updatedFieldProduction);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProductionDraft([FromBody] FieldProduction[] fieldProductionDraft)
+        {
+            var updatedProduction = await _fieldProductionRepository.UpdateFieldProductionDraft(fieldProductionDraft);
+            return Ok(updatedProduction);
+        }
     }
 }

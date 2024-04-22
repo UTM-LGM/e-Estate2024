@@ -35,7 +35,8 @@ namespace E_EstateV2_API.Repository
                 remarkUntap = x.remarkUntap,
                 estateId = _context.estates.Where(y => y.Id == (_context.fields.Where(f => f.Id == x.fieldId).Select(f => f.estateId).FirstOrDefault())).Select(e => e.Id).FirstOrDefault(),
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
-                totalTask = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.totalTask).FirstOrDefault()
+                totalTask = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.totalTask).FirstOrDefault(),
+                status = x.status,
             }).ToListAsync();
 
             return production;
@@ -45,10 +46,36 @@ namespace E_EstateV2_API.Repository
         {
             foreach (var item in fieldProduction)
             {
-
                 item.createdDate = DateTime.Now;
                 await _context.AddAsync(item);
                 await _context.SaveChangesAsync();
+            }
+            return fieldProduction;
+        }
+
+        public async Task<IEnumerable<FieldProduction>> UpdateFieldProductionDraft(FieldProduction[] fieldProduction)
+        {
+            foreach(var item in fieldProduction)
+            {
+                var existingProduction = await _context.fieldProductions.FirstOrDefaultAsync(x => x.Id == item.Id);
+                if (existingProduction != null)
+                {
+                    existingProduction.cuplump = item.cuplump;
+                    existingProduction.cuplumpDRC = item.cuplumpDRC;
+                    existingProduction.latex = item.latex;
+                    existingProduction.latexDRC = item.latexDRC;
+                    existingProduction.USS = item.USS;
+                    existingProduction.USSDRC = item.USSDRC;
+                    existingProduction.others = item.others;
+                    existingProduction.othersDRC = item.othersDRC;
+                    existingProduction.noTaskTap = item.noTaskTap;
+                    existingProduction.noTaskUntap = item.noTaskUntap;
+                    existingProduction.remarkUntap = item.remarkUntap;
+                    existingProduction.updatedBy = item.updatedBy;
+                    existingProduction.updatedDate = DateTime.Now;
+                    existingProduction.status = item.status;
+                    await _context.SaveChangesAsync();
+                }
             }
             return fieldProduction;
         }

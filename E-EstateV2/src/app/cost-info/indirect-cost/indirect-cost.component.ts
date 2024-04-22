@@ -64,6 +64,7 @@ export class IndirectCostComponent implements OnInit {
         .subscribe(
           Response => {
             this.indirectCosts = Response
+            this.indirectCosts.forEach(sub =>sub.amount = 0)
             this.isLoading = false
           });
     }, 1000)
@@ -118,7 +119,7 @@ export class IndirectCostComponent implements OnInit {
           next: (Response) => {
             swal.fire({
               title: 'Done!',
-              text: 'Cost amount successfully submitted!',
+              text: 'Cost amount successfully saved!',
               icon: 'success',
               showConfirmButton: false,
               timer: 1000
@@ -134,6 +135,22 @@ export class IndirectCostComponent implements OnInit {
         }
       )
 
+  }
+
+  save(){
+    this.costAmountService.updateCostAmount(this.draftFilterIndirectCostAmount)
+    .subscribe(
+      Response =>{
+        swal.fire({
+          title: 'Done!',
+          text: 'Cost amount successfully saved!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        })
+        this.getIndirectCostAmount();
+      }
+    )
   }
 
   submitIndirectCost() {

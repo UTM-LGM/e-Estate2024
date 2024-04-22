@@ -47,7 +47,7 @@ builder.Services.AddScoped<IFieldCloneRepository, FieldCloneRepository>();
 builder.Services.AddScoped<IFieldConversionRepository, FieldConversionRepository>();
 builder.Services.AddScoped<IFieldProductionRepository, FieldProductionRepository>();
 builder.Services.AddScoped<IFieldRepository, FieldRepository>();
-builder.Services.AddScoped<IForeignLaborRepository, ForeignLaborRepository>();
+//builder.Services.AddScoped<IForeignLaborRepository, ForeignLaborRepository>();
 builder.Services.AddScoped<ILocalLaborRepository, LocalLaborRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRubberPurchaseRepository, RubberPurchaseRepository>();
@@ -58,6 +58,11 @@ builder.Services.AddScoped<ITownRepository, TownRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 builder.Services.AddScoped<IFieldInfoYearlyRepository, FieldInfoYearlyRepository>();
+builder.Services.AddScoped<IEstateDetailRepository, EstateDetailRepository>();
+builder.Services.AddScoped<IFieldInfectedRepository, FieldInfectedRepository>();
+builder.Services.AddScoped<ICompanyDetailRepository, CompanyDetailRepository>();
+builder.Services.AddScoped<ILaborInformationRepository, LaborInformationRepository>();
+builder.Services.AddScoped<ILaborByCategoryRepository, LaborByCategoryRepository>();
 
 //configure password
 builder.Services.Configure<IdentityOptions>(options =>
@@ -109,7 +114,6 @@ builder.Services.AddAuthentication(x =>
 });
 
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
@@ -117,7 +121,6 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .AllowAnyMethod());
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -138,5 +141,7 @@ app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
+
+SeedData.PopulateDb(app);
 
 app.Run();

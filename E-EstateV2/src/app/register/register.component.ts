@@ -8,6 +8,8 @@ import { UserService } from '../_services/user.service';
 import swal from 'sweetalert2';
 import { EmailService } from '../_services/email.service';
 import { Email } from '../_interface/email';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 
 @Component({
@@ -29,7 +31,9 @@ export class RegisterComponent implements OnInit {
     private dialog: MatDialog,
     private roleService: RoleService,
     private userService: UserService,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private myLesenService:MyLesenIntegrationService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -64,6 +68,8 @@ export class RegisterComponent implements OnInit {
     }
     else {
       this.register.isEmailVerified = false
+      this.register.companyId = this.result.companyId
+      this.register.estateId = this.result.premiseId
       this.userService.register(this.register)
         .subscribe(
           {
@@ -103,21 +109,33 @@ export class RegisterComponent implements OnInit {
   }
 
   checkLicenseNo(event: any) {
-    this.userService.checkLicenseNo(event.target.value.toString())
+    this.spinnerService.requestStarted()
+    setTimeout(() => {
+    this.myLesenService.getLicenseNo(event.target.value.toString())
       .subscribe(
         {
           next: (Response) => {
             this.result = Response
+            this.spinnerService.requestEnded();
+            swal.fire({
+              title: 'Done!',
+              text: 'Data found!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
           },
           error: (Error) => {
+            this.spinnerService.requestEnded();
             swal.fire({
               icon: 'error',
-              title: 'Error ! ' + Error.error + ' !',
+              title: 'Error! License No does not exist',
             });
             this.register.licenseNo = ''
             this.result = {}
           }
         })
+      },1000)
   }
 
   checkUsername(event: any) {

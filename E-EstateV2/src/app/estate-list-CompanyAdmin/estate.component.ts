@@ -4,6 +4,7 @@ import { EstateStatus } from '../_interface/estateStatus';
 import { ActivatedRoute } from '@angular/router';
 import { Company } from '../_interface/company';
 import { CompanyService } from '../_services/company.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-estate',
@@ -13,7 +14,7 @@ import { CompanyService } from '../_services/company.service';
 export class EstateComponent implements OnInit {
   estates: Estate[] = []
 
-  company: Company = {} as Company
+  company: any = {} as any
 
   history: EstateStatus = {} as EstateStatus
 
@@ -24,18 +25,16 @@ export class EstateComponent implements OnInit {
   currentSortedColumn = ''
 
   sortableColumns = [
-    { columnName: 'estateName', displayText: 'Estate Name' },
+    { columnName: 'name', displayText: 'Estate Name' },
     { columnName: 'state', displayText: 'State' },
     { columnName: 'town', displayText: 'Town' },
     { columnName: 'email', displayText: 'Email' },
-    { columnName: 'licenseNo', displayText: 'License No' },
-    { columnName: 'totalArea', displayText: 'Total Area (Ha)' },
-    { columnName: 'membershipType', displayText: 'Membership Type' },
   ];
 
   constructor(
     private route: ActivatedRoute,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -46,12 +45,13 @@ export class EstateComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
-          this.companyService.getOneCompany(routeParams['id'])
-            .subscribe(
-              Response => {
-                this.company = Response
-                this.isLoading = false
-              });
+          this.myLesenService.getOneCompany(routeParams['id'])
+          .subscribe(
+            Response =>{
+              this.company = Response
+              this.isLoading = false
+            }
+          )
         }
       });
     }, 2000)

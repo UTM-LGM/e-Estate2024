@@ -1,0 +1,51 @@
+<br />
+<div style="padding: 15px;">
+  <h1>Labor Information</h1>
+  <hr />
+
+  <div style="columns: 2">
+    <label>Month and Year :</label>
+    <input type="text" name="tapperCheckrole" [(ngModel)]="labor.monthYear" disabled />
+    <label>Country :</label>
+    <input type="text" name="tapperCheckrole" [(ngModel)]="labor.countryName" disabled />
+  </div>
+
+  <div>
+    <div style="columns: 2">
+      <label>No of Checkrole Tappers :</label>
+      <input type="number" name="tapperCheckrole" [(ngModel)]="labor.tapperCheckrole" />
+      <label>No of Tappers Employed by Contractors :</label>
+      <input type="number" name="tapperContractor" [(ngModel)]="labor.tapperContractor" />
+    </div>
+    <div style="columns: 2">
+      <label>No of Checkrole Field Workers :</label>
+      <input type="number" name="fieldCheckrole" [(ngModel)]="labor.fieldCheckrole" />
+      <label>No of Field Workers Employed by Contractors :</label>
+      <input type="number" name="fieldContractor" [(ngModel)]="labor.fieldContractor" />
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap;column-gap: 10px;">
+      <ng-container *ngFor="let laborType of laborCategory; let i = index;">
+        <div style="flex: 1 1 calc(50% - 10px);">
+          <div>
+            <label>No of {{ laborType.laborType | titlecase }}:</label>
+            <input type="number" name="noOf{{ laborType.laborType }}" [(ngModel)]="laborType.noOfWorker" >
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div style="padding-right: 10px">
+      <button style="float: right" class="btn-update" type="submit" (click)="update()">
+        Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>
+    </div>
+    <div style="padding-left: 10px">
+      <button class="btn-back" (click)="back()">
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
+    </div>
+    <br />
+
+  </div>
+</div>

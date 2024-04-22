@@ -16,6 +16,8 @@ import { FieldConversionService } from '../_services/field-conversion.service';
 import { FieldCloneService } from '../_services/field-clone.service';
 import { FieldDiseaseService } from '../_services/field-disease.service';
 import { FieldDisease } from '../_interface/fieldDisease';
+import { FieldInfected } from '../_interface/fieldInfected';
+import { FieldInfectedService } from '../_services/field-infected.service';
 
 @Component({
   selector: 'app-field-detail',
@@ -23,11 +25,15 @@ import { FieldDisease } from '../_interface/fieldDisease';
   styleUrls: ['./field-detail.component.css'],
 })
 export class FieldDetailComponent implements OnInit {
-  fields: Field = {} as Field
+  field: Field = {} as Field
   filteredFields: any = {}
+
+  fields:Field[]=[]
 
   fieldClone: FieldClone = {} as FieldClone
   fieldConversion: FieldConversion = {} as FieldConversion
+
+  fieldInfect:FieldInfected = {} as FieldInfected
 
   selected: FieldStatus = {} as FieldStatus
 
@@ -42,7 +48,9 @@ export class FieldDetailComponent implements OnInit {
 
   filterFieldDisease : FieldDisease [] =[]
 
-  infected = false
+  filterFieldInfected : FieldInfected [] = []
+
+  fieldSick = false
   dataRows: any[] = [{ year: null, currentTreeStand: null }]
 
   formattedDate = ''
@@ -52,6 +60,24 @@ export class FieldDetailComponent implements OnInit {
   disableInput = false
   isLoading = true
   onInit = true
+  fieldInfecteds = false
+  order = ''
+  currentSortedColumn = ''
+  pageNumber = 1
+  term = ''
+
+
+
+  sortableColumn = [
+    { columnName: 'dateInfected', displayText: 'Date Infected'},
+    { columnName: 'fieldName', displayText: 'Field / Block' },
+    { columnName: 'area', displayText: 'Field Area (Ha)' },
+    { columnName: 'areaInfected', displayText: 'Area Infected (Ha)'},
+    { columnName: 'fieldDiseaseName', displayText: 'Field Disease Name' },
+    { columnName: 'severityLevel', displayText: 'Level Infected'},
+    { columnName: 'dateRecovered', displayText: 'Date Recovered'},
+    { columnName: 'remark', displayText: 'Remark'},
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -63,7 +89,8 @@ export class FieldDetailComponent implements OnInit {
     private location: Location,
     private sharedService: SharedService,
     private fieldCloneService: FieldCloneService,
-    private fieldDiseaseService: FieldDiseaseService
+    private fieldDiseaseService: FieldDiseaseService,
+    private fieldInfectedService:FieldInfectedService
 
   ) { }
 
@@ -72,65 +99,102 @@ export class FieldDetailComponent implements OnInit {
     this.getOneField()
     this.getClone()
     this.getFieldDisease()
+    this.getField()
   }
 
 
   getOneField() {
     this.route.params.subscribe((routeParams) => {
       if (routeParams['id'] != null) {
-        this.infected = false
-        this.fieldService.getOneField(routeParams['id'])
-          .subscribe(
-            Response => {
-              this.fields = Response
-              if(Response.fieldDiseaseId != null)
-              {
-                this.infected=true
-                this.disableInput = true
-              }else if(Response.fieldDiseaseId == null){
-                this.infected = false
-              }
-              this.isLoading = false
-              this.getcategory(this.fields)
-              const conversion = this.fields.fieldStatuses.map(x => x.fieldStatus.toLowerCase().includes("conversion"))
-              if (this.fields.conversionId != 0 && conversion) {
-                this.disableInput = true
-                this.conversion = true
-                this.updateConversionBtn = true
-              }
-              else {
-                this.conversion = false
-              }
-              this.fields.cloneId = 0;
-              this.fieldClones = Response.clones
-              this.selectedValues = this.fieldClones
-              this.availableClones = this.filterClones.filter(clone => !this.selectedValues.some(selectedClone => selectedClone.id === clone.id))
-              this.getDate(Response.dateOpenTapping)
-            });
+      this.fieldService.getOneField(routeParams['id'])
+        .subscribe(
+          Response => {
+            this.field = Response
+            this.isLoading = false
+            this.getcategory(this.field)
+            this.field.cloneId = 0;
+            this.fieldClones = Response.clones
+            this.selectedValues = this.fieldClones
+            this.availableClones = this.filterClones.filter(clone => !this.selectedValues.some(selectedClone => selectedClone.id === clone.id))
+            this.getDate(Response.dateOpenTapping)
+            this.getFieldInfected()
+          });
       }
     })
   }
 
+  getFieldInfected(){
+    // this.fieldInfectedService.getFieldInfected()
+    // .subscribe(
+    //   Response =>{
+    //     const fieldInfected = Response
+    //     this.filterFieldInfected = fieldInfected.filter(x=>x.fieldId == this.field.id)
+    //     console.log(this.filterFieldInfected)
+    //     if(this.filterFieldInfected.length > 0)
+    //     {
+    //       this.fieldInfecteds = true
+    //     }
+    //   }
+    // )
+    this.fieldInfectedService.getFieldInfectedById(this.field.id)
+    .subscribe(
+      Response =>{
+        this.filterFieldInfected = Response
+        // this.areaAffectedTotal(this.filterFieldInfected)
+        if(this.filterFieldInfected.length > 0)
+        {
+          this.fieldInfecteds = true
+        }
+      }
+    )
+  }
+
+  // areaAffectedTotal(row:FieldInfected[]){
+  //   row.forEach(x=> {
+  //     x.areaAffected = (x.area) * (x.percentage /100)
+  //   })
+  // }
+
+  getField(){
+    this.fieldService.getField()
+    .subscribe(
+      Response =>{
+        const fields = Response
+        this.fields = fields.filter(x=>x.estateId == this.sharedService.estateId)
+      }
+    )
+  }
+
+  checkFieldStatus(){
+    const conversionField = this.field.fieldStatuses.map(x => x.fieldStatus.toLowerCase().includes("conversion"))
+    const convert = this.filterFieldStatus.find(x=>x.fieldStatus.toLowerCase().includes("conversion"))
+    if (this.field.conversionId != 0 && this.field.fieldStatusId == convert?.id && conversionField) {
+      this.conversion = true
+      this.updateConversionBtn = true
+    }
+    else {
+      this.conversion = false
+    }
+  }
+
   getDate(date: string | null) {
     this.formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd') || ''
-    this.fields.dateOpenTapping = this.formattedDate.toString()
+    this.field.dateOpenTapping = this.formattedDate.toString()
   }
 
   getcategory(field: Field) {
-    if(this.fields.fieldDiseaseId == null){
-      this.infected = false
-    }
     this.fieldStatusService.getFieldStatus()
       .subscribe(
         Response => {
           if (this.onInit == true) {
             this.fieldStatus = Response
             this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == field.isMature && c.isActive == true)
+            this.checkFieldStatus()
             this.onInit = false
           }
           else {
-            this.fields.fieldStatusId = 0
-            this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == this.fields.isMature && c.isActive == true)
+            this.field.fieldStatusId = 0
+            this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == this.field.isMature && c.isActive == true)
           }
         });
   }
@@ -138,7 +202,8 @@ export class FieldDetailComponent implements OnInit {
   updateField(field: Field) {
     field.updatedBy = this.sharedService.userId.toString()
     field.updatedDate = new Date()
-    const { fieldStatus, ...newFields } = this.fields
+    field.dateOpenTapping = field.dateOpenTappingFormatted
+    const { fieldStatus, ...newFields } = this.field
     this.filteredFields = newFields
     this.fieldService.updateField(this.filteredFields)
       .subscribe(
@@ -150,9 +215,6 @@ export class FieldDetailComponent implements OnInit {
             showConfirmButton: false,
             timer: 1000
           });
-          setTimeout(() => {
-            location.reload()
-          }, 2000);
         });
 
   }
@@ -168,7 +230,7 @@ export class FieldDetailComponent implements OnInit {
         Response => {
           field.updatedBy = this.sharedService.userId.toString()
           field.updatedDate = new Date()
-          const { fieldStatus, ...newFields } = this.fields
+          const { fieldStatus, ...newFields } = this.field
           this.filteredFields = newFields
           this.fieldService.updateField(this.filteredFields)
             .subscribe(
@@ -198,7 +260,7 @@ export class FieldDetailComponent implements OnInit {
     field.updatedBy = this.sharedService.userId.toString()
     field.updatedDate = new Date()
     field.isActive = !field.isActive
-    const { fieldStatus, ...newFields } = this.fields
+    const { fieldStatus, ...newFields } = this.field
     this.filteredFields = newFields
     this.fieldService.updateField(this.filteredFields)
       .subscribe(
@@ -215,7 +277,7 @@ export class FieldDetailComponent implements OnInit {
   }
 
   addClone(field: Field) {
-    if(this.fields.cloneId == 0){
+    if(this.field.cloneId == 0){
       swal.fire({
         text: 'Please choose clone',
         icon: 'error'
@@ -243,8 +305,8 @@ export class FieldDetailComponent implements OnInit {
 
   changeFieldStatus(fieldStatusId: any) {
     this.checkDisease(fieldStatusId)
-    const conversionItem = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion"))
-    if (fieldStatusId.value == conversionItem?.id && this.fields.conversionId == 0) {
+    const conversionItem = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion") && !x.fieldStatus.toLowerCase().includes("rubber"))
+    if (fieldStatusId.value == conversionItem?.id && this.field.conversionId == 0) {
       this.conversion = true
       this.conversionButton = true
     }
@@ -260,22 +322,22 @@ export class FieldDetailComponent implements OnInit {
   }
 
   checkDisease(fieldStatusId:any){
-    if(this.fields.isMature == true){
+    if(this.field.isMature == true){
       const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == true);
       if(fieldStatusId.value == infected?.id){
-        this.infected= true
+        this.fieldSick= true
       }
       else{
-        this.infected = false
+        this.fieldSick = false
       }
     }
-    else if(this.fields.isMature == false){
+    else if(this.field.isMature == false){
       const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == false);
       if(fieldStatusId.value == infected?.id){
-        this.infected= true
+        this.fieldSick= true
       }
       else{
-        this.infected = false
+        this.fieldSick = false
       }
     }
   }
@@ -315,9 +377,9 @@ export class FieldDetailComponent implements OnInit {
   }
 
   convertField(field: Field) {
-    this.fieldConversion.fieldId = this.fields.id
-    this.fieldConversion.conversionCropName = this.fields.conversionCropName
-    this.fieldConversion.sinceYear = this.fields.sinceYear
+    this.fieldConversion.fieldId = this.field.id
+    this.fieldConversion.conversionCropName = this.field.conversionCropName
+    this.fieldConversion.sinceYear = this.field.sinceYear
     this.fieldConversion.createdBy = this.sharedService.userId.toString()
     this.fieldConversion.createdDate = new Date()
     this.fieldConversionService.addConversion(this.fieldConversion)
@@ -328,7 +390,7 @@ export class FieldDetailComponent implements OnInit {
               Response => {
                 field.updatedBy = this.sharedService.userId.toString()
                 field.updatedDate = new Date()
-                const { fieldStatus, ...newFields } = this.fields
+                const { fieldStatus, ...newFields } = this.field
                 this.filteredFields = newFields
                 this.fieldService.updateField(this.filteredFields)
                   .subscribe(
@@ -360,6 +422,34 @@ export class FieldDetailComponent implements OnInit {
         this.filterFieldDisease = fieldDisease.filter (e=>e.isActive == true)
       }
     )
+  }
+
+  fieldInfected(field:Field){
+    this.fieldInfect.fieldId = this.field.id
+    this.fieldInfect.areaInfected = this.field.areaInfected
+    this.fieldInfect.fieldDiseaseId = this.field.fieldDiseaseId
+    this.fieldConversion.createdBy = this.sharedService.userId.toString()
+    this.fieldConversion.createdDate = new Date()
+
+  }
+
+  checkFieldName(){
+    if(this.fields.some((s:any)=>s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())){
+      swal.fire({
+        text: 'Field/Block Name already exists!',
+        icon: 'error'
+      });
+      this.field.fieldName = ''
+    }
+  }
+
+  toggleSort(columnName: string) {
+    if (this.currentSortedColumn === columnName) {
+      this.order = this.order === 'asc' ? 'desc' : 'asc'
+    } else {
+      this.currentSortedColumn = columnName;
+      this.order = this.order === 'desc' ? 'asc' : 'desc'
+    }
   }
 
 }

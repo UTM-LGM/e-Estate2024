@@ -29,4 +29,5 @@ export interface FieldProduction {
     othersDry: number
     tappedAreaPerHa: number
     isAcive: boolean
+    status:string
 }

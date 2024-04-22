@@ -1,12 +1,12 @@
 <h1 class="tittle">Dashboard Estate Clerk:
-  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.estateName}}</span>
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.name}}</span>
   <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
       [theme]="{'height':'20px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
 </h1>
 
 <hr />
 
-<div class="box">
+<!-- <div class="box">
   <div class="column box-container" style="background-color: bisque;">
     <h1>Estate Responsibility : </h1>
     <span>The estate is responsible for filling in daily (sales), monthly (production, total workforce, stock) and annual (rubber plantation area, production costs) information.
@@ -18,7 +18,7 @@
     </span><br/><br/>
   </div>
 
-</div> <br/>
+</div> <br/> -->
 
 <div class="box">
   <div class="column box-container color1">
@@ -76,13 +76,13 @@
 
   <div class="column box-container color4">
     <span>Current Total Foreign Worker </span> <br />
-    <span *ngFor="let labor of filterForeignWorker">Last Updated on: {{labor.monthYear}} </span><br />
+    <!-- <span *ngFor="let labor of filterForeignWorker">Last Updated on: {{labor.monthYear}} </span><br /> -->
     <div *ngIf="isLoadingForeign">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#4872ad8a'}"></ngx-skeleton-loader>
     </div>
     <div *ngIf="!isLoadingForeign">
-      <b><span *ngFor="let labor of filterForeignWorker">{{labor.totalLaborWorker }}</span></b>
+      <!-- <b><span *ngFor="let labor of filterForeignWorker">{{labor.totalLaborWorker }}</span></b> -->
     </div>
   </div>
 

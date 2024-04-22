@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 
-
 import { NgPipesModule } from 'ngx-pipes';
 import { AppRoutingModule } from './app-routing.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -22,6 +21,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxPrintModule } from 'ngx-print';
+import { QRCodeModule } from 'angularx-qrcode';
 
 import { AppComponent } from './app.component';
 import { LoginLayoutComponent } from './_layout/login-layout/login-layout.component';
@@ -101,8 +101,8 @@ import { HistoryLogInterceptor } from './_interceptor/historyLog.interceptor';
 import { FieldInfoYearlyComponent } from './field-info-yearly/field-info-yearly.component';
 import { CompanyStatusComponent } from './report/company-status/company-status.component';
 import { EstateStatusComponent } from './report/estate-status/estate-status.component';
-import { WorkerShortageComponent } from './labor-info/worker-shortage/worker-shortage.component';
-import { WorkerShortageDetailComponent } from './labor-info/worker-shortage-detail/worker-shortage-detail.component';
+import { WorkerShortageComponent } from './monthly-form/worker-shortage/worker-shortage.component';
+import { WorkerShortageDetailComponent } from './monthly-form/worker-shortage-detail/worker-shortage-detail.component';
 import { OwnershipComponent } from './utility/ownership/ownership.component';
 import { TappingSystemComponent } from './utility/tapping-system/tapping-system.component';
 import { MatSelectModule } from '@angular/material/select';
@@ -116,6 +116,17 @@ import { AddUserComponent } from './utility-manage-user/add-user/add-user.compon
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { register } from 'swiper/element/bundle';
 import { PlantingMaterialComponent } from './utility/planting-material/planting-material.component';
+import { FieldInfectedComponent } from './field-infected/field-infected.component';
+import { FieldInfectedDetailComponent } from './field-infected-detail/field-infected-detail.component';
+import { FieldInfectedStatusComponent } from './field-infected-status/field-infected-status.component';
+import { GenerateForm1Component } from './generate-form1/generate-form1.component';
+import { FieldProductionMonthlyComponent } from './monthly-form/field-production-monthly/field-production-monthly.component';
+import { MonthlyFormComponent } from './monthly-form/monthly-form.component';
+import { LaborInfoMonthlyComponent } from './monthly-form/labor-info-monthly/labor-info-monthly.component';
+import { LaborInfoMonthlyDetailComponent } from './monthly-form/labor-info-monthly-detail/labor-info-monthly-detail.component';
+import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
+import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
+import { RubberStockDetailComponent } from './rubber-stock-detail/rubber-stock-detail.component';
 
 register()
 
@@ -204,6 +215,17 @@ register()
     AddUserComponent,
     ContactDetailComponent,
     PlantingMaterialComponent,
+    FieldInfectedComponent,
+    FieldInfectedDetailComponent,
+    FieldInfectedStatusComponent,
+    GenerateForm1Component,
+    FieldProductionMonthlyComponent,
+    MonthlyFormComponent,
+    LaborInfoMonthlyComponent,
+    LaborInfoMonthlyDetailComponent,
+    RubberStockComponent,
+    AddRubberStockComponent,
+    RubberStockDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -228,7 +250,8 @@ register()
     MatMenuModule,
     ToastrModule.forRoot(),
     NgxPrintModule,
-    MatSelectModule
+    MatSelectModule,
+    QRCodeModule
   ],
   providers: [
     DatePipe,

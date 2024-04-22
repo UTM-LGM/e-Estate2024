@@ -4,15 +4,15 @@
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
-  width: 80%;
+  width: 65%;
   height: 465px;
 }
 
 .form-container {
-  padding: 25px;
+  padding: 18px;
   position: absolute;
   height: 100%;
-  width: 27%;
+  width: 28%;
   background-color: ghostwhite;
   display: flex;
   align-items: center;
@@ -76,11 +76,11 @@ button {
   font-weight: 100;
 }
 
-@media (max-width: 1350px) {
+/* @media (max-width: 1350px) {
   .form-container {
     width: 25%;
   }
-}
+} */
 
 a {
   cursor: pointer;

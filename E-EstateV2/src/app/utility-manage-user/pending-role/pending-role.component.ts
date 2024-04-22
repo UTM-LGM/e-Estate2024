@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/_interface/user';
 import { UserService } from 'src/app/_services/user.service';
 import { PendingRoleDetailComponent } from '../pending-role-detail/pending-role-detail.component';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-pending-role',
@@ -17,6 +18,7 @@ export class PendingRoleComponent implements OnInit {
   currentSortedColumn = ''
   isLoading = true
   users:User []=[]
+  result:any = {} as any
 
   sortableColumns = [
     { columnName: 'fullName', displayText: 'User Fullname' },
@@ -30,6 +32,7 @@ export class PendingRoleComponent implements OnInit {
 
   constructor(private userService:UserService,
     private dialog: MatDialog,
+    private myLesenService:MyLesenIntegrationService
     )
   {}
 
@@ -44,6 +47,18 @@ export class PendingRoleComponent implements OnInit {
       Response=>{
         const users = Response
         this.users = users.filter((x:any)=>x.roleId == null && x.isEmailVerified == true)
+        this.users.forEach((user: any) => {
+          this.myLesenService.getLicenseNo(user.licenseNo)
+          .subscribe(
+            {
+              next: (Response) => {
+                this.result[user.licenseNo] = Response;
+                this.isLoading = false
+              },
+              error: (error: any) => {
+                console.error("Error fetching license number:", error);
+              }
+            })})  
         this.isLoading = false
       })
     }, 1000)

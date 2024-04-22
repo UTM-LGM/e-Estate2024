@@ -7,13 +7,21 @@ namespace E_EstateV2_API.Models
     {
         [Key]
         public int Id { get; set; }
-        public string date { get; set; }
+        public DateTime saleDateTime { get; set; }
         public string rubberType { get; set; }
-        public string authorizationLetter { get; set; }
+        public string letterOfConsentNo { get; set; }
         public string receiptNo { get; set; }
-        public float weight { get; set; }
+        public float wetWeight { get; set; }
+        public float buyerWetWeight { get; set; }
         public float DRC { get; set; }
-        public float amountPaid { get; set; }
+        public float buyerDRC { get; set; }
+        public float unitPrice { get; set; }
+        public float total { get; set; }
+        public string weightSlipNo { get; set; }
+        public string transportPlateNo { get; set; }
+        public string driverName { get; set; }
+        public string remark { get; set; }
+        public int estateId { get; set; }
         public bool isActive { get; set; }
         public string createdBy { get; set; }
         public DateTime createdDate { get; set; }
@@ -24,13 +32,9 @@ namespace E_EstateV2_API.Models
         public int buyerId { get; set; }
         public Buyer buyer { get; set; }
 
-        [ForeignKey("CompanyId")]
-        public int companyId { get; set; }
-        public Company company { get; set; }
-
-        [ForeignKey("EstateId")]
-        public int estateId { get; set; }
-        public Estate Estate { get; set; }
+        [ForeignKey("PaymentStatusId")]
+        public int paymentStatusId { get; set; }
+        public PaymentStatus paymentStatus { get; set; }
 
     }
 }

@@ -24,4 +24,8 @@ export class RubberSaleService {
     return this.http.put<RubberSale>(this.baseUrl + '/rubbersales/UpdateRubberSales', sale)
   }
 
+  getRubberSaleById(id:number):Observable<RubberSale>{
+    return this.http.get<RubberSale>(this.baseUrl + '/rubbersales/GetRubberSaleById/'+ id)
+  }
+
 }

@@ -12,7 +12,6 @@ namespace E_EstateV2_API.Models
         public bool isMature { get; set; }
         public bool isActive { get; set; }
         public DateTime? dateOpenTapping { get; set; }
-        public int infectedPercentage { get; set; }
         public int yearPlanted { get; set; }
         public int totalTask { get; set; }
         public int initialTreeStand { get; set; }
@@ -22,15 +21,9 @@ namespace E_EstateV2_API.Models
         public DateTime updatedDate { get; set; }
 
         [ForeignKey("FieldStatusId")]
-        public int fieldStatusId { get; set; }
+        public int? fieldStatusId { get; set; }
         public FieldStatus FieldStatus { get; set; }
-
-        [ForeignKey("EstateId")]
         public int estateId { get; set; }
-        public Estate Estate { get; set; }
 
-        [ForeignKey("FieldDiseaseId")]
-        public int? fieldDiseaseId { get; set; }
-        public FieldDisease FieldDisease { get; set; }
     }
 }

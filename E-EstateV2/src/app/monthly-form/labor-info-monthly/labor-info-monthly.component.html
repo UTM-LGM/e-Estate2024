@@ -1,0 +1,133 @@
+<br/>
+<div class="monthYear">
+  <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
+  <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled/>
+</div>
+
+<div style="padding-left: 30px;padding-right: 30px;">
+  <div style="width: 49%;">
+    <div style="flex: 1;">
+      <label>Country:</label>
+      <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId" >
+        <mat-option *ngFor="let country of filterCountries" [value]="country.id">
+          {{ country.country }}
+        </mat-option>
+      </mat-select>
+      <div class="remark">
+        **To add new country that is not in the list, please inform LGM admin by clicking <a
+          (click)="openCountry()">here</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="columns: 2">
+    <label>No of Checkrole Tapper :</label>
+    <input type="number" name="tapperCheckrole" [(ngModel)]="labor.tapperCheckrole"  />
+    <label>No of Employed Tapper :</label>
+    <input type="number" name="tapperContractor" [(ngModel)]="labor.tapperContractor"  />
+  </div>
+  <div style="columns: 2">
+    <label>No of Checkrole Field Worker :</label>
+    <input type="number" name="fieldCheckrole" [(ngModel)]="labor.fieldCheckrole"  />
+    <label>No of Employed Field Worker :</label>
+    <input type="number" name="fieldContractor" [(ngModel)]="labor.fieldContractor" />
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap;column-gap: 10px;">
+    <ng-container *ngFor="let laborType of filterTypes; let i = index;">
+      <div style="flex: 1 1 calc(50% - 10px);">
+        <div>
+          <label>No of {{ laborType.laborType | titlecase }}:</label>
+          <input type="number" name="noOf{{ laborType.laborType }}" [(ngModel)]="laborCategory[laborType.id].noOfWorker">
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div>
+    <button style="float: right" class="btn-add" type="submit"(click)="onSubmit()">
+      Add &nbsp; <i class="fa fa-plus"></i>
+    </button>
+  </div><br/><br/>
+
+  <div class="box-container">
+    <h1>List of Labor Information</h1>
+    <hr />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <tr>
+          <th>Month and Year</th>
+          <th>Country</th>
+          <th>No.of Checkrole Tappers</th>
+          <th>No.of Tappers Employed by Contractors</th>
+          <th>No.of Checkrole Field Workers</th>
+          <th>No.of Field Workers Employed by Contractors</th>
+          <!-- <th>Foreign Worker at Estate</th> -->
+          <ng-container *ngFor="let type of filterTypes">
+            <th>No.of {{ type.laborType | titlecase }}</th>
+          </ng-container>
+          <th>Total worker by Country</th>
+          <th width="90px">Action</th>
+        </tr>
+  
+        <tr *ngIf="isLoading">
+          <td colspan="14">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+  
+        <tr *ngIf="filterLabors.length == 0 && !isLoading">
+          <td colspan="14" style="color: red;"><b>No Labor information</b></td>
+        </tr>
+  
+        <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <td>{{ labor.monthYear | date : "MMM-yyyy" }}</td>
+          <td>{{ labor.countryName }}</td>
+          <td>{{ labor.tapperCheckrole }}</td>
+          <td>{{ labor.tapperContractor }}</td>
+          <td>{{ labor.fieldCheckrole }}</td>
+          <td>{{ labor.fieldContractor }}</td>
+          <ng-container *ngFor="let category of labor.laborCategory">
+            <td>{{ category.noOfWorker }}</td>
+          </ng-container>
+          <td>
+            <label>{{ labor.total }}</label>
+          </td>
+  
+          <td style="column-count: 2;">
+            <button class="btn-update" (click)="openDialog(labor)" >
+              <i class="fa fa-pencil"></i>
+            </button>
+            <button style="float: right;" class="btn-del" (click)="delete(labor.id)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+  
+        </tr>
+  
+        <tr>
+          <th colspan="12">Total Worker : </th>
+          <th>{{ totalForeignWorker }}</th>
+          <th></th>
+        </tr>
+      </table>
+  
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  
+    </div>
+  </div><br/>
+
+  <div>
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+
+    <button style="float: right" class="btn-add" (click)="nextTab()" *ngIf="filterLabors.length>0">
+      Next &nbsp; <i class="fa fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <div>
+    
+  </div>

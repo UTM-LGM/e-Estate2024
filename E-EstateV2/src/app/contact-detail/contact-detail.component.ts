@@ -38,7 +38,9 @@ export class ContactDetailComponent implements OnInit {
     }
 
     ngOnInit() {
-
+      if(this.companyContact.id == null){
+        this.companyContact.name = ''
+      }
       if (this.companyId !== undefined) {
         this.estateId = 0
       } else if ( this.estateId !== undefined ){

@@ -3,6 +3,7 @@ import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
 import { CompanyService } from 'src/app/_services/company.service';
 import { EstateService } from 'src/app/_services/estate.service';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-home-admin-lgm',
@@ -23,7 +24,8 @@ export class HomeAdminLGMComponent implements OnInit {
 
   constructor(
     private estateService: EstateService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -32,22 +34,22 @@ export class HomeAdminLGMComponent implements OnInit {
   }
 
   getCompany() {
-    this.companyService.getCompany()
-      .subscribe(
-        Response => {
-          const companies = Response
-          this.filterCompanies = companies.filter(x => x.isActive == true)
-          this.totalCompany = this.filterCompanies.length
-          this.isLoadingCompany = false
-        });
+    this.myLesenService.getAllCompany()
+    .subscribe(
+      Response =>{
+        this.filterCompanies = Response
+        this.totalCompany = this.filterCompanies.length
+        this.isLoadingCompany = false
+      } 
+    )
+
   }
 
   getEstate() {
-    this.estateService.getEstate()
+      this.myLesenService.getAllEstate()
       .subscribe(
-        Response => {
-          const estates = Response
-          this.filterEstates = estates.filter(x => x.isActive == true)
+        Response =>{
+          this.filterEstates = Response
           this.totalEstate = this.filterEstates.length
           this.isLoadingEstate = false
         }

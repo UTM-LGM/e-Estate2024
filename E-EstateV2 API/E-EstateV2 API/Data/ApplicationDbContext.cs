@@ -34,9 +34,8 @@ namespace E_EstateV2_API.Data
         public DbSet<Field> fields { get; set; }
         public DbSet<FieldClone> fieldClones { get; set; }
         public DbSet<Country> countries { get; set; }
-        public DbSet<ForeignLabor> foreignLabors { get; set; }
         public DbSet<LocalLabor> localLabors { get; set; }
-        public DbSet<LaborType> localLaborTypes { get; set; }
+        public DbSet<LaborType> laborTypes { get; set; }
         public DbSet<CostType> costTypes { get; set; }
         public DbSet<CostCategory> costCategories { get; set; }
         public DbSet<CostSubcategory1> costSubcategories1 { get; set; } 
@@ -65,6 +64,13 @@ namespace E_EstateV2_API.Data
         public DbSet<CompanyContact> companyContacts { get; set; }
         public DbSet<EstateContact> estateContacts { get; set; }
         public DbSet<PlantingMaterial> plantingMaterials { get; set; }
+        public DbSet<FieldInfected> fieldInfecteds { get; set; }
+        public DbSet<EstateDetail> estateDetails { get; set; }
+        public DbSet<PaymentStatus> paymentStatuses { get; set; }
+        public DbSet<CompanyDetail> companyDetails { get; set; }
+        public DbSet<LaborInfo> laborInfos { get; set; }
+        public DbSet<LaborByCategory> laborByCategories { get; set; }
+        public DbSet<RubberStock> rubberStocks { get; set;}
     }
 
 }

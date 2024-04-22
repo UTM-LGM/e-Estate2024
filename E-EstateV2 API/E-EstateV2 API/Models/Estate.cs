@@ -34,18 +34,6 @@ namespace E_EstateV2_API.Models
         public int townId { get; set; }
         public Town Town { get; set; }
 
-        [ForeignKey("EstablshmentId")]
-        public int establishmentId { get; set; }
-        public Establishment Establishment { get; set; }
-
-        [ForeignKey("FinancialYearId")]
-        public int financialYearId { get; set; }
-        public FinancialYear FinancialYear { get; set; }
-
-        [ForeignKey("MembershipTypeId")]
-        public int membershipTypeId { get; set; }
-        public MembershipType MembershipType { get; set; }
-
         [ForeignKey("PlantingMaterialId")]
         public int plantingMaterialId { get; set; }
         public PlantingMaterial PlantingMaterial { get; set; }

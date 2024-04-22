@@ -3,9 +3,10 @@ import { Chart } from 'chart.js/auto';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Estate } from 'src/app/_interface/estate';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
-import { ForeignLabor } from 'src/app/_interface/foreignLabor';
+// import { ForeignLabor } from 'src/app/_interface/laborInfo';
 import { LocalLabor } from 'src/app/_interface/localLabor';
 import { EstateService } from 'src/app/_services/estate.service';
+import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 
@@ -26,18 +27,18 @@ export class HomeEstateClerkComponent implements OnInit {
 
   filterLocalLabors: LocalLabor[] = []
 
-  filterForeignWorker: ForeignLabor[] = []
+  // filterForeignWorker: ForeignLabor[] = []
 
   sumCuplumpByMonthYear: any
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
   yearNow = 0
   totalCuplump = 0
   totalLatex = 0
   totalLocal = 0
   totalForeign = 0
-  estateId = ''
+  estateId = 0
   isLoadingEstateName = true
   isLoadingProduction = true
   isLoadingLocal = true
@@ -47,7 +48,8 @@ export class HomeEstateClerkComponent implements OnInit {
   constructor(
     private reportService: ReportService,
     private authGuard: AuthGuard,
-    private estateService: EstateService
+    private estateService: EstateService,
+    private myLesenService:MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class HomeEstateClerkComponent implements OnInit {
       this.getEstate()
       this.getProduction()
       this.getLocalWorker()
-      this.getForeignWorker()
+      // this.getForeignWorker()
     }
   }
 
@@ -76,13 +78,21 @@ export class HomeEstateClerkComponent implements OnInit {
   }
 
   getEstate() {
-    this.estateService.getOneEstate(parseInt(this.estateId))
-      .subscribe(
-        Response => {
-          this.estate = Response
-          this.isLoadingEstateName = false
-        }
-      )
+    // this.estateService.getOneEstate(parseInt(this.estateId))
+    //   .subscribe(
+    //     Response => {
+    //       this.estate = Response
+    //       this.isLoadingEstateName = false
+    //     }
+    //   )
+
+    this.myLesenService.getOneEstate(this.estateId)
+    .subscribe(
+      Response =>{
+        this.estate = Response
+        this.isLoadingEstateName = false
+      }
+    )  
   }
 
   getProduction() {
@@ -124,23 +134,23 @@ export class HomeEstateClerkComponent implements OnInit {
       )
   }
 
-  getForeignWorker() {
-    this.reportService.getCurrentForeignWorker()
-      .subscribe(
-        Response => {
-          const foreignLabors = Response
-          if (foreignLabors.some(x => x && x.estateId === this.estateId)) {
-            this.filterForeignWorker = foreignLabors.filter(x => x.estateId == this.estateId)
-          } else {
-            const foreignLabor: any = {
-              totalLaborWorker: 0
-            };
-            this.filterForeignWorker.push(foreignLabor)
-          }
-          this.isLoadingForeign = false
-        }
-      )
-  }
+  // getForeignWorker() {
+  //   this.reportService.getCurrentForeignWorker()
+  //     .subscribe(
+  //       Response => {
+  //         const foreignLabors = Response
+  //         if (foreignLabors.some(x => x && x.estateId === this.estateId)) {
+  //           this.filterForeignWorker = foreignLabors.filter(x => x.estateId == this.estateId)
+  //         } else {
+  //           const foreignLabor: any = {
+  //             totalLaborWorker: 0
+  //           };
+  //           this.filterForeignWorker.push(foreignLabor)
+  //         }
+  //         this.isLoadingForeign = false
+  //       }
+  //     )
+  // }
 
   createChart() {
     this.yearNow = 2022

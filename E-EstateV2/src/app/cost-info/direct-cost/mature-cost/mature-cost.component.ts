@@ -75,6 +75,7 @@ export class MatureCostComponent implements OnInit {
       .subscribe(
         Response => {
           this.subCategories1 = Response
+          this.subCategories1.forEach(sub => sub.amount = 0);
         })
   }
 
@@ -131,7 +132,7 @@ export class MatureCostComponent implements OnInit {
             next: (Response) => {
               swal.fire({
                 title: 'Done!',
-                text: 'Cost amount successfully submitted!',
+                text: 'Cost amount successfully saved!',
                 icon: 'success',
                 showConfirmButton: false,
                 timer: 1000
@@ -153,6 +154,22 @@ export class MatureCostComponent implements OnInit {
         showConfirmButton: true,
       });
     }
+  }
+
+  save(){
+    this.costAmountService.updateCostAmount(this.draftFilterMatureDirectCostAmount)
+    .subscribe(
+      Response =>{
+        swal.fire({
+          title: 'Done!',
+          text: 'Cost amount successfully saved!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        })
+        this.getMatureDirectCost();
+      }
+    )
   }
 
   submitMatureCost() {

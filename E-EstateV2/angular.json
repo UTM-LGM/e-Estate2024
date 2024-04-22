@@ -35,7 +35,8 @@
               "sweetalert2",
               "base64-js",
               "html2canvas",
-              "jspdf"
+              "jspdf",
+              "angularx-qrcode"
             ]
           },
           "configurations": {

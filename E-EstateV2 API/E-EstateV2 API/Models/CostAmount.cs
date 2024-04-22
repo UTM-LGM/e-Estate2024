@@ -19,9 +19,6 @@ namespace E_EstateV2_API.Models
         [ForeignKey("CostId")]
         public int costId { get; set; }
         public Cost Cost { get; set; }
-
-        [ForeignKey("EstateId")]
         public int estateId { get; set; }
-        public Estate Estate { get; set; }
     }
 }

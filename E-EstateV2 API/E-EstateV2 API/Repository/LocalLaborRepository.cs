@@ -31,11 +31,11 @@ namespace E_EstateV2_API.Repository
             {
                 id = x.Id,
                 laborTypeId = x.laborTypeId,
-                laborTypeName = _context.localLaborTypes.Where(y => y.Id == x.laborTypeId).Select(y => y.laborType).FirstOrDefault(),
+                laborTypeName = _context.laborTypes.Where(y => y.Id == x.laborTypeId).Select(y => y.laborType).FirstOrDefault(),
                 monthYear = x.monthYear,
                 totalWorker = x.totalWorker,
                 estateId = x.estateId,
-                laborType = _context.localLaborTypes.Where(y => y.Id == x.laborTypeId).Select(y => y.laborType).FirstOrDefault()
+                laborType = _context.laborTypes.Where(y => y.Id == x.laborTypeId).Select(y => y.laborType).FirstOrDefault()
             }).ToListAsync();
             return labor;
         }

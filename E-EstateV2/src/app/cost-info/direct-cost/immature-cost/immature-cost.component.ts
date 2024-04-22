@@ -61,6 +61,7 @@ export class ImmatureCostComponent implements OnInit {
         .subscribe(
           Response => {
             this.subCategories2IM = Response
+            this.subCategories2IM.forEach(sub =>sub.amount = 0)
             this.isLoading = false
           });
     }, 1000)
@@ -112,7 +113,7 @@ export class ImmatureCostComponent implements OnInit {
           next: (Response) => {
             swal.fire({
               title: 'Done!',
-              text: 'Cost amount successfully submitted!',
+              text: 'Cost amount successfully saved!',
               icon: 'success',
               showConfirmButton: false,
               timer: 1000
@@ -132,6 +133,22 @@ export class ImmatureCostComponent implements OnInit {
 
   calculateTotalImmatureAmount() {
     this.totalImmatureAmount = this.subCategories2IM.reduce((acc, item) => acc + (item.amount || 0), 0)
+  }
+
+  save(){
+    this.costAmountService.updateCostAmount(this.draftFilterImmatureDirectCostAmount)
+    .subscribe(
+      Response =>{
+        swal.fire({
+          title: 'Done!',
+          text: 'Cost amount successfully saved!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        })
+        this.getImmatureDirectCost();
+      }
+    )
   }
 
   submitImmatureCost() {

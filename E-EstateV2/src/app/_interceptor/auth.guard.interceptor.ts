@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
 
   role = ''
   username = ''
-  estateId = ''
+  estateId = 0
   companyId = ''
 
   user = {} as User
@@ -76,7 +76,7 @@ export class AuthGuard implements CanActivate {
     return this.companyId
   }
 
-  getUser(estateId: string, companyId: string) {
+  getUser(estateId: number, companyId: string) {
     this.userService.getUser(this.username)
       .subscribe(
         Response => {
@@ -85,7 +85,7 @@ export class AuthGuard implements CanActivate {
           this.sharedService.email = this.user.email
           if( this.getRole() != "Admin")
           {
-            if (this.user.estateId.toString() == estateId && this.user.companyId.toString() == companyId) {
+            if (this.user.estateId == estateId && this.user.companyId.toString() == companyId) {
               this.sharedService.companyId = this.user.companyId
               this.sharedService.estateId = this.user.estateId
             }

@@ -170,7 +170,7 @@ namespace E_EstateV2_API.Repository
         {
             int year = DateTime.Now.Year;
 
-            var foreignLabor = await _context.foreignLabors.Where(x => x.monthYear.Contains(year.ToString())).Select(x => new DTO_ForeignLabor
+            /**var foreignLabor = await _context.foreignLabors.Where(x => x.monthYear.Contains(year.ToString())).Select(x => new DTO_LaborInfo
             {
                 monthYear = x.monthYear,
                 totalLaborWorker = x.tapperCheckrole + x.tapperContractor + x.fieldCheckrole + x.fieldContractor,
@@ -179,7 +179,7 @@ namespace E_EstateV2_API.Repository
 
             var groupForeignLabor = foreignLabor
                 .GroupBy(x => x.monthYear)
-                 .Select(group => new DTO_ForeignLabor
+                 .Select(group => new DTO_LaborInfo
                  {
                      estateId = group.First().estateId,
                      monthYear = group.First().monthYear,
@@ -191,7 +191,8 @@ namespace E_EstateV2_API.Repository
 
             var result = new[] { latestEntry };
 
-            return result;
+            return result; **/
+            return null;
         }
 
         public async Task<object> GetProductionYearlyByClone(int year)

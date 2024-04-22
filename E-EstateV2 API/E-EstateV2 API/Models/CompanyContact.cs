@@ -16,8 +16,8 @@ namespace E_EstateV2_API.Models
         public DateTime createdDate { get; set; }
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
-        [ForeignKey("CompanyId")]
-        public int CompanyId { get; set; }
-        public Company Company { get; set; }
+
+        public int companyId { get; set; }
+
     }
 }

@@ -20,7 +20,7 @@
       </tr>
 
       <tr>
-        <td><b>Total Amount for Immature Cost</b></td>
+        <td><b>Total Amount for Immature Cost (RM)</b></td>
         <td><input class="total" class="amount" type="text" [value]="totalImmatureAmount | number:'1.2-2'" disabled /></td>
       </tr>
     </table>
@@ -58,16 +58,23 @@
             </tr>
 
             <tr>
-              <td><b>Total Amount for Immature Cost</b></td>
+              <td><b>Total Amount for Immature Cost (RM)</b></td>
               <td><input class="total" class="amount" type="text" [value]="totalImmatureCostAmount| number:'1.2-2'" disabled /></td>
             </tr>
           </table>
 
+          <div>
           <div *ngIf="draftFilterImmatureDirectCostAmount.length != 0">
             <button (click)="submitImmatureCost()" style="float: right" class="btn-add" type="submit">
               Submit &nbsp; <i class="fa fa-plus"></i>
             </button>
           </div>
+          <div *ngIf="draftFilterImmatureDirectCostAmount.length != 0">
+            <button (click)="save()" style="float: right; background-color:  #CAE00D; margin-right:10px" class="btn-add" type="submit" [disabled]="isDisable">
+              Save &nbsp; <i class="fa fa-check"></i>
+            </button>
+          </div>        
+        </div>
           <br />
           <br />
         </div>
@@ -96,7 +103,7 @@
             </tr>
 
             <tr>
-              <td><b>Total Amount for Immature Cost</b></td>
+              <td><b>Total Amount for Immature Cost (RM)</b></td>
               <td style="text-align: right !important;"><b>{{ totalImmatureCostAmount | number:'1.2-2'}}</b></td>
             </tr>
           </table>

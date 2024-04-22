@@ -24,7 +24,7 @@
               <td class="td"></td>
             </ng-container>
             <td class="td">{{sub.costSubcategory2}}</td>
-            <td class="td"><input class="amount" type="number" placeholder="0.00" [(ngModel)]="sub.amount"
+            <td class="td"><input class="amount" type="number" [value]="0" [(ngModel)]="sub.amount"
               (input)="calculateTotalMatureAmount()" /></td>
           </tr>
         </ng-container>
@@ -33,7 +33,7 @@
     <div >
     <table>
       <tr>
-        <td><b>Total Amount for Mature Cost (RM) </b></td>
+        <td style="width: 100%;"><b>Total Amount for Mature Cost (RM) </b></td>
         <td><input class="amount" type="text" [value]="totalMatureAmount| number:'1.2-2'" disabled /></td>
       </tr>
     </table>
@@ -76,16 +76,23 @@
             </tr>
 
             <tr>
-              <td colspan="2"><b>Total Amount for Mature Cost</b></td>
+              <td colspan="2"><b>Total Amount for Mature Cost (RM)</b></td>
               <td><input class="total" class="amount" type="text" [value]="totalMatureCostAmount| number:'1.2-2'" disabled /></td>
             </tr>
           </table>
 
+          <div>
           <div *ngIf="draftFilterMatureDirectCostAmount.length != 0">
             <button (click)="submitMatureCost()" style="float: right" class="btn-add" type="submit">
               Submit &nbsp; <i class="fa fa-plus"></i>
             </button>
           </div>
+          <div *ngIf="draftFilterMatureDirectCostAmount.length != 0">
+            <button (click)="save()" style="float: right; background-color:  #CAE00D; margin-right:10px" class="btn-add" type="submit" [disabled]="isDisable">
+              Save &nbsp; <i class="fa fa-check"></i>
+            </button>
+          </div>        
+        </div>
           <br />
         </div>
       </div>
@@ -117,7 +124,7 @@
             </tr>
 
             <tr>
-              <td colspan="2"><b>Total Amount for Mature Cost</b></td>
+              <td colspan="2"><b>Total Amount for Mature Cost (RM)</b></td>
               <td style="text-align: right !important;"><b>{{ totalMatureCostAmount | number: '1.2-2' }}</b></td>
             </tr>
           </table>

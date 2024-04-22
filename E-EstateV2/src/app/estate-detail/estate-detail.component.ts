@@ -14,6 +14,10 @@ import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { EstateContact } from '../_interface/estate-contact';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { EstateContactService } from '../_services/estate-contact.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { EstateDetailService } from '../_services/estate-detail.service';
+import { EstateDetail } from '../_interface/estate-detail';
+import { FieldService } from '../_services/field.service';
 
 @Component({
   selector: 'app-estate-detail',
@@ -21,13 +25,17 @@ import { EstateContactService } from '../_services/estate-contact.service';
   styleUrls: ['./estate-detail.component.css'],
 })
 export class EstateDetailComponent implements OnInit {
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
-  contacts:any = {} as any
+  contacts:any[]=[]
+
+  fields:Field[]=[]
 
   value: Field[] = []
 
   conversionField: FieldConversion[] = [];
+
+  estateDetail:EstateDetail = {} as EstateDetail
 
   term = ''
   userRole = ''
@@ -54,7 +62,7 @@ export class EstateDetailComponent implements OnInit {
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
     { columnName: 'email', displayText: 'Email' },
-  ];
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -64,39 +72,62 @@ export class EstateDetailComponent implements OnInit {
     private dialog: MatDialog,
     private fieldConversionService: FieldConversionService,
     private auth: AuthGuard,
-    private estateContactService:EstateContactService
+    private estateContactService:EstateContactService,
+    private myLesenService:MyLesenIntegrationService,
+    private estateDetailService:EstateDetailService,
+    private fieldService:FieldService
   ) { }
 
   ngOnInit() {
     this.userRole = this.auth.getRole()
     this.getEstate()
-    this.getContact()
   }
 
   getEstate() {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
-            .subscribe(
-              Response => {
-                this.estate = Response
-                this.sum(this.estate.fields)
-                this.isLoading = false
-              });
+          this.myLesenService.getOneEstate(routerParams['id'])
+          .subscribe(
+            Response =>{
+              this.estate = Response
+              this.getContact()
+              this.getField()
+              this.isLoading = false
+            }
+          )
+          this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
+          .subscribe(
+            Response=>{
+              if(Response != null){
+                this.estateDetail = Response
+              }
+            }
+          )
         }
       });
     }, 2000)
+  }
+
+  getField(){
+    this.fieldService.getField()
+    .subscribe(
+      Response =>{
+        const fields = Response
+        this.fields = fields.filter(x=>x.estateId == this.estate.id)
+      }
+    )
   }
 
   getContact(){
     this.estateContactService.getCompanyContact()
     .subscribe(
       Response =>{
-        this.contacts = Response
-      }
-    )
-  }
+        const contacts = Response
+        this.contacts = contacts.filter(x=>x.estateId == this.estate.id)
+      }
+    )
+  }
 
   statusEstate(estate: Estate) {
     estate.updatedBy = this.sharedService.userId.toString()
@@ -132,17 +163,17 @@ export class EstateDetailComponent implements OnInit {
           timer: 1000
         });
         this.ngOnInit()
-      }
-    )
+      }
+    )
   }
 
   back() {
     this.location.back()
   }
 
-  openDialog(estate: Estate) {
+  openDialog(estate: Estate, estateDetail:EstateDetail) {
     const dialogRef = this.dialog.open(EditEstateDetailComponent, {
-      data: { data: estate },
+      data: { data: estate, estateDetail:estateDetail },
     });
     dialogRef.afterClosed()
       .subscribe(
@@ -185,7 +216,7 @@ export class EstateDetailComponent implements OnInit {
       )
   }
 
-  openDialogContact(contact:EstateContact, estate:Estate)
+  openDialogContact(contact:EstateContact[], estate:Estate)
   {
     const dialogRef = this.dialog.open(ContactDetailComponent, {
       data:{contact: contact, estateId: estate.id},
@@ -194,8 +225,8 @@ export class EstateDetailComponent implements OnInit {
       .subscribe(
         Response => {
           this.ngOnInit()
-        }
-      )
-  }
+        }
+    )
+  }
 
 }

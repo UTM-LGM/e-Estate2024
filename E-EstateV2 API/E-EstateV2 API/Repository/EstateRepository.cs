@@ -35,12 +35,9 @@ namespace E_EstateV2_API.Repository
                 phone = x.phone,
                 fax = x.fax,
                 latitudeLongitude = x.latitudeLongitude,
-                financialYear = _context.financialYears.Where(y => y.Id == x.financialYearId).Select(y => y.financialYear).FirstOrDefault(),
-                establishment = _context.establishments.Where(y => y.Id == x.establishmentId).Select(x => x.establishment).FirstOrDefault(),
                 companyName = _context.companies.Where(y=>y.Id == x.companyId).Select(y=>y.companyName).FirstOrDefault(),
                 town = _context.towns.Where(y => y.Id == x.townId).Select(y => y.town).FirstOrDefault(),
                 state = _context.states.Where(y => y.Id == _context.towns.Where(z => z.Id == x.townId).Select(x => x.stateId).FirstOrDefault()).Select(y => y.state).FirstOrDefault(),
-                membership = _context.membershipTypes.Where(y => y.Id == x.membershipTypeId).Select(y => y.membershipType).FirstOrDefault(),
                 plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(x => new PlantingMaterial
                 {
                     Id = x.Id,
@@ -78,20 +75,6 @@ namespace E_EstateV2_API.Repository
                 }).ToList(),
                 stateId = _context.towns.Where(y => y.Id == x.townId).Select(y => y.stateId).FirstOrDefault(),
                 state = _context.states.Where(y => y.Id == _context.towns.Where(z => z.Id == x.townId).Select(x => x.stateId).FirstOrDefault()).Select(y => y.state).FirstOrDefault(),
-                membershipTypeId = x.membershipTypeId,
-                membership = _context.membershipTypes.Where(y => y.Id == x.membershipTypeId).Select(y => y.membershipType).FirstOrDefault(),
-                financialYearId = x.financialYearId,
-                financialYears = _context.financialYears.Where(y => y.Id == x.financialYearId).Select(f => new DTO_FinancialYear
-                {
-                    id = f.Id,
-                    financialYear = f.financialYear
-                }).ToList(),
-                establishmentId = x.establishmentId,
-                establishments = _context.establishments.Where(y => y.Id == x.establishmentId).Select(e => new DTO_Establishment
-                {
-                    id = e.Id,
-                    establishment = e.establishment
-                }).ToList(),
                 plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(x => new PlantingMaterial
                 {
                     Id = x.Id,
@@ -141,9 +124,6 @@ namespace E_EstateV2_API.Repository
                 existingEstate.address3 = estate.address3;
                 existingEstate.postcode = estate.postcode;
                 existingEstate.townId = estate.townId;
-                existingEstate.financialYearId = estate.financialYearId;
-                existingEstate.membershipTypeId = estate.membershipTypeId;
-                existingEstate.establishmentId = estate.establishmentId;
                 existingEstate.phone = estate.phone;
                 existingEstate.fax = estate.fax;
                 existingEstate.email = estate.email;

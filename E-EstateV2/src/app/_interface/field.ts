@@ -2,6 +2,7 @@ import { Clone } from "./clone";
 import { FieldStatus } from "./fieldStatus";
 
 export interface Field {
+    percentage: number;
     id: number
     fieldName: string
     area: number
@@ -31,5 +32,5 @@ export interface Field {
     fieldId: number
     conversionId: number
     fieldDiseaseId:number
-    infectedPercentage:number
+    areaInfected:number
 }

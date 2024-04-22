@@ -20,7 +20,7 @@ export class NotificationComponent implements OnInit {
   showAlertProduction = false
   showEmptyMessage = false
   yearNow = 0
-  estateId = ''
+  estateId = 0
   sumTotalDryPreviousMonthYear = 0
   sumTotalDryCurrentMonthYear = 0
   message = ''
@@ -59,7 +59,7 @@ export class NotificationComponent implements OnInit {
           const production = Response.production
           const previousMonthYear = Response.monthYear
           this.responsePreviousMonthYear = previousMonthYear.filter((x: any) => x.estateId == this.estateId)
-          const filterProduction = production.filter((x: { estateId: string; }) => x.estateId == this.estateId)
+          const filterProduction = production.filter((x: { estateId: number; }) => x.estateId == this.estateId)
           const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
           this.sumTotalDryPreviousMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0)
 
@@ -69,7 +69,7 @@ export class NotificationComponent implements OnInit {
                 const production = Response.production
                 const currentMonthYear = Response.monthYear
                 this.responseCurrentMonthYear = currentMonthYear.filter((x: any) => x.estateId == this.estateId)
-                const filterProduction = production.filter((x: { estateId: string; }) => x.estateId == this.estateId)
+                const filterProduction = production.filter((x: { estateId: number; }) => x.estateId == this.estateId)
                 const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
                 this.sumTotalDryCurrentMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0);
 
@@ -77,7 +77,7 @@ export class NotificationComponent implements OnInit {
                   .subscribe(
                     Response => {
                       const production = Response
-                      this.filterProduction = production.filter(x => x.estateId == parseInt(this.estateId) && x.createdYear == currentYear)
+                      this.filterProduction = production.filter(x => x.estateId == this.estateId && x.createdYear == currentYear)
 
                       if (this.responsePreviousMonthYear.some((item) => item.monthYear.includes('Dec')) &&
                         this.responseCurrentMonthYear.some((item) => item.monthYear.includes('Dec')) && this.filterProduction.length == 0) {

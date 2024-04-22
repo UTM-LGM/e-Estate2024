@@ -8,5 +8,6 @@ namespace E_EstateV2_API.IRepository
         Task<List<DTO_FieldProduction>> GetFieldProductions();
         Task<IEnumerable<FieldProduction>> AddFieldProduction (FieldProduction[] fieldProduction);
         Task<FieldProduction> UpdateFieldProduction (FieldProduction fieldProduction);
+        Task<IEnumerable<FieldProduction>> UpdateFieldProductionDraft(FieldProduction[] fieldProduction);
     }
 }

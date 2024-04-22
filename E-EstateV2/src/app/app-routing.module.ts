@@ -9,7 +9,6 @@ import { EstateListComponent } from './estate-list/estate-list.component';
 import { EstateComponent } from './estate-list-CompanyAdmin/estate.component';
 import { FieldDetailComponent } from './field-detail/field-detail.component';
 import { FieldInfoComponent } from './field-info/field-info.component';
-import { FieldProductionComponent } from './field-production/field-production.component';
 import { HomeComponent } from './home/home.component';
 import { LaborInfoComponent } from './labor-info/labor-info.component';
 import { LoginComponent } from './login/login.component';
@@ -52,9 +51,16 @@ import { TappingSystemComponent } from './utility/tapping-system/tapping-system.
 import { FieldDiseaseComponent } from './utility/field-disease/field-disease.component';
 import { UtilityManageUserComponent } from './utility-manage-user/utility-manage-user.component';
 import { PlantingMaterialComponent } from './utility/planting-material/planting-material.component';
+import { FieldInfectedComponent } from './field-infected/field-infected.component';
+import { FieldInfectedStatusComponent } from './field-infected-status/field-infected-status.component';
+import { GenerateForm1Component } from './generate-form1/generate-form1.component';
+import { MonthlyFormComponent } from './monthly-form/monthly-form.component';
+import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
+import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
+  { path: 'generate-form-1/:id', component: GenerateForm1Component},
   {
     path: 'login',
     component: LoginLayoutComponent,
@@ -97,8 +103,11 @@ const routes: Routes = [
       { path: 'estate-list', component: EstateListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] } },
       { path: 'estate-detail/:id', component: EstateDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-info/:id', component: FieldInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'field-disease/:id', component: FieldInfectedComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-detail/:id', component: FieldDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'field-production/:id', component: FieldProductionComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
+      { path: 'field-production/:id', component: MonthlyFormComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
+      { path: 'rubber-stock/:id', component: RubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
+      { path: 'add-rubber-stock', component: AddRubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
       { path: 'labor-info/:id', component: LaborInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
       { path: 'cost-info/:id', component: CostInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
       { path: 'rubber-sale/:id', component: RubberSalesComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
@@ -107,11 +116,13 @@ const routes: Routes = [
       { path: 'add-rubber-purchase/:id', component: AddRubberPurchaseComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
       { path: 'notification', component: NotificationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-info-yearly/:id', component: FieldInfoYearlyComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
+      { path: 'field-infected-status/:id', component: FieldInfectedStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
 
       {
         path: 'utilities-admin',
         component: UtilityComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] },
         children: [
+          { path: 'planting-material', component: PlantingMaterialComponent },
           { path: 'state', component: StateComponent },
           { path: 'financialYear', component: FinancialYearComponent },
           { path: 'membershipType', component: MembershipComponent },
@@ -128,7 +139,6 @@ const routes: Routes = [
           { path: 'ownership', component:OwnershipComponent },
           { path: 'tapping-system',component:TappingSystemComponent },
           { path: 'field-disease', component: FieldDiseaseComponent },
-          { path: 'planting-material', component: PlantingMaterialComponent },
 
         ],
       },

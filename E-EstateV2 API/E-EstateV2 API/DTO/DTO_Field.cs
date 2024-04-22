@@ -21,6 +21,7 @@
         public int conversionId { get; set; }
         public int infectedPercentage { get; set; }
         public int? fieldDiseaseId { get; set; }
+        public int estateId { get; set; }
 
         public List<DTO_FieldStatus> fieldStatuses { get; set; }
         public List<DTO_Clone> clones { get; set; }

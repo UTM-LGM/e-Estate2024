@@ -5,6 +5,7 @@ import { CostType } from '../_interface/costType';
 import { EstateService } from '../_services/estate.service';
 import { CostTypeService } from '../_services/cost-type.service';
 import swal from 'sweetalert2';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-cost-info',
@@ -16,7 +17,7 @@ export class CostInfoComponent implements OnInit {
   clickedCostTypeId = 1
   selectedYear = ''
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
   costType: CostType[] = []
   isLoading = true;
@@ -26,7 +27,8 @@ export class CostInfoComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private estateService: EstateService,
-    private costTypeService: CostTypeService
+    private costTypeService: CostTypeService,
+    private myLesenService:MyLesenIntegrationService,
   ) { }
 
   ngOnInit() {
@@ -53,13 +55,13 @@ export class CostInfoComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
-            .subscribe(
-              Response => {
-                this.estate = Response
-                this.isLoading = false
-              });
-        }
+          this.myLesenService.getOneEstate(routerParams['id'])
+          .subscribe(
+            Response =>{
+              this.estate = Response;
+              this.isLoading = false
+            }
+          )}
       });
     }, 2000)
   }

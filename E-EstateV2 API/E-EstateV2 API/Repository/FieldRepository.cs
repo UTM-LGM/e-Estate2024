@@ -37,7 +37,8 @@ namespace E_EstateV2_API.Repository
                 yearPlanted = x.yearPlanted,
                 fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
                 initialTreeStand = x.initialTreeStand,
-                totalTask = x.totalTask
+                totalTask = x.totalTask,
+                estateId = x.estateId,
             }).ToListAsync();
             return field;
         }
@@ -75,8 +76,6 @@ namespace E_EstateV2_API.Repository
                 dateOpenTapping = x.dateOpenTapping,
                 dateOpenTappingFormatted = (x.dateOpenTapping != null) ? x.dateOpenTapping.Value.ToString("yyyy-MM-dd") : null,
                 yearPlanted = x.yearPlanted,
-                fieldDiseaseId = x.fieldDiseaseId,
-                infectedPercentage = x.infectedPercentage,
                 //fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
                 fieldStatusId = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.Id).FirstOrDefault(),
                 fieldStatuses = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => new DTO_FieldStatus
@@ -111,8 +110,6 @@ namespace E_EstateV2_API.Repository
                 existingField.yearPlanted = field.yearPlanted;
                 existingField.dateOpenTapping = field.dateOpenTapping;
                 existingField.initialTreeStand = field.initialTreeStand;
-                existingField.fieldDiseaseId = field.fieldDiseaseId;
-                existingField.infectedPercentage = field.infectedPercentage;
                 existingField.totalTask = field.totalTask;
                 existingField.updatedBy = field.updatedBy;
                 existingField.updatedDate = DateTime.Now;
@@ -123,6 +120,21 @@ namespace E_EstateV2_API.Repository
             return null;
         }
 
+        public async Task<Field> UpdateFieldInfected(Field field)
+        {
+            var existingField = await _context.fields.FirstOrDefaultAsync(x => x.Id == field.Id);
+            if(existingField != null)
+            {
+                existingField.isActive = field.isActive;
+                existingField.updatedBy = field.updatedBy;
+                existingField.updatedDate = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return existingField;
+            }
+            return null;
+        }
+
+
         public async Task<FieldClone> AddFieldClone(FieldClone clone)
         {
             clone.createdDate = DateTime.Now;
@@ -130,6 +142,7 @@ namespace E_EstateV2_API.Repository
             await _context.SaveChangesAsync();
             return clone;
         }
+
 
         public async Task<FieldClone> GetFieldCloneById(int cloneId, int fieldId)
         {

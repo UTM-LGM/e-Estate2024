@@ -6,5 +6,8 @@ export interface WorkerShortage{
     updatedBy: string
     updatedDate: Date
     estateId: number
-    workerShortage:number
+    tapperWorkerShortage:number
+    fieldWorkerShortage:number
+    // neededTapper:number
+    // neededField:number
 }

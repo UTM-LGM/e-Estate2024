@@ -10,8 +10,9 @@ import { SharedService } from '../_services/shared.service';
 import { ActivatedRoute } from '@angular/router';
 import { Estate } from '../_interface/estate';
 import { EstateService } from '../_services/estate.service';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { FieldService } from '../_services/field.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class FieldProductionComponent implements OnInit {
   currentDate = new Date()
   today = new Date()
 
-  estate: Estate = {} as Estate
+  estate: any = {} as any
 
   fields: Field[] = []
   filterFields: Field[] = []
@@ -66,6 +67,9 @@ export class FieldProductionComponent implements OnInit {
     private route: ActivatedRoute,
     private estateService: EstateService,
     private fieldProductionService: FieldProductionService,
+    private fieldService:FieldService,
+    private myLesenService:MyLesenIntegrationService,
+
   ) { }
 
   ngOnInit() {
@@ -78,18 +82,30 @@ export class FieldProductionComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
-            .subscribe(
-              Response => {
-                this.estate = Response;
-                this.filterFields = this.estate.fields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatuses.some(y => y.fieldStatus.toLowerCase().includes("conversion")))
-                this.getProducts(this.filterFields)
-                this.getAllProduction(this.estate.fields)
-                this.isLoading = false
-              });
-        }
+          this.myLesenService.getOneEstate(routerParams['id'])
+          .subscribe(
+            Response =>{
+              this.estate = Response;
+              this.getField()
+              this.getProducts(this.filterFields)
+              this.getAllProduction(this.filterFields)
+              this.isLoading = false
+            }
+          )}
       });
     }, 2000)
+  }
+
+  getField(){
+    this.fieldService.getField()
+    .subscribe(
+      Response => {
+        const filterFields = Response.filter(x=>x.estateId == this.estate.id)
+        this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+        this.getProducts(this.filterFields)
+        this.getAllProduction(this.filterFields)
+      }
+    )
   }
 
   taskTap(index: any, totalTask: number, i: number) {
@@ -119,7 +135,7 @@ export class FieldProductionComponent implements OnInit {
   }
 
   getDate() {
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+    this.previousMonth.setMonth(this.previousMonth.getMonth() -1 )
   }
 
   add() {
@@ -136,8 +152,7 @@ export class FieldProductionComponent implements OnInit {
                 showConfirmButton: false,
                 timer: 1000
               });
-              this.products = [];
-              this.getEstate();
+              this.getEstate()
             },
             error: (err) => {
               swal.fire({
@@ -221,22 +236,22 @@ export class FieldProductionComponent implements OnInit {
     this.totalOthersDry = this.totalOthers.reduce((total, item) => total + item.OthersDry, 0)
   }
   
-  downloadPDF() {
-    let DATA: any = document.getElementById('content');
-    html2canvas(DATA).then((canvas) => {
-      let fileWidth = 258
-      let fileHeight = (canvas.height * fileWidth) / canvas.width
-      const FILEURI = canvas.toDataURL('image/png')
-      let PDF = new jsPDF('l', 'mm', 'a4')
-      let positionX = 20
-      // let positionX = (PDF.internal.pageSize.width - fileWidth) / 2
-      let positionY = 5
-      PDF.addImage(FILEURI, 'PNG', positionX, positionY, fileWidth, fileHeight)
-      const fileDate = this.date
-      const filename = `FieldProduction/${this.estate.estateName}/${fileDate}.pdf`
-      PDF.save(filename)
-    });
-  }
+  // downloadPDF() {
+  //   let DATA: any = document.getElementById('content');
+  //   html2canvas(DATA).then((canvas) => {
+  //     let fileWidth = 258
+  //     let fileHeight = (canvas.height * fileWidth) / canvas.width
+  //     const FILEURI = canvas.toDataURL('image/png')
+  //     let PDF = new jsPDF('l', 'mm', 'a4')
+  //     let positionX = 20
+  //     // let positionX = (PDF.internal.pageSize.width - fileWidth) / 2
+  //     let positionY = 5
+  //     PDF.addImage(FILEURI, 'PNG', positionX, positionY, fileWidth, fileHeight)
+  //     const fileDate = this.date
+  //     const filename = `FieldProduction/${this.estate.estateName}/${fileDate}.pdf`
+  //     PDF.save(filename)
+  //   });
+  // }
 
   calculateCuplumpDry(data: FieldProduction[], cuplump: FieldProduction[]) {
     this.value = data

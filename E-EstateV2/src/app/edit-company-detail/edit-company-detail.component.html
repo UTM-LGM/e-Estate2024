@@ -2,7 +2,7 @@
   <h1>Company Information</h1>
   <hr />
 
-  <div style="columns: 2" class="column">
+  <!-- <div style="columns: 2" class="column">
     <label>Company Name :</label>
     <input type="text" name="companyName" [(ngModel)]="company.companyName" disabled />
     <label>Address 1 :</label>
@@ -54,6 +54,78 @@
   <div style="columns: 2">
     <label>Contact No :</label>
     <input type="text" name="phone" [(ngModel)]="company.contactNo" />
+  </div> -->
+
+  <div>
+    <table>
+      <tr>
+        <td >Company Name</td>
+        <td ><span>:</span></td>
+        <td >{{ company.name }}</td>
+      </tr>
+
+      <tr>
+        <td >Company Registration No</td>
+        <td ><span>:</span></td>
+        <td >{{ company.registrationNumber }}</td>
+      </tr>
+
+      <tr>
+        <td >Establishment</td>
+        <td ><span>:</span></td>
+        <td >{{ company.category }}</td>
+      </tr>
+
+      <tr>
+        <td >Email</td>
+        <td ><span>:</span></td>
+        <td >{{ company.email }}</td>
+      </tr>
+
+      <tr>
+        <td >Phone No</td>
+        <td ><span>:</span></td>
+        <td >{{company.phoneCode}} {{ company.phoneNo }}</td>
+      </tr>
+
+      <tr>
+        <td >Official Company Website</td>
+        <td ><span>:</span></td>        
+        <td >{{ company.website }}</td>
+      </tr>
+
+      <tr>
+        <td >Address</td>
+        <td ><span>:</span></td>
+        <td >
+          {{ company.add1 }} {{ company.add2 }} {{ company.add3 }}
+        </td>
+      </tr>
+
+      <tr>
+        <td >Postcode</td>
+        <td ><span>:</span></td>
+        <td >{{ company.postcode }}</td>
+      </tr>
+
+      <tr>
+        <td >State</td>
+        <td ><span>:</span></td>
+        <td >{{ company.state}} </td>
+      </tr>
+
+    </table>
+  </div><br/>
+
+  <hr/>
+
+  <div style="columns: 1" class="column">
+    <label>Membership :</label>
+    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipId" >
+      <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
+        {{ membership.membershipType }}
+      </mat-option>
+    </mat-select>
   </div>
 
   <div style="padding-right: 10px">

@@ -2,9 +2,9 @@
   <div class="container">
     <div class="form-container">
       <h1 style="font-size: 25px !important;">Welcome to e-Estate</h1>
-      <input name="username" [(ngModel)]="loginUser.userName" type="text" placeholder="Username" required />
+      <input style="width: 90%;" name="username" [(ngModel)]="loginUser.userName" type="text" placeholder="Username" required />
       <div class="password-toggle">
-        <input name="password" [(ngModel)]="loginUser.password" type="{{ showPassword ? 'text' : 'password' }}"
+        <input style="width: 90%;" name="password" [(ngModel)]="loginUser.password" type="{{ showPassword ? 'text' : 'password' }}"
           placeholder="Password" required />
         <span (click)="togglePasswordVisibility()">
           <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>

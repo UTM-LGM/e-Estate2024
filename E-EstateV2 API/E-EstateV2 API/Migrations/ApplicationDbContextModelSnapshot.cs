@@ -73,7 +73,7 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("estateId")
+                    b.Property<int>("estateId")
                         .HasColumnType("int");
 
                     b.Property<bool>("isActive")
@@ -89,8 +89,6 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("estateId");
 
                     b.ToTable("buyers");
                 });
@@ -181,14 +179,23 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("establishmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("fax")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("financialYearId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("managerName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("membershipTypeId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ownershipId")
                         .HasColumnType("int");
@@ -210,6 +217,12 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("establishmentId");
+
+                    b.HasIndex("financialYearId");
+
+                    b.HasIndex("membershipTypeId");
+
                     b.HasIndex("ownershipId");
 
                     b.HasIndex("townId");
@@ -225,7 +238,7 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int>("companyId")
                         .HasColumnType("int");
 
                     b.Property<string>("createdBy")
@@ -257,9 +270,43 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.ToTable("companyContacts");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("MembershipTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("companyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("membershipId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MembershipTypeId");
+
+                    b.ToTable("companyDetails");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>
@@ -351,8 +398,6 @@ namespace E_EstateV2_API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("costId");
-
-                    b.HasIndex("estateId");
 
                     b.ToTable("costAmounts");
                 });
@@ -606,17 +651,11 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("establishmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("estateName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("fax")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("financialYearId")
-                        .HasColumnType("int");
 
                     b.Property<string>("grantNo")
                         .HasColumnType("nvarchar(max)");
@@ -632,9 +671,6 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<string>("managerName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("membershipTypeId")
-                        .HasColumnType("int");
 
                     b.Property<string>("phone")
                         .HasColumnType("nvarchar(max)");
@@ -661,12 +697,6 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasIndex("companyId");
 
-                    b.HasIndex("establishmentId");
-
-                    b.HasIndex("financialYearId");
-
-                    b.HasIndex("membershipTypeId");
-
                     b.HasIndex("plantingMaterialId");
 
                     b.HasIndex("townId");
@@ -682,9 +712,6 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("EstateId")
-                        .HasColumnType("int");
-
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -693,6 +720,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
@@ -714,9 +744,43 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EstateId");
-
                     b.ToTable("estateContacts");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("grantNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("plantingMaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("plantingMaterialId");
+
+                    b.ToTable("estateDetails");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Field", b =>
@@ -742,16 +806,10 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("estateId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("fieldDiseaseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("fieldName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("fieldStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("infectedPercentage")
+                    b.Property<int?>("fieldStatusId")
                         .HasColumnType("int");
 
                     b.Property<int>("initialTreeStand")
@@ -776,10 +834,6 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("estateId");
-
-                    b.HasIndex("fieldDiseaseId");
 
                     b.HasIndex("fieldStatusId");
 
@@ -891,6 +945,59 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("fieldDiseases");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("areaInfected")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("dateRecovered")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateScreening")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("fieldDiseaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("fieldId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("severityLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("fieldDiseaseId");
+
+                    b.HasIndex("fieldId");
+
+                    b.ToTable("fieldInfecteds");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfoYearly", b =>
                 {
                     b.Property<int>("Id")
@@ -985,6 +1092,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("remarkUntap")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("updatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1063,7 +1173,79 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("financialYears");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.ForeignLabor", b =>
+            modelBuilder.Entity("E_EstateV2_API.Models.HistoryLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("body")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("dateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("entityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("entityType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("method")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("historyLogs");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.LaborByCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("laborInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("laborTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("noOfWorker")
+                        .HasColumnType("int");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("laborInfoId");
+
+                    b.HasIndex("laborTypeId");
+
+                    b.ToTable("laborByCategories");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.LaborInfo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1108,43 +1290,7 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasIndex("countryId");
 
-                    b.HasIndex("estateId");
-
-                    b.ToTable("foreignLabors");
-                });
-
-            modelBuilder.Entity("E_EstateV2_API.Models.HistoryLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("body")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("dateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("entityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("entityType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("method")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("historyLogs");
+                    b.ToTable("laborInfos");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.LaborType", b =>
@@ -1175,7 +1321,7 @@ namespace E_EstateV2_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("localLaborTypes");
+                    b.ToTable("laborTypes");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.LocalLabor", b =>
@@ -1323,6 +1469,22 @@ namespace E_EstateV2_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ownerships");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.PaymentStatus", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("paymentStatuses");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.PlantingMaterial", b =>
@@ -1479,17 +1641,14 @@ namespace E_EstateV2_API.Migrations
                     b.Property<float>("DRC")
                         .HasColumnType("real");
 
-                    b.Property<float>("amountPaid")
+                    b.Property<float>("buyerDRC")
                         .HasColumnType("real");
-
-                    b.Property<string>("authorizationLetter")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("buyerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("companyId")
-                        .HasColumnType("int");
+                    b.Property<float>("buyerWetWeight")
+                        .HasColumnType("real");
 
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
@@ -1497,7 +1656,7 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("date")
+                    b.Property<string>("driverName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("estateId")
@@ -1506,11 +1665,32 @@ namespace E_EstateV2_API.Migrations
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
+                    b.Property<string>("letterOfConsentNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("paymentStatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("receiptNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("remark")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("rubberType")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("saleDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("total")
+                        .HasColumnType("real");
+
+                    b.Property<string>("transportPlateNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("unitPrice")
+                        .HasColumnType("real");
 
                     b.Property<string>("updatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1518,18 +1698,68 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("updatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("weight")
+                    b.Property<string>("weightSlipNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("wetWeight")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
 
                     b.HasIndex("buyerId");
 
-                    b.HasIndex("companyId");
-
-                    b.HasIndex("estateId");
+                    b.HasIndex("paymentStatusId");
 
                     b.ToTable("rubberSales");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.RubberStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("currentStock")
+                        .HasColumnType("real");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("monthYear")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("previousStock")
+                        .HasColumnType("real");
+
+                    b.Property<float>("totalProduction")
+                        .HasColumnType("real");
+
+                    b.Property<float>("totalSale")
+                        .HasColumnType("real");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("waterLoss")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("rubberStocks");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Seller", b =>
@@ -1747,8 +1977,14 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("estateId")
                         .HasColumnType("int");
 
+                    b.Property<int>("fieldWorkerShortage")
+                        .HasColumnType("int");
+
                     b.Property<string>("monthYear")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("tapperWorkerShortage")
+                        .HasColumnType("int");
 
                     b.Property<string>("updatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1756,12 +1992,7 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("updatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("workerShortage")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("estateId");
 
                     b.ToTable("workerShortages");
                 });
@@ -1989,19 +2220,10 @@ namespace E_EstateV2_API.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.Buyer", b =>
-                {
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId");
-
-                    b.Navigation("Estate");
-                });
-
             modelBuilder.Entity("E_EstateV2_API.Models.BuyerCompany", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.Buyer", "buyer")
-                        .WithMany("BuyerCompanies")
+                        .WithMany()
                         .HasForeignKey("buyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2019,6 +2241,24 @@ namespace E_EstateV2_API.Migrations
 
             modelBuilder.Entity("E_EstateV2_API.Models.Company", b =>
                 {
+                    b.HasOne("E_EstateV2_API.Models.Establishment", "Establishment")
+                        .WithMany()
+                        .HasForeignKey("establishmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.FinancialYear", "FinancialYear")
+                        .WithMany()
+                        .HasForeignKey("financialYearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.MembershipType", "MembershipType")
+                        .WithMany()
+                        .HasForeignKey("membershipTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("E_EstateV2_API.Models.Ownership", "Ownership")
                         .WithMany()
                         .HasForeignKey("ownershipId")
@@ -2031,20 +2271,24 @@ namespace E_EstateV2_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Establishment");
+
+                    b.Navigation("FinancialYear");
+
+                    b.Navigation("MembershipType");
+
                     b.Navigation("Ownership");
 
                     b.Navigation("Town");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.CompanyContact", b =>
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyDetail", b =>
                 {
-                    b.HasOne("E_EstateV2_API.Models.Company", "Company")
+                    b.HasOne("E_EstateV2_API.Models.MembershipType", "MembershipType")
                         .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MembershipTypeId");
 
-                    b.Navigation("Company");
+                    b.Navigation("MembershipType");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>
@@ -2090,15 +2334,7 @@ namespace E_EstateV2_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Cost");
-
-                    b.Navigation("Estate");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Estate", b =>
@@ -2106,24 +2342,6 @@ namespace E_EstateV2_API.Migrations
                     b.HasOne("E_EstateV2_API.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("companyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.Establishment", "Establishment")
-                        .WithMany()
-                        .HasForeignKey("establishmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.FinancialYear", "FinancialYear")
-                        .WithMany()
-                        .HasForeignKey("financialYearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.MembershipType", "MembershipType")
-                        .WithMany()
-                        .HasForeignKey("membershipTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2141,49 +2359,27 @@ namespace E_EstateV2_API.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("Establishment");
-
-                    b.Navigation("FinancialYear");
-
-                    b.Navigation("MembershipType");
-
                     b.Navigation("PlantingMaterial");
 
                     b.Navigation("Town");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.EstateContact", b =>
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateDetail", b =>
                 {
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
+                    b.HasOne("E_EstateV2_API.Models.PlantingMaterial", "PlantingMaterial")
                         .WithMany()
-                        .HasForeignKey("EstateId")
+                        .HasForeignKey("plantingMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Estate");
+                    b.Navigation("PlantingMaterial");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Field", b =>
                 {
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.FieldDisease", "FieldDisease")
-                        .WithMany()
-                        .HasForeignKey("fieldDiseaseId");
-
                     b.HasOne("E_EstateV2_API.Models.FieldStatus", "FieldStatus")
                         .WithMany()
-                        .HasForeignKey("fieldStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estate");
-
-                    b.Navigation("FieldDisease");
+                        .HasForeignKey("fieldStatusId");
 
                     b.Navigation("FieldStatus");
                 });
@@ -2218,6 +2414,21 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Field");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.FieldDisease", "FieldDisease")
+                        .WithMany()
+                        .HasForeignKey("fieldDiseaseId");
+
+                    b.HasOne("E_EstateV2_API.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("fieldId");
+
+                    b.Navigation("Field");
+
+                    b.Navigation("FieldDisease");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfoYearly", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.Field", "Field")
@@ -2248,7 +2459,26 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Field");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.ForeignLabor", b =>
+            modelBuilder.Entity("E_EstateV2_API.Models.LaborByCategory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.LaborInfo", "LaborInfo")
+                        .WithMany()
+                        .HasForeignKey("laborInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.LaborType", "LaborType")
+                        .WithMany()
+                        .HasForeignKey("laborTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LaborInfo");
+
+                    b.Navigation("LaborType");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.LaborInfo", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.Country", "Country")
                         .WithMany()
@@ -2256,15 +2486,7 @@ namespace E_EstateV2_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Country");
-
-                    b.Navigation("Estate");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.LocalLabor", b =>
@@ -2351,23 +2573,15 @@ namespace E_EstateV2_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_EstateV2_API.Models.Company", "company")
+                    b.HasOne("E_EstateV2_API.Models.PaymentStatus", "paymentStatus")
                         .WithMany()
-                        .HasForeignKey("companyId")
+                        .HasForeignKey("paymentStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estate");
 
                     b.Navigation("buyer");
 
-                    b.Navigation("company");
+                    b.Navigation("paymentStatus");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Seller", b =>
@@ -2409,17 +2623,6 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.Navigation("State");
-                });
-
-            modelBuilder.Entity("E_EstateV2_API.Models.WorkerShortage", b =>
-                {
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estate");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -2471,11 +2674,6 @@ namespace E_EstateV2_API.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("E_EstateV2_API.Models.Buyer", b =>
-                {
-                    b.Navigation("BuyerCompanies");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Company", b =>

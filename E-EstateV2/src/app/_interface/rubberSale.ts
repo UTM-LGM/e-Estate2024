@@ -2,13 +2,14 @@ import { Buyer } from "./buyer"
 
 export interface RubberSale {
     id: number
-    date: Date
+    saleDateTime: Date
     rubberType: string
-    authorizationLetter: string
-    receiptNo: string
-    weight: number
+    letterOfConsentNo: string
+    // receiptNo: string
+    wetWeight: number
     drc: number
-    amountPaid: number
+    unitPrice: number
+    total:string
     isActive: boolean
     buyerId: number
     buyer: Buyer[]
@@ -19,4 +20,9 @@ export interface RubberSale {
     updatedBy: string
     updatedDate: Date
     estateId: number
+    transportPlateNo:string
+    paymentStatusId:number
+    buyerLicenseNo:string
+    driverName:string
+    remark:string
 }

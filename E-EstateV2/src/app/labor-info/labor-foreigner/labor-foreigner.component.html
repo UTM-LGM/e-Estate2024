@@ -1,4 +1,4 @@
-<div class="monthYear">
+<!-- <div class="monthYear">
   <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
   <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
 </div>
@@ -40,7 +40,6 @@
   </div>
   <br />
   <br />
-  <!-- <h2>Total Worker: {{totalWorker}} people</h2> -->
 </div>
 
 <div class="box-container">
@@ -64,6 +63,10 @@
           <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
           </ngx-skeleton-loader>
         </td>
+      </tr>
+
+      <tr *ngIf="filterLabors.length == 0 && !isLoading">
+        <td colspan="8" style="color: red;"><b>No Labor information</b></td>
       </tr>
 
       <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
@@ -98,4 +101,4 @@
     <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 
   </div>
-</div>
+</div> -->

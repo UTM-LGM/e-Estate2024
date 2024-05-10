@@ -1,127 +1,72 @@
 <div class="box-container">
   <h1>Company Information</h1>
   <hr />
-
-  <!-- <div style="columns: 2" class="column">
-    <label>Company Name :</label>
-    <input type="text" name="companyName" [(ngModel)]="company.companyName" disabled />
-    <label>Address 1 :</label>
-    <input type="text" name="address1" [(ngModel)]="company.address1" />
-  </div>
-  <div style="columns: 2">
-    <label>Address 2 :</label>
-    <input type="text" name="address2" [(ngModel)]="company.address2" />
-    <label>Address 3 :</label>
-    <input type="text" name="address3" [(ngModel)]="company.address3" />
-  </div>
-  <div style="columns: 2">
-    <label>Postcode : </label>
-    <input type="text" name="postcode" [(ngModel)]="company.postcode" />
-    <label>State : </label>
-    <mat-select name="state" placeholder="Please Choose" [(ngModel)]="company.stateId" (selectionChange)="gettown($event)" >
-      <mat-option *ngFor="let state of filterStates" [value]="state.id">
-        {{ state.state }}
-      </mat-option>
-    </mat-select>
-  </div>
-  <div style="columns: 2">
-    <label>Town :</label>
-    <mat-select name="town" placeholder="Please Choose" [(ngModel)]="company.townId" [disabled]="town" >
-      <mat-option *ngFor="let town of filterTowns" [value]="town.id">
-        {{ town.town }}
-      </mat-option>
-    </mat-select>
-    <label>Ownership :</label>
-    <mat-select name="ownership" placeholder="Please Choose" [(ngModel)]="company.ownershipId" >
-      <mat-option *ngFor="let ownership of ownership" [value]="ownership.id">
-        {{ownership.ownership}}
-      </mat-option>
-    </mat-select>
-  </div>
-  <div style="columns: 2">
-    <label>Email :</label>
-    <input type="text" name="email" [(ngModel)]="company.email" />
-    <label>Fax :</label>
-    <input type="text" name="fax" [(ngModel)]="company.fax" />
-    
-  </div>
-  <div style="columns: 2">
-    <label>Phone :</label>
-    <input type="text" name="phone" [(ngModel)]="company.phone" />
-    <label>Liaison Officer :</label>
-    <input type="text" name="managerName" [(ngModel)]="company.managerName" />
-  </div>
-  <div style="columns: 2">
-    <label>Contact No :</label>
-    <input type="text" name="phone" [(ngModel)]="company.contactNo" />
-  </div> -->
-
   <div>
     <table>
       <tr>
-        <td >Company Name</td>
-        <td ><span>:</span></td>
-        <td >{{ company.name }}</td>
+        <td>Company Name</td>
+        <td><span>:</span></td>
+        <td>{{ company.name }}</td>
       </tr>
 
       <tr>
-        <td >Company Registration No</td>
-        <td ><span>:</span></td>
-        <td >{{ company.registrationNumber }}</td>
+        <td>Company Registration No</td>
+        <td><span>:</span></td>
+        <td>{{ company.registrationNumber }}</td>
       </tr>
 
       <tr>
-        <td >Establishment</td>
-        <td ><span>:</span></td>
-        <td >{{ company.category }}</td>
+        <td>Establishment</td>
+        <td><span>:</span></td>
+        <td>{{ company.category }}</td>
       </tr>
 
       <tr>
-        <td >Email</td>
-        <td ><span>:</span></td>
-        <td >{{ company.email }}</td>
+        <td>Email</td>
+        <td><span>:</span></td>
+        <td>{{ company.email }}</td>
       </tr>
 
       <tr>
-        <td >Phone No</td>
-        <td ><span>:</span></td>
-        <td >{{company.phoneCode}} {{ company.phoneNo }}</td>
+        <td>Phone No</td>
+        <td><span>:</span></td>
+        <td>{{company.phoneCode}} {{ company.phoneNo }}</td>
       </tr>
 
       <tr>
-        <td >Official Company Website</td>
-        <td ><span>:</span></td>        
-        <td >{{ company.website }}</td>
+        <td>Official Company Website</td>
+        <td><span>:</span></td>
+        <td>{{ company.website }}</td>
       </tr>
 
       <tr>
-        <td >Address</td>
-        <td ><span>:</span></td>
-        <td >
+        <td>Address</td>
+        <td><span>:</span></td>
+        <td>
           {{ company.add1 }} {{ company.add2 }} {{ company.add3 }}
         </td>
       </tr>
 
       <tr>
-        <td >Postcode</td>
-        <td ><span>:</span></td>
-        <td >{{ company.postcode }}</td>
+        <td>Postcode</td>
+        <td><span>:</span></td>
+        <td>{{ company.postcode }}</td>
       </tr>
 
       <tr>
-        <td >State</td>
-        <td ><span>:</span></td>
-        <td >{{ company.state}} </td>
+        <td>State</td>
+        <td><span>:</span></td>
+        <td>{{ company.state}} </td>
       </tr>
 
     </table>
-  </div><br/>
+  </div><br />
 
-  <hr/>
+  <hr />
 
   <div style="columns: 1" class="column">
     <label>Membership :</label>
-    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipId" >
+    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipId">
       <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
         {{ membership.membershipType }}
       </mat-option>

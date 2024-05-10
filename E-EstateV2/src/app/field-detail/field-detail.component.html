@@ -1,6 +1,6 @@
 <div class="box-container">
   <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-        [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
   <h1>
     {{ field.fieldName }}
     <button *ngIf="!fieldInfecteds" style="float: right" (click)="status(field)" [ngClass]="{
@@ -13,7 +13,7 @@
     <div *ngIf="fieldInfecteds">
       <button style="float: right;margin-top: -30px; cursor: not-allowed;" class="inactive-btn">Infected</button>
     </div>
- 
+
   </h1>
   <hr />
 
@@ -24,7 +24,8 @@
           <label>Field / Block :</label>
           <input type="text" name="fieldname" [(ngModel)]="field.fieldName" (change)="checkFieldName()" />
           <label>Maturity :</label>
-          <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature" (selectionChange)="getcategory(field)">
+          <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature"
+            (selectionChange)="getcategory(field)">
             <mat-option [value]="true">MATURE</mat-option>
             <mat-option [value]="false">IMMATURE</mat-option>
           </mat-select>
@@ -32,32 +33,25 @@
 
         <div style="columns: 2">
           <label>Field Status:</label>
-          <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId"  (selectionChange)="changeFieldStatus($event)" >
+          <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId"
+            (selectionChange)="changeFieldStatus($event)">
             <mat-option *ngFor="let category of filterFieldStatus" [value]="category.id">
               {{ category.fieldStatus }}
             </mat-option>
           </mat-select>
 
           <label>Field Area (Ha) :</label>
-          <input type="number" name="area"  [(ngModel)]="field.area" />
+          <input type="number" name="area" [(ngModel)]="field.area" />
         </div>
-
-        <!-- <div style="columns: 2" *ngIf="fieldSick">
-          <label>Disease Name :</label>
-          <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName" [(ngModel)]="field.fieldDiseaseId">
-            <mat-option *ngFor="let diseaseName of filterFieldDisease" [value]="diseaseName.id">
-              {{ diseaseName.diseaseName }}
-            </mat-option>
-          </mat-select>
-
-          <label>Infected Percentage (%) :</label>
-          <b><input type="number" name="sickPercentage" [(ngModel)]="field.infectedPercentage"  /></b>
-        </div> -->
 
         <div *ngIf="conversion">
           <div style="columns: 2;">
             <label>Conversion Crop Name :</label>
-            <input type="text" name="crop" [(ngModel)]="field.conversionCropName" />
+            <mat-select name="otherCrop" placeholder="Please Choose" name="otherCrop" [(ngModel)]="field.otherCropId">
+              <mat-option *ngFor="let otherCrop of otherCrops" [value]="otherCrop.id">
+                {{ otherCrop.otherCrop }}
+              </mat-option>
+            </mat-select>
 
             <label>Since year :</label>
             <input type="number" name="year" [(ngModel)]="field.sinceYear" />
@@ -69,13 +63,13 @@
             <label>Year Planted :</label>
             <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
             <label>Initial Tree Stand :</label>
-            <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b> 
+            <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
           </div>
 
           <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick">
             <label>Date Open Tapping :</label>
             <input name="dateopentapping" type="date" [(ngModel)]="field.dateOpenTappingFormatted " />
-            
+
             <label>Total task :</label>
             <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
           </div>
@@ -92,8 +86,8 @@
             class="btn-update" type="submit" (click)="convertField(field)">
             Convert &nbsp; <i class="fa fa-rotate-left"></i>
           </button>
-          <button *ngIf="fieldSick" style="float: right; margin-right:10px;padding: 10px 13px;"
-            class="btn-del" type="submit" (click)="fieldInfected(field)">
+          <button *ngIf="fieldSick" style="float: right; margin-right:10px;padding: 10px 13px;" class="btn-del"
+            type="submit" (click)="fieldInfected(field)">
             Infected &nbsp; <i class="fa fa-rotate-right"></i>
           </button>
           <button *ngIf="updateConversionBtn && conversion"
@@ -118,12 +112,13 @@
           </mat-option>
         </mat-select>
         <div>
-          <button [disabled]="conversion" style="margin-top: 28px; margin-left: 60px" class="btn-add" (click)="addClone(field)" disabled="{{disableInput}}">
+          <button [disabled]="conversion" style="margin-top: 28px; margin-left: 60px" class="btn-add"
+            (click)="addClone(field)" disabled="{{disableInput}}">
             Add Clone &nbsp; <i class="fa fa-plus"></i>
           </button>
         </div>
       </div>
-  
+
       <div class="box-container">
         <h1>Clones planted</h1>
         <hr />
@@ -137,15 +132,15 @@
             <tr *ngFor="let clone of fieldClones, let i=index">
               <td>{{i+1}}</td>
               <td>{{clone.cloneName}}</td>
-              <td><button class="btn-del" [disabled]="conversion || disableInput" (click)="delete(clone.id, field.id)"><i
-                    class="fa fa-trash"></i></button>
+              <td><button class="btn-del" [disabled]="conversion || disableInput"
+                  (click)="delete(clone.id, field.id)"><i class="fa fa-trash"></i></button>
               </td>
             </tr>
           </table>
         </div>
       </div>
-  
-      </div>
+
+    </div>
   </div>
 
   <div class="box-container" *ngIf="conversion">
@@ -194,13 +189,13 @@
     </div>
   </div>
 
-  <div class="box-container" style="overflow-x: auto" *ngIf="fieldInfecteds" >
-  <h1>List of Field Disease</h1>
+  <div class="box-container" style="overflow-x: auto" *ngIf="fieldInfecteds">
+    <h1>List of Field Disease</h1>
     <table style="width: 100%">
       <thead>
         <tr>
-          <th *ngFor="let column of sortableColumn" scope="col" [appSort]="filterFieldInfected" [attr.data-order]="order"
-            [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+          <th *ngFor="let column of sortableColumn" scope="col" [appSort]="filterFieldInfected"
+            [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
           </th>
           <th width="90px">Status</th>
@@ -224,9 +219,6 @@
           <td>{{ field.severityLevel }}</td>
           <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
           <td>{{ field.remark }}</td>
-
-
-          <!-- [routerLink]="field.isActive ? '/e-estate/field-infected-status/' + field.id : null" -->
           <td>
             <button style="cursor: default;" [ngClass]="{
               'active-btn': field.isActive == true,

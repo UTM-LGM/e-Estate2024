@@ -16,7 +16,6 @@ import { EstablishmentService } from '../_services/establishment.service';
 import { StateService } from '../_services/state.service';
 import { EstateService } from '../_services/estate.service';
 
-
 @Component({
   selector: 'app-add-estate',
   templateUrl: './add-estate.component.html',
@@ -112,7 +111,7 @@ export class AddEstateComponent implements OnInit {
       .subscribe(
         Response => {
           const towns = Response
-          this.towns = towns.filter(e=>e.isActive == true)
+          this.towns = towns.filter(e => e.isActive == true)
         });
   }
 
@@ -156,22 +155,22 @@ export class AddEstateComponent implements OnInit {
     this.location.back()
   }
 
-  checkEstateName(event:any){
+  checkEstateName(event: any) {
     this.estateService.checkEstateName(event.target.value.toString())
-    .subscribe(
-      {
-        next: (Response: any) => {
-          
-        },
-        error: (Error) => {
-          swal.fire({
-            icon: 'error',
-            title: 'Error ! ' + Error.error + ' !',
-          });
-          this.estate.estateName = ''
+      .subscribe(
+        {
+          next: (Response: any) => {
+
+          },
+          error: (Error) => {
+            swal.fire({
+              icon: 'error',
+              title: 'Error ! ' + Error.error + ' !',
+            });
+            this.estate.estateName = ''
+          }
         }
-      }
-    )
+      )
   }
 
 }

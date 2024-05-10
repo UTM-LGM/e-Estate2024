@@ -10,7 +10,7 @@
     <button class="btn-update" (click)="openDialog(company,companyDetail)">
       Update &nbsp; <i class="fa fa-pencil"></i>
     </button>
-  </div> 
+  </div>
 
   <div>
     <table>
@@ -46,7 +46,7 @@
 
       <tr>
         <td class="detail">Official Company Website</td>
-        <td class="detail"><span>:</span></td>        
+        <td class="detail"><span>:</span></td>
         <td class="detail">{{ company.website }}</td>
       </tr>
 
@@ -74,8 +74,8 @@
   </div>
   <br />
 
-  <hr/>
-  
+  <hr />
+
   <div>
     <h1>List of Additional Contact</h1>
     <button style="margin-bottom: 10px" class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
@@ -129,7 +129,7 @@
             </td>
           </tr>
 
-          
+
 
         </tbody>
       </table>
@@ -138,28 +138,24 @@
 
     </div>
   </div>
-<br/>
+  <br />
 
   <div class="box-container" *ngIf="userRole == 'Admin'">
     <h1>List of Estates</h1>
     <hr />
-    <!-- <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
-      Add New Estate &nbsp; <i class="fa fa-plus"></i>
-    </button> -->
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>
           <tr>
-            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises" [attr.data-order]="order"
-              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises"
+              [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
               {{ column.displayText }}
               <i class="fa"
                 [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                                     'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
-            <!-- <th width="30px">Action</th> -->
           </tr>
         </thead>
 
@@ -174,71 +170,16 @@
           <td colspan="9"><b>No Estate</b></td>
         </tr>
 
-        <tbody *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tbody
+          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor: default;">
             <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
-              <a>{{estate.name}}</a></td>
+              <a>{{estate.name}}</a>
+            </td>
             <td>{{ estate.state }}</td>
             <td>{{ estate.town }}</td>
             <td>{{ estate.email }} </td>
-            <!-- <td>
-              <button style="cursor: pointer;" (click)="statusEstate(estate)" [ngClass]="{
-                'active-btn': estate.isActive == true,
-                'inactive-btn': estate.isActive == false
-              }">
-                {{ estate.isActive == true ? "Active" : "Inactive" }}
-              </button>
-            </td> -->
-            <!-- <td *ngIf="selectedEstate !== estate"><i class="fa fa-chevron-down" style="cursor:pointer"
-                (click)="toggleSelectedEstate(estate)"></i></td>
-            <td *ngIf="selectedEstate === estate"><i class="fa fa-chevron-up" style="cursor:pointer"
-                (click)="toggleSelectedEstate(estate)"></i></td> -->
           </tr>
-
-          <!-- <tr *ngIf="selectedEstate === estate && estate.fields.length != 0">
-            <td colspan="9">
-              <table style="width: 100%; background-color: antiquewhite;">
-                <tr>
-                  <th class="th">Field / Block</th>
-                  <th class="th">Field Area (Ha)</th>
-                  <th class="th">Maturity</th>
-                  <th class="th">Field Status</th>
-                  <th class="th">Year Planted</th>
-                  <th class="th">Date Open Tapping</th>
-                  <th class="th">Initial Tree Stand</th>
-                  <th class="th">Total Task</th>
-                  <th class="th" width="90px">Status</th>
-                </tr>
-
-                <tr *ngFor="let fields of estate.fields | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-                  <td class="td">{{ fields.fieldName }}</td>
-                  <td class="td">{{ fields.area }}</td>
-                  <td class="td">
-                    {{ fields.isMature == true ? "Mature" : "Immature" }}
-                  </td>
-                  <td class="td" *ngFor="let category of fields.fieldStatuses">{{ category.fieldStatus }}</td>
-                  <td class="td">{{ fields.yearPlanted }}</td>
-                  <td class="td">{{ fields.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
-                  <td class="td">{{ fields.initialTreeStand}}</td>
-                  <td class="td">{{ fields.totalTask}}</td>
-                  <td class="td">
-                    <button style="cursor: pointer;" (click)="statusField(fields)" [ngClass]="{
-                      'active-btn': fields.isActive == true,
-                      'inactive-btn': fields.isActive == false
-                    }">
-                      {{ fields.isActive == true ? "Active" : "Inactive" }}
-                    </button>
-                  </td>
-                </tr>
-
-              </table>
-            </td>
-          </tr>
-
-          <tr *ngIf="selectedEstate === estate && estate.fields.length == 0">
-            <td style="width: 100%; background-color: antiquewhite;" colspan="9"> <b> No field data found </b> </td>
-          <tr>-->
-
         </tbody>
       </table>
 

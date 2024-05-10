@@ -1,13 +1,15 @@
-.box-container{
-    box-shadow: none;
-  }
+.box-container {
+  box-shadow: none;
+}
 
-  .list {
-    cursor: default;
-  }
+.list {
+  cursor: default;
+}
 
+.btn-update {
+  padding: 4px 13px;
+}
 
-  .btn-update {
-    padding: 4px 13px;
-  }
-  
+button:disabled{
+  cursor: not-allowed;
+}

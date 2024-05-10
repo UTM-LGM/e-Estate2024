@@ -64,7 +64,7 @@ export class IndirectCostComponent implements OnInit {
         .subscribe(
           Response => {
             this.indirectCosts = Response
-            this.indirectCosts.forEach(sub =>sub.amount = 0)
+            this.indirectCosts.forEach(sub => sub.amount = 0)
             this.isLoading = false
           });
     }, 1000)
@@ -93,7 +93,7 @@ export class IndirectCostComponent implements OnInit {
           this.indirectCostAmount = Response;
           this.filterIndirectCostAmount = this.indirectCostAmount.filter(x => x.year === parseInt(this.selectedYear) && x.costTypeId == this.costTypeId)
           this.draftFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
-          .map(item => ({ ...item,amount:Number(item.amount).toFixed(2)}))
+            .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
           this.submitFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
           this.totalCost(this.filterIndirectCostAmount)
         }
@@ -137,20 +137,20 @@ export class IndirectCostComponent implements OnInit {
 
   }
 
-  save(){
+  save() {
     this.costAmountService.updateCostAmount(this.draftFilterIndirectCostAmount)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Cost amount successfully saved!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        })
-        this.getIndirectCostAmount();
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Cost amount successfully saved!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          this.getIndirectCostAmount();
+        }
+      )
   }
 
   submitIndirectCost() {
@@ -167,23 +167,23 @@ export class IndirectCostComponent implements OnInit {
       confirmButtonText: 'Yes',
       denyButtonText: 'Cancel',
     })
-    .then((result)=>{
-      if(result.isConfirmed){
-        this.costAmountService.updateCostAmount(updatedArray)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Cost Amount successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.getIndirectCostAmount()
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.costAmountService.updateCostAmount(updatedArray)
+            .subscribe(
+              Response => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Cost Amount successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.getIndirectCostAmount()
+              }
+            )
         }
-      )
-      }
-    })
+      })
   }
 
 }

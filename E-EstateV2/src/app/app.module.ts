@@ -78,7 +78,7 @@ import { EditEstateDetailComponent } from './edit-estate-detail/edit-estate-deta
 import { LaborForeignerComponent } from './labor-info/labor-foreigner/labor-foreigner.component';
 import { LaborForeignerDetailComponent } from './labor-info/labor-foreigner-detail/labor-foreigner-detail.component';
 import { LaborLocalComponent } from './labor-info/labor-local/labor-local.component';
-import { LocalLaborTypeComponent } from './utility/local-labor-type/local-labor-type.component';
+import { LaborInformationComponent } from './utility/local-labor-type/local-labor-type.component';
 import { LaborLocalDetailComponent } from './labor-info/labor-local-detail/labor-local-detail.component';
 import { HomeAdminLGMComponent } from './home/home-admin-lgm/home-admin-lgm.component';
 import { HomeCompanyAdminComponent } from './home/home-company-admin/home-company-admin.component';
@@ -86,7 +86,6 @@ import { HomeEstateClerkComponent } from './home/home-estate-clerk/home-estate-c
 import { AddCountryComponent } from './labor-info/labor-foreigner/add-country/add-country.component';
 import { YieldProductionYearlyReportComponent } from './report/yield-production-yearly-report/yield-production-yearly-report.component';
 import { CostTypeComponent } from './utility/cost-type/cost-type.component';
-import { CloneProductivityYearlyComponent } from './report/clone-productivity-yearly/clone-productivity-yearly.component';
 import { RegisterSellerComponent } from './utility-clerk/register-seller/register-seller.component';
 import { SortDirective } from './directive/directive';
 import { EditCompanyDetailComponent } from './edit-company-detail/edit-company-detail.component';
@@ -127,6 +126,23 @@ import { LaborInfoMonthlyDetailComponent } from './monthly-form/labor-info-month
 import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
 import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
 import { RubberStockDetailComponent } from './rubber-stock-detail/rubber-stock-detail.component';
+import { EstateByStateComponent } from './report-by-state/estate-by-state/estate-by-state.component';
+import { RubberCropsByStateComponent } from './report-by-state/rubber-crops-by-state/rubber-crops-by-state.component';
+import { ReportByStateComponent } from './report-by-state/report-by-state.component';
+import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
+import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
+import { CloneProductionYearlyComponent } from './report-production-by-year/clone-production-yearly/clone-production-yearly.component';
+import { ReportFieldInformationComponent } from './report-field-information/report-field-information.component';
+import { ReportProductivityByYearComponent } from './report-productivity-by-year/report-productivity-by-year.component';
+import { CloneProductivityYearlyComponent } from './report-productivity-by-year/clone-productivity-yearly/clone-productivity-yearly.component';
+import { ReportLaborInformationComponent } from './report-labor-information/report-labor-information.component';
+import { OtherCropComponent } from './utility/other-crop/other-crop.component';
+import { LaborInformationYearlyComponent } from './report-labor-information/labor-information-yearly/labor-information-yearly.component';
+import { WorkerShortageEstateComponent } from './report-labor-information/worker-shortage-estate/worker-shortage-estate.component';
+import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
+import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
+import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import { AuthInterceptor } from './_interceptor/token.interceptor';
 
 register()
 
@@ -181,7 +197,7 @@ register()
     LaborForeignerComponent,
     LaborForeignerDetailComponent,
     LaborLocalComponent,
-    LocalLaborTypeComponent,
+    LaborInformationComponent,
     LaborLocalDetailComponent,
     HomeAdminLGMComponent,
     HomeCompanyAdminComponent,
@@ -189,7 +205,6 @@ register()
     AddCountryComponent,
     YieldProductionYearlyReportComponent,
     CostTypeComponent,
-    CloneProductivityYearlyComponent,
     RegisterSellerComponent,
     SortDirective,
     EditCompanyDetailComponent,
@@ -226,6 +241,20 @@ register()
     RubberStockComponent,
     AddRubberStockComponent,
     RubberStockDetailComponent,
+    EstateByStateComponent,
+    RubberCropsByStateComponent,
+    ReportByStateComponent,
+    ReportProductionByYearComponent,
+    RubberProductionYearlyComponent,
+    CloneProductionYearlyComponent,
+    ReportFieldInformationComponent,
+    ReportProductivityByYearComponent,
+    CloneProductivityYearlyComponent,
+    ReportLaborInformationComponent,
+    OtherCropComponent,
+    LaborInformationYearlyComponent,
+    WorkerShortageEstateComponent,
+    ReportCostInformationComponent,
   ],
   imports: [
     BrowserModule,
@@ -251,7 +280,38 @@ register()
     ToastrModule.forRoot(),
     NgxPrintModule,
     MatSelectModule,
-    QRCodeModule
+    QRCodeModule,
+    MsalModule.forRoot(
+      new PublicClientApplication({
+        auth: {
+          clientId: "4c278748-3ef9-49f9-94ec-9591a665a4b7", // Application (client) ID from the app registration
+          authority:
+            "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
+          redirectUri: "http://localhost:4200", // This is your redirect URI
+          //redirectUri: "http://localhost:4300", // This is your redirect URI
+
+        },
+        cache: {
+          cacheLocation: "localStorage",
+	        //Can be set true or false
+          storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
+        },
+      }),
+      {
+        interactionType: InteractionType.Redirect, // MSAL Guard Configuration
+        authRequest: {
+          scopes: ["api://e-EstateAPI/.default"],
+          // scopes: ["https://lgmb2cgovmy.onmicrosoft.com/e-EstateB2CApi/Guest.Read"]
+
+        },
+      },
+      {
+        interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
+        protectedResourceMap: new Map([
+          ["https://graph.microsoft.com/User.Read", ["User.Read"]],
+        ]),
+      }
+    ),
   ],
   providers: [
     DatePipe,
@@ -260,6 +320,11 @@ register()
       provide: HTTP_INTERCEPTORS,
       useClass: UserActivityLogInterceptor,
       multi: true
+    },
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi:true
     },
     {
       provide: HTTP_INTERCEPTORS,
@@ -271,11 +336,17 @@ register()
       useClass : UpperCaseInterceptor,
       multi:true
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true,
+    },
+    MsalGuard,
     AuthGuard,
     SharedService,
     NotificationComponent
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent, MsalRedirectComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

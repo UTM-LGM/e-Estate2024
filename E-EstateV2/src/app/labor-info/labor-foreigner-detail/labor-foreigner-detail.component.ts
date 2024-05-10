@@ -4,7 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LaborForeignerComponent } from '../labor-foreigner/labor-foreigner.component';
 import { SharedService } from 'src/app/_services/shared.service';
 import swal from 'sweetalert2';
-import { ForeignLaborService } from 'src/app/_services/foreign-labor.service';
 
 @Component({
   selector: 'app-labor-foreigner-detail',

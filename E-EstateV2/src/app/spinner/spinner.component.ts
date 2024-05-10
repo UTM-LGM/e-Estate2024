@@ -22,5 +22,4 @@ export class SpinnerComponent implements OnInit {
           this.cdRef.detectChanges()
         });
   }
-
 }

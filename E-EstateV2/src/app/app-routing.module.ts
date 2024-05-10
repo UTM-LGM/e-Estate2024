@@ -34,18 +34,15 @@ import { UtilityClerkComponent } from './utility-clerk/utility-clerk.component';
 import { RegisterBuyerComponent } from './utility-clerk/register-buyer/register-buyer.component';
 import { AddRubberPurchaseComponent } from './add-rubber-purchase/add-rubber-purchase.component';
 import { RubberPurchaseComponent } from './rubber-purchase/rubber-purchase.component';
-import { LocalLaborTypeComponent } from './utility/local-labor-type/local-labor-type.component';
+import { LaborInformationComponent } from './utility/local-labor-type/local-labor-type.component';
 import { YieldProductionYearlyReportComponent } from './report/yield-production-yearly-report/yield-production-yearly-report.component';
 import { CostTypeComponent } from './utility/cost-type/cost-type.component';
-import { CloneProductivityYearlyComponent } from './report/clone-productivity-yearly/clone-productivity-yearly.component';
 import { RegisterSellerComponent } from './utility-clerk/register-seller/register-seller.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { AnnouncementComponent } from './utility/announcement/announcement.component';
 import { FieldInfoYearlyComponent } from './field-info-yearly/field-info-yearly.component';
-import { CompanyStatusComponent } from './report/company-status/company-status.component';
-import { EstateStatusComponent } from './report/estate-status/estate-status.component';
 import { OwnershipComponent } from './utility/ownership/ownership.component';
 import { TappingSystemComponent } from './utility/tapping-system/tapping-system.component';
 import { FieldDiseaseComponent } from './utility/field-disease/field-disease.component';
@@ -57,6 +54,21 @@ import { GenerateForm1Component } from './generate-form1/generate-form1.componen
 import { MonthlyFormComponent } from './monthly-form/monthly-form.component';
 import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
 import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
+import { EstateByStateComponent } from './report-by-state/estate-by-state/estate-by-state.component';
+import { RubberCropsByStateComponent } from './report-by-state/rubber-crops-by-state/rubber-crops-by-state.component';
+import { ReportByStateComponent } from './report-by-state/report-by-state.component';
+import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
+import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
+import { CloneProductionYearlyComponent } from './report-production-by-year/clone-production-yearly/clone-production-yearly.component';
+import { ReportFieldInformationComponent } from './report-field-information/report-field-information.component';
+import { ReportProductivityByYearComponent } from './report-productivity-by-year/report-productivity-by-year.component';
+import { CloneProductivityYearlyComponent } from './report-productivity-by-year/clone-productivity-yearly/clone-productivity-yearly.component';
+import { ReportLaborInformationComponent } from './report-labor-information/report-labor-information.component';
+import { OtherCropComponent } from './utility/other-crop/other-crop.component';
+import { LaborInformationYearlyComponent } from './report-labor-information/labor-information-yearly/labor-information-yearly.component';
+import { WorkerShortageEstateComponent } from './report-labor-information/worker-shortage-estate/worker-shortage-estate.component';
+import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
+import { MsalGuard } from '@azure/msal-angular';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
@@ -123,6 +135,7 @@ const routes: Routes = [
         component: UtilityComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] },
         children: [
           { path: 'planting-material', component: PlantingMaterialComponent },
+          { path: 'other-crop', component: OtherCropComponent },
           { path: 'state', component: StateComponent },
           { path: 'financialYear', component: FinancialYearComponent },
           { path: 'membershipType', component: MembershipComponent },
@@ -134,7 +147,7 @@ const routes: Routes = [
           { path: 'cost-category', component: CostCategoryComponent },
           { path: 'cost-type', component: CostTypeComponent },
           { path: 'cost-item', component: CostItemComponent },
-          { path: 'labor-type', component: LocalLaborTypeComponent },
+          { path: 'labor-type', component: LaborInformationComponent },
           { path: 'announcement', component: AnnouncementComponent },
           { path: 'ownership', component:OwnershipComponent },
           { path: 'tapping-system',component:TappingSystemComponent },
@@ -153,15 +166,44 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'reports',
-        component: ReportComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        path: 'report-by-state',
+        component: ReportByStateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
         children: [
-          { path: 'yield-production-yearly', component: YieldProductionYearlyReportComponent },
-          { path: 'clone-production-yearly', component: CloneProductivityYearlyComponent },
-          { path: 'company-status', component: CompanyStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] } },
-          { path: 'estate-status', component: EstateStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin'] } },
+          { path: 'estate-by-state', component: EstateByStateComponent },
+          { path: 'rubber-crops-by-state', component:RubberCropsByStateComponent},
         ]
       },
+      {
+        path:'report-production-by-year',
+        component:ReportProductionByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        children:[
+          { path: 'rubber-production-yearly', component: RubberProductionYearlyComponent },
+          { path: 'clone-production-yearly', component: CloneProductionYearlyComponent}
+        ]
+      },
+      {
+        path:'report-productivity-by-year',
+        component:ReportProductivityByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        children:[
+          { path: 'clone-productivity-yearly',component:CloneProductivityYearlyComponent}
+        ]
+      },
+      {
+        path:'report-field-information',
+        component:ReportFieldInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+      },
+      {
+        path:'report-labor-information',
+        component:ReportLaborInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        children:[
+          { path: 'labor-information-yearly', component:LaborInformationYearlyComponent},
+          { path: 'worker-shortage-estate', component:WorkerShortageEstateComponent}
+        ]
+      },
+      {
+        path:'report-cost-information',
+        component:ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+      }
     ],
   },
 ];

@@ -1,6 +1,7 @@
 <br />
 <div style="padding: 20px;">
   <h1>Rubber Sale Information</h1>
+  <hr />
   <div style="columns: 2" class="column">
     <label>Letter Of Consent No (Form 1) :</label>
     <input type="text" name="letter" [(ngModel)]="rubberSale.letterOfConsentNo" disabled />
@@ -31,15 +32,16 @@
   </div>
 
   <div style="columns: 2">
-    <label>Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" />
+    <label>Buyer Weight (Kg) :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" (input)="calculateTotalPrice()" />
     <label>DRC (%) :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" />
   </div>
 
   <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
-    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00" (input)="calculateTotalPrice()" />
+    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00"
+      (input)="calculateTotalPrice()" />
     <label>Total Price (RM) :</label>
     <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
   </div>

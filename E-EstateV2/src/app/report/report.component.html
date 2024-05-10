@@ -1,5 +1,14 @@
 <div class="box-container">
     <div style="columns:4">
+
+        <button class="btn" routerLink="estate-by-state" routerLinkActive="active">
+            Estate by State
+        </button>
+
+        <button class="btn" routerLink="rubber-crops-by-state" routerLinkActive="active">
+            Rubber Crops by State
+        </button>
+
         <button class="btn" routerLink="yield-production-yearly" routerLinkActive="active">
             Field Productivity Report
         </button>
@@ -8,17 +17,17 @@
             Clone Productivity Report
         </button>
 
-        <button class="btn" routerLink="company-status" routerLinkActive="active" [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+        <button class="btn" routerLink="company-status" routerLinkActive="active"
+            [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
             Company Status Report
         </button>
 
-        <button class="btn" routerLink="estate-status" routerLinkActive="active" [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin', 'none':role == 'EstateClerk' }">
+        <button class="btn" routerLink="estate-status" routerLinkActive="active"
+            [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin', 'none':role == 'EstateClerk' }">
             Estate Status Report
         </button>
-
     </div>
     <br />
     <hr />
-
-    <router-outlet></router-outlet>
+<router-outlet></router-outlet>
 </div>

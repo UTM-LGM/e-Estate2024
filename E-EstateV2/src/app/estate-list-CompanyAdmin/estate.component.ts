@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Estate } from '../_interface/estate';
 import { EstateStatus } from '../_interface/estateStatus';
 import { ActivatedRoute } from '@angular/router';
-import { Company } from '../_interface/company';
-import { CompanyService } from '../_services/company.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
@@ -33,8 +31,7 @@ export class EstateComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private companyService: CompanyService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -46,12 +43,12 @@ export class EstateComponent implements OnInit {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
           this.myLesenService.getOneCompany(routeParams['id'])
-          .subscribe(
-            Response =>{
-              this.company = Response
-              this.isLoading = false
-            }
-          )
+            .subscribe(
+              Response => {
+                this.company = Response
+                this.isLoading = false
+              }
+            )
         }
       });
     }, 2000)

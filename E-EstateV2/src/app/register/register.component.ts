@@ -11,7 +11,6 @@ import { Email } from '../_interface/email';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SpinnerService } from '../_services/spinner.service';
 
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -32,8 +31,8 @@ export class RegisterComponent implements OnInit {
     private roleService: RoleService,
     private userService: UserService,
     private emailService: EmailService,
-    private myLesenService:MyLesenIntegrationService,
-    private spinnerService:SpinnerService
+    private myLesenService: MyLesenIntegrationService,
+    private spinnerService: SpinnerService
   ) { }
 
   ngOnInit() {
@@ -91,7 +90,6 @@ export class RegisterComponent implements OnInit {
                     }
                   }
                 )
-
             },
             error: (Error) => {
               swal.fire({
@@ -111,31 +109,31 @@ export class RegisterComponent implements OnInit {
   checkLicenseNo(event: any) {
     this.spinnerService.requestStarted()
     setTimeout(() => {
-    this.myLesenService.getLicenseNo(event.target.value.toString())
-      .subscribe(
-        {
-          next: (Response) => {
-            this.result = Response
-            this.spinnerService.requestEnded();
-            swal.fire({
-              title: 'Done!',
-              text: 'Data found!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-          },
-          error: (Error) => {
-            this.spinnerService.requestEnded();
-            swal.fire({
-              icon: 'error',
-              title: 'Error! License No does not exist',
-            });
-            this.register.licenseNo = ''
-            this.result = {}
-          }
-        })
-      },1000)
+      this.myLesenService.getLicenseNo(event.target.value.toString())
+        .subscribe(
+          {
+            next: (Response) => {
+              this.result = Response
+              this.spinnerService.requestEnded();
+              swal.fire({
+                title: 'Done!',
+                text: 'Data found!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+            },
+            error: (Error) => {
+              this.spinnerService.requestEnded();
+              swal.fire({
+                icon: 'error',
+                title: 'Error! License No does not exist',
+              });
+              this.register.licenseNo = ''
+              this.result = {}
+            }
+          })
+    }, 1000)
   }
 
   checkUsername(event: any) {

@@ -23,7 +23,6 @@ export class ForgotPasswordComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router
-
   ) { }
 
   ngOnInit(): void {

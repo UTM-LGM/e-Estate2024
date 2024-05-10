@@ -16,10 +16,12 @@ mat-select {
   font-size: 14px;
 }
 
-::ng-deep .cdk-overlay-pane:not(.mat-mdc-select-panel-above) .mdc-menu-surface.mat-mdc-select-panel{
+::ng-deep
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above)
+  .mdc-menu-surface.mat-mdc-select-panel {
   border-radius: 10px;
 }
 
-mat-option{
+mat-option {
   font-size: 12px;
 }

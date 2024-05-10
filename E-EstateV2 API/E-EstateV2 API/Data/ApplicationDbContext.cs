@@ -34,11 +34,10 @@ namespace E_EstateV2_API.Data
         public DbSet<Field> fields { get; set; }
         public DbSet<FieldClone> fieldClones { get; set; }
         public DbSet<Country> countries { get; set; }
-        public DbSet<LocalLabor> localLabors { get; set; }
         public DbSet<LaborType> laborTypes { get; set; }
         public DbSet<CostType> costTypes { get; set; }
         public DbSet<CostCategory> costCategories { get; set; }
-        public DbSet<CostSubcategory1> costSubcategories1 { get; set; } 
+        public DbSet<CostSubcategory1> costSubcategories1 { get; set; }
         public DbSet<CostSubcategory2> costSubcategories2 { get; set; }
         public DbSet<Cost> costs { get; set; }
         public DbSet<CostAmount> costAmounts { get; set; }
@@ -51,7 +50,7 @@ namespace E_EstateV2_API.Data
         public DbSet<SellerCompany> sellerCompanies { get; set; }
         public DbSet<Seller> sellers { get; set; }
         public DbSet<FieldConversion> fieldConversions { get; set; }
-        public DbSet<ProductionComparison> productionComparisons { get; set;}
+        public DbSet<ProductionComparison> productionComparisons { get; set; }
         public DbSet<Announcement> announcements { get; set; }
         public DbSet<HistoryLog> historyLogs { get; set; }
         public DbSet<FieldInfoYearly> fieldInfoYearly { get; set; }
@@ -70,7 +69,8 @@ namespace E_EstateV2_API.Data
         public DbSet<CompanyDetail> companyDetails { get; set; }
         public DbSet<LaborInfo> laborInfos { get; set; }
         public DbSet<LaborByCategory> laborByCategories { get; set; }
-        public DbSet<RubberStock> rubberStocks { get; set;}
+        public DbSet<RubberStock> rubberStocks { get; set; }
+        public DbSet<OtherCrop> otherCrops { get; set; }
     }
 
 }

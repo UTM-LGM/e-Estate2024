@@ -58,24 +58,26 @@
 
             <tr>
               <td><b>Total Amount for Indirect Cost</b></td>
-              <td><input class="total" class="amount" type="text" [value]="totalCostAmount | number:'1.2-2'" disabled /></td>
+              <td><input class="total" class="amount" type="text" [value]="totalCostAmount | number:'1.2-2'" disabled />
+              </td>
             </tr>
           </table>
 
           <br />
           <div>
-          <div *ngIf="draftFilterIndirectCostAmount.length != 0">
-            <button (click)="submitIndirectCost()" style="float: right" class="btn-add" type="submit">
-              Submit &nbsp; <i class="fa fa-plus"></i>
-            </button>
-          </div>
+            <div *ngIf="draftFilterIndirectCostAmount.length != 0">
+              <button (click)="submitIndirectCost()" style="float: right" class="btn-add" type="submit">
+                Submit &nbsp; <i class="fa fa-plus"></i>
+              </button>
+            </div>
 
-          <div *ngIf="draftFilterIndirectCostAmount.length != 0">
-            <button (click)="save()" style="float: right; background-color:  #CAE00D; margin-right:10px" class="btn-add" type="submit" [disabled]="isDisable">
-              Save &nbsp; <i class="fa fa-check"></i>
-            </button>
-          </div>        
-        </div>
+            <div *ngIf="draftFilterIndirectCostAmount.length != 0">
+              <button (click)="save()" style="float: right; background-color:  #CAE00D; margin-right:10px"
+                class="btn-add" type="submit" [disabled]="isDisable">
+                Save &nbsp; <i class="fa fa-check"></i>
+              </button>
+            </div>
+          </div>
           <br />
         </div>
       </div>

@@ -12,13 +12,33 @@
 }
 
 .color1 {
-  background-color: #59788e96;
-  height: 50px;
+  background-color: #a6cbd8; /* Similar to color 3 */
+  height: 65px;
 }
 
 .color2 {
+  background-color: #84d9e5; /* Similar to color 4 */
+  height: 65px;
+}
+
+.color3 {
+  background-color: #59788e96;
+  height: 65px;
+}
+
+.color4 {
   background-color: #0492c259;
-  height: 50px;
+  height: 65px;
+}
+
+.color5 {
+  background-color: #48aaad91;
+  height: 65px;
+}
+
+.color6 {
+  background-color: #4872ad8a;
+  height: 65px;
 }
 
 .mat-h1 {

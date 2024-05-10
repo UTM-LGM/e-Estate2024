@@ -6,14 +6,13 @@
 
 input[type="number"],
 input[type="text"],
-select{
+select {
   width: 150px;
   padding: 3px 7px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
 }
-
 
 .td {
   padding: 2px;
@@ -26,7 +25,6 @@ td {
 .center-div {
   flex-direction: column;
 }
-
 
 mat-select {
   width: 100%;
@@ -41,10 +39,12 @@ mat-select {
   font-size: 14px;
 }
 
-::ng-deep .cdk-overlay-pane:not(.mat-mdc-select-panel-above) .mdc-menu-surface.mat-mdc-select-panel{
+::ng-deep
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above)
+  .mdc-menu-surface.mat-mdc-select-panel {
   border-radius: 10px;
 }
 
-mat-option{
+mat-option {
   font-size: 12px;
 }

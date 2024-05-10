@@ -5,7 +5,7 @@ import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Country } from 'src/app/_interface/country';
 import { LaborByCategory } from 'src/app/_interface/laborCategory';
 import { LaborInfo } from 'src/app/_interface/laborInfo';
-import { LocalLaborType } from 'src/app/_interface/localLaborType';
+import { LaborInformation } from 'src/app/_interface/laborInformation';
 import { CountryService } from 'src/app/_services/country.service';
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
@@ -27,28 +27,26 @@ export class LaborInfoMonthlyComponent implements OnInit {
   filterCountries: Country[] = []
   labor: LaborInfo = {} as LaborInfo
   filterLabors: LaborInfo[] = []
-  laborCategory:any ={} as LaborByCategory
+  laborCategory: any = {} as LaborByCategory
 
-  laborCategories:any = {} as any
+  laborCategories: any = {} as any
 
-
-  filterTypes: LocalLaborType[] = []
+  filterTypes: LaborInformation[] = []
   isLoading = true
   pageNumber = 1
   totalForeignWorker = 0
   date: any
-  
-  laborCategoryArray:LaborByCategory[]=[]
+
+  laborCategoryArray: LaborByCategory[] = []
 
   constructor(
     private countryService: CountryService,
     private dialog: MatDialog,
     private laborTypeService: LaborTypeService,
     private sharedService: SharedService,
-    private laborInfoService:LaborInfoService,
-    private datePipe: DatePipe,
-    private authGuard:AuthGuard
-  ){}
+    private laborInfoService: LaborInfoService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit(): void {
     this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
@@ -64,15 +62,15 @@ export class LaborInfoMonthlyComponent implements OnInit {
           const types = Response
           this.filterTypes = types.filter(x => x.isActive == true)
           this.filterTypes.forEach(type => {
-            this.laborCategory[type.id] = { noOfWorker: null,};
+            this.laborCategory[type.id] = { noOfWorker: null, };
           });
         }
       )
   }
 
-  back(){
+  back() {
     this.backTabEvent.emit();
-    
+
   }
 
   getCountry() {
@@ -81,7 +79,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
       .subscribe(
         Response => {
           const countries = Response
-          this.filterCountries = countries.filter((e) => e.isActive == true  && !this.filterLabors.some(x => x.countryId == e.id))
+          this.filterCountries = countries.filter((e) => e.isActive == true && !this.filterLabors.some(x => x.countryId == e.id))
         });
   }
 
@@ -106,24 +104,26 @@ export class LaborInfoMonthlyComponent implements OnInit {
         {
           next: (Response) => {
             this.filterTypes.forEach(type => {
-              this.laborCategory[type.id] = { noOfWorker: this.laborCategory[type.id].noOfWorker, laborTypeId: type.id, laborInfoId:Response.id,
-              createdBy: this.sharedService.userId, createdDate:new Date()};
+              this.laborCategory[type.id] = {
+                noOfWorker: this.laborCategory[type.id].noOfWorker, laborTypeId: type.id, laborInfoId: Response.id,
+                createdBy: this.sharedService.userId, createdDate: new Date()
+              };
             });
             this.laborCategoryArray = Object.values(this.laborCategory);
             this.laborInfoService.addLaborCategory(this.laborCategoryArray)
-            .subscribe(
-              Response =>{
-                swal.fire({
-                  title: 'Done!',
-                  text: 'Labor successfully submitted!',
-                  icon: 'success',
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-              }
-            )
+              .subscribe(
+                Response => {
+                  swal.fire({
+                    title: 'Done!',
+                    text: 'Labor successfully submitted!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                  });
+                }
+              )
             this.labor.countryId = 0
-            this.labor = {} as  LaborInfo
+            this.labor = {} as LaborInfo
             this.getLabor()
             this.getLaborType()
           }, error: (err) => {
@@ -142,7 +142,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
         .subscribe(
           Response => {
             const labors = Response
-            this.filterLabors = labors.filter(e => e.monthYear == this.date.toUpperCase() && e.estateId == this.authGuard.getEstateId())
+            this.filterLabors = labors.filter(e => e.monthYear == this.date.toUpperCase() && e.estateId == this.sharedService.estateId)
             this.getCountry()
             this.sumTable(this.filterLabors,)
             this.TotalForeign()
@@ -151,7 +151,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
     }, 2000)
   }
 
-  sumTable(row:LaborInfo[]){
+  sumTable(row: LaborInfo[]) {
     row.forEach(x => {
       let laborCategorySum = x.laborCategory.reduce((acc, x) => acc + x.noOfWorker, 0)
       x.total = (x.fieldCheckrole || 0) + (x.fieldContractor || 0) + (x.tapperCheckrole || 0) + (x.tapperContractor || 0) + laborCategorySum
@@ -168,11 +168,11 @@ export class LaborInfoMonthlyComponent implements OnInit {
     })
 
     dialogRef.afterClosed()
-    .subscribe(
-      Response => {
-        this.getLabor()
-    });
-}
+      .subscribe(
+        Response => {
+          this.getLabor()
+        });
+  }
 
   delete(id: number) {
     swal.fire({
@@ -185,16 +185,16 @@ export class LaborInfoMonthlyComponent implements OnInit {
       .then((result) => {
         if (result.isConfirmed) {
           this.laborInfoService.deleteLabor(id)
-          .subscribe(
-            Response =>{
-              swal.fire(
-                'Deleted!',
-                'Labor information has been deleted.',
-                'success'
-              )
-              this.getLabor()
-            }
-          )
+            .subscribe(
+              Response => {
+                swal.fire(
+                  'Deleted!',
+                  'Labor information has been deleted.',
+                  'success'
+                )
+                this.getLabor()
+              }
+            )
         } else if (result.isDenied) {
         }
       });
@@ -203,5 +203,5 @@ export class LaborInfoMonthlyComponent implements OnInit {
   nextTab() {
     this.nextTabEvent.emit();
   }
-  
+
 }

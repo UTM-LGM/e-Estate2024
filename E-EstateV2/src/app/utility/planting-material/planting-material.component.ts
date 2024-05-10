@@ -9,7 +9,7 @@ import swal from 'sweetalert2';
   templateUrl: './planting-material.component.html',
   styleUrls: ['./planting-material.component.css']
 })
-export class PlantingMaterialComponent implements OnInit{
+export class PlantingMaterialComponent implements OnInit {
 
   term = ''
   pageNumber = 1
@@ -17,71 +17,69 @@ export class PlantingMaterialComponent implements OnInit{
   currentSortedColumn = ''
   isLoading = true
 
+  plantingMaterial: PlantingMaterial = {} as PlantingMaterial
 
-
-  plantingMaterial:PlantingMaterial = {} as PlantingMaterial
-
-  plantingMaterials:PlantingMaterial[]=[]
+  plantingMaterials: PlantingMaterial[] = []
 
   sortableColumns = [
     { columnName: 'plantingMaterial', displayText: 'Planting Material' },
   ];
 
   constructor(
-    private sharedService:SharedService,
-    private plantingMaterialService:PlantingMaterialService
-  ){}
+    private sharedService: SharedService,
+    private plantingMaterialService: PlantingMaterialService
+  ) { }
 
   ngOnInit(): void {
     this.plantingMaterial.plantingMaterial = ''
     this.getPlantingMaterial()
   }
 
-  getPlantingMaterial(){
-    setTimeout(()=>{
+  getPlantingMaterial() {
+    setTimeout(() => {
       this.plantingMaterialService.getPlantingMaterial()
-      .subscribe(
-        Response =>{
-          this.plantingMaterials = Response
-          this.isLoading = false
-        }
-      )
+        .subscribe(
+          Response => {
+            this.plantingMaterials = Response
+            this.isLoading = false
+          }
+        )
     })
   }
 
-  submit(){
-    if(this.plantingMaterial.plantingMaterial === ''){
+  submit() {
+    if (this.plantingMaterial.plantingMaterial === '') {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
       });
-     } else if(this.plantingMaterials.some(p=>p.plantingMaterial.toLowerCase() === this.plantingMaterial.plantingMaterial.toLowerCase())){
+    } else if (this.plantingMaterials.some(p => p.plantingMaterial.toLowerCase() === this.plantingMaterial.plantingMaterial.toLowerCase())) {
       swal.fire({
         text: 'State already exists!',
         icon: 'error'
       });
-     } else{
+    } else {
       this.plantingMaterial.isActive = true
       this.plantingMaterial.createdBy = this.sharedService.userId.toString()
       this.plantingMaterial.createdDate = new Date()
       this.plantingMaterialService.addPlantingMaterial(this.plantingMaterial)
-      .subscribe(
-        Response =>{
-          swal.fire({
-            title: 'Done!',
-            text: 'Planting Material successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.reset()
-          this.ngOnInit()
-        }
-      )
-     }
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Planting Material successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.reset()
+            this.ngOnInit()
+          }
+        )
+    }
   }
 
-  reset(){
+  reset() {
     this.plantingMaterial = {} as PlantingMaterial
   }
 
@@ -94,22 +92,22 @@ export class PlantingMaterialComponent implements OnInit{
     }
   }
 
-  status(plantingMaterial:PlantingMaterial){
+  status(plantingMaterial: PlantingMaterial) {
     plantingMaterial.updatedBy = this.sharedService.userId.toString()
     plantingMaterial.updatedDate = new Date()
     plantingMaterial.isActive = !plantingMaterial.isActive
     this.plantingMaterialService.updatePlantingMaterial(plantingMaterial)
-    .subscribe(
-      Response => {
-        swal.fire({
-          title: 'Done!',
-          text: 'Status successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Status successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 }

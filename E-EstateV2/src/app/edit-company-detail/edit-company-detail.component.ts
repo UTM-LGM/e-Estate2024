@@ -8,8 +8,6 @@ import { Town } from '../_interface/town';
 import { CompanyService } from '../_services/company.service';
 import { SharedService } from '../_services/shared.service';
 import swal from 'sweetalert2';
-import { Ownership } from '../_interface/ownership';
-import { OwnershipService } from '../_services/ownership.service';
 import { CompanyDetail } from '../_interface/company-detail';
 import { MembershipType } from '../_interface/membership';
 import { MembershipService } from '../_services/membership.service';
@@ -24,8 +22,8 @@ import { CompanyDetailService } from '../_services/company-detail.service';
 export class EditCompanyDetailComponent {
 
   company: any = {} as any
-  
-  companyDetail:CompanyDetail = {} as CompanyDetail
+
+  companyDetail: CompanyDetail = {} as CompanyDetail
 
   filteredCompany: any = {} as any
 
@@ -42,13 +40,12 @@ export class EditCompanyDetailComponent {
 
   constructor(
     public dialog: MatDialogRef<Company>,
-    @Inject(MAT_DIALOG_DATA) public data: { data: any, companyDetail:CompanyDetail },
+    @Inject(MAT_DIALOG_DATA) public data: { data: any, companyDetail: CompanyDetail },
     private stateService: StateService,
     private townService: TownService,
-    private companyService: CompanyService,
     private sharedService: SharedService,
-    private membershipService:MembershipService,
-    private companyDetailService:CompanyDetailService
+    private membershipService: MembershipService,
+    private companyDetailService: CompanyDetailService
   ) { }
 
   ngOnInit() {
@@ -94,58 +91,43 @@ export class EditCompanyDetailComponent {
   }
 
   update() {
-    if(this.companyDetail.id == undefined){
+    if (this.companyDetail.id == undefined) {
       this.companyDetail.companyId = this.company.id
       this.companyDetail.membershipId = this.companyDetail.membershipId
       this.companyDetail.createdBy = this.sharedService.userId.toString()
       this.companyDetail.createdDate = new Date()
       this.companyDetailService.addCompanyDetail(this.companyDetail)
-      .subscribe(
-        Response =>{
-          swal.fire({
-            title: 'Done!',
-            text: 'Company successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialog.close()
-        }
-      )
-    }else{
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Company successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialog.close()
+          }
+        )
+    } else {
       this.companyDetail.membershipId = this.companyDetail.membershipId
       this.companyDetail.updatedBy = this.sharedService.userId.toString()
       this.companyDetail.updatedDate = new Date()
-      const {membership, ...newObj} = this.companyDetail
+      const { membership, ...newObj } = this.companyDetail
       this.filteredCompany = newObj
       this.companyDetailService.updateCompanyDetail(this.filteredCompany)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Company successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialog.close()
-        })
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Company successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialog.close()
+          })
     }
-    // this.company.updatedBy = this.sharedService.userId.toString()
-    // this.company.updatedDate = new Date()
-    // this.companyService.updateCompany(this.company)
-    //   .subscribe(
-    //     Response => {
-    //       swal.fire({
-    //         title: 'Done!',
-    //         text: 'Company successfully updated!',
-    //         icon: 'success',
-    //         showConfirmButton: false,
-    //         timer: 1000
-    //       });
-    //       this.dialog.close()
-    //     }
-    //   )
   }
 
   back() {

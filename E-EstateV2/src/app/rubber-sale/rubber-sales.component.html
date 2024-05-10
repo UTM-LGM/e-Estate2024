@@ -22,13 +22,12 @@
                 [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                                     'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
-            <th width="90px">Status</th>
             <th width="30px">Action</th>
           </tr>
         </thead>
 
         <tr *ngIf="isLoading">
-          <td colspan="13">
+          <td colspan="14">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
@@ -39,43 +38,42 @@
         </tr>
 
         <tbody
-        *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-        <tr class="list" style="cursor: default;">
-          <td>{{sale.saleDateTime | date : "dd/MM/YYYY"}}</td>
-          <td>{{sale.buyerName}}</td>
-          <td>{{sale.rubberType}}</td>
-          <td>{{sale.letterOfConsentNo}}</td>
-          <td>{{sale.wetWeight }}</td>
-          <td>{{sale.drc}}</td>
-          <td>{{sale.unitPrice| number : "1.2-2"}}</td>
-          <td>{{sale.total| number : "1.2-2"}}</td>
-          <td>{{sale.transportPlateNo}}</td>
-          <td>{{sale.driverName}}</td>
-          <td>{{sale.remark}}</td>
-          <td>
-            <button (click)="status(sale)" style="cursor: pointer;" [ngClass]="{
+          *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <tr class="list" style="cursor: default;">
+            <td>{{sale.saleDateTime | date : "dd/MM/YYYY"}}</td>
+            <td>{{sale.paymentStatus}}
+            <td>{{sale.buyerName}}</td>
+            <td>{{sale.transportPlateNo}}</td>
+            <td>{{sale.driverName}}</td>
+            <td>{{sale.rubberType}}</td>
+            <td>{{sale.letterOfConsentNo}}</td>
+            <td>{{sale.wetWeight }}</td>
+            <td>{{ sale.buyerWetWeight || null }}</td>
+            <td>{{sale.buyerDRC || null}}</td>
+            <td>{{sale.unitPrice || null}}</td>
+            <td>{{sale.total || null}}</td>
+            <td>{{sale.remark}}</td>
+            <!-- <td><button (click)="status(sale)" style="cursor: pointer;" [ngClass]="{
                 'active-btn': sale.isActive == true,
                 'inactive-btn': sale.isActive == false
               }">
-              {{ sale.isActive == true ? "Active" : "Inactive" }}
-            </button>
-          </td>
-          <td>
-            <div style="display: flex;">
-              <button class="btn-update" (click)="openDialog(sale)">
-                <i class="fa fa-pencil"></i>
-              </button> &nbsp;
-              <button class="btn-update" (click)="print(sale)">
-                <i class="fa fa-print"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
+                {{ sale.isActive == true ? "Active" : "Inactive" }}
+              </button> 
+            </td>-->
+            <td>
+              <div style="display: flex;">
+                <button class="btn-update" (click)="openDialog(sale)">
+                  <i class="fa fa-pencil"></i>
+                </button> &nbsp;
+                <button class="btn-update" (click)="print(sale)">
+                  <i class="fa fa-print"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
-
       <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-
     </div>
   </div>
 

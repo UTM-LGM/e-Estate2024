@@ -1,8 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Estate } from '../_interface/estate';
 import { ActivatedRoute } from '@angular/router';
 import { CostType } from '../_interface/costType';
-import { EstateService } from '../_services/estate.service';
 import { CostTypeService } from '../_services/cost-type.service';
 import swal from 'sweetalert2';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
@@ -26,9 +24,8 @@ export class CostInfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private estateService: EstateService,
     private costTypeService: CostTypeService,
-    private myLesenService:MyLesenIntegrationService,
+    private myLesenService: MyLesenIntegrationService,
   ) { }
 
   ngOnInit() {
@@ -56,12 +53,13 @@ export class CostInfoComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response;
-              this.isLoading = false
-            }
-          )}
+            .subscribe(
+              Response => {
+                this.estate = Response;
+                this.isLoading = false
+              }
+            )
+        }
       });
     }, 2000)
   }

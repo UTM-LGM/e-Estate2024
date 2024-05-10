@@ -82,26 +82,26 @@ export class FieldProductionDetailComponent implements OnInit {
     this.product.noTaskUntap = totalTask - taskTap
   }
 
-  initialZeroCuplump(index:any){
-    if(index == 0){
+  initialZeroCuplump(index: any) {
+    if (index == 0) {
       this.product.cuplumpDRC = 0
     }
   }
 
-  initialZeroLatex(index:any){
-    if(index == 0){
+  initialZeroLatex(index: any) {
+    if (index == 0) {
       this.product.latexDRC = 0
     }
   }
 
-  initialZeroUSS(index:any){
-    if(index == 0){
+  initialZeroUSS(index: any) {
+    if (index == 0) {
       this.product.ussDRC = 0
     }
   }
 
-  initialZeroOthers(index:any){
-    if(index == 0){
+  initialZeroOthers(index: any) {
+    if (index == 0) {
       this.product.othersDRC = 0
     }
   }

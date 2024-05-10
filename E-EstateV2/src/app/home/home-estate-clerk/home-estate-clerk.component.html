@@ -6,19 +6,57 @@
 
 <hr />
 
-<!-- <div class="box">
-  <div class="column box-container" style="background-color: bisque;">
-    <h1>Estate Responsibility : </h1>
-    <span>The estate is responsible for filling in daily (sales), monthly (production, total workforce, stock) and annual (rubber plantation area, production costs) information.
-    </span><br/><br/><br/>
+<div class="box" style="padding-bottom: 15px;" *ngIf="warningProductionDrafted">
+  <div class="column box-container" style="background-color: yellow; text-align: left;">
+    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have rubber production in drafted, please submit <a  routerLink="/e-estate/field-production/{{estateId}}" style="text-decoration: underline; cursor: pointer;">here</a></span><br />
   </div>
-  <div class="column box-container" style="background-color: bisque;">
-    <h1>e-Estate Info : </h1>
-    <span>Data, statistics and information obtained from the implementation of the e-Estate project are rubber production data, rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate sector.
-    </span><br/><br/>
-  </div>
+</div>
 
-</div> <br/> -->
+<div class="box" style="padding-bottom: 15px;" *ngIf="warningCostDrafted">
+  <div class="column box-container" style="background-color: yellow; text-align: left;">
+    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have cost information in drafted, please submit <a  routerLink="/e-estate/cost-info/{{estateId}}" style="text-decoration: underline; cursor: pointer;">here</a></span><br />
+  </div>
+</div>
+
+<div class="box">
+  <div class="column box-container color1">
+    <span>Current Tapper Worker</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
+    <div *ngIf="isLoadingTapper">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+  <div class="column box-container color2">
+    <span>Current Field Worker</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingField">{{currentTotalField}}</span>
+    <div *ngIf="isLoadingField">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+<br />
+
+<div class="box">
+  <div class="column box-container color3">
+    <span>Current Mature Field Area</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{matureArea}}</span>
+    <div *ngIf="isLoadingProduction">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+  <div class="column box-container color4">
+    <span>Current Immature Field Area</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{immatureArea}}</span>
+    <div *ngIf="isLoadingProduction">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+</div>
+<br />
 
 <div class="box">
   <div class="column box-container color1">
@@ -61,48 +99,12 @@
 </div>
 <br />
 
-<div class="box">
-  <div class="column box-container color3">
-    <span>Current Total Local Worker </span> <br />
-    <span *ngFor="let labor of filterLocalLabors">Last Updated on: {{labor.monthYear}} </span><br />
-    <div *ngIf="isLoadingLocal">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#48aaad91'}"></ngx-skeleton-loader>
-    </div>
-    <div *ngIf="!isLoadingLocal">
-      <b><span *ngFor="let labor of filterLocalLabors">{{labor.totalLaborWorker }}</span></b>
+<div class="box" style="justify-content: left;">
+  <div class="column box-container" style="color:black;margin: none;">
+    <span>Rubber Productivity yearly</span>
+    <div class="chart-container">
+      <canvas id="chartProductivityEstate">{{ chartEstate }}</canvas>
     </div>
   </div>
 
-  <div class="column box-container color4">
-    <span>Current Total Foreign Worker </span> <br />
-    <!-- <span *ngFor="let labor of filterForeignWorker">Last Updated on: {{labor.monthYear}} </span><br /> -->
-    <div *ngIf="isLoadingForeign">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#4872ad8a'}"></ngx-skeleton-loader>
-    </div>
-    <div *ngIf="!isLoadingForeign">
-      <!-- <b><span *ngFor="let labor of filterForeignWorker">{{labor.totalLaborWorker }}</span></b> -->
-    </div>
-  </div>
-
-</div>
-<br>
-
-<div class="box">
-  <div class="column box-container" style="color:black">
-    <span>Yield Production for {{yearNow}}</span>
-    <canvas #myCanvas></canvas>
-  </div>
-
-  <div class="column box-container" style="color:black">
-    <span>Yield Production for {{yearNow}}</span>
-    <canvas #myCanvas1></canvas>
-  </div>
-  <!-- <div class="column box-container" style="color: black;" >
-      <span>Yield Production for {{yearNow}}</span>
-        <canvas  id="lineChart" >{{ lineChart }}</canvas>
-    </div>-->
-</div>
-
-<app-notification style="display: none;"></app-notification>
+  <app-notification style="display: none;"></app-notification>

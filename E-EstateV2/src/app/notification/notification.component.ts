@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { ReportService } from '../_services/report.service';
 import { BadgeService } from '../_services/badge.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +7,7 @@ import { ProductionComparisonService } from '../_services/production-comparison.
 import { ProductionComparison } from '../_interface/productionComparison';
 import { FieldInfoYearlyService } from '../_services/field-info-yearly.service';
 import { FieldInfoYearly } from '../_interface/fieldInfoYearly';
+import { SharedService } from '../_services/shared.service';
 
 @Component({
   selector: 'app-notification',
@@ -32,25 +32,24 @@ export class NotificationComponent implements OnInit {
   fieldInfo: FieldInfoYearly[] = []
 
   constructor(
-    private authGuard: AuthGuard,
     private reportService: ReportService,
     private badgeService: BadgeService,
     private dialog: MatDialog,
     private productionComparisonService: ProductionComparisonService,
-    private fieldInfoYearlyService: FieldInfoYearlyService
+    private fieldInfoYearlyService: FieldInfoYearlyService,
+    private sharedService: SharedService
+
   ) { }
 
   ngOnInit() {
     this.yearNow = new Date().getFullYear()
-    this.estateId = this.authGuard.getEstateId()
+    this.estateId = this.sharedService.estateId
     this.checkProduction()
     this.getFieldInfoYearly()
   }
 
   checkProduction() {
     const currentDate = new Date()
-    // const currentYear = currentDate.getFullYear()
-    // const previousYear = currentDate.getFullYear() - 1
     const previousYear = 2010
     const currentYear = 2011
     this.reportService.getEstateProductivityByField(previousYear.toString())
@@ -125,7 +124,6 @@ export class NotificationComponent implements OnInit {
   getFieldInfoYearly() {
     const today = new Date()
     const isNovember = today.getMonth() === 1 // Note: JavaScript months are 0-based
-    // this.yearNow = 2021
     this.fieldInfoYearlyService.getExtraFieldInfo(this.yearNow)
       .subscribe(
         Response => {

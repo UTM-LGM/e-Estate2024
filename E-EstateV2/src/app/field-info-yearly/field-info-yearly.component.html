@@ -19,13 +19,12 @@
           <td class="td"><input class="total" type="number" placeholder="0"
               [(ngModel)]="fieldInfo[i].currentTreeStand" /></td>
           <td class="td">
-            <mat-select name="tappingsystem" placeholder="Please Choose" [(ngModel)]="fieldInfo[i].tappingSystemId" >
+            <mat-select name="tappingsystem" placeholder="Please Choose" [(ngModel)]="fieldInfo[i].tappingSystemId">
               <mat-option *ngFor="let tappingSystem of tappingSystems" [value]="tappingSystem.id">
                 {{tappingSystem.tappingSystem}}
               </mat-option>
             </mat-select>
 
-            <!-- <input class="total" type="text" [(ngModel)]="fieldInfo[i].tappingSystem" /> -->
           </td>
         </tr>
       </table><br />

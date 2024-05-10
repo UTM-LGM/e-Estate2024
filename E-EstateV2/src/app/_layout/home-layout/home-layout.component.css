@@ -28,7 +28,7 @@ mat-toolbar {
 .homelink {
   font-size: 23px;
   cursor: pointer;
-  margin-top: -9px;
+  margin-top: 5px;
 }
 
 .homelink:hover {
@@ -53,7 +53,7 @@ mat-toolbar {
   position: fixed;
   top: 15px;
   right: 20px;
-  background-color: #DC4C64;
+  background-color: #dc4c64;
   color: #fff;
   border-radius: 50%;
   font-size: 11px;

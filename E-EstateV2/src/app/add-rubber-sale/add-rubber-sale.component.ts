@@ -96,14 +96,14 @@ export class AddRubberSaleComponent implements OnInit {
     this.location.back()
   }
 
-  calculateTotalPrice(){
-    const total = this.rubberSale.unitPrice * (this.rubberSale.wetWeight*this.rubberSale.drc/100)
+  calculateTotalPrice() {
+    const total = this.rubberSale.unitPrice * this.rubberSale.wetWeight
     this.rubberSale.total = total.toFixed(2)
   }
 
-  generateLetterOfConsetnNo(){
+  generateLetterOfConsetnNo() {
     const currentDate = new Date();
-    
+
     const year = currentDate.getFullYear().toString().substring(2); // Get last two digits of the year
     const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
     const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
@@ -113,7 +113,7 @@ export class AddRubberSaleComponent implements OnInit {
     this.letterOfConsentNo = `E1${year}${month}${day}${hours}${minutes}`;
   }
 
-  print(sale:RubberSale){
+  print(sale: RubberSale) {
     const url = 'generate-form-1/' + sale.id;
     window.open(url, '_blank');
   }

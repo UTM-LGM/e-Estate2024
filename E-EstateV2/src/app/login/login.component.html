@@ -2,10 +2,11 @@
   <div class="container">
     <div class="form-container">
       <h1 style="font-size: 25px !important;">Welcome to e-Estate</h1>
-      <input style="width: 90%;" name="username" [(ngModel)]="loginUser.userName" type="text" placeholder="Username" required />
+      <input style="width: 90%;" name="username" [(ngModel)]="loginUser.userName" type="text" placeholder="Username"
+        required />
       <div class="password-toggle">
-        <input style="width: 90%;" name="password" [(ngModel)]="loginUser.password" type="{{ showPassword ? 'text' : 'password' }}"
-          placeholder="Password" required />
+        <input style="width: 90%;" name="password" [(ngModel)]="loginUser.password"
+          type="{{ showPassword ? 'text' : 'password' }}" placeholder="Password" required />
         <span (click)="togglePasswordVisibility()">
           <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
         </span>
@@ -13,7 +14,9 @@
       </div>
       <span style="cursor: pointer;" [routerLink]="['/forgotpassword', '', '']"><u>Forgot Password</u></span><br />
       <button (click)="login()">LOGIN</button><br />
-      <span> Dont have account ? <a routerLink="/register">Sign Up</a></span>
+      <span> Dont have account ? <a routerLink="/register">Sign Up</a></span><br />
+
+      <button (click)="loginStaff()">LOGIN AS STAFF LGM</button>
 
       <div>
         <button class="contact" [matMenuTriggerFor]="hubungiKamiMenu">
@@ -26,11 +29,6 @@
             (Menara) 148 Jalan Ampang 50450 Kuala Lumpur, Malaysia.</button>
         </mat-menu>
       </div>
-
-      <div style="margin-left: 250px;">
-        <!-- <button style="padding:10px" routerLink="/register" ><i class="fa fa-registered"></i></button> -->
-      </div>
-
     </div>
 
     <div class="overlay-container">

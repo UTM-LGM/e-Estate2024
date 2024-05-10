@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environments';
-import { LocalLaborType } from '../_interface/localLaborType';
+import { LaborInformation } from '../_interface/laborInformation';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,15 +12,15 @@ export class LaborTypeService {
 
   constructor(private http: HttpClient) { }
 
-  getType(): Observable<LocalLaborType[]> {
-    return this.http.get<LocalLaborType[]>(this.baseUrl + '/locallabortypes/GetLaborTypes')
+  getType(): Observable<LaborInformation[]> {
+    return this.http.get<LaborInformation[]>(this.baseUrl + '/LocalLaborTypes/GetLaborTypes')
   }
 
-  addType(type: LocalLaborType): Observable<LocalLaborType> {
-    return this.http.post<LocalLaborType>(this.baseUrl + '/locallabortypes/AddLaborType', type)
+  addType(type: LaborInformation): Observable<LaborInformation> {
+    return this.http.post<LaborInformation>(this.baseUrl + '/LocalLaborTypes/AddLaborType', type)
   }
 
-  updateType(type: LocalLaborType): Observable<LocalLaborType> {
-    return this.http.put<LocalLaborType>(this.baseUrl + '/locallabortypes/UpdateLaborType', type)
+  updateType(type: LaborInformation): Observable<LaborInformation> {
+    return this.http.put<LaborInformation>(this.baseUrl + '/LocalLaborTypes/UpdateLaborType', type)
   }
 }

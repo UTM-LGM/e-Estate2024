@@ -12,6 +12,7 @@ import swal from 'sweetalert2';
   styleUrls: ['./town.component.css'],
 })
 export class TownComponent implements OnInit {
+  
   town: Town = {} as Town
   fileteredTown: any = {}
 

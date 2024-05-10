@@ -2,7 +2,7 @@ import { FieldStatus } from "./fieldStatus";
 
 export interface FieldConversion {
     id: number
-    conversionCropName: string
+    otherCrop: string
     sinceYear: number | null
     fieldId: number
     createdBy: string
@@ -12,4 +12,6 @@ export interface FieldConversion {
     fieldStatuses: FieldStatus[]
     fieldName: string
     isActive: boolean
+    otherCropId:number
+
 }

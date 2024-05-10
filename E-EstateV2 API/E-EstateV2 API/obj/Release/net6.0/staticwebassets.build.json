@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "IkXLjFiNE07a0lAC1oSb1nEotIAn1fG/W5TCTmykz1k=",
+  "Hash": "Ja5zjszAMS+lhXUAi5fIHoOT6rc4U76aU7HJGUoLelw=",
   "Source": "E-EstateV2 API",
   "BasePath": "_content/E-EstateV2 API",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "E-EstateV2 API\\wwwroot",
       "Source": "E-EstateV2 API",
-      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
       "BasePath": "_content/E-EstateV2 API",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 1.png",
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 1.png",
       "SourceId": "E-EstateV2 API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
       "BasePath": "_content/E-EstateV2 API",
       "RelativePath": "api/Images/ANNOUCEMENT 1.png",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot\\api\\Images\\ANNOUCEMENT 1.png"
     },
     {
-      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 2.png",
+      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 2.png",
       "SourceId": "E-EstateV2 API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
       "BasePath": "_content/E-EstateV2 API",
       "RelativePath": "api/Images/ANNOUCEMENT 2.png",
       "AssetKind": "All",

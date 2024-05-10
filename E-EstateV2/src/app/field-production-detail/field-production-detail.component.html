@@ -18,13 +18,16 @@
     </tr>
 
     <tr>
-      <td><input type="number" name="cuplump" [(ngModel)]="product.cuplump" (input)="initialZeroCuplump(product.cuplump)"/></td>
-      <td><input type="number" name="cuplumpDRC" [(ngModel)]="product.cuplumpDRC"/></td>
-      <td><input type="number" name="latex" [(ngModel)]="product.latex" (input)="initialZeroLatex(product.latex)"/></td>
+      <td><input type="number" name="cuplump" [(ngModel)]="product.cuplump"
+          (input)="initialZeroCuplump(product.cuplump)" /></td>
+      <td><input type="number" name="cuplumpDRC" [(ngModel)]="product.cuplumpDRC" /></td>
+      <td><input type="number" name="latex" [(ngModel)]="product.latex" (input)="initialZeroLatex(product.latex)" />
+      </td>
       <td><input type="number" name="latexDRC" [(ngModel)]="product.latexDRC" /></td>
-      <td><input type="number" name="USS" [(ngModel)]="product.uss" (input)="initialZeroUSS(product.uss)"/></td>
-      <td><input type="number" name="USSDRC" [(ngModel)]="product.ussDRC"  /></td>
-      <td><input type="number" name="others" [(ngModel)]="product.others" (input)="initialZeroOthers(product.others)" /></td>
+      <td><input type="number" name="USS" [(ngModel)]="product.uss" (input)="initialZeroUSS(product.uss)" /></td>
+      <td><input type="number" name="USSDRC" [(ngModel)]="product.ussDRC" /></td>
+      <td><input type="number" name="others" [(ngModel)]="product.others" (input)="initialZeroOthers(product.others)" />
+      </td>
       <td><input type="number" name="othersDRC" [(ngModel)]="product.othersDRC" /></td>
       <td><input type="number" name="noTaskTap" [(ngModel)]="product.noTaskTap"
           (change)="taskTap(product.noTaskTap, product.totalTask)" /></td>

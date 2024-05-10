@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalLabor } from 'src/app/_interface/localLabor';
-import { LocalLaborType } from 'src/app/_interface/localLaborType';
+import { LaborInformation } from 'src/app/_interface/laborInformation';
 import { SharedService } from 'src/app/_services/shared.service';
 import swal from 'sweetalert2';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
@@ -23,7 +23,7 @@ export class LaborLocalComponent implements OnInit {
   previousMonth = new Date()
   currentDate = new Date()
 
-  filterTypes: LocalLaborType[] = []
+  filterTypes: LaborInformation[] = []
 
   filterLocalLabors: LocalLabor[] = []
 
@@ -86,7 +86,7 @@ export class LaborLocalComponent implements OnInit {
     this.getNewArray();
     const localLabor = this.filterTypes.map(({ id, monthYear, createdBy, createdDate, totalWorker, estateId }) => ({ laborTypeId: id, monthYear, createdBy, createdDate, totalWorker, estateId })) as unknown as LocalLabor[]
     const filteredLabors = localLabor.filter(x => x !== null)
-    console.log(localLabor)
+    //console.log(localLabor)
     // if (filteredLabors.length === localLabor.length) {
     //   this.localLaborService.addLabor(localLabor)
     //     .subscribe(
@@ -128,7 +128,7 @@ export class LaborLocalComponent implements OnInit {
     this.totalLocalWorker = this.filterLocalLabors.reduce((acc, item) => acc + (item.totalWorker || 0), 0)
   }
 
-  update(labor:LocalLabor) {
+  update(labor: LocalLabor) {
     const dialogRef = this.dialog.open(LaborLocalDetailComponent, {
       data: { data: labor },
     })
@@ -172,9 +172,9 @@ export class LaborLocalComponent implements OnInit {
     return false
   }
 
-  
 
 
-  
+
+
 
 }

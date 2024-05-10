@@ -9,7 +9,7 @@ import { CompanyService } from 'src/app/_services/company.service';
 })
 export class CompanyStatusComponent {
 
-  status='0'
+  status = '0'
   term = ''
   isLoading = false
   isActiveChoosen = false
@@ -19,30 +19,28 @@ export class CompanyStatusComponent {
 
   constructor(
     private companyService: CompanyService,
-
-  ){ }
+  ) { }
 
   ngOnInit(): void {
-    
+
   }
 
-  statusSelected(event:any){
+  statusSelected(event: any) {
     this.isLoading = true
     this.isActiveChoosen = false
     this.getCompany(event)
   }
 
-  getCompany(isActive:boolean){
+  getCompany(isActive: boolean) {
     setTimeout(() => {
       this.companyService.getCompany()
         .subscribe(
           Response => {
             this.isActiveChoosen = true
             const companies = Response
-            this.companies = companies.filter(x=>x.isActive == isActive)
+            this.companies = companies.filter(x => x.isActive == isActive)
             this.isLoading = false
           });
     }, 2000)
   }
-  
 }

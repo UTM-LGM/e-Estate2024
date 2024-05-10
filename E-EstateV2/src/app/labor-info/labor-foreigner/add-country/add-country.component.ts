@@ -3,7 +3,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Email } from 'src/app/_interface/email';
 import { LaborForeignerComponent } from '../labor-foreigner.component';
 import { SharedService } from 'src/app/_services/shared.service';
-import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import swal from 'sweetalert2';
 import { EmailService } from 'src/app/_services/email.service';
 
@@ -20,12 +19,11 @@ export class AddCountryComponent {
     private dialogRef: MatDialogRef<LaborForeignerComponent>,
     private emailService: EmailService,
     private sharedService: SharedService,
-    private auth: AuthGuard
   ) { }
 
   sendEmail() {
     this.email.from = this.sharedService.email
-    this.email.userName = this.auth.getUsername()
+    this.email.userName = this.sharedService.userName
     this.email.userId = this.sharedService.userId.toString();
     this.emailService.sendEmailCountry(this.email)
       .subscribe(

@@ -1,124 +1,119 @@
 <div class="box-container">
 
-    <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-          [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-        <h1>{{ estate.name }}</h1>
-        <hr />
-  
-      <div>
-      <h1>Field Disease Information </h1>
+  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>{{ estate.name }}</h1>
+  <hr />
 
-      <div style="columns: 2" class="column" >  
-        <div>
-          <label >Field / Block : </label>
-          <mat-select name="fieldName" placeholder="Please Choose" [(ngModel)]="fieldInfected.fieldId" (selectionChange)="selectedFieldName($event)">
-            <mat-option *ngFor="let field of filteredFields" [value]="field.id">
-              {{ field.fieldName }}
-            </mat-option>
-          </mat-select>
-        </div>
-          
-          <label>Area : </label>
-          <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled/>
-      </div>
-  
-      <div style="columns: 2" class="column">
-        <label>Date of Screening :</label>
-        <input type="date" name="date" [(ngModel)]="fieldInfected.dateScreening"/>
-        <label>Level Infected :</label>
-        <mat-select name="severity" placeholder="Please Choose"  [(ngModel)]="fieldInfected.severityLevel">
-          <mat-option value="HIGH">HIGH</mat-option>
-          <mat-option value="MEDIUM">MEDIUM</mat-option>
-          <mat-option value="LOW">LOW</mat-option>
-        </mat-select>
-      </div>
-  
-      
-  
-      <div style="columns: 2" class="column">
-        <label>Disease Name :</label>
-        <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName" [(ngModel)]="fieldInfected.fieldDiseaseId">
-          <mat-option *ngFor="let diseaseName of filterFieldDisease" [value]="diseaseName.id">
-            {{ diseaseName.diseaseName }}
+  <div>
+    <h1>Field Disease Information </h1>
+
+    <div style="columns: 2" class="column">
+      <div>
+        <label>Field / Block : </label>
+        <mat-select name="fieldName" placeholder="Please Choose" [(ngModel)]="fieldInfected.fieldId"
+          (selectionChange)="selectedFieldName($event)">
+          <mat-option *ngFor="let field of filteredFields" [value]="field.id">
+            {{ field.fieldName }}
           </mat-option>
         </mat-select>
-          <label>Area Infected (Ha) : </label>
-          <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected"/>
       </div>
-  
-      <div>
-        <button style="float: right" class="btn-add" type="submit" (click)="submit()" >
-          Add &nbsp; <i class="fa fa-plus"></i>
-        </button>
-      </div><br/><br/><br/>
 
+      <label>Area : </label>
+      <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled />
     </div>
-  
-      
-  <hr/>
+
+    <div style="columns: 2" class="column">
+      <label>Date of Screening :</label>
+      <input type="date" name="date" [(ngModel)]="fieldInfected.dateScreening" />
+      <label>Level Infected :</label>
+      <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel">
+        <mat-option value="HIGH">HIGH</mat-option>
+        <mat-option value="MEDIUM">MEDIUM</mat-option>
+        <mat-option value="LOW">LOW</mat-option>
+      </mat-select>
+    </div>
+
+
+
+    <div style="columns: 2" class="column">
+      <label>Disease Name :</label>
+      <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName"
+        [(ngModel)]="fieldInfected.fieldDiseaseId">
+        <mat-option *ngFor="let diseaseName of filterFieldDisease" [value]="diseaseName.id">
+          {{ diseaseName.diseaseName }}
+        </mat-option>
+      </mat-select>
+      <label>Area Infected (Ha) : </label>
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" />
+    </div>
+
+    <div>
+      <button style="float: right" class="btn-add" type="submit" (click)="submit()">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div><br /><br /><br />
+
+  </div>
+
+
+  <hr />
   <h1>List of Field Disease</h1>
-  
+
   <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
-      <div style="overflow-x: auto">
-        <table style="width: 100%">
-          <thead>
-            <tr>
-              <th *ngFor="let column of sortableColumn" scope="col" [appSort]="fieldInfecteds" [attr.data-order]="order"
-                [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
-                {{ column.displayText }}
-              </th>
-              <th width="90px">Status</th>
-              <th width="30px">Action</th>
-            </tr>
-          </thead>
-  
-          <tr *ngIf="isLoading">
-            <td colspan="11">
-              <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-              </ngx-skeleton-loader>
-            </td>
-          </tr>
-  
-          <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
-            <td colspan="11"><b>No Field Infected</b></td>
-          </tr>
-  
-          <tbody
-            *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-            <tr class="list" style="cursor: default;">
-              <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
-              <td style="cursor: pointer;">{{field.fieldName}}</td>
-              <td>{{ field.area }}</td>
-              <td>{{ field.areaInfected }}</td>
-              <td>{{ field.diseaseName }}</td>
-              <td>{{ field.severityLevel }}</td>
-              <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
-              <td>{{ field.remark }}</td>
+  <div style="overflow-x: auto">
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th *ngFor="let column of sortableColumn" scope="col" [appSort]="fieldInfecteds" [attr.data-order]="order"
+            [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Status</th>
+          <th width="30px">Action</th>
+        </tr>
+      </thead>
 
+      <tr *ngIf="isLoading">
+        <td colspan="11">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
 
-              <!-- [routerLink]="field.isActive ? '/e-estate/field-infected-status/' + field.id : null" -->
-              <td>
-                <button style="cursor: pointer;"  [ngClass]="{
+      <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
+        <td colspan="11"><b>No Field Infected</b></td>
+      </tr>
+
+      <tbody
+        *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tr class="list" style="cursor: default;">
+          <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
+          <td style="cursor: pointer;">{{field.fieldName}}</td>
+          <td>{{ field.area }}</td>
+          <td>{{ field.areaInfected }}</td>
+          <td>{{ field.diseaseName }}</td>
+          <td>{{ field.severityLevel }}</td>
+          <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
+          <td>{{ field.remark }}</td>
+          <td>
+            <button style="cursor: pointer;" [ngClass]="{
                   'active-btn': field.isActive == true,
                   'inactive-btn': field.isActive == false
                 }" [disabled]="!field.isActive" (click)="openDialogStatus(field)">
-                  {{ field.isActive == true ? "Active" : "Inactive" }}
-                </button>
-              </td>
-              <td>
-                <button class="btn-update" (click)="openDialog(field)">
-                  <i class="fa fa fa-pencil"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-  
-        <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-  
-      </div>
-    </div><br />
-  
-  
-  
-  
+              {{ field.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+          <td>
+            <button class="btn-update" (click)="openDialog(field)">
+              <i class="fa fa fa-pencil"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+  </div>
+</div><br />

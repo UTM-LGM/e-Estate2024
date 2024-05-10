@@ -1,34 +1,34 @@
 .box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .column {
-    width: 100%;
-    margin: 0 5px;
-    text-align: center;
-    color: black;
-  }
-  
-  .color1 {
-    background-color: #59788e96;
-    height: 50px;
-  }
-  
-  .color2 {
-    background-color: #0492c259;
-    height: 50px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
 
-  input[type="month"] {
-    padding: 10px 7px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
+.column {
+  width: 100%;
+  margin: 0 5px;
+  text-align: center;
+  color: black;
+}
 
-  button:disabled{
-    cursor: not-allowed;
-  }
+.color1 {
+  background-color: #59788e96;
+  height: 50px;
+}
+
+.color2 {
+  background-color: #0492c259;
+  height: 50px;
+}
+
+input[type="month"] {
+  padding: 10px 7px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

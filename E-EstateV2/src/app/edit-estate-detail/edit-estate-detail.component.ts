@@ -8,7 +8,6 @@ import { FinancialYear } from '../_interface/financialYear';
 import { Establishment } from '../_interface/establishment';
 import { MembershipType } from '../_interface/membership';
 import swal from 'sweetalert2';
-import { EstateService } from '../_services/estate.service';
 import { SharedService } from '../_services/shared.service';
 import { StateService } from '../_services/state.service';
 import { TownService } from '../_services/town.service';
@@ -30,7 +29,7 @@ export class EditEstateDetailComponent implements OnInit {
   estate: any = {} as any
   filteredEstate: any = {} as any
 
-  estateDetail:EstateDetail = {} as EstateDetail
+  estateDetail: EstateDetail = {} as EstateDetail
 
 
   filterStates: State[] = []
@@ -45,22 +44,21 @@ export class EditEstateDetailComponent implements OnInit {
 
   filterEstablishments: Establishment[] = []
 
-  filterPlantingMaterial:PlantingMaterial[]=[]
+  filterPlantingMaterial: PlantingMaterial[] = []
 
   town = true
 
   constructor(
     public dialog: MatDialogRef<Estate>,
-    @Inject(MAT_DIALOG_DATA) public data: { data: Estate, estateDetail:EstateDetail },
+    @Inject(MAT_DIALOG_DATA) public data: { data: Estate, estateDetail: EstateDetail },
     private stateService: StateService,
     private townService: TownService,
     private financialYearService: FinancialYearService,
     private membershipService: MembershipService,
     private establishmentService: EstablishmentService,
-    private estateService: EstateService,
     private sharedService: SharedService,
-    private plantingMaterialService:PlantingMaterialService,
-    private estateDetailService:EstateDetailService
+    private plantingMaterialService: PlantingMaterialService,
+    private estateDetailService: EstateDetailService
   ) { }
 
   ngOnInit() {
@@ -83,14 +81,14 @@ export class EditEstateDetailComponent implements OnInit {
         });
   }
 
-  getPlantingMaterial(){
+  getPlantingMaterial() {
     this.plantingMaterialService.getPlantingMaterial()
-    .subscribe(
-      Response =>{
-        const plantingMaterial = Response
-        this.filterPlantingMaterial = plantingMaterial.filter(p => p.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          const plantingMaterial = Response
+          this.filterPlantingMaterial = plantingMaterial.filter(p => p.isActive == true)
+        }
+      )
   }
 
   getMembership() {
@@ -141,62 +139,44 @@ export class EditEstateDetailComponent implements OnInit {
   }
 
   update() {
-    if(this.estateDetail.id == undefined){
+    if (this.estateDetail.id == undefined) {
       this.estateDetail.estateId = this.estate.id
       this.estateDetail.grantNo = this.estateDetail.grantNo
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
       this.estateDetail.createdBy = this.sharedService.userId.toString()
       this.estateDetail.createdDate = new Date()
       this.estateDetailService.addEstateDetail(this.estateDetail)
-      .subscribe(
-            Response => {
-              swal.fire({
-                title: 'Done!',
-                text: 'Estate successfully updated!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
-              this.dialog.close()
-            })
-    }else{
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Estate successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialog.close()
+          })
+    } else {
       this.estateDetail.grantNo = this.estateDetail.grantNo
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
       this.estateDetail.updatedBy = this.sharedService.userId.toString()
       this.estateDetail.updatedDate = new Date()
-      const {plantingMaterial, ...newObj} = this.estateDetail
+      const { plantingMaterial, ...newObj } = this.estateDetail
       this.filteredEstate = newObj
       this.estateDetailService.updateEstateDetail(this.filteredEstate)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Estate successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialog.close()
-        })
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Estate successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialog.close()
+          })
     }
-    
-    // this.estate.updatedBy = this.sharedService.userId.toString()
-    // this.estate.updatedDate = new Date()
-    // const {plantingMaterial, ...newObj} = this.estate
-    // this.filteredEstate = newObj
-    // this.estateService.updateEstate(this.filteredEstate)
-    //   .subscribe(
-    //     Response => {
-    //       swal.fire({
-    //         title: 'Done!',
-    //         text: 'Estate successfully updated!',
-    //         icon: 'success',
-    //         showConfirmButton: false,
-    //         timer: 1000
-    //       });
-    //       this.dialog.close()
-    //     }
-    //   )
   }
 
 }

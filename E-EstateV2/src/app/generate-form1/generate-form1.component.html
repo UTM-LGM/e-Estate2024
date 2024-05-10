@@ -1,142 +1,138 @@
-    <div class="print" #pdfContent>
-        <button class="btn-print" (click)="print()">Print <i class="fa fa-print"></i></button>
-        <div style="text-align: center;" style="border: 1px solid black; padding: 15px;">
-            <table class="table1" width="90%">
-                <tr>
-                    <td colspan="8" style="text-align:right">Salinan Pelanggan</td>
-                </tr>
-                <tr>
-                    <td colspan="8" style="text-align:right"><qrcode [qrdata]="qrcodedata" [width]="80"></qrcode></td>
-                </tr>
-                <div style="text-align: center; margin-top: -70px;">
-                    <table>
-                        <tr>
-                            <td colspan="8">
-                                <b>Kebenaran Bertulis</b><br /><br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span>[Peraturan 41]</span>
-                                <br /><span>AKTA LEMBAGA GETAH MALAYSIA (PERBADANAN) 1996</span>
-                                <br /><span>PERATURAN-PERATURAN</span>
-                                <br /><span>LEMBAGA GETAH MALAYSIA (PELESENAN DAN PERMIT) 2014</span>
-                                <br /><br /><b>KEBENARAN BERTULIS UNTUK PENGANGKUTAN</b>
-                                <br /><b>GETAH ATAU BAHAN TANAMAN GETAH</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="8">
-                                <span><img alt="Jata Negara" src="https://www.lgm.gov.my/webv2/assets/img/lgm-logo.png" style="height: 74px; width: 76px" /></span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </table>
-            <table class="table1" width="90%">
-                <tr>
-                    <td style="width:3%"></td>
-                    <td style="width:15%"></td>
-                    <td style="width:30%"></td>
-                    <td style="width:26%"></td>
-                    <td style="width:3%"></td>
-                    <td style="width:15%"><b>No. Siri</b></td>
-                    <td style="width:1%">:</td>
-                    <td style="width:26%"><b>{{rubberSale.letterOfConsentNo}}</b></td>
-                </tr>
-                <tr>
-                    <td style="width:3%"></td>
-                    <td style="width:15%"></td>
-                    <td style="width:30%"></td>
-                    <td style="width:26%"></td>
-                    <td style="width:3%"></td>
-                    <td style="width:15%"><b>Tarikh</b></td>
-                    <td style="width:1%">:</td>
-                    <td style="width:26%"><span id="tarikh"><b>{{dateNow | date:'dd-MM-yyyy'}}</b></span></td>
-                </tr>
+<div class="print" #pdfContent>
+    <button class="btn-print" (click)="print()">Print <i class="fa fa-print"></i></button>
+    <div style="text-align: center;" style="border: 1px solid black; padding: 15px;">
+        <table class="table1" width="90%">
+            <tr>
+                <td colspan="8" style="text-align:right">Salinan Pelanggan</td>
+            </tr>
+            <tr>
+                <td colspan="8" style="text-align:right">
+                    <qrcode [qrdata]="qrcodedata" [width]="80"></qrcode>
+                </td>
+            </tr>
+            <div style="text-align: center; margin-top: -70px;">
+                <table>
+                    <tr>
+                        <td colspan="8">
+                            <b>Kebenaran Bertulis</b><br /><br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>[Peraturan 41]</span>
+                            <br /><span>AKTA LEMBAGA GETAH MALAYSIA (PERBADANAN) 1996</span>
+                            <br /><span>PERATURAN-PERATURAN</span>
+                            <br /><span>LEMBAGA GETAH MALAYSIA (PELESENAN DAN PERMIT) 2014</span>
+                            <br /><br /><b>KEBENARAN BERTULIS UNTUK PENGANGKUTAN</b>
+                            <br /><b>GETAH ATAU BAHAN TANAMAN GETAH</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">
+                            <span><img alt="Jata Negara" src="https://www.lgm.gov.my/webv2/assets/img/lgm-logo.png"
+                                    style="height: 74px; width: 76px" /></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </table>
+        <table class="table1" width="90%">
+            <tr>
+                <td style="width:3%"></td>
+                <td style="width:15%"></td>
+                <td style="width:30%"></td>
+                <td style="width:26%"></td>
+                <td style="width:3%"></td>
+                <td style="width:15%"><b>No. Siri</b></td>
+                <td style="width:1%">:</td>
+                <td style="width:26%"><b>{{rubberSale.letterOfConsentNo}}</b></td>
+            </tr>
+            <tr>
+                <td style="width:3%"></td>
+                <td style="width:15%"></td>
+                <td style="width:30%"></td>
+                <td style="width:26%"></td>
+                <td style="width:3%"></td>
+                <td style="width:15%"><b>Tarikh</b></td>
+                <td style="width:1%">:</td>
+                <td style="width:26%"><span id="tarikh"><b>{{dateNow | date:'dd-MM-yyyy'}}</b></span></td>
+            </tr>
 
-            </table>
-            <br />
-            <table class="table1" width="90%">
-                <tr>
-                    <td>
-                        Saya/Kami* <b>{{ estate.name }}</b>
-                        yang beralamat
-                        di <b>{{estate.add1}} {{estate.add2}} {{estate.add3}}</b>
-                        Pemegang Lesen No. / PAT-G <b>{{estate.licenseNo}}</b> memperakui bahawa saya/kami*
-                        ialah pemunya sah getah/bahan tanaman getah yang diperihalkan di bawah.
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <table class="myTable" width="90%">
-                <tr style="background-color:#D5D2D1;">
-                    <th style="width:20%">&nbsp;Perihalan (Jenis Getah)</th>
-                    <!-- <th style="width:20%">&nbsp;Berat Bersih (kg).Bil. Unit</th> -->
-                    <th style="width:20%">&nbsp;Berat Bersih (Kg)</th>
-                    <th style="width:20%">&nbsp;No Kenderaan / Pemandu</th>
-                    <th style="width:60%">&nbsp;Catatan</th>
+        </table>
+        <br />
+        <table class="table1" width="90%">
+            <tr>
+                <td>
+                    Saya/Kami* <b>{{ estate.name }}</b>
+                    yang beralamat
+                    di <b>{{estate.add1}} {{estate.add2}} {{estate.add3}}</b>
+                    Pemegang Lesen No. / PAT-G <b>{{estate.licenseNo}}</b> memperakui bahawa saya/kami*
+                    ialah pemunya sah getah/bahan tanaman getah yang diperihalkan di bawah.
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="myTable" width="90%">
+            <tr style="background-color:#D5D2D1;">
+                <th style="width:20%">&nbsp;Perihalan (Jenis Getah)</th>
+                <th style="width:20%">&nbsp;Berat Bersih (Kg)</th>
+                <th style="width:20%">&nbsp;No Kenderaan / Pemandu</th>
+                <th style="width:60%">&nbsp;Catatan</th>
 
-                </tr>
-                <tr>
-                    <td>
-                        <span id="perihal">{{rubberSale.rubberType}}</span>
-                    </td>
-                    <td>
-                        <span id="perihal">{{rubberSale.wetWeight}}</span>
-                    </td>
-                    <td>
-                        <span id="perihal">{{rubberSale.transportPlateNo}} / {{rubberSale.driverName}}</span>
-                    </td>
-                    <td>
-                        <span id="perihal">{{rubberSale.remark}}</span>
-                    </td>
+            </tr>
+            <tr>
+                <td>
+                    <span id="perihal">{{rubberSale.rubberType}}</span>
+                </td>
+                <td>
+                    <span id="perihal">{{rubberSale.wetWeight}}</span>
+                </td>
+                <td>
+                    <span id="perihal">{{rubberSale.transportPlateNo}} / {{rubberSale.driverName}}</span>
+                </td>
+                <td>
+                    <span id="perihal">{{rubberSale.remark}}</span>
+                </td>
 
-                </tr>
+            </tr>
 
-            </table>
+        </table>
 
-            <table width="90%">
-                <!-- <tr align="left">
-                        <td nowrap="nowrap" colspan="7">&nbsp;Ringgit Malaysia&nbsp; : &nbsp;<span id="Perkataan">XXXXX</span></td>
-                    </tr> -->
+        <table width="90%">
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    Saya/Kami* <b>{{buyer.premiseName}}</b>
+                    yang beralamat
+                    di <b>{{buyer.premiseAdd1}} {{buyer.premiseAdd2}} {{buyer.premiseAdd3}} </b>
+                    Pemegang Lesen No. / PAT-G <b>{{buyer.licenseNo}}</b> / ejen penghantaran memperakui bahawa
+                    saya/kami*
+                    telah menerima getah/bahan tanaman getah yang tidak diperihalkan di atas.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7"><b>Ini adalah cetakan komputer dan tidak perlu ditandatangani</b>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap" colspan="8" style="text-align: left;">Kebenaran bertulis ini dijana dari Sistem
+                    e-Estate</td>
+            </tr>
+            <tr>
 
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <!-- <tr align="right">
-                <td nowrap="nowrap" colspan="7">&nbsp;Tarikh&nbsp; : &nbsp;<span id="Perkataan">XXXXX</span></td>
-            </tr> -->
-                <tr>
-                    <td colspan="7">
-                        Saya/Kami* <b>{{buyer.premiseName}}</b>
-                        yang beralamat
-                        di <b>{{buyer.premiseAdd1}} {{buyer.premiseAdd2}} {{buyer.premiseAdd3}} </b>
-                        Pemegang Lesen No. / PAT-G <b>{{buyer.licenseNo}}</b> / ejen penghantaran memperakui bahawa
-                        saya/kami*
-                        telah menerima getah/bahan tanaman getah yang tidak diperihalkan di atas.
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="7"><b>Ini adalah cetakan komputer dan tidak perlu ditandatangani</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td nowrap="nowrap" colspan="8" style="text-align: left;">Kebenaran bertulis ini dijana dari Sistem e-Estate</td>
-                </tr>
-                <tr>
-        
-                </tr>
-            </table>
+            </tr>
+        </table>
 
-        </div><br/><br/>
-        
-    </div>
+    </div><br /><br />
 
-    <div class="break-after"></div>
+</div>
+
+<div class="break-after"></div>

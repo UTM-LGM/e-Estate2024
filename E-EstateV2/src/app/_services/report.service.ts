@@ -16,8 +16,21 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductionYearlyByField/' + year)
   }
 
+
   getCurrentCropProduction(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/reports/CurrentProductions')
+  }
+
+  getCropProductivity(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetProductivity')
+  }
+
+  getFieldArea():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetFieldArea')
+  }
+
+  getCurrentTapperAndFieldWorker():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentTapperAndFieldWorker')
   }
 
   getProductionYearly(year: string): Observable<any[]> {
@@ -32,8 +45,28 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/CurrentForeignLabors')
   }
 
-  getProductivityByClone(year: string): Observable<any[]> {
+  getProductionByClone(year: string): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductionYearlyByClone/' + year)
+  }
+
+  getProductivityByClone(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/ProductivityYearlyByClone/' + year) 
+  }
+
+  getLaborInformationCategory():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetLaborInformationCategory' )
+  }
+
+  getTapperAndFieldWorker():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetTapperAndFieldWorker')
+  }
+
+  getWorkerShortageEstate():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetWorkerShortageEstate')
+  }
+
+  getCostInformation(year: string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetCostInformation/' + year)
   }
 
 }

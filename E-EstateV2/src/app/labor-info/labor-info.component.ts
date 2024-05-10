@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Estate } from '../_interface/estate';
 import { ActivatedRoute } from '@angular/router';
-import { EstateService } from '../_services/estate.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
@@ -18,8 +16,7 @@ export class LaborInfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private estateService: EstateService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -31,15 +28,14 @@ export class LaborInfoComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response
-              this.isLoading = false
-            }
-          )
+            .subscribe(
+              Response => {
+                this.estate = Response
+                this.isLoading = false
+              }
+            )
         }
       });
     }, 2000)
   }
-
 }

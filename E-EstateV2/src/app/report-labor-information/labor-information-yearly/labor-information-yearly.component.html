@@ -1,0 +1,127 @@
+<div class="box-container">
+  <h1>Labor Information</h1>
+
+  <div style="columns:2"
+    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    <div>
+      <label>Company</label>
+      <input type="text" [value]="company.name" disabled />
+    </div>
+    <label>Estate : </label>
+    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+      <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
+        {{estate.name}}
+      </mat-option>
+    </mat-select>
+  </div>
+
+  <div style="columns: 1;"
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    <label>Estate : </label>
+    <input type="text" [value]="estate.name" disabled />
+  </div>
+
+  <br/>
+  
+  <div style="overflow-x: auto;">
+    <table style="width: 100%;">
+      <tr>
+        <th>No</th>
+        <th>Category</th>
+        <th>Local</th>
+        <th>Foreign</th>
+        <th>Total</th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="10">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && labors.length == 0 && role == 'CompanyAdmin'">
+        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose estate</td>
+      </tr>
+
+      <tbody *ngIf="!isLoading && labors.length > 0">
+        <ng-container *ngIf="showAll">
+        <tr *ngFor="let labor of labors; let i=index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ labor.laborType }}</td>
+          <td>{{ labor.totalAmountLocal }}</td>
+          <td>{{ labor.totalAmountForeign }}</td>
+          <td>{{ labor.totalAmountLocal + labor.totalAmountForeign }}</td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="showAll">
+        <tr>
+          <td>{{ labors.length + 1 }}</td>
+          <td>TAPPER WORKER</td>
+          <ng-container *ngFor="let local of localTapperFieldWorker">
+            <td>{{ local.totalTapperWorker }}</td>
+          </ng-container>
+          <ng-container *ngFor="let local of foreignTapperFieldWorker">
+            <td>{{ local.totalTapperWorker }}</td>
+          </ng-container>
+          <td>{{ totalTapperWorker }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ labors.length + 2 }}</td>
+          <td>FIELD WORKER</td>
+          <ng-container *ngFor="let local of localTapperFieldWorker">
+            <td>{{ local.totalFieldWorker }}</td>
+          </ng-container>
+          <ng-container *ngFor="let local of foreignTapperFieldWorker">
+            <td>{{ local.totalFieldWorker }}</td>
+          </ng-container>
+          <td>{{ totalFieldWorker }}</td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="!showAll">
+        <tr *ngFor="let labor of labors; let i=index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ labor.laborType }}</td>
+          <td>{{ labor.localNoOfWorkers }}</td>
+          <td>{{ labor.foreignNoOfWorkers }}</td>
+          <td>{{ labor.localNoOfWorkers + labor.foreignNoOfWorkers }}</td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="!showAll">
+        <tr>
+          <td>{{ labors.length + 1 }}</td>
+          <td>TAPPER WORKER</td>
+          <ng-container *ngFor="let local of localTapperFieldWorker">
+            <td>{{ local.tapperWorker }}</td>
+          </ng-container>
+          <ng-container *ngFor="let local of foreignTapperFieldWorker">
+            <td>{{ local.tapperWorker }}</td>
+          </ng-container>
+          <td>{{ totalTapperWorker }}</td>
+        </tr>
+
+        <tr>
+          <td>{{ labors.length + 2 }}</td>
+          <td>FIELD WORKER</td>
+          <ng-container *ngFor="let local of localTapperFieldWorker">
+            <td>{{ local.fieldWorker }}</td>
+          </ng-container>
+          <ng-container *ngFor="let local of foreignTapperFieldWorker">
+            <td>{{ local.fieldWorker }}</td>
+          </ng-container>
+          <td>{{ totalFieldWorker }}</td>
+        </tr>
+      </ng-container>
+
+
+      
+
+
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -23,5 +23,5 @@ export class EstateContactService {
 
   updateEstateContact(estateContact: EstateContact): Observable<EstateContact> {
     return this.http.put<EstateContact>(this.baseUrl + '/EstateContacts/UpdateEstateContact', estateContact)
-  }
+  }
 }

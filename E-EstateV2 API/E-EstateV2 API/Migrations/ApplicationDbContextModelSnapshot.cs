@@ -1324,47 +1324,6 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("laborTypes");
                 });
 
-            modelBuilder.Entity("E_EstateV2_API.Models.LocalLabor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("createdBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("estateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("laborTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("monthYear")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("totalWorker")
-                        .HasColumnType("int");
-
-                    b.Property<string>("updatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("updatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("estateId");
-
-                    b.HasIndex("laborTypeId");
-
-                    b.ToTable("localLabors");
-                });
-
             modelBuilder.Entity("E_EstateV2_API.Models.MembershipType", b =>
                 {
                     b.Property<int>("Id")
@@ -1394,6 +1353,37 @@ namespace E_EstateV2_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("membershipTypes");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.OtherCrop", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("otherCrop")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("otherCrops");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.OtherField", b =>
@@ -2487,25 +2477,6 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
-                });
-
-            modelBuilder.Entity("E_EstateV2_API.Models.LocalLabor", b =>
-                {
-                    b.HasOne("E_EstateV2_API.Models.Estate", "Estate")
-                        .WithMany()
-                        .HasForeignKey("estateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("E_EstateV2_API.Models.LaborType", "laborType")
-                        .WithMany()
-                        .HasForeignKey("laborTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estate");
-
-                    b.Navigation("laborType");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.OtherField", b =>

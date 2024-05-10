@@ -25,7 +25,7 @@ namespace E_EstateV2_API.Repository
             return localLabor;
         }
 
-        public async Task<List<DTO_LocalLabor>> GetLocalLabors()
+        /*public async Task<List<DTO_LocalLabor>> GetLocalLabors()
         {
             var labor = await _context.localLabors.Select(x => new DTO_LocalLabor
             {
@@ -52,6 +52,6 @@ namespace E_EstateV2_API.Repository
                 return existingLabor;
             }
             return null;
-        }
+        }*/
     }
 }

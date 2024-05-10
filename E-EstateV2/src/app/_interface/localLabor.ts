@@ -1,4 +1,4 @@
-import { LocalLaborType } from "./localLaborType"
+import { LaborInformation } from "./laborInformation"
 
 export interface LocalLabor {
     id: number
@@ -10,7 +10,7 @@ export interface LocalLabor {
     updatedDate: Date
     laborTypeId: number
     laborTypeName: string
-    laborType: LocalLaborType[]
+    laborType: LaborInformation[]
     estateId: number
     totalLaborWorker: number
 }

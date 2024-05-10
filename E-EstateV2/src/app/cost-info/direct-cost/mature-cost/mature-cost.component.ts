@@ -86,11 +86,11 @@ export class MatureCostComponent implements OnInit {
           this.matureDirectCostAmount = Response
           this.filterMatureDirectCostAmount = this.matureDirectCostAmount.filter(x => x.year === parseInt(this.matureYear)
             && x.costTypeId == this.costTypeId && x.isMature === true)
-          // this.draftFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
           this.draftFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount
-          .filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
-          .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }));
+            .filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
+            .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }));
           this.submitFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
+          console.log(this.submitFilterMatureDirectCostAmount)
           this.totalMatureCost(this.filterMatureDirectCostAmount)
         }
       )
@@ -156,20 +156,20 @@ export class MatureCostComponent implements OnInit {
     }
   }
 
-  save(){
+  save() {
     this.costAmountService.updateCostAmount(this.draftFilterMatureDirectCostAmount)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Cost amount successfully saved!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        })
-        this.getMatureDirectCost();
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Cost amount successfully saved!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          this.getMatureDirectCost();
+        }
+      )
   }
 
   submitMatureCost() {
@@ -186,23 +186,23 @@ export class MatureCostComponent implements OnInit {
       confirmButtonText: 'Yes',
       denyButtonText: 'Cancel',
     })
-    .then((result)=>{
-      if(result.isConfirmed){
-        this.costAmountService.updateCostAmount(updatedArray)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Cost Amount successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-        }),
-          this.getMatureDirectCost()
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.costAmountService.updateCostAmount(updatedArray)
+            .subscribe(
+              Response => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Cost Amount successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                }),
+                  this.getMatureDirectCost()
+              }
+            )
         }
-      )
-      }
-    })
+      })
   }
 
   getRowCount(costSubcategory1: string) {
@@ -218,6 +218,6 @@ export class MatureCostComponent implements OnInit {
     }
   }
 
-  
+
 
 }

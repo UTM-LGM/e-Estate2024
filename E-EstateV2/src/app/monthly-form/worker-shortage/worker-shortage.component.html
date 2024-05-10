@@ -1,61 +1,58 @@
-<br/>
+<br />
 <div class="monthYear">
-    <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-    <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled/>
-  </div>
-  
-  <div class="center-div"  *ngIf="filterWorkerShortage.length == 0" >
-    <div class="box-container center-div" style="margin: 10px;">
-      <table class="table">
-        <tr>
-          <td><b>Item</b> </td>
-          <td><b>No of Worker Shortage</b></td>
-        </tr>
-  
-        <tr>
-          <td>Tapper worker in estate</td>
-          <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" /></td>
-        </tr>
+  <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
+  <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled />
+</div>
 
-        <tr>
-          <td>Field worker in estate</td>
-          <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" /></td>
-        </tr>
+<div class="center-div" *ngIf="filterWorkerShortage.length == 0">
+  <div class="box-container center-div" style="margin: 10px;">
+    <table class="table">
+      <tr>
+        <td><b>Item</b> </td>
+        <td><b>No of Worker Shortage</b></td>
+      </tr>
 
-  
-      </table>
-      <br />
-  
-      <div style="float: right;">
-        <button (click)="add()"class="btn-add" type="submit">
-          Add &nbsp; <i class="fa fa-plus"></i>
-        </button>
-        <br /><br />
-      </div>
-  
-    </div>
+      <tr>
+        <td>Tapper worker in estate</td>
+        <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" />
+        </td>
+      </tr>
+
+      <tr>
+        <td>Field worker in estate</td>
+        <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" />
+        </td>
+      </tr>
+    </table>
     <br />
+
+    <div style="float: right;">
+      <button (click)="add()" class="btn-add" type="submit">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+      <br /><br />
+    </div>
+
   </div>
-  
-  <div class="center-div">
-    <div *ngIf="filterWorkerShortage.length != 0" class="box-container" style="margin: 10px;">
-      <table class="table">
+  <br />
+</div>
+
+<div class="center-div">
+  <div *ngIf="filterWorkerShortage.length != 0" class="box-container" style="margin: 10px;">
+    <table class="table">
+      <tr>
+        <td><b>Item</b> </td>
+        <td><b>Total Current Worker</b></td>
+        <td><b>Total Shortage Worker</b></td>
+        <td><b>Total Worker Needed</b></td>
+      </tr>
+
+      <tbody *ngFor="let worker of filterWorkerShortage">
         <tr>
-          <td><b>Item</b> </td>
-          <td><b>Total Current Worker</b></td>
-          <td><b>Total Shortage Worker</b></td>
-          <td><b>Total Worker Needed</b></td>
-          <!-- <td><b>Action</b></td> -->
-        </tr>
-  
-        <tbody *ngFor="let worker of filterWorkerShortage">
-        <tr >
           <td class="td">Tapper worker</td>
           <td class="td">{{ totalSumTapper }}</td>
           <td class="td">{{ worker.tapperWorkerShortage }}</td>
           <td class="td">{{ neededTapper }}</td>
-
-          <!-- <td class="td"><button class="btn-update"><i class="fa fa-pencil" (click)="update(worker)"></i></button></td> -->
         </tr>
 
         <tr>
@@ -63,36 +60,28 @@
           <td class="td">{{ totalSumField }}</td>
           <td class="td">{{ worker.fieldWorkerShortage }}</td>
           <td class="td">{{ neededField }}</td>
-
-          <!-- <td class="td"><button class="btn-update"><i class="fa fa-pencil" (click)="update(worker)"></i></button></td> -->
         </tr>
-        <br/>
+        <br />
 
         <tr>
           <td style="border-bottom: none;"></td>
           <td style="border-bottom: none;"></td>
           <td style="border-bottom: none;"></td>
-          <td style="border-bottom: none;" > 
+          <td style="border-bottom: none;">
             <div style="float: right;">
-            <button (click)="update(worker)" class="btn-update" type="submit">
-              Update &nbsp; <i class="fa fa-pencil"></i>
-            </button>
-          </div></td>
+              <button (click)="update(worker)" class="btn-update" type="submit">
+                Update &nbsp; <i class="fa fa-pencil"></i>
+              </button>
+            </div>
+          </td>
         </tr>
-       
-
-                  
       </tbody>
-
-      </table><br/>
-
-      
-  
-    </div>
+    </table><br />
   </div>
+</div>
 
-  <div>
-    <button class="btn-back" (click)="back()">
-      <i class="fa fa-arrow-left"></i> &nbsp; Back
-    </button>
-  </div>
+<div>
+  <button class="btn-back" (click)="back()">
+    <i class="fa fa-arrow-left"></i> &nbsp; Back
+  </button>
+</div>

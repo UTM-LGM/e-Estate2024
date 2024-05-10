@@ -1,13 +1,13 @@
 <div class="box-container">
   <div class="monthYear">
     <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-    <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled/>
+    <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled />
   </div>
 
   <div style="overflow-x: auto" *ngIf="filterProductions.length == 0 ">
     <span style="color: red;">*If there is no production, please insert 0</span>
     <div>
-      <table style="width: 100%" >
+      <table style="width: 100%">
         <tr>
           <th>Month and Year</th>
           <th>Field / Block</th>
@@ -38,17 +38,24 @@
         <tr *ngFor="let field of filterFields; let i = index">
           <td>{{products[i].monthYear}}</td>
           <td class="td">{{ field.fieldName }}</td>
-          <td class="td"><input type="number" name="cuplump" [(ngModel)]="products[i].cuplump" placeholder="0.00" (input)="initialZeroCuplump(products[i].cuplump, i)" /></td>
-          <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0"/></td>
-          <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00" (input)="initialZeroLatex(products[i].latex, i)" /></td>
+          <td class="td"><input type="number" name="cuplump" [(ngModel)]="products[i].cuplump" placeholder="0.00"
+              (input)="initialZeroCuplump(products[i].cuplump, i)" /></td>
+          <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0" />
+          </td>
+          <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00"
+              (input)="initialZeroLatex(products[i].latex, i)" /></td>
           <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0" /></td>
-          <td class="td"><input type="number" name="USS" [(ngModel)]="products[i].uss" placeholder="0.00" (input)="initialZeroUSS(products[i].uss, i)" /></td>
+          <td class="td"><input type="number" name="USS" [(ngModel)]="products[i].uss" placeholder="0.00"
+              (input)="initialZeroUSS(products[i].uss, i)" /></td>
           <td class="td"><input type="number" name="USSDRC" [(ngModel)]="products[i].ussDRC" placeholder="0" /></td>
-          <td class="td"><input type="number" name="others" [(ngModel)]="products[i].others" placeholder="0.00" (input)="initialZeroOthers(products[i].others, i)" /></td>
-          <td class="td"><input type="number" name="othersDRC" [(ngModel)]="products[i].othersDRC" placeholder="0" /></td>
+          <td class="td"><input type="number" name="others" [(ngModel)]="products[i].others" placeholder="0.00"
+              (input)="initialZeroOthers(products[i].others, i)" /></td>
+          <td class="td"><input type="number" name="othersDRC" [(ngModel)]="products[i].othersDRC" placeholder="0" />
+          </td>
           <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="products[i].noTaskTap" placeholder="0"
               (change)="taskTap(products[i].noTaskTap, field.totalTask, i)" /></td>
-          <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"[(ngModel)]="products[i].noTaskUntap" /></td>
+          <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
+              [(ngModel)]="products[i].noTaskUntap" /></td>
           <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="products[i].remarkUntap" /></td>
         </tr>
 
@@ -73,8 +80,8 @@
         <ng-template mat-tab-label>
           <i class="fa fa-pencil"></i> Draft
         </ng-template><br />
-  
-        <table style="width: 100%" >
+
+        <table style="width: 100%">
           <tr>
             <th>Month and Year</th>
             <th>Field / Block</th>
@@ -90,153 +97,149 @@
             <th>No of Task UnTap</th>
             <th>Remark Task UnTap</th>
           </tr>
-  
+
           <tr *ngIf="isLoading">
             <td colspan="13">
               <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
               </ngx-skeleton-loader>
             </td>
           </tr>
-  
+
           <tr *ngIf="filterFields.length == 0 && !isLoading">
             <td colspan="13" style="color: red;"><b>No Field. Please insert field in Field Information</b></td>
           </tr>
-  
+
           <tr *ngFor="let field of draftFilterProductions; let i = index">
             <td>{{field.monthYear}}</td>
             <td class="td">{{ field.fieldName }}</td>
-            <td class="td"><input type="number" name="cuplump" [(ngModel)]="field.cuplump" placeholder="0.00" (input)="initialZeroCuplump(field.cuplump, i)" /></td>
-            <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="field.cuplumpDRC" placeholder="0"/></td>
-            <td class="td"><input type="number" name="latex" [(ngModel)]="field.latex" placeholder="0.00" (input)="initialZeroLatex(field.latex, i)" /></td>
+            <td class="td"><input type="number" name="cuplump" [(ngModel)]="field.cuplump" placeholder="0.00"
+                (input)="initialZeroCuplump(field.cuplump, i)" /></td>
+            <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="field.cuplumpDRC" placeholder="0" /></td>
+            <td class="td"><input type="number" name="latex" [(ngModel)]="field.latex" placeholder="0.00"
+                (input)="initialZeroLatex(field.latex, i)" /></td>
             <td class="td"><input type="number" name="latexDRC" [(ngModel)]="field.latexDRC" placeholder="0" /></td>
-            <td class="td"><input type="number" name="USS" [(ngModel)]="field.uss" placeholder="0.00" (input)="initialZeroUSS(field.uss, i)" /></td>
+            <td class="td"><input type="number" name="USS" [(ngModel)]="field.uss" placeholder="0.00"
+                (input)="initialZeroUSS(field.uss, i)" /></td>
             <td class="td"><input type="number" name="USSDRC" [(ngModel)]="field.ussDRC" placeholder="0" /></td>
-            <td class="td"><input type="number" name="others" [(ngModel)]="field.others" placeholder="0.00" (input)="initialZeroOthers(field.others, i)" /></td>
+            <td class="td"><input type="number" name="others" [(ngModel)]="field.others" placeholder="0.00"
+                (input)="initialZeroOthers(field.others, i)" /></td>
             <td class="td"><input type="number" name="othersDRC" [(ngModel)]="field.othersDRC" placeholder="0" /></td>
             <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="field.noTaskTap" placeholder="0"
                 (change)="taskTap(field.noTaskTap, field.totalTask, i)" /></td>
-            <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"[(ngModel)]="field.noTaskUntap" /></td>
+            <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
+                [(ngModel)]="field.noTaskUntap" /></td>
             <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="field.remarkUntap" /></td>
           </tr>
-        </table><br/>
+        </table><br />
 
         <div>
-        <div *ngIf="draftFilterProductions.length != 0">
-          <button (click)="submitProduction()" style="float: right" class="btn-add" type="submit">
-            Submit &nbsp; <i class="fa fa-plus"></i>
-          </button>
-        </div>
+          <div *ngIf="draftFilterProductions.length != 0">
+            <button (click)="submitProduction()" style="float: right" class="btn-add" type="submit">
+              Submit &nbsp; <i class="fa fa-plus"></i>
+            </button>
+          </div>
 
-        <div *ngIf="draftFilterProductions.length != 0">
-          <button style="float: right; margin-right: 10px; background-color:  #CAE00D;" class="btn-add" (click)="save()">
-            Save &nbsp; <i class="fa fa-check"></i>
-          </button>
-        </div>
+          <div *ngIf="draftFilterProductions.length != 0">
+            <button style="float: right; margin-right: 10px; background-color:  #CAE00D;" class="btn-add"
+              (click)="save()">
+              Save &nbsp; <i class="fa fa-check"></i>
+            </button>
+          </div>
         </div>
 
         <br />
       </mat-tab>
     </mat-tab-group>
 
-  <div class="card" *ngIf="submitFilterProductions.length !=0" id="content">
-    <!-- <div *ngIf="isDownloadPDF">
-      <span>Generated by e-Estate system, {{currentDate}}</span>
-    </div> -->
-    <div class="box">
-      <div class="column box-container color1">
-        <span>Total Cuplump Dry Production (Kg)</span><br />
-        <span><b>{{ totalCuplumpDry | number : "1.2-2" }}</b></span>
+    <div class="card" *ngIf="submitFilterProductions.length !=0" id="content">
+      <div class="box">
+        <div class="column box-container color1">
+          <span>Total Cuplump Dry Production (Kg)</span><br />
+          <span><b>{{ totalCuplumpDry | number : "1.2-2" }}</b></span>
+        </div>
+
+        <div class="column box-container color2">
+          <span>Total Latex Dry Production (Kg)</span><br />
+          <span><b>{{ totalLatexDry | number : "1.2-2" }}</b></span>
+        </div>
+
+        <div class="column box-container color3">
+          <span>Total USS Dry Production (Kg)</span><br />
+          <span><b>{{ totalUSSDry | number : "1.2-2" }}</b></span>
+        </div>
+
+        <div class="column box-container color4">
+          <span>Total Other Dry Production (Kg)</span><br />
+          <span><b>{{ totalOthersDry | number : "1.2-2" }}</b></span>
+        </div>
+
+      </div><br />
+
+      <div style="padding-left: 10px;">
+        <span></span> &nbsp;
+        <div style="float: right;">
+          <span><b>Total Production 100% Dry : {{totalCuplumpDry + totalLatexDry + totalUSSDry + totalOthersDry |
+              number: '1.2-2'}} Kg</b></span>
+        </div>
+      </div><br />
+
+      <div style="text-align: center; overflow-x: auto;" id="content" #content>
+        <table style="width: 100%">
+          <tr>
+            <th>Month and Year</th>
+            <th>Field / Block</th>
+            <th>Cuplump (Kg)</th>
+            <th>Cuplump DRC (%)</th>
+            <th>Cuplump Dry (Kg)</th>
+            <th>Latex (Kg)</th>
+            <th>Latex DRC (%)</th>
+            <th>Latex Dry (Kg)</th>
+            <th>USS (Kg)</th>
+            <th>USS DRC (%)</th>
+            <th>USS Dry (Kg)</th>
+            <th>Others (Kg)</th>
+            <th>Others DRC (%)</th>
+            <th>Others Dry (Kg)</th>
+            <th>No of Task Tap</th>
+            <th>No of Task Uptap</th>
+            <th>Remark Untap</th>
+            <th width="30px">Action</th>
+          </tr>
+
+          <tr *ngFor="let product of filterProductions; index as i">
+            <td>{{ product.monthYear | date : "MMM-yyyy" }}</td>
+            <td>{{ product.fieldName }}</td>
+            <td>{{ product.cuplump | number : "1.2-2" }}</td>
+            <td>{{ product.cuplumpDRC }}</td>
+            <td>{{ cuplump[i] | number : "1.2-2" }}</td>
+            <td>{{ product.latex | number : "1.2-2" }}</td>
+            <td>{{ product.latexDRC }}</td>
+            <td>{{ latex[i] | number : "1.2-2" }}</td>
+            <td>{{ product.uss | number : "1.2-2"}}</td>
+            <td>{{ product.ussDRC }}</td>
+            <td>{{ USS[i] | number: "1.2-2"}}</td>
+            <td>{{ product.others | number: "1.2-2"}}</td>
+            <td>{{ product.othersDRC }}</td>
+            <td>{{ others[i] | number: "1.2-2"}}</td>
+            <td>{{ product.noTaskTap }}</td>
+            <td>{{ product.noTaskUntap }}</td>
+            <td>{{product.remarkUntap}}</td>
+            <td>
+              <!-- [disabled]="currentDate.getDate() > 15" -->
+              <button class="btn-update" (click)="openDialog(product)">
+                <i class="fa fa fa-pencil"></i>
+              </button>
+            </td>
+          </tr>
+
+        </table><br />
+      </div><br />
+      <div *ngIf="filterProductions.length >= 0">
+        <div *ngIf="products.length > 0 ">
+          <button style="float: right" class="btn-add" (click)="nextTab()">
+            Next &nbsp; <i class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+        <br />
       </div>
-
-      <div class="column box-container color2">
-        <span>Total Latex Dry Production (Kg)</span><br />
-        <span><b>{{ totalLatexDry | number : "1.2-2" }}</b></span>
-      </div>
-
-      <div class="column box-container color3">
-        <span>Total USS Dry Production (Kg)</span><br />
-        <span><b>{{ totalUSSDry | number : "1.2-2" }}</b></span>
-      </div>
-
-      <div class="column box-container color4">
-        <span>Total Other Dry Production (Kg)</span><br />
-        <span><b>{{ totalOthersDry | number : "1.2-2" }}</b></span>
-      </div>
-
-    </div><br />
-
-    <div style="padding-left: 10px;">
-      <span></span> &nbsp;
-      <!-- <button (click)="scrollToBottom()" class="summaryBtn">Production Summary <i class="fa fa-file"></i></button> -->
-      <div style="float: right;">
-        <span><b>Total Production 100% Dry : {{totalCuplumpDry + totalLatexDry + totalUSSDry + totalOthersDry |
-            number: '1.2-2'}} Kg</b></span>
-      </div>
-
-      <!-- <div style="float: left;">
-        <button class="printBtn" (click)="downloadPDF()">Export to PDF</button>
-      </div> -->
-      
-    </div><br />
-
-    <!-- <span><button (click)="generatePdf()" >Print Summary <i class="fa fa-download"></i> </button></span> -->
-    <div style="text-align: center; overflow-x: auto;" id="content" #content>
-      <table style="width: 100%">
-        <tr>
-          <th>Month and Year</th>
-          <th>Field / Block</th>
-          <th>Cuplump (Kg)</th>
-          <th>Cuplump DRC (%)</th>
-          <th>Cuplump Dry (Kg)</th>
-          <th>Latex (Kg)</th>
-          <th>Latex DRC (%)</th>
-          <th>Latex Dry (Kg)</th>
-          <th>USS (Kg)</th>
-          <th>USS DRC (%)</th>
-          <th>USS Dry (Kg)</th>
-          <th>Others (Kg)</th>
-          <th>Others DRC (%)</th>
-          <th>Others Dry (Kg)</th>
-          <th>No of Task Tap</th>
-          <th>No of Task Uptap</th>
-          <th>Remark Untap</th>
-          <th width="30px">Action</th>
-        </tr>
-
-        <tr *ngFor="let product of filterProductions; index as i">
-          <td>{{ product.monthYear | date : "MMM-yyyy" }}</td>
-          <td>{{ product.fieldName }}</td>
-          <td>{{ product.cuplump | number : "1.2-2" }}</td>
-          <td>{{ product.cuplumpDRC }}</td>
-          <td>{{ cuplump[i] | number : "1.2-2" }}</td>
-          <td>{{ product.latex | number : "1.2-2" }}</td>
-          <td>{{ product.latexDRC }}</td>
-          <td>{{ latex[i] | number : "1.2-2" }}</td>
-          <td>{{ product.uss | number : "1.2-2"}}</td>
-          <td>{{ product.ussDRC }}</td>
-          <td>{{ USS[i] | number: "1.2-2"}}</td>
-          <td>{{ product.others | number: "1.2-2"}}</td>
-          <td>{{ product.othersDRC }}</td>
-          <td>{{ others[i] | number: "1.2-2"}}</td>
-          <td>{{ product.noTaskTap }}</td>
-          <td>{{ product.noTaskUntap }}</td>
-          <td>{{product.remarkUntap}}</td>
-          <td>
-            <!-- [disabled]="currentDate.getDate() > 15" -->
-            <button class="btn-update" (click)="openDialog(product)" >
-              <i class="fa fa fa-pencil"></i>
-            </button>
-          </td>
-        </tr>
-
-      </table><br/>
-    </div><br />
-    <div *ngIf="filterProductions.length >= 0">
-      <div *ngIf="products.length > 0 ">
-        <button style="float: right" class="btn-add" (click)="nextTab()">
-          Next &nbsp; <i class="fa fa-arrow-right"></i>
-        </button>
-      </div>
-      <br />
     </div>
-  </div>

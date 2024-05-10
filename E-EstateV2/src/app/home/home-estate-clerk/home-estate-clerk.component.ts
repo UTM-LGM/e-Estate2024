@@ -1,11 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto';
-import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
-import { Estate } from 'src/app/_interface/estate';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
-// import { ForeignLabor } from 'src/app/_interface/laborInfo';
 import { LocalLabor } from 'src/app/_interface/localLabor';
-import { EstateService } from 'src/app/_services/estate.service';
+import { CostAmountService } from 'src/app/_services/cost-amount.service';
+import { FieldProductionService } from 'src/app/_services/field-production.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -17,21 +16,21 @@ import { SharedService } from 'src/app/_services/shared.service';
 })
 export class HomeEstateClerkComponent implements OnInit {
 
-  @ViewChild('myCanvas') myCanvas: any
-  @ViewChild('myCanvas1') myCanvas1: any
-
-
   productions: FieldProduction[] = []
   filterProductions: FieldProduction[] = []
   productionYearly: FieldProduction[] = []
 
   filterLocalLabors: LocalLabor[] = []
 
-  // filterForeignWorker: ForeignLabor[] = []
-
   sumCuplumpByMonthYear: any
+  chartEstate: any
+
+
 
   estate: any = {} as any
+
+  productivity: any[] = []
+
 
   yearNow = 0
   totalCuplump = 0
@@ -39,34 +38,86 @@ export class HomeEstateClerkComponent implements OnInit {
   totalLocal = 0
   totalForeign = 0
   estateId = 0
+
+  currentTotalTapper = 0
+  currentTotalField = 0
+
+  productivityCuplumpDry = 0
+  productivityLatexDry = 0
+  productivityUSSDry = 0
+  productivityOthersDry = 0
+
+  matureArea = 0
+  immatureArea = 0
+
   isLoadingEstateName = true
   isLoadingProduction = true
   isLoadingLocal = true
   isLoadingForeign = true
   showAlert = false
 
+  isLoadingTapper = true
+  isLoadingField = true
+
+  warningProductionDrafted = false
+  warningCostDrafted = false
+
+  productivityByYear:any
+
+
   constructor(
     private reportService: ReportService,
-    private authGuard: AuthGuard,
-    private estateService: EstateService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private sharedService: SharedService,
+    private productionService:FieldProductionService,
+    private datePipe: DatePipe,
+    private costInformationService:CostAmountService
   ) { }
 
   ngOnInit() {
-    if(this.authGuard.getRole() != "Admin"){
+    if (this.sharedService.role != "Admin") {
       this.yearNow = new Date().getFullYear()
-      this.estateId = this.authGuard.getEstateId()
+      this.estateId = this.sharedService.estateId
       this.checkDate()
       this.getEstate()
+      this.getProductionReport()
+      this.getWorker()
+      this.getFieldArea()
       this.getProduction()
-      this.getLocalWorker()
-      // this.getForeignWorker()
+      this.getCost()
     }
   }
 
   ngAfterViewInit() {
-    this.createChart()
-    this.createChart1()
+    this.getProductivity()
+  }
+
+  getProduction(){
+    const previousMonth = new Date()
+    previousMonth.setMonth(previousMonth.getMonth() - 1)
+    const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
+    this.productionService.getProduction()
+    .subscribe(
+      Response =>{
+        const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "Draft" && x.monthYear == date)
+        if(production.length > 0)
+          {
+            this.warningProductionDrafted = true
+          }
+      }
+    )
+  }
+
+  getCost(){
+    this.costInformationService.getCostAmount()
+    .subscribe(
+      Response =>{
+        const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.year == new Date().getFullYear())
+        if(cost.length > 0){
+          this.warningCostDrafted = true
+        }
+      }
+    )
   }
 
   checkDate() {
@@ -78,24 +129,16 @@ export class HomeEstateClerkComponent implements OnInit {
   }
 
   getEstate() {
-    // this.estateService.getOneEstate(parseInt(this.estateId))
-    //   .subscribe(
-    //     Response => {
-    //       this.estate = Response
-    //       this.isLoadingEstateName = false
-    //     }
-    //   )
-
     this.myLesenService.getOneEstate(this.estateId)
-    .subscribe(
-      Response =>{
-        this.estate = Response
-        this.isLoadingEstateName = false
-      }
-    )  
+      .subscribe(
+        Response => {
+          this.estate = Response
+          this.isLoadingEstateName = false
+        }
+      )
   }
 
-  getProduction() {
+  getProductionReport() {
     this.reportService.getCurrentCropProduction()
       .subscribe(
         Response => {
@@ -116,118 +159,162 @@ export class HomeEstateClerkComponent implements OnInit {
 
   }
 
-  getLocalWorker() {
-    this.reportService.getCurrentLocalWorker()
+  getWorker() {
+    this.reportService.getCurrentTapperAndFieldWorker()
       .subscribe(
         Response => {
-          const localLabors = Response || []; // Ensure localLabors is an array
-          if (localLabors.some(x => x && x.estateId === this.estateId)) {
-            this.filterLocalLabors = localLabors.filter(x => x && x.estateId === this.estateId);
-          } else {
-            const localLabor: any = {
-              totalLaborWorker: 0
-            };
-            this.filterLocalLabors.push(localLabor)
-          }
-          this.isLoadingLocal = false
+          const worker = Response.filter(x => x.estateId == this.sharedService.estateId)
+          worker.forEach(item => {
+            // Add values with "tapper" in their keys to currentTotalTapper
+            this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
+            this.isLoadingTapper = false
+
+            // Add values with "field" in their keys to currentTotalField
+            this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
+            this.isLoadingField = false
+          });
         }
       )
   }
 
-  // getForeignWorker() {
-  //   this.reportService.getCurrentForeignWorker()
-  //     .subscribe(
-  //       Response => {
-  //         const foreignLabors = Response
-  //         if (foreignLabors.some(x => x && x.estateId === this.estateId)) {
-  //           this.filterForeignWorker = foreignLabors.filter(x => x.estateId == this.estateId)
-  //         } else {
-  //           const foreignLabor: any = {
-  //             totalLaborWorker: 0
-  //           };
-  //           this.filterForeignWorker.push(foreignLabor)
+  getProductivity() {
+    this.reportService.getCropProductivity()
+      .subscribe(
+        {
+          next:(Response)=>{
+            this.productivity = Response.filter(x=>x.estateId == this.sharedService.estateId);
+            if (this.productivity.length === 0) {
+              const product: any = {
+                productivityCuplumpDry: 0,
+                productivityLatexDry: 0,
+                productivityUSSDry: 0,
+                productivityOthersDry: 0,
+              };
+              this.productivity.push(product);
+            } else {
+              // Call the groupByYear function to group data by year and calculate sums
+              this.productivityByYear = this.groupByYear(this.productivity);
+              this.createProductivityChart(); // Call chart creation after data is processed
+            }
+            this.isLoadingProduction = false;
+          },
+          error:(err)=>{
+            console.error('Error fetching productivity data:', err);
+            this.isLoadingProduction = false;
+          }
+        }
+      );
+  }
+
+  // Helper function to group data by year and calculate sums
+  groupByYear(data:any) {
+    return data.reduce((acc:any, curr:any) => {
+      const year = curr.monthYear.split('-')[1];
+      if (!acc[year]) {
+        acc[year] = {
+          year: year,
+          productivityCuplumpDry: 0,
+          productivityLatexDry: 0,
+          productivityUSSDry: 0,
+          productivityOthersDry: 0
+        };
+      }
+      acc[year].productivityCuplumpDry += curr.productivityCuplumpDry || 0;
+      acc[year].productivityLatexDry += curr.productivityLatexDry || 0;
+      acc[year].productivityUSSDry += curr.productivityUSSDry || 0;
+      acc[year].productivityOthersDry += curr.productivityOthersDry || 0;
+      return acc;
+    }, {});
+  }
+
+  createProductivityChart() {
+    if (this.chartEstate) {
+      this.chartEstate.destroy();
+    }
+  
+    this.chartEstate = new Chart("chartProductivityEstate", {
+      type: 'line',
+      data: {
+        labels: Object.keys(this.productivityByYear), // Use years as labels
+        datasets: [
+          {
+            label: 'Cuplump Dry (Kg/Ha)',
+            data: Object.values(this.productivityByYear).map((x:any) => x.productivityCuplumpDry),
+            backgroundColor: 'blue',
+            borderColor: 'blue',
+            fill: false
+          },
+          {
+            label: 'Latex Dry (Kg/Ha)',
+            data: Object.values(this.productivityByYear).map((x:any) => x.productivityLatexDry),
+            backgroundColor: 'limegreen',
+            borderColor: 'limegreen',
+            fill: false
+          },
+          {
+            label: 'USS Dry (Kg/Ha)',
+            data: Object.values(this.productivityByYear).map((x:any) => x.productivityUSSDry),
+            backgroundColor: 'orange',
+            borderColor: 'orange',
+            fill: false
+          },
+          {
+            label: 'Others Dry (Kg/Ha)',
+            data: Object.values(this.productivityByYear).map((x:any) => x.productivityOthersDry),
+            backgroundColor: 'pink',
+            borderColor: 'pink',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  }
+
+  getFieldArea() {
+    this.reportService.getFieldArea()
+      .subscribe(
+        Response => {
+          const matureArea = Response.filter(x => x.isMature == true && x.estateId == this.sharedService.estateId)
+          this.matureArea = matureArea.reduce((total, current) => total + current.area, 0);
+
+          const immatureArea = Response.filter(x => x.isMature == false && x.estateId == this.sharedService.estateId)
+          this.immatureArea = immatureArea.reduce((total, current) => total + current.area, 0);
+        }
+
+      )
+  }
+
+  // createAreaChart() {
+  //   if (this.barChart) {
+  //     this.barChart.destroy();
+  //   }
+
+  //   this.barChart = new Chart("barChart", {
+  //     type: 'bar',
+  //     data: {
+  //       labels: ['Mature Area', 'Immature Area'],
+  //       datasets: [
+  //         {
+  //           label: 'Mature Area',
+  //           data: [this.matureArea, 0], // Add 0 for the immature area to align bars
+  //           backgroundColor: 'blue'
+  //         },
+  //         {
+  //           label: 'Immature Area',
+  //           data: [0, this.immatureArea], // Add 0 for the mature area to align bars
+  //           backgroundColor: 'limegreen'
   //         }
-  //         this.isLoadingForeign = false
-  //       }
-  //     )
+  //       ]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       maintainAspectRatio: false,
+  //     }
+  //   });
   // }
-
-  createChart() {
-    this.yearNow = 2022
-    this.reportService.getProductionYearly(this.yearNow.toString())
-      .subscribe(
-        Response => {
-          const productionYearly = Response
-          this.productionYearly = productionYearly.filter(x => x.estateId == this.estateId)
-          const ctx = this.myCanvas.nativeElement.getContext('2d');
-          const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-              labels: this.productionYearly.map(p => `${p.monthYear}`),
-              datasets: [
-                {
-                  label: "Cumplump Dry (Kg)",
-                  data: this.productionYearly.map(p => p.cuplumpDry),
-                  backgroundColor: 'blue'
-                },
-                {
-                  label: "Latex Dry (Kg)",
-                  data: this.productionYearly.map(p => p.latexDry),
-                  backgroundColor: 'limegreen'
-                },
-                {
-                  label: "USS Dry (Kg)",
-                  data: this.productionYearly.map(p => p.ussDry),
-                  backgroundColor: 'orange'
-                },
-                {
-                  label: "Others Dry (Kg)",
-                  data: this.productionYearly.map(p => p.othersDry),
-                  backgroundColor: 'pink'
-                }
-              ]
-            }
-          });
-        })
-  }
-
-  createChart1() {
-    this.yearNow = 2022
-    this.reportService.getProductionYearly(this.yearNow.toString())
-      .subscribe(
-        Response => {
-          const productionYearly = Response
-          this.productionYearly = productionYearly.filter(x => x.estateId == this.estateId)
-          const ctx = this.myCanvas1.nativeElement.getContext('2d');
-          const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: this.productionYearly.map(p => `${p.monthYear}`),
-              datasets: [
-                {
-                  label: "Cumplump Dry (Kg)",
-                  data: this.productionYearly.map(p => p.cuplumpDry),
-                  backgroundColor: 'blue'
-                },
-                {
-                  label: "Latex Dry (Kg)",
-                  data: this.productionYearly.map(p => p.latexDry),
-                  backgroundColor: 'limegreen'
-                },
-                {
-                  label: "USS Dry (Kg)",
-                  data: this.productionYearly.map(p => p.ussDry),
-                  backgroundColor: 'orange'
-                },
-                {
-                  label: "Others Dry (Kg)",
-                  data: this.productionYearly.map(p => p.othersDry),
-                  backgroundColor: 'pink'
-                }
-              ]
-            }
-          });
-        })
-  }
 }
 

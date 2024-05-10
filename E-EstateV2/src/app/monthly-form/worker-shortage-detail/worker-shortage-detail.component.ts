@@ -14,38 +14,38 @@ import swal from 'sweetalert2';
 })
 export class WorkerShortageDetailComponent implements OnInit {
 
-  worker:WorkerShortage = {} as WorkerShortage
+  worker: WorkerShortage = {} as WorkerShortage
 
   constructor(
-    public dialogRef:MatDialogRef<WorkerShortageComponent>,
-    @Inject (MAT_DIALOG_DATA) public data : {data: WorkerShortage},
+    public dialogRef: MatDialogRef<WorkerShortageComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { data: WorkerShortage },
     private sharedService: SharedService,
-    private workerShortageService:WorkerShortageService
-  ){}
+    private workerShortageService: WorkerShortageService
+  ) { }
 
   ngOnInit(): void {
     this.worker = this.data.data
   }
 
-  back(){
+  back() {
     this.dialogRef.close()
   }
 
-  update(){
+  update() {
     this.worker.updatedBy = this.sharedService.userId.toString()
     this.worker.updatedDate = new Date()
     this.workerShortageService.updateWorkerShortage(this.worker)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Worker Shortage successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.dialogRef.close()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Worker Shortage successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close()
+        }
+      )
   }
 }

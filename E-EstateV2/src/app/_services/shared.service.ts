@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { User } from '../_interface/user';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -8,9 +7,13 @@ import { BehaviorSubject } from 'rxjs';
 export class SharedService {
 
   userId = ''
-  companyId: number = 0
-  estateId: number = 0
+  companyId = 0
+  estateId = 0
   email = ''
+  fullName = ''
+  userName=''
+  role = ''
+  roles:any[]=[]
 
   private dialogClosedSubject = new BehaviorSubject<boolean>(false)
 

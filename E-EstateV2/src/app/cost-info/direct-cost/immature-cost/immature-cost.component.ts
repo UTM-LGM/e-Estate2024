@@ -61,7 +61,7 @@ export class ImmatureCostComponent implements OnInit {
         .subscribe(
           Response => {
             this.subCategories2IM = Response
-            this.subCategories2IM.forEach(sub =>sub.amount = 0)
+            this.subCategories2IM.forEach(sub => sub.amount = 0)
             this.isLoading = false
           });
     }, 1000)
@@ -75,7 +75,7 @@ export class ImmatureCostComponent implements OnInit {
           this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.year === parseInt(this.immatureYear)
             && x.costTypeId == this.costTypeId && x.isMature === false && x.isMature !== null)
           this.draftFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
-          .map(item => ({ ...item,amount:Number(item.amount).toFixed(2)}))
+            .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
           this.submitFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
           this.totalImmatureCost(this.filterImmatureDirectCostAmount)
         }
@@ -88,7 +88,7 @@ export class ImmatureCostComponent implements OnInit {
   }
 
   calculateDraftAmount() {
-    this.draftFilterImmatureDirectCostAmount.forEach(item =>{
+    this.draftFilterImmatureDirectCostAmount.forEach(item => {
       item.amount = parseFloat(item.amount).toFixed(2);
     })
     this.totalImmatureCostAmount = this.draftFilterImmatureDirectCostAmount.reduce((acc, item) => acc + parseFloat(item.amount), 0)
@@ -135,20 +135,20 @@ export class ImmatureCostComponent implements OnInit {
     this.totalImmatureAmount = this.subCategories2IM.reduce((acc, item) => acc + (item.amount || 0), 0)
   }
 
-  save(){
+  save() {
     this.costAmountService.updateCostAmount(this.draftFilterImmatureDirectCostAmount)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Cost amount successfully saved!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        })
-        this.getImmatureDirectCost();
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Cost amount successfully saved!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          this.getImmatureDirectCost();
+        }
+      )
   }
 
   submitImmatureCost() {
@@ -165,23 +165,23 @@ export class ImmatureCostComponent implements OnInit {
       confirmButtonText: 'Yes',
       denyButtonText: 'Cancel',
     })
-    .then((result)=>{
-      if(result.isConfirmed){
-      this.costAmountService.updateCostAmount(updatedArray)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Cost Amount successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.getImmatureDirectCost()
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.costAmountService.updateCostAmount(updatedArray)
+            .subscribe(
+              Response => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Cost Amount successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.getImmatureDirectCost()
+              }
+            )
         }
-      )
-      } 
-    })
+      })
   }
 
 }

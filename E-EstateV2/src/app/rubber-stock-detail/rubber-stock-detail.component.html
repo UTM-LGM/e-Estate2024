@@ -1,64 +1,62 @@
 <div style="padding: 20px;" class="box-container">
-    <h1>{{estate.name}}</h1>
-    <hr>
+  <h1>{{estate.name}}</h1>
+  <hr>
 
-    <div class="monthYear" *ngIf="stock.id == undefined">
-      <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-      <!-- <input type="month" value="{{ monthYear | date : 'YYY-MM' }}" disabled/> -->
-    </div>
+  <div class="monthYear" *ngIf="stock.id == undefined">
+    <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
+  </div>
 
 
-    <div class="monthYear" *ngIf="stock.id != undefined">
-      <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-      <input type="month" value="{{ stock.monthYear | date : 'YYY-MM' }}" disabled/>
-    </div>
+  <div class="monthYear" *ngIf="stock.id != undefined">
+    <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
+    <input type="month" value="{{ stock.monthYear | date : 'YYY-MM' }}" disabled />
+  </div>
 
-    <div class="card">
-        <div class="box">
-          <div class="column box-container color1">
-            <span>Total Production 100% Dry (Kg)</span><br />
-            <span *ngIf="!isLoadingProduction"><b> {{stock.totalProduction| number: '1.2-2'}} Kg</b></span>
-            <div *ngIf="isLoadingProduction">
-              <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-            </div>
-          </div>
-    
-          <div class="column box-container color2">
-            <span>Total Rubber Sale 100% Dry (Kg)</span><br />
-            <span *ngIf="!isLoadingSale"><b> {{stock.totalSale| number: '1.2-2'}} Kg</b></span>
-            <div *ngIf="isLoadingSale">
-              <ngx-skeleton-loader appearance="line" animation="progress-dark"
-                [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-            </div>
-          </div>
-    
+  <div class="card">
+    <div class="box">
+      <div class="column box-container color1">
+        <span>Total Production 100% Dry (Kg)</span><br />
+        <span *ngIf="!isLoadingProduction"><b> {{stock.totalProduction| number: '1.2-2'}} Kg</b></span>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
         </div>
-        </div>    
+      </div>
 
-          <div style="columns: 2">
-            <label>Previous Month End Stock :</label>
-            <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
-            <label>Month End Stock :</label>
-            <input type="number" name="currentStock" (input)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
-          </div>
-          <div>
-            <label>Water Loss (%) :</label>
-            <input type="number" name="waterLoss" disabled [value]="stock.waterLoss | number: '1.2-2'"/>
-          </div>
-          <br/>
-
-    <div>
-        <button *ngIf="stock.id != undefined" style="float: right" class="btn-update" type="submit" (click)="update()">
-          Update &nbsp; <i class="fa fa-pencil"></i>
-        </button>
+      <div class="column box-container color2">
+        <span>Total Rubber Sale 100% Dry (Kg)</span><br />
+        <span *ngIf="!isLoadingSale"><b> {{stock.totalSale| number: '1.2-2'}} Kg</b></span>
+        <div *ngIf="isLoadingSale">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
 
     </div>
+  </div>
 
-    <div (click)="back()">
-      <button class="btn-back" >
-        <i class="fa fa-arrow-left"></i> &nbsp; Back
-      </button>
-    </div>
+  <div style="columns: 2">
+    <label>Previous Month End Stock :</label>
+    <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
+    <label>Month End Stock :</label>
+    <input type="number" name="currentStock" (input)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
+  </div>
+  <div>
+    <label>Water Loss (%) :</label>
+    <input type="number" name="waterLoss" disabled [value]="stock.waterLoss | number: '1.2-2'" />
+  </div>
+  <br />
+
+  <div>
+    <button *ngIf="stock.id != undefined" style="float: right" class="btn-update" type="submit" (click)="update()">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+
+  </div>
+
+  <div (click)="back()">
+    <button class="btn-back">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
 </div>
-    

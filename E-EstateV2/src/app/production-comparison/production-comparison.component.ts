@@ -25,8 +25,6 @@ export class ProductionComparisonComponent {
   ) { }
 
   ngOnInit() {
-    // const currentYear = currentDate.getFullYear()
-    // const previousYear = currentDate.getFullYear() - 1
     this.previousYear = 2010
     this.currentYear = 2011
     this.production.currentYearDry = this.data.data

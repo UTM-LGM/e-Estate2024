@@ -79,8 +79,8 @@ export class RubberSaleDetailComponent implements OnInit {
       )
   }
 
-  calculateTotalPrice(){
-    const total = this.rubberSale.unitPrice * (this.rubberSale.wetWeight*this.rubberSale.drc/100)
+  calculateTotalPrice() {
+    const total = this.rubberSale.unitPrice * this.rubberSale.wetWeight
     this.rubberSale.total = total.toFixed(2)
   }
 

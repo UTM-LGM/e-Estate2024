@@ -10,9 +10,9 @@
     <button class="btn-update" (click)="openDialog(estate,estateDetail)">
       Update &nbsp; <i class="fa fa-pencil"></i>
     </button>
-  </div> 
+  </div>
 
-  <div style="overflow-x: auto; " >
+  <div style="overflow-x: auto; ">
     <table class="detailAdmin">
       <tr>
         <td>Estate Name</td>
@@ -52,7 +52,7 @@
         <td>District</td>
         <td><span>:</span></td>
         <td>{{estate.district}}</td>
-        
+
       </tr>
 
       <tr>
@@ -111,7 +111,7 @@
         <td>Longitude</td>
         <td><span>:</span></td>
         <td>{{estate.longitude}}</td>
-        
+
       </tr>
 
       <tr>
@@ -150,144 +150,12 @@
         <td><span>:</span></td>
         <td>{{estateDetail.plantingMaterial}}</td>
 
-      </tr>
-      
-    </table>
-  </div>
-
-  <!-- <div style="overflow-x: auto;" *ngIf="userRole == 'EstateClerk'">
-    <table class="detailClerk">
-      <tr>
-        <td>Estate Name</td>
-        <td><span>:</span></td>
-        <td>{{estate.name}}</td>
-      </tr>
-
-      <tr>
-        <td>Company Name</td>
-        <td><span>:</span></td>
-        <td>{{estate.company}}</td>
-      </tr>
-
-      <tr>
-        <td>License No</td>
-        <td><span>:</span></td>
-        <td>{{estate.licenseNo}}</td>
-      </tr>
-
-      <tr>
-        <td>Area</td>
-        <td><span>:</span></td>
-        <td>{{estate.area}}</td>
-      </tr>
-
-
-      <tr>
-        <td>Address</td>
-        <td><span>:</span></td>
-        <td>{{estate.add1}} {{estate.add2}} {{estate.add3}}</td>
-      </tr>
-
-      <tr>
-        <td>District</td>
-        <td><span>:</span></td>
-        <td>{{estate.district}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Postcode</td>
-        <td><span>:</span></td>
-        <td>{{estate.postcode}}</td>
-
-
-      <tr>
-        <td>Parliment</td>
-        <td><span>:</span></td>
-        <td>{{estate.parliament}}</td>
-
-      </tr>
-
-      <tr>
-        <td>State</td>
-        <td><span>:</span></td>
-        <td>{{estate.state}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Dun</td>
-        <td><span>:</span></td>
-        <td>{{estate.dun}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Town</td>
-        <td><span>:</span></td>
-        <td>{{estate.town}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Latitude</td>
-        <td><span>:</span></td>
-        <td>{{estate.latitude}}</td>
-      </tr>
-
-      <tr>
-        <td>Longitude</td>
-        <td><span>:</span></td>
-        <td>{{estate.longitude}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Estate Manager</td>
-        <td><span>:</span></td>
-        <td>{{estate.personInCharge}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Contact No</td>
-        <td><span>:</span></td>
-        <td>{{estate.mobileCode}} {{estate.mobileNo}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Email</td>
-        <td><span>:</span></td>
-        <td>{{estate.email}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Estate Phone No</td>
-        <td><span>:</span></td>
-        <td>{{estate.phoneCode}} {{estate.phoneNo}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Land tittle (Grant No)</td>
-        <td><span>:</span></td>
-        <td>{{estateDetail.grantNo}}</td>
-
-      </tr>
-
-      <tr>
-        <td>Planting Material</td>
-        <td><span>:</span></td>
-        <td>{{estateDetail.plantingMaterial}}</td>
       </tr>
 
     </table>
-  </div> -->
-
+  </div>
   <br />
-  <hr/>
+  <hr />
 
   <div>
     <h1>List of Additional Contact</h1>
@@ -347,7 +215,7 @@
       <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 
     </div>
-  </div><br />
+  </div><br />
 
   <div class="box-container" *ngIf="userRole !== 'EstateClerk'">
     <h1>List of Fields</h1>
@@ -377,8 +245,7 @@
           <td colspan="10"><b>No Field</b></td>
         </tr>
 
-        <tbody
-          *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor:default;">
             <td class="td" style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{
                 field.fieldName }}</a></td>
@@ -391,14 +258,21 @@
             <td class="td">{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
             <td class="td">{{ field.initialTreeStand }}</td>
             <td class="td">{{field.totalTask}}</td>
-            <td class="td">
-              <button style="pointer-events: none; border-radius: 0px;" [ngClass]="{
+            <td *ngIf="result[field.id]?.length == 0 ">
+              <button style="border-radius: 0px !important; cursor: default;" [ngClass]="{
                 'active-btn': field.isActive == true,
                 'inactive-btn': field.isActive == false
               }">
                 {{ field.isActive == true ? "Active" : "Inactive" }}
               </button>
             </td>
+
+            <td *ngIf="result[field.id] && result[field.id]?.length > 0">
+              <button style="border-radius: 0px !important; cursor: default;" class="inactive-btn">
+                Infected
+              </button>
+            </td>
+
             <td class="td" *ngIf="selectedField !== field"><i class="fa fa-chevron-down" style="cursor:pointer"
                 (click)="toggleSelectedField(field)"></i></td>
             <td class="td" *ngIf="selectedField === field"><i class="fa fa-chevron-up" style="cursor:pointer"
@@ -416,7 +290,7 @@
 
                 <tr *ngFor="let conversion of conversionField">
                   <td>{{conversion.fieldName}}</td>
-                  <td>{{conversion.conversionCropName}}</td>
+                  <td>{{conversion.otherCrop}}</td>
                   <td>{{conversion.sinceYear}}</td>
                 </tr>
               </table>

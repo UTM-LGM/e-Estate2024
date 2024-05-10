@@ -33,10 +33,10 @@ namespace E_EstateV2_API.Repository
                 noTaskUntap = x.noTaskUntap,
                 fieldId = x.fieldId,
                 remarkUntap = x.remarkUntap,
-                estateId = _context.estates.Where(y => y.Id == (_context.fields.Where(f => f.Id == x.fieldId).Select(f => f.estateId).FirstOrDefault())).Select(e => e.Id).FirstOrDefault(),
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
                 totalTask = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.totalTask).FirstOrDefault(),
                 status = x.status,
+                estateId = _context.fields.Where(y=>y.Id == x.fieldId).Select(y=>y.estateId).FirstOrDefault()
             }).ToListAsync();
 
             return production;

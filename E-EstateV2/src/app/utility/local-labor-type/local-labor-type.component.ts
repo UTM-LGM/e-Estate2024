@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalLaborType } from 'src/app/_interface/localLaborType';
+import { LaborInformation } from 'src/app/_interface/laborInformation';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import swal from 'sweetalert2';
@@ -9,10 +9,10 @@ import swal from 'sweetalert2';
   templateUrl: './local-labor-type.component.html',
   styleUrls: ['./local-labor-type.component.css']
 })
-export class LocalLaborTypeComponent implements OnInit {
-  labor: LocalLaborType = {} as LocalLaborType
+export class LaborInformationComponent implements OnInit {
+  labor: LaborInformation = {} as LaborInformation
 
-  labors: LocalLaborType[] = []
+  labors: LaborInformation[] = []
 
   term = ''
   isLoading = true
@@ -68,7 +68,7 @@ export class LocalLaborTypeComponent implements OnInit {
   }
 
   reset() {
-    this.labor = {} as LocalLaborType
+    this.labor = {} as LaborInformation
   }
 
   getType() {
@@ -82,7 +82,7 @@ export class LocalLaborTypeComponent implements OnInit {
     }, 2000)
   }
 
-  status(type: LocalLaborType) {
+  status(type: LaborInformation) {
     type.updatedBy = this.sharedService.userId.toString()
     type.updatedDate = new Date()
     type.isActive = !type.isActive

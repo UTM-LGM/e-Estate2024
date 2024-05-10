@@ -1,25 +1,26 @@
-<br/>
+<br />
 <div style="padding: 15px;">
-<h1>Labor Shortage Information</h1>
-<hr/>
+  <h1>Labor Shortage Information</h1>
+  <hr />
 
-<table class="table">
+  <table class="table">
     <tr>
       <td><b>Item</b></td>
       <td><b>No of Worker Shortage</b></td>
     </tr>
-  
+
     <tr>
       <td>Tapper worker in estate</td>
-      <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" /></td>
+      <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" />
+      </td>
     </tr>
 
     <tr>
       <td>Field worker in estate</td>
       <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" /></td>
     </tr>
-  
-  </table><br/>
+
+  </table><br />
 
   <div style="padding-right: 10px">
     <button style="float: right" class="btn-update" type="submit" (click)="update()">
@@ -31,6 +32,5 @@
       <i class="fa fa-arrow-left"></i> &nbsp; Back
     </button>
   </div>
-  
-  </div>
 
+</div>

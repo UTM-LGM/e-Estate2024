@@ -17,7 +17,6 @@ export class ChangePasswordComponent implements OnInit {
   showPassword: boolean = false
   userId = ''
 
-
   constructor(
     public dialog: MatDialogRef<HomeLayoutComponent>,
     private sharedService: SharedService,

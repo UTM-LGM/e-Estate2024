@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../_interface/user';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { SharedService } from '../_services/shared.service';
 import { UserService } from '../_services/user.service';
 import { NotificationComponent } from '../notification/notification.component';
@@ -24,14 +23,13 @@ export class SidenavComponent implements OnInit {
   showOthers = false
 
   constructor(
-    private auth: AuthGuard,
     private sharedService: SharedService,
     private userService: UserService,
     public notificationComponent: NotificationComponent
   ) { }
 
   ngOnInit() {
-    this.role = this.auth.getRole()
+    this.role = this.sharedService.role
     this.getUser()
   }
 
@@ -61,16 +59,17 @@ export class SidenavComponent implements OnInit {
   }
 
   getUser() {
-    this.username = this.auth.getUsername()
-    this.userService.getUser(this.username)
-      .subscribe(
-        Response => {
-          this.user = Response
-          this.sharedService.userId = this.user.id
-          this.companyId = this.user.companyId
-          this.estateId = this.user.estateId
-        }
-      )
+    this.username = this.sharedService.userName
+    if (this.role != 'Admin') {
+      this.userService.getUser(this.username)
+        .subscribe(
+          Response => {
+            this.user = Response
+            this.sharedService.userId = this.user.id
+            this.companyId = this.user.companyId
+            this.estateId = this.user.estateId
+          }
+        )
+    }
   }
-
 }

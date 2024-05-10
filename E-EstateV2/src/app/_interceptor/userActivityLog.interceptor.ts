@@ -11,8 +11,8 @@ export class UserActivityLogInterceptor implements HttpInterceptor {
   userActivity = {} as UserActivityLog
   flagged = true
 
-  constructor(private userActivityLogService: UserActivityLogService,
-    private authGuardService: AuthGuard,
+  constructor(
+    private userActivityLogService: UserActivityLogService,
     private sharedService: SharedService,
   ) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -30,8 +30,8 @@ export class UserActivityLogInterceptor implements HttpInterceptor {
       this.userActivity.method = req.method
       this.userActivity.body = JSON.stringify(req.body)
       this.userActivity.url = req.url
-      this.userActivity.userName = this.authGuardService.getUsername()
-      this.userActivity.role = this.authGuardService.getRole()
+      this.userActivity.userName = this.sharedService.userName
+      this.userActivity.role = this.sharedService.role
       this.userActivity.userId = this.sharedService.userId.toString()
       this.userActivityLogService.logActivity(this.userActivity)
         .subscribe(
@@ -52,8 +52,8 @@ export class UserActivityLogInterceptor implements HttpInterceptor {
       this.userActivity.method = req.method
       this.userActivity.body = JSON.stringify(req.body)
       this.userActivity.url = req.url
-      this.userActivity.userName = this.authGuardService.getUsername()
-      this.userActivity.role = this.authGuardService.getRole()
+      this.userActivity.userName = this.sharedService.userName
+      this.userActivity.role = this.sharedService.role
       this.userActivity.userId = this.sharedService.userId.toString()
 
       this.userActivityLogService.logActivity(this.userActivity)

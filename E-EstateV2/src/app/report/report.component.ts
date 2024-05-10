@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
+import { SharedService } from '../_services/shared.service';
 
 @Component({
   selector: 'app-report',
@@ -13,12 +13,12 @@ export class ReportComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private auth: AuthGuard,
+    private sharedService: SharedService
 
   ) { }
 
   ngOnInit() {
-    this.role = this.auth.getRole()
-    this.router.navigateByUrl('/e-estate/reports/yield-production-yearly')
+    this.role = this.sharedService.role
+    this.router.navigateByUrl('/e-estate/reports/estate-by-state')
   }
 }

@@ -1,10 +1,11 @@
 <div style="columns:2" [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
-    <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId" (selectionChange)="companySelected()">
+    <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
+        (selectionChange)="companySelected()">
         <mat-option *ngFor="let company of filteredCompanies" [value]="company.id">
             {{company.companyName}}
         </mat-option>
-      </mat-select>
+    </mat-select>
 </div>
 
 <div style="columns:2">
@@ -12,11 +13,12 @@
     <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
         <label>Estate : </label>
 
-        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
+            (selectionChange)="estateSelected()">
             <mat-option *ngFor="let estate of filterEstatesAdmin" [value]="estate.id">
                 {{estate.estateName}}
             </mat-option>
-          </mat-select>
+        </mat-select>
     </div>
 
     <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
@@ -29,11 +31,12 @@
 
     <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
         <label>Estate : </label>
-        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
+            (selectionChange)="estateSelected()">
             <mat-option *ngFor="let estate of filterEstatesCompanyAdmin" [value]="estate.id">
                 {{estate.estateName}}
             </mat-option>
-          </mat-select>
+        </mat-select>
     </div>
 
     <label>Please choose year : </label>
@@ -45,8 +48,6 @@
 </div>
 
 <div *ngIf="filterProductionYearly.length != 0">
-
-
 
     <h1>Crop Productivity by Field yearly Report</h1>
     <span *ngFor="let monthYear of monthYear">Last updated at: <b>{{monthYear.monthYear}}</b></span>
@@ -65,7 +66,6 @@
                     <th> Tapped Area (Ha/yr) (FieldArea * (TaskTap/TotalTask)) </th>
                     <th> Total Crop (Kg/yr) (CuplumpDry+LatexDry+USSDry+OthersDry) </th>
                     <th> Total Productivity (Kg/Ha/yr) (Total Crop/Tapped Area) </th>
-
                 </tr>
 
                 <tr
@@ -79,11 +79,7 @@
                     <td> {{ totalProductivity[i] | number: '1.2-2' }}</td>
                 </tr>
             </table>
-
-
             <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-
         </div>
     </div>
-
 </div>

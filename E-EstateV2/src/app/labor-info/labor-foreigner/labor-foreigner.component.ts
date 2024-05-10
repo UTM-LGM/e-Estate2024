@@ -1,14 +1,4 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Country } from 'src/app/_interface/country';
-// import { ForeignLabor } from 'src/app/_interface/laborInfo';
-import { SharedService } from 'src/app/_services/shared.service';
-import swal from 'sweetalert2';
-import { LaborForeignerDetailComponent } from '../labor-foreigner-detail/labor-foreigner-detail.component';
-import { AddCountryComponent } from './add-country/add-country.component';
-import { CountryService } from 'src/app/_services/country.service';
-import { ForeignLaborService } from 'src/app/_services/foreign-labor.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-labor-foreigner',

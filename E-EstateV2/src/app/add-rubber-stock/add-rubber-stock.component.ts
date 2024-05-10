@@ -13,7 +13,6 @@ import { RubberStock } from '../_interface/rubberStock';
 import { RubberStockService } from '../_services/rubber-stock.service';
 import swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-add-rubber-stock',
   templateUrl: './add-rubber-stock.component.html',
@@ -57,11 +56,11 @@ export class AddRubberStockComponent implements OnInit {
   monthYear = new Date()
   previousMonth = new Date()
   today = new Date()
-  isDecember:boolean | undefined
+  isDecember: boolean | undefined
   totalProduction = 0
   filterSales: RubberSale[] = []
 
-  rubberStocks:RubberStock[]=[]
+  rubberStocks: RubberStock[] = []
 
 
   isLoadingProduction = true
@@ -71,24 +70,22 @@ export class AddRubberStockComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<RubberStockComponent>,
-    private fieldService:FieldService,
+    private fieldService: FieldService,
     private fieldProductionService: FieldProductionService,
     private datePipe: DatePipe,
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
-    private rubberStockService:RubberStockService,
-    @Inject(MAT_DIALOG_DATA) public data:any
-  ){
+    private rubberStockService: RubberStockService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
     this.estate = data.estate;
-    if(this.data.stock.id != undefined)
-      {
-        this.stock = data.stock
-      }
+    if (this.data.stock.id != undefined) {
+      this.stock = data.stock
+    }
   }
 
   ngOnInit(): void {
     this.getDate()
-    // this.isDecember = this.today.getMonth() === 11
     this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
     this.previousDate = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')?.toUpperCase()
     this.getField()
@@ -96,17 +93,16 @@ export class AddRubberStockComponent implements OnInit {
     this.getStock()
   }
 
-  getStock(){
+  getStock() {
     this.rubberStockService.getRubberStock()
       .subscribe(
-        Response =>{
-          this.rubberStocks = Response.filter(e=>e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true)
-          if(this.rubberStocks.length != 0)
-            {
-              let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
-              this.stock.previousStock = latestItem.currentStock;
-              this.isPreviousStock = true
-            }
+        Response => {
+          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true)
+          if (this.rubberStocks.length != 0) {
+            let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
+            this.stock.previousStock = latestItem.currentStock;
+            this.isPreviousStock = true
+          }
         }
       )
   }
@@ -120,36 +116,36 @@ export class AddRubberStockComponent implements OnInit {
     this.dialogRef.close()
   }
 
-  addStock(){
+  addStock() {
     this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
     this.stock.estateId = this.estate.id
     this.stock.monthYear = this.date
     this.stock.createdBy = this.sharedService.userId
     this.stock.isActive = true
     this.rubberStockService.addRubberStock(this.stock)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Stock successfully submitted!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.dialogRef.close()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Stock successfully submitted!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close()
+        }
+      )
   }
 
-  getField(){
+  getField() {
     this.fieldService.getField()
-    .subscribe(
-      Response => {
-        const filterFields = Response.filter(x=>x.estateId == this.estate.id)
-        this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
-        this.getAllProduction(this.filterFields)
-      }
-    )
+      .subscribe(
+        Response => {
+          const filterFields = Response.filter(x => x.estateId == this.estate.id)
+          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+          this.getAllProduction(this.filterFields)
+        }
+      )
   }
 
   getAllProduction(Fields: Field[]) {
@@ -166,10 +162,9 @@ export class AddRubberStockComponent implements OnInit {
           this.TotalLatex()
           this.TotalUSS()
           this.TotalOthers()
-          if(this.stock.totalProduction == null)
-            {
-              this.calculateTotal()
-            }
+          if (this.stock.totalProduction == null) {
+            this.calculateTotal()
+          }
           this.isLoadingProduction = false
         });
   }
@@ -238,53 +233,53 @@ export class AddRubberStockComponent implements OnInit {
     this.totalOthersDry = this.totalOthers.reduce((total, item) => total + item.OthersDry, 0)
   }
 
-  calculateTotal(){
+  calculateTotal() {
     this.stock.totalProduction = this.totalCuplumpDry + this.totalLatexDry + this.totalUSSDry + this.totalOthersDry
   }
 
-  calculateWaterDepletion(){
+  calculateWaterDepletion() {
     const production = this.stock.totalProduction + this.stock.previousStock
-    const stock = this.stock.totalSale + this.stock.currentStock 
-    this.stock.waterLoss = ((production - stock)/production) * 100
+    const stock = this.stock.totalSale + this.stock.currentStock
+    this.stock.waterLoss = ((production - stock) / production) * 100
   }
 
   getSales() {
     this.rubberSaleService.getSale()
-    .subscribe(
-      Response => {
-        const rubberSales = Response
-        this.filterSales = rubberSales.filter(e => {
-          const saleDate = new Date(e.saleDateTime);
-          return e.estateId == this.sharedService.estateId && saleDate.getMonth() == this.monthYear.getMonth() && saleDate.getFullYear() == this.monthYear.getFullYear();
+      .subscribe(
+        Response => {
+          const rubberSales = Response
+          this.filterSales = rubberSales.filter(e => {
+            const saleDate = new Date(e.saleDateTime);
+            return e.estateId == this.sharedService.estateId && saleDate.getMonth() + 1 == this.monthYear.getMonth() + 1 && saleDate.getFullYear() == this.monthYear.getFullYear();
+          })
+          this.calculateSale()
+          this.isLoadingSale = false
         })
-        this.calculateSale()
-        this.isLoadingSale=false
-      })
   }
 
-  calculateSale(){
+  calculateSale() {
     this.totalSales = this.filterSales.map((item: any) => {
-      const rubberDry = item.wetWeight * (item.drc / 100)
+      const rubberDry = (item.wetWeight * item.drc / 100)
       return { rubberDry }
     });
     this.stock.totalSale = this.totalSales.reduce((total, item) => total + item.rubberDry, 0)
   }
 
-  update(){
+  update() {
     this.stock.updatedBy = this.sharedService.userId
     this.rubberStockService.updateRubberStock(this.stock)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Stock successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.dialogRef.close()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Stock successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close()
+        }
+      )
 
   }
 

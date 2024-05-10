@@ -24,7 +24,7 @@ export class CompanyListComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
-    private mylesenService:MyLesenIntegrationService
+    private mylesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -34,12 +34,12 @@ export class CompanyListComponent implements OnInit {
   getCompany() {
     setTimeout(() => {
       this.mylesenService.getAllCompany()
-      .subscribe(
-        Response =>{
-          this.companies = Response
-          this.isLoading = false
-        } 
-      )
+        .subscribe(
+          Response => {
+            this.companies = Response
+            this.isLoading = false
+          }
+        )
     }, 2000)
   }
 

@@ -15,7 +15,7 @@ export class RubberStockDetailComponent implements OnInit {
 
   estate: any = {} as any
 
-  rubberStocks:RubberStock[]=[]
+  rubberStocks: RubberStock[] = []
   stock = {} as RubberStock
 
   isLoadingProduction = true
@@ -23,68 +23,47 @@ export class RubberStockDetailComponent implements OnInit {
 
   isPreviousStock = false
 
-
   constructor(
-    private rubberStockService:RubberStockService,
-    @Inject(MAT_DIALOG_DATA) public data:any,
-    private sharedService:SharedService,
+    private rubberStockService: RubberStockService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private sharedService: SharedService,
     public dialogRef: MatDialogRef<RubberStockComponent>,
-  ){
+  ) {
     this.estate = data.estate;
-    if(this.data.stock.id != undefined)
-      {
-        this.isLoadingProduction = false
-        this.isLoadingSale = false
-        this.stock = data.stock
-      }
+    if (this.data.stock.id != undefined) {
+      this.isLoadingProduction = false
+      this.isLoadingSale = false
+      this.stock = data.stock
+    }
   }
 
   ngOnInit(): void {
-    // this.getStock()
   }
 
-  // getStock(){
-  //   this.rubberStockService.getRubberStock()
-  //     .subscribe(
-  //       Response =>{
-  //         this.rubberStocks = Response
-  //         // if(this.rubberStocks.length != 0)
-  //         //   {
-  //         //     let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
-  //         //     this.stock.previousStock = latestItem.currentStock;
-  //         //     this.isPreviousStock = true
-  //         //   }
-  //       }
-  //     )
-  // }
-
-  calculateWaterDepletion(){
+  calculateWaterDepletion() {
     const production = this.stock.totalProduction + this.stock.previousStock
-    const stock = this.stock.totalSale + this.stock.currentStock 
-    this.stock.waterLoss = ((production - stock)/production) * 100
+    const stock = this.stock.totalSale + this.stock.currentStock
+    this.stock.waterLoss = ((production - stock) / production) * 100
   }
 
-  update(){
+  update() {
     this.stock.updatedBy = this.sharedService.userId
     this.rubberStockService.updateRubberStock(this.stock)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Stock successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.dialogRef.close()
-      }
-    )
-
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Stock successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close()
+        }
+      )
   }
 
   back() {
     this.dialogRef.close()
   }
-
-
 }

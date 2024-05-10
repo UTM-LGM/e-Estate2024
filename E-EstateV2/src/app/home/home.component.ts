@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
+import { SharedService } from '../_services/shared.service';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +10,10 @@ export class HomeComponent implements OnInit {
   role = ''
 
   constructor(
-    private authGuard: AuthGuard,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
-    this.role = this.authGuard.getRole()
+    this.role = this.sharedService.role
   }
 }

@@ -3,13 +3,6 @@
   <hr />
 
   <input type="text" [(ngModel)]="term" placeholder="Filter Company" />
-  <!-- <div style="padding-bottom: 10px;">
-    <button class="active-btn" [ngClass]="{'selectedActivebtn': isBtnActive}"
-      (click)="filterActive(true)">Active</button> &nbsp;
-    <button class="inactive-btn" [ngClass]="{'selectedInactivebtn': isBtnInactive}"
-      (click)="filterInactive(false)">Inactive</button> &nbsp;
-    <span style="cursor: pointer;" (click)="clearFilter()"><u>Clear Filter</u></span>
-  </div> -->
 
   <div *ngIf="isLoading">
     <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>
@@ -21,7 +14,6 @@
       routerLink="/e-estate/company-profile/{{ company.id }}">
       <h3>
         <a>{{company.name}}</a>
-        <!-- <a>CompanyName</a> -->
       </h3>
       <table>
         <tr>
@@ -36,80 +28,9 @@
           <td>{{ company.postcode }} {{ company.town }} {{ company.state }}</td>
         </tr>
       </table>
-      <!-- <button style="float: right; pointer-events: none; border-radius: 0px;" disabled [ngClass]="{
-        'active-btn': company.isActive == true,
-        'inactive-btn': company.isActive == false
-      }">{{ company.isActive == true ? "Active" : "Inactive" }}
-      </button> -->
       <br />
     </div>
   </div>
-
-  <!-- <h1 *ngIf="showActive">List of Active Companies</h1>
-  <div class="column" *ngIf="showActive">
-    <div class="box-container list"
-      *ngFor="let company of activeCompanies | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
-      routerLink="/e-estate/company-profile/{{ company.id }}">
-      <h3>
-        <a>{{company.companyName}}</a>
-      </h3>
-      <table>
-        <tr>
-          <td>Address</td>
-          <td><span>:</span></td>
-          <td>
-            {{ company.add1 }}  {{ company.add2 }} {{ company.add3 }}
-          </td>
-        </tr>
-
-        <tr>
-          <td></td>
-          <td><span>:</span></td>
-          <td>{{ company.postcode }} {{ company.town }} {{ company.state }}</td>
-        </tr>
-
-      </table>
-      <button style="float: right; pointer-events: none; border-radius: 0px;" disabled [ngClass]="{
-          'active-btn': company.isActive == true,
-          'inactive-btn': company.isActive == false
-        }">{{ company.isActive == true ? "Active" : "Inactive" }}
-      </button>
-      <br />
-    </div>
-  </div> -->
-
-  <!-- <h1 *ngIf="showInactive">List of Inactive Companies</h1>
-  <div class="column" *ngIf="showInactive">
-    <div class="box-container list"
-      *ngFor="let company of inactiveCompanies | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
-      routerLink="/e-estate/company-profile/{{ company.id }}">
-      <h3>
-        <a>{{company.companyName}}</a>
-      </h3>
-      <table>
-        <tr>
-          <td>Address</td>
-          <td><span>:</span></td>
-          <td>
-            {{ company.address1 }}, {{ company.address2 }}, {{ company.address3 }},
-          </td>
-        </tr>
-
-        <tr>
-          <td></td>
-          <td><span>:</span></td>
-          <td *ngFor="let town of company.towns">{{ company.postcode }}, {{ town.town }}, {{ company.state }}</td>
-        </tr>
-      </table>
-      <button style="float: right; pointer-events: none; border-radius: 0px;" disabled [ngClass]="{
-            'active-btn': company.isActive == true,
-            'inactive-btn': company.isActive == false
-          }">{{ company.isActive == true ? "Active" : "Inactive" }}
-      </button>
-      <br />
-    </div>
-  </div> -->
-
   <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 
 </div>

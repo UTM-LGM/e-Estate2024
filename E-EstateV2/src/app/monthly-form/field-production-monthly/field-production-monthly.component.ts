@@ -59,13 +59,13 @@ export class FieldProductionMonthlyComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private myLesenService:MyLesenIntegrationService,
-    private fieldService:FieldService,
+    private myLesenService: MyLesenIntegrationService,
+    private fieldService: FieldService,
     private sharedService: SharedService,
     private datePipe: DatePipe,
     private fieldProductionService: FieldProductionService,
     private dialog: MatDialog,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.getEstate()
@@ -77,27 +77,28 @@ export class FieldProductionMonthlyComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response;
-              this.getField()
-              this.isLoading = false
-            }
-          )}
+            .subscribe(
+              Response => {
+                this.estate = Response;
+                this.getField()
+                this.isLoading = false
+              }
+            )
+        }
       });
     }, 2000)
   }
 
-  getField(){
+  getField() {
     this.fieldService.getField()
-    .subscribe(
-      Response => {
-        const filterFields = Response.filter(x=>x.estateId == this.estate.id)
-        this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
-        this.getProducts(this.filterFields)
-        this.getAllProduction(this.filterFields)
-      }
-    )
+      .subscribe(
+        Response => {
+          const filterFields = Response.filter(x => x.estateId == this.estate.id)
+          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+          this.getProducts(this.filterFields)
+          this.getAllProduction(this.filterFields)
+        }
+      )
   }
 
   getProducts(Fields: Field[]) {
@@ -119,76 +120,72 @@ export class FieldProductionMonthlyComponent implements OnInit {
         product.createdBy = this.sharedService.userId.toString(),
         product.createdDate = new Date(),
         product.status = "Draft"
-        this.products.push(product)
+      this.products.push(product)
     });
   }
 
-  initialZeroCuplump(index:any, i:number){
-    if(index == 0){
+  initialZeroCuplump(index: any, i: number) {
+    if (index == 0) {
       this.products[i].cuplumpDRC = 0
     }
-    else if(index < 0)
-    {
+    else if (index < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'No of cuplump cannot below than 0',
       });
       this.products[i].cuplump = 0
-      this.draftFilterProductions[i].cuplump =0
+      this.draftFilterProductions[i].cuplump = 0
     }
   }
 
-  initialZeroLatex(index:any, i:number){
-    if(index == 0){
+  initialZeroLatex(index: any, i: number) {
+    if (index == 0) {
       this.products[i].latexDRC = 0
     }
-    else if(index < 0)
-    {
+    else if (index < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'No of latex cannot below than 0',
       });
       this.products[i].latex = 0
-      this.draftFilterProductions[i].latex =0
+      this.draftFilterProductions[i].latex = 0
     }
   }
 
-  initialZeroUSS(index:any, i:number){
-    if(index == 0){
+  initialZeroUSS(index: any, i: number) {
+    if (index == 0) {
       this.products[i].ussDRC = 0
     }
-    else if(index < 0)
-    {
+    else if (index < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'No of USS cannot below than 0',
       });
       this.products[i].uss = 0
-      this.draftFilterProductions[i].uss =0
+      this.draftFilterProductions[i].uss = 0
     }
   }
 
-  initialZeroOthers(index:any, i:number){
-    if(index == 0){
+  initialZeroOthers(index: any, i: number) {
+    if (index == 0) {
       this.products[i].othersDRC = 0
     }
-    else if(index < 0)
-    {
+    else if (index < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'No of Others cannot below than 0',
       });
       this.products[i].others = 0
-      this.draftFilterProductions[i].others =0
+      this.draftFilterProductions[i].others = 0
     }
   }
 
   taskTap(index: any, totalTask: number, i: number) {
-    if(this.draftFilterProductions.length == 0){
+    if (this.draftFilterProductions.length == 0) {
       if (index > totalTask) {
         swal.fire({
           icon: 'error',
@@ -204,7 +201,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
       else {
         this.products[i].noTaskUntap = 0
       }
-    }else{
+    } else {
       if (index > totalTask) {
         swal.fire({
           icon: 'error',
@@ -221,7 +218,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
         this.draftFilterProductions[i].noTaskUntap = 0
       }
     }
-    
+
   }
 
   nextTab() {
@@ -262,7 +259,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
         Response => {
           const productions = Response
           this.filterProductions = productions.filter(e => e.monthYear == this.date && Fields.some(field => field.id === e.fieldId))
-          this.draftFilterProductions = this.filterProductions.filter(e=>e.status === "Draft")
+          this.draftFilterProductions = this.filterProductions.filter(e => e.status === "Draft")
           this.submitFilterProductions = this.filterProductions.filter(e => e.status == "Submitted")
           this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
           this.calculateLatexDry(this.filterProductions, this.latexDry)
@@ -352,39 +349,39 @@ export class FieldProductionMonthlyComponent implements OnInit {
         });
   }
 
-  submitProduction(){
+  submitProduction() {
     const updatedBy = this.sharedService.userId.toString()
     const date = new Date()
-    const updatedArray = this.draftFilterProductions.map(obj =>{
+    const updatedArray = this.draftFilterProductions.map(obj => {
       return { ...obj, status: 'Submitted', updatedBy: updatedBy, updatedDate: date }
     });
     this.fieldProductionService.updateProductionDraft(updatedArray)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Field Production information successfully submitted!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-      });this.getEstate()}
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Field Production information successfully submitted!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          }); this.getEstate()
+        }
+      )
   }
 
-  save(){
+  save() {
     this.fieldProductionService.updateProductionDraft(this.draftFilterProductions)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Field Production information successfully saved!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.getEstate()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Field Production information successfully saved!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.getEstate()
+        }
+      )
   }
-
 }

@@ -18,23 +18,23 @@ import { SharedService } from '../_services/shared.service';
 export class FieldInfectedDetailComponent implements OnInit {
 
   fieldInfected: FieldInfected = {} as FieldInfected
-  filterFieldDisease:FieldDisease []=[]
+  filterFieldDisease: FieldDisease[] = []
   formattedDate = ''
   dateRecovered = ''
 
 
 
   constructor(
-    @Inject (MAT_DIALOG_DATA) public data : {data : FieldInfected},
-    private fieldDiseaseService:FieldDiseaseService,
+    @Inject(MAT_DIALOG_DATA) public data: { data: FieldInfected },
+    private fieldDiseaseService: FieldDiseaseService,
     private datePipe: DatePipe,
-    private fieldInfectedService:FieldInfectedService,
+    private fieldInfectedService: FieldInfectedService,
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
-    private sharedService:SharedService
+    private sharedService: SharedService
 
-  ){}
+  ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.fieldInfected = this.data.data
     this.formattedDate = this.datePipe.transform(this.fieldInfected.dateScreening, 'yyyy-MM-dd') || ''
     this.dateRecovered = this.datePipe.transform(this.fieldInfected.dateRecovered, 'yyyy-MM-dd') || ''
@@ -46,14 +46,14 @@ export class FieldInfectedDetailComponent implements OnInit {
     this.getFieldDisease()
   }
 
-  getFieldDisease(){
+  getFieldDisease() {
     this.fieldDiseaseService.getFieldDisease()
-    .subscribe(
-      Response =>{
-        const disease = Response
-        this.filterFieldDisease = disease.filter(x=>x.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          const disease = Response
+          this.filterFieldDisease = disease.filter(x => x.isActive == true)
+        }
+      )
   }
 
   back() {
@@ -72,25 +72,21 @@ export class FieldInfectedDetailComponent implements OnInit {
     }
   }
 
-  update(){
+  update() {
     this.fieldInfected.updatedBy = this.sharedService.userId
     this.fieldInfected.updatedDate = new Date()
     this.fieldInfectedService.updateFieldInfected(this.fieldInfected)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Field Infected successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.dialogRef.close()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Field Infected successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close()
+        }
+      )
   }
-
-  
-
-  
 }

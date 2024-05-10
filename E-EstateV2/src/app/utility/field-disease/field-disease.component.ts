@@ -4,7 +4,6 @@ import { FieldDiseaseService } from 'src/app/_services/field-disease.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-field-disease',
   templateUrl: './field-disease.component.html',
@@ -12,8 +11,8 @@ import swal from 'sweetalert2';
 })
 export class FieldDiseaseComponent implements OnInit {
 
-  fieldDisease:FieldDisease = {} as FieldDisease
-  fieldDiseases:FieldDisease [] = []
+  fieldDisease: FieldDisease = {} as FieldDisease
+  fieldDiseases: FieldDisease[] = []
 
   term = ''
   order = ''
@@ -27,35 +26,34 @@ export class FieldDiseaseComponent implements OnInit {
 
 
   constructor(
-    private sharedService:SharedService,
-    private fieldDiseaseService:FieldDiseaseService
-  ){}
+    private sharedService: SharedService,
+    private fieldDiseaseService: FieldDiseaseService
+  ) { }
 
   ngOnInit(): void {
     this.fieldDisease.diseaseName = ''
-    this,this.getFieldDisease()
+    this, this.getFieldDisease()
   }
 
-  getFieldDisease(){
-    setTimeout(() =>{
+  getFieldDisease() {
+    setTimeout(() => {
       this.fieldDiseaseService.getFieldDisease()
-      .subscribe(
-        Response =>{
-          this.fieldDiseases = Response
-          this.isLoading = false
-        }
-      )
+        .subscribe(
+          Response => {
+            this.fieldDiseases = Response
+            this.isLoading = false
+          }
+        )
     })
   }
 
-  submit(){
-    if(this.fieldDisease.diseaseName === ''){
+  submit() {
+    if (this.fieldDisease.diseaseName === '') {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
       });
-    } else if (this.fieldDiseases.some(s=>s.diseaseName.toLowerCase() === this.fieldDisease.diseaseName.toLowerCase()))
-    {
+    } else if (this.fieldDiseases.some(s => s.diseaseName.toLowerCase() === this.fieldDisease.diseaseName.toLowerCase())) {
       swal.fire({
         text: 'Disease Name already exists!',
         icon: 'error'
@@ -65,23 +63,23 @@ export class FieldDiseaseComponent implements OnInit {
       this.fieldDisease.createdBy = this.sharedService.userId.toString()
       this.fieldDisease.createdDate = new Date()
       this.fieldDiseaseService.addFieldDisease(this.fieldDisease)
-      .subscribe(
-        Response =>{
-          swal.fire({
-            title: 'Done!',
-            text: 'Field Disease successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.reset()
-          this.ngOnInit()
-        }
-      )
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Field Disease successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.reset()
+            this.ngOnInit()
+          }
+        )
     }
   }
 
-  reset(){
+  reset() {
     this.fieldDisease = {} as FieldDisease
   }
 
@@ -94,22 +92,22 @@ export class FieldDiseaseComponent implements OnInit {
     }
   }
 
-  status(fieldDisease:FieldDisease){
+  status(fieldDisease: FieldDisease) {
     fieldDisease.updatedBy = this.sharedService.userId.toString()
     fieldDisease.updatedDate = new Date()
     fieldDisease.isActive = !fieldDisease.isActive
     this.fieldDiseaseService.updateFieldDisease(fieldDisease)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Field Disease successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Field Disease successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 }

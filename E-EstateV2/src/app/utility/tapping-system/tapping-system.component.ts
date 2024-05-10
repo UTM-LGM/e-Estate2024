@@ -4,7 +4,6 @@ import { SharedService } from 'src/app/_services/shared.service';
 import { TappingSystemService } from 'src/app/_services/tapping-system.service';
 import swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-tapping-system',
   templateUrl: './tapping-system.component.html',
@@ -12,8 +11,8 @@ import swal from 'sweetalert2';
 })
 export class TappingSystemComponent implements OnInit {
 
-  tappingSystem:TappingSystem={} as TappingSystem
-  tappingSystems:TappingSystem[]=[]
+  tappingSystem: TappingSystem = {} as TappingSystem
+  tappingSystems: TappingSystem[] = []
 
   isLoading = true
   term = ''
@@ -26,52 +25,51 @@ export class TappingSystemComponent implements OnInit {
   ];
 
   constructor(
-    private tappingSystemService:TappingSystemService,
-    private sharedService:SharedService
-  ){}
+    private tappingSystemService: TappingSystemService,
+    private sharedService: SharedService
+  ) { }
 
   ngOnInit(): void {
     this.tappingSystem.tappingSystem = ''
     this.getTappingSystem()
   }
 
-  submit(){
-    if(this.tappingSystem.tappingSystem === ''){
+  submit() {
+    if (this.tappingSystem.tappingSystem === '') {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
       });
-    } else if(this.tappingSystems.some(s=>s.tappingSystem.toLowerCase() === this.tappingSystem.tappingSystem.toLowerCase()))
-    {
+    } else if (this.tappingSystems.some(s => s.tappingSystem.toLowerCase() === this.tappingSystem.tappingSystem.toLowerCase())) {
       swal.fire({
         text: 'Tapping system already exists!',
         icon: 'error'
       });
-    } else{
+    } else {
       this.tappingSystem.isActive = true
       this.tappingSystem.createdBy = this.sharedService.userId.toString()
       this.tappingSystem.createdDate = new Date()
       this.tappingSystemService.addTappingSystem(this.tappingSystem)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Tapping system successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Tapping system successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.reset()
+            this.ngOnInit()
           });
-          this.reset()
-          this.ngOnInit()
-        });
     }
   }
 
-  reset(){
+  reset() {
     this.tappingSystem = {} as TappingSystem
   }
 
-  getTappingSystem(){
+  getTappingSystem() {
     setTimeout(() => {
       this.tappingSystemService.getTappingSystem()
         .subscribe(
@@ -91,23 +89,23 @@ export class TappingSystemComponent implements OnInit {
     }
   }
 
-  status(tappingSystem:TappingSystem){
+  status(tappingSystem: TappingSystem) {
     tappingSystem.updatedBy = this.sharedService.userId.toString()
     tappingSystem.updatedDate = new Date()
     tappingSystem.isActive = !tappingSystem.isActive
     this.tappingSystemService.updateTappingSystem(tappingSystem)
-    .subscribe(
-      Response => {
-        swal.fire({
-          title: 'Done!',
-          text: 'Tapping system successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Tapping system successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 
 }

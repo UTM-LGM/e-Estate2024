@@ -1,7 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { AuthGuard } from "./auth.guard.interceptor";
 import { SharedService } from "../_services/shared.service";
 import { HistoryLogService } from "../_services/history-log.service";
 import { HistoryLog } from "../_interface/historyLog";
@@ -69,27 +68,4 @@ export class HistoryLogInterceptor implements HttpInterceptor {
   private extractEntityId(body: any) {
     this.historyLog.entityId = body && body.id ? body.id : null
   }
-
-  //     if (req.method === 'POST' && !req.url.includes('/login') && !req.url.includes('/register') && this.flagged == true && !req.url.includes('/useractivitylogs')) {
-  //       this.flagged = false
-  //       this.extractEntityType(req.url)
-  //       this.extractEntityId(req.body)
-  //       this.historyLog.entityId = 0
-  //       this.historyLog.dateTime = new Date()
-  //       this.historyLog.method = req.method;
-  //       this.historyLog.body = JSON.stringify(req.body);
-  //       this.historyLog.url = req.url;
-  //       this.historyLog.userId = this.sharedService.userId.toString();
-
-  //       this.historyLogService.addHistoryLog(this.historyLog)
-  //       .subscribe(
-  //         Response=>{
-
-  //         }
-  //       )
-  //       this.flagged = true
-  //     }
-
-
-
 }

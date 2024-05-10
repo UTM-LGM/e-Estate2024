@@ -18,6 +18,8 @@ import { FieldDiseaseService } from '../_services/field-disease.service';
 import { FieldDisease } from '../_interface/fieldDisease';
 import { FieldInfected } from '../_interface/fieldInfected';
 import { FieldInfectedService } from '../_services/field-infected.service';
+import { OtherCrop } from '../_interface/otherCrop';
+import { OtherCropService } from '../_services/other-crop.service';
 
 @Component({
   selector: 'app-field-detail',
@@ -28,12 +30,12 @@ export class FieldDetailComponent implements OnInit {
   field: Field = {} as Field
   filteredFields: any = {}
 
-  fields:Field[]=[]
+  fields: Field[] = []
 
   fieldClone: FieldClone = {} as FieldClone
   fieldConversion: FieldConversion = {} as FieldConversion
 
-  fieldInfect:FieldInfected = {} as FieldInfected
+  fieldInfect: FieldInfected = {} as FieldInfected
 
   selected: FieldStatus = {} as FieldStatus
 
@@ -46,9 +48,9 @@ export class FieldDetailComponent implements OnInit {
   filterClones: Clone[] = []
   selectedValues: Clone[] = []
 
-  filterFieldDisease : FieldDisease [] =[]
+  filterFieldDisease: FieldDisease[] = []
 
-  filterFieldInfected : FieldInfected [] = []
+  filterFieldInfected: FieldInfected[] = []
 
   fieldSick = false
   dataRows: any[] = [{ year: null, currentTreeStand: null }]
@@ -66,17 +68,19 @@ export class FieldDetailComponent implements OnInit {
   pageNumber = 1
   term = ''
 
+  otherCrops: OtherCrop[] = []
+
 
 
   sortableColumn = [
-    { columnName: 'dateInfected', displayText: 'Date Infected'},
+    { columnName: 'dateInfected', displayText: 'Date Infected' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'area', displayText: 'Field Area (Ha)' },
-    { columnName: 'areaInfected', displayText: 'Area Infected (Ha)'},
+    { columnName: 'areaInfected', displayText: 'Area Infected (Ha)' },
     { columnName: 'fieldDiseaseName', displayText: 'Field Disease Name' },
-    { columnName: 'severityLevel', displayText: 'Level Infected'},
-    { columnName: 'dateRecovered', displayText: 'Date Recovered'},
-    { columnName: 'remark', displayText: 'Remark'},
+    { columnName: 'severityLevel', displayText: 'Level Infected' },
+    { columnName: 'dateRecovered', displayText: 'Date Recovered' },
+    { columnName: 'remark', displayText: 'Remark' },
   ];
 
   constructor(
@@ -90,8 +94,8 @@ export class FieldDetailComponent implements OnInit {
     private sharedService: SharedService,
     private fieldCloneService: FieldCloneService,
     private fieldDiseaseService: FieldDiseaseService,
-    private fieldInfectedService:FieldInfectedService
-
+    private fieldInfectedService: FieldInfectedService,
+    private otherCropService: OtherCropService
   ) { }
 
   ngOnInit() {
@@ -100,74 +104,63 @@ export class FieldDetailComponent implements OnInit {
     this.getClone()
     this.getFieldDisease()
     this.getField()
+    this.getOtherCrop()
   }
 
+  getOtherCrop() {
+    this.otherCropService.getOtherCrop()
+      .subscribe(
+        Response => {
+          this.otherCrops = Response.filter(x => x.isActive == true)
+        }
+      )
+  }
 
   getOneField() {
     this.route.params.subscribe((routeParams) => {
       if (routeParams['id'] != null) {
-      this.fieldService.getOneField(routeParams['id'])
-        .subscribe(
-          Response => {
-            this.field = Response
-            this.isLoading = false
-            this.getcategory(this.field)
-            this.field.cloneId = 0;
-            this.fieldClones = Response.clones
-            this.selectedValues = this.fieldClones
-            this.availableClones = this.filterClones.filter(clone => !this.selectedValues.some(selectedClone => selectedClone.id === clone.id))
-            this.getDate(Response.dateOpenTapping)
-            this.getFieldInfected()
-          });
+        this.fieldService.getOneField(routeParams['id'])
+          .subscribe(
+            Response => {
+              this.field = Response
+              this.isLoading = false
+              this.getcategory(this.field)
+              this.field.cloneId = 0;
+              this.fieldClones = Response.clones
+              this.selectedValues = this.fieldClones
+              this.availableClones = this.filterClones.filter(clone => !this.selectedValues.some(selectedClone => selectedClone.id === clone.id))
+              this.getDate(Response.dateOpenTapping)
+              this.getFieldInfected()
+            });
       }
     })
   }
 
-  getFieldInfected(){
-    // this.fieldInfectedService.getFieldInfected()
-    // .subscribe(
-    //   Response =>{
-    //     const fieldInfected = Response
-    //     this.filterFieldInfected = fieldInfected.filter(x=>x.fieldId == this.field.id)
-    //     console.log(this.filterFieldInfected)
-    //     if(this.filterFieldInfected.length > 0)
-    //     {
-    //       this.fieldInfecteds = true
-    //     }
-    //   }
-    // )
+  getFieldInfected() {
     this.fieldInfectedService.getFieldInfectedById(this.field.id)
-    .subscribe(
-      Response =>{
-        this.filterFieldInfected = Response
-        // this.areaAffectedTotal(this.filterFieldInfected)
-        if(this.filterFieldInfected.length > 0)
-        {
-          this.fieldInfecteds = true
+      .subscribe(
+        Response => {
+          this.filterFieldInfected = Response
+          if (this.filterFieldInfected.length > 0) {
+            this.fieldInfecteds = true
+          }
         }
-      }
-    )
+      )
   }
 
-  // areaAffectedTotal(row:FieldInfected[]){
-  //   row.forEach(x=> {
-  //     x.areaAffected = (x.area) * (x.percentage /100)
-  //   })
-  // }
-
-  getField(){
+  getField() {
     this.fieldService.getField()
-    .subscribe(
-      Response =>{
-        const fields = Response
-        this.fields = fields.filter(x=>x.estateId == this.sharedService.estateId)
-      }
-    )
+      .subscribe(
+        Response => {
+          const fields = Response
+          this.fields = fields.filter(x => x.estateId == this.sharedService.estateId)
+        }
+      )
   }
 
-  checkFieldStatus(){
+  checkFieldStatus() {
     const conversionField = this.field.fieldStatuses.map(x => x.fieldStatus.toLowerCase().includes("conversion"))
-    const convert = this.filterFieldStatus.find(x=>x.fieldStatus.toLowerCase().includes("conversion"))
+    const convert = this.filterFieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion"))
     if (this.field.conversionId != 0 && this.field.fieldStatusId == convert?.id && conversionField) {
       this.conversion = true
       this.updateConversionBtn = true
@@ -221,10 +214,10 @@ export class FieldDetailComponent implements OnInit {
 
   updateConversion(field: Field) {
     this.fieldConversion.id = field.conversionId
-    this.fieldConversion.conversionCropName = field.conversionCropName
     this.fieldConversion.sinceYear = field.sinceYear
     this.fieldConversion.updatedBy = this.sharedService.userId.toString()
     this.fieldConversion.updatedDate = new Date()
+    this.fieldConversion.otherCropId = this.field.otherCropId
     this.fieldConversionService.updateConversion(this.fieldConversion)
       .subscribe(
         Response => {
@@ -277,35 +270,35 @@ export class FieldDetailComponent implements OnInit {
   }
 
   addClone(field: Field) {
-    if(this.field.cloneId == 0){
+    if (this.field.cloneId == 0) {
       swal.fire({
         text: 'Please choose clone',
         icon: 'error'
       });
-    }else {
-    this.fieldClone.fieldId = field.id
-    this.fieldClone.cloneId = field.cloneId
-    this.fieldClone.createdBy = this.sharedService.userId.toString()
-    this.fieldClone.createdDate = new Date()
-    this.fieldService.addClone(this.fieldClone)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Clone successfully added!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.ngOnInit()
-        }
-      )
+    } else {
+      this.fieldClone.fieldId = field.id
+      this.fieldClone.cloneId = field.cloneId
+      this.fieldClone.createdBy = this.sharedService.userId.toString()
+      this.fieldClone.createdDate = new Date()
+      this.fieldService.addClone(this.fieldClone)
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Clone successfully added!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.ngOnInit()
+          }
+        )
     }
   }
 
   changeFieldStatus(fieldStatusId: any) {
     this.checkDisease(fieldStatusId)
-    const conversionItem = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion") && !x.fieldStatus.toLowerCase().includes("rubber"))
+    const conversionItem = this.filterFieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion") && !x.fieldStatus.toLowerCase().includes("rubber"))
     if (fieldStatusId.value == conversionItem?.id && this.field.conversionId == 0) {
       this.conversion = true
       this.conversionButton = true
@@ -321,22 +314,22 @@ export class FieldDetailComponent implements OnInit {
     }
   }
 
-  checkDisease(fieldStatusId:any){
-    if(this.field.isMature == true){
+  checkDisease(fieldStatusId: any) {
+    if (this.field.isMature == true) {
       const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == true);
-      if(fieldStatusId.value == infected?.id){
-        this.fieldSick= true
+      if (fieldStatusId.value == infected?.id) {
+        this.fieldSick = true
       }
-      else{
+      else {
         this.fieldSick = false
       }
     }
-    else if(this.field.isMature == false){
+    else if (this.field.isMature == false) {
       const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == false);
-      if(fieldStatusId.value == infected?.id){
-        this.fieldSick= true
+      if (fieldStatusId.value == infected?.id) {
+        this.fieldSick = true
       }
-      else{
+      else {
         this.fieldSick = false
       }
     }
@@ -378,10 +371,10 @@ export class FieldDetailComponent implements OnInit {
 
   convertField(field: Field) {
     this.fieldConversion.fieldId = this.field.id
-    this.fieldConversion.conversionCropName = this.field.conversionCropName
     this.fieldConversion.sinceYear = this.field.sinceYear
     this.fieldConversion.createdBy = this.sharedService.userId.toString()
     this.fieldConversion.createdDate = new Date()
+    this.fieldConversion.otherCropId = this.field.otherCropId
     this.fieldConversionService.addConversion(this.fieldConversion)
       .subscribe(
         Response => {
@@ -414,17 +407,17 @@ export class FieldDetailComponent implements OnInit {
     this.disableInput = true
   }
 
-  getFieldDisease(){
+  getFieldDisease() {
     this.fieldDiseaseService.getFieldDisease()
-    .subscribe(
-      Response =>{
-        const fieldDisease = Response
-        this.filterFieldDisease = fieldDisease.filter (e=>e.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          const fieldDisease = Response
+          this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
+        }
+      )
   }
 
-  fieldInfected(field:Field){
+  fieldInfected(field: Field) {
     this.fieldInfect.fieldId = this.field.id
     this.fieldInfect.areaInfected = this.field.areaInfected
     this.fieldInfect.fieldDiseaseId = this.field.fieldDiseaseId
@@ -433,8 +426,8 @@ export class FieldDetailComponent implements OnInit {
 
   }
 
-  checkFieldName(){
-    if(this.fields.some((s:any)=>s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())){
+  checkFieldName() {
+    if (this.fields.some((s: any) => s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())) {
       swal.fire({
         text: 'Field/Block Name already exists!',
         icon: 'error'

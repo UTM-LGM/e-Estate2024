@@ -25,7 +25,7 @@ export class FieldInfoYearlyComponent {
 
   fieldInfo: FieldInfoYearly[] = []
 
-  tappingSystems:TappingSystem[]=[]
+  tappingSystems: TappingSystem[] = []
 
   constructor(
     private route: ActivatedRoute,
@@ -34,13 +34,13 @@ export class FieldInfoYearlyComponent {
     private fieldInfoYearlyService: FieldInfoYearlyService,
     private router: Router,
     private location: Location,
-    private tappingSystemService:TappingSystemService
+    private tappingSystemService: TappingSystemService
   ) { }
 
   ngOnInit() {
     this.yearNow = new Date().getFullYear()
     this.getEstate()
-    this.getTappingSystem()    
+    this.getTappingSystem()
   }
 
   getEstate() {
@@ -59,14 +59,14 @@ export class FieldInfoYearlyComponent {
     }, 2000)
   }
 
-  getTappingSystem(){
+  getTappingSystem() {
     this.tappingSystemService.getTappingSystem()
-    .subscribe(
-      Response=>{
-        const tapping = Response
-        this.tappingSystems = tapping.filter(x=>x.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          const tapping = Response
+          this.tappingSystems = tapping.filter(x => x.isActive == true)
+        }
+      )
   }
 
   getExtraFieldInfo(fields: Field[]) {
@@ -91,22 +91,22 @@ export class FieldInfoYearlyComponent {
       confirmButtonText: 'Yes',
       denyButtonText: 'Cancel',
     })
-    .then((result)=>{
-      if(result.isConfirmed){
-      this.fieldInfoYearlyService.addExtraFieldInfo(this.fieldInfo)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Field information yearly successfully submitted!',
-            icon: 'success',
-            showConfirmButton: true,
-            confirmButtonText: 'Done',
-          })
-        })
-        this.router.navigateByUrl('/e-estate/notification')
-      }
-    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.fieldInfoYearlyService.addExtraFieldInfo(this.fieldInfo)
+            .subscribe(
+              Response => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Field information yearly successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: true,
+                  confirmButtonText: 'Done',
+                })
+              })
+          this.router.navigateByUrl('/e-estate/notification')
+        }
+      })
   }
 
   back() {

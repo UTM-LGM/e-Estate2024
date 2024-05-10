@@ -9,7 +9,7 @@
 
   <div style="columns: 2">
     <label>Buyer :</label>
-    <mat-select name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId" >
+    <mat-select name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId">
       <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
         {{buyer.buyerName}}
       </mat-option>
@@ -29,15 +29,16 @@
   </div>
 
   <div style="columns: 2">
-    <label>Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00" />
+    <label>Buyer Weight (Kg) :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00" (input)="calculateTotalPrice()" />
     <label>DRC (%) :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
   </div>
 
   <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
-    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00" (input)="calculateTotalPrice()" />
+    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00"
+      (input)="calculateTotalPrice()" />
     <label>Total Price (RM) :</label>
     <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
   </div>

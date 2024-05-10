@@ -1,5 +1,3 @@
-// uppercase-interceptor.ts
-
 import { Injectable } from '@angular/core';
 import {
   HttpInterceptor,
@@ -13,8 +11,8 @@ import { Observable } from 'rxjs';
 export class UpperCaseInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (request.method === 'POST' && (request.url.includes('/Login') || request.url.includes('/Register') || request.url.includes('/SendEmailVerification') 
-    || request.url.includes('/AddUserRole') || request.url.includes('/AddUser'))) {
+    if (request.method === 'POST' && (request.url.includes('/Login') || request.url.includes('/Register') || request.url.includes('/SendEmailVerification')
+      || request.url.includes('/AddUserRole') || request.url.includes('/AddUser'))) {
       return next.handle(request);
     }
 

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Estate } from '../_interface/estate';
-import { EstateService } from '../_services/estate.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
@@ -23,8 +22,7 @@ export class EstateListComponent implements OnInit {
   isBtnInactive = false
 
   constructor(
-    private estateService: EstateService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
@@ -34,12 +32,12 @@ export class EstateListComponent implements OnInit {
   getEstate() {
     setTimeout(() => {
       this.myLesenService.getAllEstate()
-      .subscribe(
-        Response =>{
-          this.estates = Response
-          this.isLoading = false
-        }
-      )
+        .subscribe(
+          Response => {
+            this.estates = Response
+            this.isLoading = false
+          }
+        )
     }, 2000)
   }
 

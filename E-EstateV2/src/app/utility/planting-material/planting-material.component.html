@@ -15,7 +15,7 @@
 <h1>List of Planting Material</h1>
 <div class="box-container">
   <input type="text" [(ngModel)]="term" placeholder="Filter Planting Material" />
-<table style="width: 100%">
+  <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
       <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="plantingMaterials"

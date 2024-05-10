@@ -1,6 +1,7 @@
 <div style="columns:2">
     <label>Company Status : </label>
-    <mat-select name="companyStatus" placeholder="Please Choose" [(ngModel)]="status" (selectionChange)="statusSelected(status)">
+    <mat-select name="companyStatus" placeholder="Please Choose" [(ngModel)]="status"
+        (selectionChange)="statusSelected(status)">
         <mat-option [value]="true">Active</mat-option>
         <mat-option [value]="false">Inactive</mat-option>
     </mat-select>
@@ -49,9 +50,7 @@
                     </td>
                 </tr>
             </table>
-
             <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-
         </div>
     </div>
 

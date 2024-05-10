@@ -15,6 +15,7 @@ import { EstateService } from '../_services/estate.service';
   styleUrls: ['./rubber-purchase.component.css']
 })
 export class RubberPurchaseComponent implements OnInit {
+  
   term = ''
   pageNumber = 1
   isLoading = true
@@ -35,7 +36,7 @@ export class RubberPurchaseComponent implements OnInit {
     { columnName: 'weight', displayText: 'Weight (Kg)' },
     { columnName: 'drc', displayText: 'DRC (%)' },
     { columnName: 'price', displayText: 'Price (RM/Kg)' },
-    { columnName: 'totalPrice', displayText:'Total Price (RM)'}
+    { columnName: 'totalPrice', displayText: 'Total Price (RM)' }
   ];
 
   constructor(

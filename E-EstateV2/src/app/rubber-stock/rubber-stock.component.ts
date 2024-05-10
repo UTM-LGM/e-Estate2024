@@ -9,25 +9,23 @@ import { RubberStock } from '../_interface/rubberStock';
 import { SharedService } from '../_services/shared.service';
 import swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
-import { RubberSaleDetailComponent } from '../rubber-sale-detail/rubber-sale-detail.component';
 import { RubberStockDetailComponent } from '../rubber-stock-detail/rubber-stock-detail.component';
-
 
 @Component({
   selector: 'app-rubber-stock',
   templateUrl: './rubber-stock.component.html',
   styleUrls: ['./rubber-stock.component.css']
 })
-export class RubberStockComponent implements OnInit{
+export class RubberStockComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private myLesenService:MyLesenIntegrationService,
+    private myLesenService: MyLesenIntegrationService,
     private dialog: MatDialog,
-    private rubberStockService:RubberStockService,
-    private sharedService:SharedService,
+    private rubberStockService: RubberStockService,
+    private sharedService: SharedService,
     private datePipe: DatePipe,
-  ){
+  ) {
     this.previousDate.setMonth(this.previousDate.getMonth() - 1)
   }
 
@@ -40,7 +38,7 @@ export class RubberStockComponent implements OnInit{
   order = ''
   currentSortedColumn = ''
 
-  rubberStocks:RubberStock[]=[]
+  rubberStocks: RubberStock[] = []
 
   date: any
   previousDate = new Date()
@@ -48,7 +46,7 @@ export class RubberStockComponent implements OnInit{
 
   sortableColumns = [
     { columnName: 'monthYear', displayText: 'Month and Year' },
-    { columnName: 'previousStock', displayText: 'Previous End Stock 100% Dry (Kg)'},
+    { columnName: 'previousStock', displayText: 'Previous End Stock 100% Dry (Kg)' },
     { columnName: 'production', displayText: 'Total Production 100% Dry (Kg)' },
     { columnName: 'rubberSale', displayText: 'Total Rubber Sale 100% Dry (Kg)' },
     { columnName: 'endStock', displayText: 'Month End Stock 100% Dry (Kg)' },
@@ -65,11 +63,11 @@ export class RubberStockComponent implements OnInit{
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response
-              this.isLoading = false
-            })
+            .subscribe(
+              Response => {
+                this.estate = Response
+                this.isLoading = false
+              })
         }
       });
     }, 2000)
@@ -84,13 +82,12 @@ export class RubberStockComponent implements OnInit{
     }
   }
 
-  openDialog(estate:Estate,stock:RubberStock[]){
+  openDialog(estate: Estate, stock: RubberStock[]) {
     this.date = this.datePipe.transform(this.previousDate, 'MMM-yyyy')?.toUpperCase()
-    const date = this.rubberStocks.filter(x=>x.monthYear == this.date && x.isActive == true)
-    if(date.length === 0)
-    {
+    const date = this.rubberStocks.filter(x => x.monthYear == this.date && x.isActive == true)
+    if (date.length === 0) {
       const dialog = this.dialog.open(AddRubberStockComponent, {
-      data: {estate:estate, stock:stock}
+        data: { estate: estate, stock: stock }
       });
       dialog.afterClosed()
         .subscribe(
@@ -98,49 +95,49 @@ export class RubberStockComponent implements OnInit{
             this.ngOnInit()
           });
     }
-    else{
+    else {
       swal.fire({
         text: 'Month already exists!',
         icon: 'error'
       });
     }
-    
+
   }
 
-  getStock(){
+  getStock() {
     setTimeout(() => {
       this.rubberStockService.getRubberStock()
-      .subscribe(
-        Response =>{
-          this.rubberStocks = Response.filter(e=>e.estateId == this.sharedService.estateId)
-          this.isLoading =false
-        }
-      )
+        .subscribe(
+          Response => {
+            this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId)
+            this.isLoading = false
+          }
+        )
     }, 2000)
   }
 
-  status(stock:RubberStock){
+  status(stock: RubberStock) {
     stock.updatedBy = this.sharedService.userId
     stock.updatedDate = new Date()
     stock.isActive = !stock.isActive
     this.rubberStockService.updateRubberStock(stock)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Rubber Stock Status successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Rubber Stock Status successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 
-  openDialogEdit(stock:RubberStock, estate:Estate){
-    const dialogRef =this.dialog.open(RubberStockDetailComponent, {
-      data: { stock: stock, estate: estate}
+  openDialogEdit(stock: RubberStock, estate: Estate) {
+    const dialogRef = this.dialog.open(RubberStockDetailComponent, {
+      data: { stock: stock, estate: estate }
     });
     dialogRef.afterClosed()
       .subscribe(
@@ -149,4 +146,11 @@ export class RubberStockComponent implements OnInit{
         });
   }
 
+  isLastMonth(monthYear: string): boolean {
+    const previousMonth = new Date()
+    previousMonth.setMonth(previousMonth.getMonth() - 1)
+    const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
+    return monthYear === date?.toUpperCase()
+  }
+  
 }

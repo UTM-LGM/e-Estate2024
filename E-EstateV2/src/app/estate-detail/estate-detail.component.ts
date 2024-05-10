@@ -10,7 +10,6 @@ import { EditEstateDetailComponent } from '../edit-estate-detail/edit-estate-det
 import { Field } from '../_interface/field';
 import { FieldConversionService } from '../_services/field-conversion.service';
 import { FieldConversion } from '../_interface/fieldConversion';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { EstateContact } from '../_interface/estate-contact';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { EstateContactService } from '../_services/estate-contact.service';
@@ -18,6 +17,7 @@ import { MyLesenIntegrationService } from '../_services/my-lesen-integration.ser
 import { EstateDetailService } from '../_services/estate-detail.service';
 import { EstateDetail } from '../_interface/estate-detail';
 import { FieldService } from '../_services/field.service';
+import { FieldInfectedService } from '../_services/field-infected.service';
 
 @Component({
   selector: 'app-estate-detail',
@@ -27,15 +27,15 @@ import { FieldService } from '../_services/field.service';
 export class EstateDetailComponent implements OnInit {
   estate: any = {} as any
 
-  contacts:any[]=[]
+  contacts: any[] = []
 
-  fields:Field[]=[]
+  fields: Field[] = []
 
   value: Field[] = []
 
   conversionField: FieldConversion[] = [];
 
-  estateDetail:EstateDetail = {} as EstateDetail
+  estateDetail: EstateDetail = {} as EstateDetail
 
   term = ''
   userRole = ''
@@ -45,6 +45,7 @@ export class EstateDetailComponent implements OnInit {
   currentSortedColumn = ''
   total = 0
   selectedField: any
+  result: any = {} as any
 
   sortableColumns = [
     { columnName: 'fieldName', displayText: 'Field / Block' },
@@ -61,7 +62,7 @@ export class EstateDetailComponent implements OnInit {
     { columnName: 'name', displayText: 'Name' },
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
-    { columnName: 'email', displayText: 'Email' },
+    { columnName: 'email', displayText: 'Email' },
   ];
 
   constructor(
@@ -71,15 +72,15 @@ export class EstateDetailComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private fieldConversionService: FieldConversionService,
-    private auth: AuthGuard,
-    private estateContactService:EstateContactService,
-    private myLesenService:MyLesenIntegrationService,
-    private estateDetailService:EstateDetailService,
-    private fieldService:FieldService
+    private estateContactService: EstateContactService,
+    private myLesenService: MyLesenIntegrationService,
+    private estateDetailService: EstateDetailService,
+    private fieldService: FieldService,
+    private fieldInfectedService: FieldInfectedService
   ) { }
 
   ngOnInit() {
-    this.userRole = this.auth.getRole()
+    this.userRole = this.sharedService.role
     this.getEstate()
   }
 
@@ -88,45 +89,56 @@ export class EstateDetailComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response
-              this.getContact()
-              this.getField()
-              this.isLoading = false
-            }
-          )
-          this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
-          .subscribe(
-            Response=>{
-              if(Response != null){
-                this.estateDetail = Response
+            .subscribe(
+              Response => {
+                this.estate = Response
+                this.getContact()
+                this.getField()
+                this.isLoading = false
               }
-            }
-          )
+            )
+          this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
+            .subscribe(
+              Response => {
+                if (Response != null) {
+                  this.estateDetail = Response
+                }
+              }
+            )
         }
       });
     }, 2000)
   }
 
-  getField(){
+  getField() {
     this.fieldService.getField()
-    .subscribe(
-      Response =>{
-        const fields = Response
-        this.fields = fields.filter(x=>x.estateId == this.estate.id)
-      }
-    )
+      .subscribe(
+        Response => {
+          const fields = Response
+          this.fields = fields.filter(x => x.estateId == this.estate.id)
+          // Fetch all field infected data
+          this.fieldInfectedService.getFieldInfected().subscribe(
+            allFieldInfectedData => {
+              // Filter field infected data based on field id and store in result object
+              fields.forEach(field => {
+                const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
+                this.result[field.id] = filteredData;
+
+              });
+            })
+          this.sum(this.fields)
+        }
+      )
   }
 
-  getContact(){
+  getContact() {
     this.estateContactService.getCompanyContact()
-    .subscribe(
-      Response =>{
-        const contacts = Response
-        this.contacts = contacts.filter(x=>x.estateId == this.estate.id)
-      }
-    )
+      .subscribe(
+        Response => {
+          const contacts = Response
+          this.contacts = contacts.filter(x => x.estateId == this.estate.id)
+        }
+      )
   }
 
   statusEstate(estate: Estate) {
@@ -153,27 +165,27 @@ export class EstateDetailComponent implements OnInit {
     contact.updatedDate = new Date()
     contact.isActive = !contact.isActive
     this.estateContactService.updateEstateContact(contact)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Contact Status successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Contact Status successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 
   back() {
     this.location.back()
   }
 
-  openDialog(estate: Estate, estateDetail:EstateDetail) {
+  openDialog(estate: Estate, estateDetail: EstateDetail) {
     const dialogRef = this.dialog.open(EditEstateDetailComponent, {
-      data: { data: estate, estateDetail:estateDetail },
+      data: { data: estate, estateDetail: estateDetail },
     });
     dialogRef.afterClosed()
       .subscribe(
@@ -193,8 +205,9 @@ export class EstateDetailComponent implements OnInit {
   }
 
   sum(data: Field[]) {
-    this.value = data.filter(x => x.isActive == true)
-    this.total = this.value.reduce((acc, item) => acc + item.area, 0)
+    const filteredFields = data.filter(field => !this.result[field.id]);
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned'));
+    this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 
   toggleSelectedField(field: Field) {
@@ -216,17 +229,16 @@ export class EstateDetailComponent implements OnInit {
       )
   }
 
-  openDialogContact(contact:EstateContact[], estate:Estate)
-  {
+  openDialogContact(contact: EstateContact[], estate: Estate) {
     const dialogRef = this.dialog.open(ContactDetailComponent, {
-      data:{contact: contact, estateId: estate.id},
+      data: { contact: contact, estateId: estate.id },
     })
     dialogRef.afterClosed()
       .subscribe(
         Response => {
           this.ngOnInit()
         }
-    )
+      )
   }
 
 }

@@ -24,7 +24,7 @@ input[type="month"] {
 
 .remark {
   font-size: 12px;
-  color: #DC4C64;
+  color: #dc4c64;
 }
 
 .remark a {
@@ -50,10 +50,12 @@ mat-select {
   font-size: 14px;
 }
 
-::ng-deep .cdk-overlay-pane:not(.mat-mdc-select-panel-above) .mdc-menu-surface.mat-mdc-select-panel{
+::ng-deep
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above)
+  .mdc-menu-surface.mat-mdc-select-panel {
   border-radius: 10px;
 }
 
-mat-option{
+mat-option {
   font-size: 12px;
 }

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'app-direct-cost',
   templateUrl: './direct-cost.component.html',

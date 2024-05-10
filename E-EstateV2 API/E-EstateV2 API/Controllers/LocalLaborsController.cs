@@ -25,7 +25,7 @@ namespace E_EstateV2_API.Controllers
             return Ok(addedLocalLabor);
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<IActionResult> GetLocalLabors()
         {
             var localLabors = await _localLaborRepository.GetLocalLabors(); 
@@ -37,6 +37,6 @@ namespace E_EstateV2_API.Controllers
         {
             var updatedLocalLabor = await _localLaborRepository.UpdateLocalLabor(labor);    
             return Ok(updatedLocalLabor);
-        }
+        }*/
     }
 }

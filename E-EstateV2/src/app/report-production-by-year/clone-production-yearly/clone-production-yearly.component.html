@@ -1,0 +1,44 @@
+<div class="box-container">
+  <h1>Clone production Yearly</h1>
+
+  <label>Please choose year : </label>
+  <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+
+  <br /><br />
+
+  <div style="overflow-x: auto;">
+    <table style="width: 100%">
+      <tr>
+        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="cloneProduction"
+          [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+          {{ column.displayText }}
+          <i class="fa"
+            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
+        </th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="6">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && cloneProduction.length == 0 && role == 'Admin'">
+        <td colspan="2" style="color: red; text-align: center;">No data found. Please choose year</td>
+      </tr>
+
+      <ng-container *ngIf="!isLoading">
+        <tr *ngFor="let data of cloneAreaData">
+          <td>{{ data.cloneName }}</td>
+          <td>{{ data.area }}</td>
+        </tr>
+      </ng-container>
+
+    </table>
+  </div>
+
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+</div>

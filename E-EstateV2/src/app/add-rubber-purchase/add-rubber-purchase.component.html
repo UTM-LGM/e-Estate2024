@@ -11,7 +11,7 @@
 
   <div style="columns: 2">
     <label>Seller :</label>
-    <mat-select name="seller" placeholder="Please Choose" [(ngModel)]="rubberPurchase.sellerId" >
+    <mat-select name="seller" placeholder="Please Choose" [(ngModel)]="rubberPurchase.sellerId">
       <mat-option *ngFor="let seller of sellers" [value]="seller.id">
         {{seller.sellerName}}
       </mat-option>
@@ -34,12 +34,14 @@
     <label>DRC (%) :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberPurchase.drc" placeholder="0.00" />
     <label>Price (RM/Kg) :</label>
-    <input type="text" name="amount" [(ngModel)]="rubberPurchase.price" placeholder="0.00" (change)="calculateTotalPrice()" />
+    <input type="text" name="amount" [(ngModel)]="rubberPurchase.price" placeholder="0.00"
+      (change)="calculateTotalPrice()" />
   </div>
 
   <div style="columns: 2">
     <label>Total Price (RM) :</label>
-    <input type="text" name="amount" disabled value="{{rubberPurchase.totalPrice | number:'1.2-2'}}" placeholder="0.00" />
+    <input type="text" name="amount" disabled value="{{rubberPurchase.totalPrice | number:'1.2-2'}}"
+      placeholder="0.00" />
   </div>
 
   <div style="margin-top: 10px">

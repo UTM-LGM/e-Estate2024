@@ -28,7 +28,7 @@ export class EstateService {
     return this.http.put<Estate>(this.baseUrl + '/estates/UpdateEstate', estate)
   }
 
-  checkEstateName(estate:string):Observable<any>{
-    return this.http.get<any>(this.baseUrl + '/estates/CheckEstateName/'+ estate)
+  checkEstateName(estate: string): Observable<any> {
+    return this.http.get<any>(this.baseUrl + '/estates/CheckEstateName/' + estate)
   }
 }

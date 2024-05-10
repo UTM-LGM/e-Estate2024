@@ -5,14 +5,12 @@ import { Clone } from '../_interface/clone';
 import { FieldClone } from '../_interface/fieldClone';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
-import { Estate } from '../_interface/estate';
 import { ActivatedRoute } from '@angular/router';
 import { FieldConversion } from '../_interface/fieldConversion';
 import { FieldStatusService } from '../_services/field-status.service';
 import { CloneService } from '../_services/clone.service';
 import { FieldService } from '../_services/field.service';
 import { FieldCloneService } from '../_services/field-clone.service';
-import { EstateService } from '../_services/estate.service';
 import { FieldConversionService } from '../_services/field-conversion.service';
 import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { Location } from '@angular/common';
@@ -50,8 +48,8 @@ export class FieldInfoComponent implements OnInit {
 
   conversionField: FieldConversion[] = []
 
-  filterFieldDisease : FieldDisease [] =[]
-  result:any = {} as any
+  filterFieldDisease: FieldDisease[] = []
+  result: any = {} as any
 
 
   term = ''
@@ -83,13 +81,12 @@ export class FieldInfoComponent implements OnInit {
     private fieldCloneService: FieldCloneService,
     private sharedService: SharedService,
     private route: ActivatedRoute,
-    private estateService: EstateService,
     private fieldConversionService: FieldConversionService,
     private authGuard: AuthGuard,
     private location: Location,
     private fieldDiseaseService: FieldDiseaseService,
-    private myLesenService:MyLesenIntegrationService,
-    private fieldInfectedService:FieldInfectedService
+    private myLesenService: MyLesenIntegrationService,
+    private fieldInfectedService: FieldInfectedService
   ) { }
 
   ngOnInit() {
@@ -98,7 +95,7 @@ export class FieldInfoComponent implements OnInit {
     this.getClone()
     this.getEstate()
     this.getFieldDisease()
-    this.role = this.authGuard.getRole()
+    this.role = this.sharedService.role
   }
 
   getEstate() {
@@ -106,37 +103,37 @@ export class FieldInfoComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response
-              this.getField()
-              this.isLoading = false
-            })
+            .subscribe(
+              Response => {
+                this.estate = Response
+                this.getField()
+                this.isLoading = false
+              })
         }
       });
     }, 2000)
   }
 
-  getField(){
+  getField() {
     this.fieldService.getField()
-    .subscribe(
-      Response =>{
-        const fields = Response
-        this.fields = fields.filter(x=>x.estateId == this.estate.id)
+      .subscribe(
+        Response => {
+          const fields = Response
+          this.fields = fields.filter(x => x.estateId == this.estate.id)
 
-        // Fetch all field infected data
-        this.fieldInfectedService.getFieldInfected().subscribe(
-        allFieldInfectedData => {
-          // Filter field infected data based on field id and store in result object
-          fields.forEach(field => {
-            const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
-            this.result[field.id] = filteredData;
+          // Fetch all field infected data
+          this.fieldInfectedService.getFieldInfected().subscribe(
+            allFieldInfectedData => {
+              // Filter field infected data based on field id and store in result object
+              fields.forEach(field => {
+                const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
+                this.result[field.id] = filteredData;
 
-          });
-        })
-        this.sum(this.fields)
-      }
-    )
+              });
+            })
+          this.sum(this.fields)
+        }
+      )
   }
 
   toggleSelectedField(field: Field) {
@@ -175,8 +172,8 @@ export class FieldInfoComponent implements OnInit {
     this.field.fieldName = ''
   }
 
-  checkFieldName(){
-    if(this.fields.some((s:any)=>s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())){
+  checkFieldName() {
+    if (this.fields.some((s: any) => s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())) {
       swal.fire({
         text: 'Field/Block Name already exists!',
         icon: 'error'
@@ -186,63 +183,63 @@ export class FieldInfoComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.field.fieldName == ''){
+    if (this.field.fieldName == '') {
       swal.fire({
         text: 'Please fil up the form',
         icon: 'error'
       });
     }
-    else{
-    this.field.estateId = this.estate.id
-    this.field.isActive = true
-    this.field.createdBy = this.sharedService.userId.toString()
-    this.field.createdDate = new Date()
-    this.field.dateOpenTapping = this.field.dateOpenTapping
-    this.fieldService.addField(this.field)
-      .subscribe(
-        {
-          next: (Response) => {
-            const combineClone: any[] = this.selectedValues.map(item => {
-              return { 'cloneId': item.id, 'isActive': true, 'fieldId': Response.id, 'createdBy': Response.createdBy, 'createdDate': Response.createdDate }
-            })
-            this.fieldCloneService.addFieldClone(combineClone)
-              .subscribe(
-                Response => {
-                  swal.fire({
-                    title: 'Done!',
-                    text: 'Field successfully submitted!',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1000
-                  });
-                  this.selectedValues = []
-                  this.field = {} as Field
-                  this.ngOnInit()
-                })
-          }, error: (err) => {
-            swal.fire({
-              text: 'Please fil up the form',
-              icon: 'error'
-            });
-          }
-        });
+    else {
+      this.field.estateId = this.estate.id
+      this.field.isActive = true
+      this.field.createdBy = this.sharedService.userId.toString()
+      this.field.createdDate = new Date()
+      this.field.dateOpenTapping = this.field.dateOpenTapping
+      this.fieldService.addField(this.field)
+        .subscribe(
+          {
+            next: (Response) => {
+              const combineClone: any[] = this.selectedValues.map(item => {
+                return { 'cloneId': item.id, 'isActive': true, 'fieldId': Response.id, 'createdBy': Response.createdBy, 'createdDate': Response.createdDate }
+              })
+              this.fieldCloneService.addFieldClone(combineClone)
+                .subscribe(
+                  Response => {
+                    swal.fire({
+                      title: 'Done!',
+                      text: 'Field successfully submitted!',
+                      icon: 'success',
+                      showConfirmButton: false,
+                      timer: 1000
+                    });
+                    this.selectedValues = []
+                    this.field = {} as Field
+                    this.ngOnInit()
+                  })
+            }, error: (err) => {
+              swal.fire({
+                text: 'Please fil up the form',
+                icon: 'error'
+              });
+            }
+          });
     }
   }
 
   getcategory() {
     this.filterCropCategories = this.cropCategories.filter(c => c.isMature == this.field.isMature
       && c.isActive == true
-      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true ))
+      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true))
   }
 
-  getFieldDisease(){
+  getFieldDisease() {
     this.fieldDiseaseService.getFieldDisease()
-    .subscribe(
-      Response =>{
-        const fieldDisease = Response
-        this.filterFieldDisease = fieldDisease.filter (e=>e.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          const fieldDisease = Response
+          this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
+        }
+      )
   }
 
   getCrop() {
@@ -263,13 +260,13 @@ export class FieldInfoComponent implements OnInit {
   }
 
   selectedClone(value: Field) {
-    if(this.field.cloneId == 0){
+    if (this.field.cloneId == 0) {
       swal.fire({
         text: 'Please choose clone',
         icon: 'error'
       })
     }
-    else{
+    else {
       const item = this.filterClones.find((x) => x.id == value.cloneId)
       this.selectedValues.push(item)
       this.field.cloneId = 0
@@ -284,8 +281,8 @@ export class FieldInfoComponent implements OnInit {
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
-  // Calculate sum excluding filtered fields
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop'));
+    // Calculate sum excluding filtered fields
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned'));
     this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 
@@ -297,22 +294,22 @@ export class FieldInfoComponent implements OnInit {
     return clone1 && clone2 ? clone1.id === clone2 : clone1 === clone2;
   }
 
-  diseaseName(fieldStatusId:any){
-    if(this.field.isMature == true){
+  diseaseName(fieldStatusId: any) {
+    if (this.field.isMature == true) {
       const fieldSick = this.cropCategories.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == true);
-      if(fieldStatusId.value == fieldSick?.id){
-        this.fieldSick= true
+      if (fieldStatusId.value == fieldSick?.id) {
+        this.fieldSick = true
       }
-      else{
+      else {
         this.fieldSick = false
       }
     }
-    else if(this.field.isMature == false){
+    else if (this.field.isMature == false) {
       const fieldSick = this.cropCategories.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == false);
-      if(fieldStatusId.value == fieldSick?.id){
-        this.fieldSick= true
+      if (fieldStatusId.value == fieldSick?.id) {
+        this.fieldSick = true
       }
-      else{
+      else {
         this.fieldSick = false
       }
     }

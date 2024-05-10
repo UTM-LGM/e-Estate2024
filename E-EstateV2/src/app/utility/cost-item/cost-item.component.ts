@@ -9,7 +9,6 @@ import { CostItemService } from 'src/app/_services/cost-item.service';
 import { CostSubcategory1Service } from 'src/app/_services/cost-subcategory1.service';
 import { CostSubcategory2Service } from 'src/app/_services/cost-subcategory2.service';
 import { CostTypeService } from 'src/app/_services/cost-type.service';
-import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import swal from 'sweetalert2';
 

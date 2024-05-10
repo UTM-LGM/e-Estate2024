@@ -78,7 +78,7 @@ export class RubberPurchaseDetailComponent implements OnInit {
       )
   }
 
-  calculateTotalPrice(){
+  calculateTotalPrice() {
     const total = this.rubberPurchase.price * this.rubberPurchase.weight
     this.rubberPurchase.totalPrice = total
   }

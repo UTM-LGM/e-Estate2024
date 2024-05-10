@@ -1,0 +1,71 @@
+<div class="box-container">
+  <h1>Labor Shortage in estate</h1>
+
+  <div style="columns:2"
+    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    <div>
+      <label>Company</label>
+      <input type="text" [value]="company.name" disabled />
+    </div>
+    <label>Estate : </label>
+    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+      <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
+        {{estate.name}}
+      </mat-option>
+    </mat-select>
+  </div>
+
+  <div style="columns: 1;"
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    <label>Estate : </label>
+    <input type="text" [value]="estate.name" disabled />
+  </div>
+  
+  <br/>
+
+
+  <input type="text" [(ngModel)]="term" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
+
+  <div style="overflow-x: auto;">
+    <table style="width: 100%">
+      <tr>
+        <th>Estate Name</th>
+        <th>Current Tapper Worker</th>
+        <th>Current Field Worker</th>
+        <th>Tapper Worker Shortage</th>
+        <th>Field Worker Shortage</th>
+        <th>Tapper Worker Needed</th>
+        <th>Field Worker Needed</th>
+        <th>Total Worker Needed </th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="7">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'CompanyAdmin'">
+        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose estate</td>
+      </tr>
+
+      <ng-container *ngIf="!isLoading">
+        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          <td>{{ worker.estateName }}</td>
+          <ng-container *ngFor="let labor of worker.filterLabors">
+            <td>{{ labor.tapperCheckrole + labor.tapperContractor }}</td>
+            <td>{{ labor.fieldCheckrole + labor.fieldContractor }}</td>
+          </ng-container>
+          <td>{{ worker.tapperShortage }}</td>
+          <td>{{ worker.fieldShortage }}</td>
+          <td>{{ calculateTapperSum(worker) }}</td>
+          <td>{{ calculateFieldSum(worker) }}</td>
+          <td>{{ calculateTapperSum(worker) + calculateFieldSum(worker)  }} </td>
+        </tr>
+      </ng-container>
+
+    </table>
+  </div>
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+</div>

@@ -1,9 +1,10 @@
 <div style="columns:2">
     <label>Estate Status : </label>
-    <mat-select name="estateStatus" placeholder="Please Choose" [(ngModel)]="status" (selectionChange)="statusSelected(status)">
+    <mat-select name="estateStatus" placeholder="Please Choose" [(ngModel)]="status"
+        (selectionChange)="statusSelected(status)">
         <mat-option [value]="true">Active</mat-option>
         <mat-option [value]="false">Inactive</mat-option>
-      </mat-select>
+    </mat-select>
 </div>
 
 <div *ngIf="isLoading">
@@ -49,8 +50,8 @@
                     <td> {{ estate.membership }} </td>
                     <td> {{ estate.fax }} </td>
                     <td> {{ estate.latitudeLongitude }} </td>
-                    <td> {{ estate.managerName }} </td>                 
-                     <td>
+                    <td> {{ estate.managerName }} </td>
+                    <td>
                         <button style="cursor: default;border-radius: 0;" [ngClass]="{
                           'active-btn': estate.isActive == true,
                           'inactive-btn': estate.isActive == false
@@ -60,10 +61,7 @@
                     </td>
                 </tr>
             </table>
-
             <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-
         </div>
     </div>
-
 </div>

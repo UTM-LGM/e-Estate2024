@@ -9,6 +9,9 @@ import { ToastrService } from 'ngx-toastr';
 import { BadgeService } from 'src/app/_services/badge.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ChangePasswordComponent } from 'src/app/change-password/change-password.component';
+import { MsalService } from '@azure/msal-angular';
+import { SpinnerService } from 'src/app/_services/spinner.service';
+import { SharedService } from 'src/app/_services/shared.service';
 
 @Component({
   selector: 'app-home-layout',
@@ -33,29 +36,37 @@ export class HomeLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private router: Router,
     private userService: UserService,
-    private auth: AuthGuard,
     private toastr: ToastrService,
     private badgeServie: BadgeService,
     private dialog: MatDialog,
+    private msalService: MsalService,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit() {
-    this.username = this.auth.getUsername()
+    this.username = this.sharedService.userName
     this.success(this.username)
-    this.role = this.auth.role
-    this.userService.getUser(this.username)
-      .subscribe(
-        Response => {
-          this.user = Response
-          this.email = Response.email
-          this.fullName = Response.fullName
-          this.position = Response.position
-        }
-      )
+    this.role = this.sharedService.role
+    if (this.role != 'Admin') {
+      this.userService.getUser(this.username)
+        .subscribe(
+          Response => {
+            this.user = Response
+            this.email = Response.email
+            this.fullName = Response.fullName
+            this.position = Response.position
+          }
+        )
+    } else {
+      this.email = this.sharedService.email
+      this.fullName = this.sharedService.fullName
+      this.position = this.sharedService.role
+    }
     this.badgeServie.badgeCount$.subscribe((count) => {
       this.badgeCount = count
     });
   }
+
 
   success(user: string) {
     this.toastr.success('Welcome ' + user + ' !')
@@ -81,6 +92,14 @@ export class HomeLayoutComponent implements OnInit {
     localStorage.removeItem('token')
     this.router.navigateByUrl('/login')
     this.toastr.success(this.username + ' Logout Successfully')
+  }
+
+  logOutStaff() {
+    this.msalService.logoutRedirect({
+      postLogoutRedirectUri: 'http://localhost:4200/login'
+    });
+    localStorage.clear();
+
   }
 
   changePassword() {

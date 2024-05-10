@@ -11,8 +11,8 @@ import swal from 'sweetalert2';
 })
 export class OwnershipComponent implements OnInit {
 
-  ownership : Ownership={} as Ownership
-  ownerships : Ownership[]=[]
+  ownership: Ownership = {} as Ownership
+  ownerships: Ownership[] = []
 
   isLoading = true
   term = ''
@@ -27,16 +27,16 @@ export class OwnershipComponent implements OnInit {
 
 
   constructor(
-    private ownershipService:OwnershipService,
-    private sharedService:SharedService
-  ){}
+    private ownershipService: OwnershipService,
+    private sharedService: SharedService
+  ) { }
 
   ngOnInit(): void {
     this.ownership.ownership = ''
     this.getOwnership()
   }
 
-  getOwnership(){
+  getOwnership() {
     setTimeout(() => {
       this.ownershipService.getOwnership()
         .subscribe(
@@ -47,35 +47,34 @@ export class OwnershipComponent implements OnInit {
     }, 2000)
   }
 
-  submit(){
-    if(this.ownership.ownership === ''){
+  submit() {
+    if (this.ownership.ownership === '') {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
       });
-    } else if(this.ownerships.some(s=>s.ownership.toLowerCase() === this.ownership.ownership.toLowerCase()))
-    {
+    } else if (this.ownerships.some(s => s.ownership.toLowerCase() === this.ownership.ownership.toLowerCase())) {
       swal.fire({
         text: 'Ownership already exists!',
         icon: 'error'
       });
-    } else{
+    } else {
       this.ownership.isActive = true
       this.ownership.createdBy = this.sharedService.userId.toString()
       this.ownership.createdDate = new Date()
       this.ownershipService.addOwnership(this.ownership)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Ownership successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Ownership successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.reset()
+            this.ngOnInit()
           });
-          this.reset()
-          this.ngOnInit()
-        });
     }
   }
 
@@ -92,24 +91,23 @@ export class OwnershipComponent implements OnInit {
     }
   }
 
-  status(ownership:Ownership){
+  status(ownership: Ownership) {
     ownership.updatedBy = this.sharedService.userId.toString()
     ownership.updatedDate = new Date()
     ownership.isActive = !ownership.isActive
     this.ownershipService.updateOwnership(ownership)
-    .subscribe(
-      Response => {
-        swal.fire({
-          title: 'Done!',
-          text: 'Ownership successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    );
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Ownership successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      );
   }
-
 }
 

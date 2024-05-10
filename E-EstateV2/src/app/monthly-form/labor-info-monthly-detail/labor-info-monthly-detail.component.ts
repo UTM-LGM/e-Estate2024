@@ -4,7 +4,7 @@ import { LaborInfoMonthlyComponent } from '../labor-info-monthly/labor-info-mont
 import { LaborInfo } from 'src/app/_interface/laborInfo';
 import { LaborByCategory } from 'src/app/_interface/laborCategory';
 import { SharedService } from 'src/app/_services/shared.service';
-import { LocalLaborType } from 'src/app/_interface/localLaborType';
+import { LaborInformation } from 'src/app/_interface/laborInformation';
 import swal from 'sweetalert2';
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
 
@@ -16,15 +16,15 @@ import { LaborInfoService } from 'src/app/_services/labor-info.service';
 export class LaborInfoMonthlyDetailComponent {
 
   labor: LaborInfo = {} as LaborInfo
-  filterTypes: LocalLaborType[] = []
-  laborCategory:any ={} as LaborByCategory
-  filterCategory : any = {} as any
+  filterTypes: LaborInformation[] = []
+  laborCategory: any = {} as LaborByCategory
+  filterCategory: any = {} as any
 
   constructor(
     public dialogRef: MatDialogRef<LaborInfoMonthlyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { data: LaborInfo },
     private sharedService: SharedService,
-    private laborInfoService:LaborInfoService
+    private laborInfoService: LaborInfoService
   ) { }
 
   ngOnInit() {
@@ -36,25 +36,25 @@ export class LaborInfoMonthlyDetailComponent {
     this.labor.updatedBy = this.sharedService.userId.toString()
     this.labor.updatedDate = new Date()
     this.laborInfoService.updateLaborInfo(this.labor)
-    .subscribe(
-      Response =>{
-        const filterLabor = this.laborCategory.map(({laborType, ...obj}:any) => obj)
-        this.laborInfoService.updateLaborCategory(filterLabor)
-        .subscribe(
-          Response =>{
-            swal.fire({
-              title: 'Done!',
-              text: 'Labor successfully updated!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.dialogRef.close()
-          }
-        )
-      }
-    )
-    
+      .subscribe(
+        Response => {
+          const filterLabor = this.laborCategory.map(({ laborType, ...obj }: any) => obj)
+          this.laborInfoService.updateLaborCategory(filterLabor)
+            .subscribe(
+              Response => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Labor successfully updated!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.dialogRef.close()
+              }
+            )
+        }
+      )
+
   }
 
   back() {

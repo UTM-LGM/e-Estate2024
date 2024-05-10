@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocalLaborTypeComponent } from './local-labor-type.component';
+import { LaborInformationComponent } from './local-labor-type.component';
 
-describe('LocalLaborTypeComponent', () => {
-  let component: LocalLaborTypeComponent;
-  let fixture: ComponentFixture<LocalLaborTypeComponent>;
+describe('LaborInformationComponent', () => {
+  let component: LaborInformationComponent;
+  let fixture: ComponentFixture<LaborInformationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LocalLaborTypeComponent ]
+      declarations: [ LaborInformationComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(LocalLaborTypeComponent);
+    fixture = TestBed.createComponent(LaborInformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

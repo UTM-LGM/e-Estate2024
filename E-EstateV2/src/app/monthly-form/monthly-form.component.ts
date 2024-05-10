@@ -20,9 +20,8 @@ export class MonthlyFormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private myLesenService:MyLesenIntegrationService,
-
-  ){}
+    private myLesenService: MyLesenIntegrationService,
+  ) { }
 
   ngOnInit(): void {
     this.getEstate()
@@ -45,7 +44,7 @@ export class MonthlyFormComponent implements OnInit {
     }
   }
 
-  goToBackTab(){
+  goToBackTab() {
     if (this.tabGroup) {
       this.tabGroup.selectedIndex = 0; // Go to the back tab (index 0 is the production tab)
       this.isLaborTabDisabled = true;
@@ -53,7 +52,7 @@ export class MonthlyFormComponent implements OnInit {
     }
   }
 
-  goToBackTab1(){
+  goToBackTab1() {
     if (this.tabGroup) {
       this.tabGroup.selectedIndex = 1; // Go to the back tab (index 0 is the production tab)
       this.isLaborShortageTabDisabled = true;
@@ -66,12 +65,13 @@ export class MonthlyFormComponent implements OnInit {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
           this.myLesenService.getOneEstate(routerParams['id'])
-          .subscribe(
-            Response =>{
-              this.estate = Response;
-              this.isLoading = false
-            }
-          )}
+            .subscribe(
+              Response => {
+                this.estate = Response;
+                this.isLoading = false
+              }
+            )
+        }
       });
     }, 2000)
   }

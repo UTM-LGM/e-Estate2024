@@ -51,7 +51,7 @@ export class YieldProductionYearlyReportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.role = this.auth.getRole()
+    this.role = this.sharedService.role
     if (this.role == 'EstateClerk') {
       this.estate.id = this.sharedService.estateId
     } else {

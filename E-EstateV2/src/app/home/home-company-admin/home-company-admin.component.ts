@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
-import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { CompanyService } from 'src/app/_services/company.service';
@@ -18,7 +17,7 @@ export class HomeCompanyAdminComponent implements OnInit {
 
   totalEstate = 0
   totalCrop = 0
-  companyId = ''
+  companyId = 0
 
   filterEstates: Estate[] = []
 
@@ -31,18 +30,14 @@ export class HomeCompanyAdminComponent implements OnInit {
   isLoadingEstateName = true
 
   constructor(
-    private estateService: EstateService,
     private sharedService: SharedService,
-    private companyService: CompanyService,
     private fieldProductionService: FieldProductionService,
-    private authGuard: AuthGuard,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
-    if(this.authGuard.getRole() != "Admin")
-    {
-      this.companyId = this.authGuard.getCompanyId()
+    if (this.sharedService.role != "Admin") {
+      this.companyId = this.sharedService.companyId
       this.getCompany()
       this.getEstate()
       this.getProduction()
@@ -50,19 +45,19 @@ export class HomeCompanyAdminComponent implements OnInit {
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(parseInt(this.companyId))
-    .subscribe(
-      Response =>{
-        this.company = Response
-        this.isLoadingEstateName = false
-      }
-    )
+    this.myLesenService.getOneCompany(this.companyId)
+      .subscribe(
+        Response => {
+          this.company = Response
+          this.isLoadingEstateName = false
+        }
+      )
   }
 
   getEstate() {
     this.myLesenService.getAllEstate()
       .subscribe(
-        Response =>{
+        Response => {
           const estates = Response
           this.filterEstates = estates.filter(x => x.companyId == this.sharedService.companyId)
           this.totalEstate = this.filterEstates.length

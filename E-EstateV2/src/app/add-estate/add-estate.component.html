@@ -2,98 +2,99 @@
   <h1>Estate Information</h1>
   <hr />
 
-    <div style="columns: 2" class="column">
-      <label>Estate Name :</label>
-      <input type="text" name="estateName" [(ngModel)]="estate.estateName" (change)="checkEstateName($event)" />
-      <label>Address 1 :</label>
-      <input type="text" name="address1" [(ngModel)]="estate.address1" />
-    </div>
+  <div style="columns: 2" class="column">
+    <label>Estate Name :</label>
+    <input type="text" name="estateName" [(ngModel)]="estate.estateName" (change)="checkEstateName($event)" />
+    <label>Address 1 :</label>
+    <input type="text" name="address1" [(ngModel)]="estate.address1" />
+  </div>
 
-    <div style="columns: 2">
-      <label>Address 2 :</label>
-      <input type="text" name="address2" [(ngModel)]="estate.address2" />
-      <label>Address 3 :</label>
-      <input type="text" name="address3" [(ngModel)]="estate.address3" />
-    </div>
+  <div style="columns: 2">
+    <label>Address 2 :</label>
+    <input type="text" name="address2" [(ngModel)]="estate.address2" />
+    <label>Address 3 :</label>
+    <input type="text" name="address3" [(ngModel)]="estate.address3" />
+  </div>
 
-    <div style="columns: 2">
-      <label>Postcode : </label>
-      <input type="text" name="postcode" [(ngModel)]="estate.postcode" />
-      <label>State : </label>
-      <mat-select name="postcode" placeholder="Please Choose" [(ngModel)]="estate.stateId" (selectionChange)="gettownFilter($event)">
-        <mat-option *ngFor="let state of filterStates" [value]="state.id">
-          {{ state.state }}
-        </mat-option>
-      </mat-select>
-      
-    </div>
+  <div style="columns: 2">
+    <label>Postcode : </label>
+    <input type="text" name="postcode" [(ngModel)]="estate.postcode" />
+    <label>State : </label>
+    <mat-select name="postcode" placeholder="Please Choose" [(ngModel)]="estate.stateId"
+      (selectionChange)="gettownFilter($event)">
+      <mat-option *ngFor="let state of filterStates" [value]="state.id">
+        {{ state.state }}
+      </mat-option>
+    </mat-select>
 
-    <div style="columns: 2">
-      <label>Town :</label>
-      <mat-select name="town" placeholder="Please Choose" [(ngModel)]="estate.townId" >
-        <mat-option *ngFor="let town of filterTowns" [value]="town.id">
-          {{ town.town }}
-        </mat-option>
-      </mat-select>
-      <label>License No :</label>
-      <input type="text" name="licenseNo" [(ngModel)]="estate.licenseNo" />
-    </div>
+  </div>
 
-    <div style="columns: 2">
-      <label>Total Area (Ha) :</label>
-      <input type="number" name="totalArea" [(ngModel)]="estate.totalArea" />
-      <label>Financial Year :</label>
-      <mat-select name="financialYear" placeholder="Please Choose" [(ngModel)]="estate.financialYearId" >
-        <mat-option *ngFor="let financialYear of filterFinancialYears" [value]="financialYear.id">
-          {{ financialYear.financialYear }}
-        </mat-option>
-      </mat-select>
-    </div>
+  <div style="columns: 2">
+    <label>Town :</label>
+    <mat-select name="town" placeholder="Please Choose" [(ngModel)]="estate.townId">
+      <mat-option *ngFor="let town of filterTowns" [value]="town.id">
+        {{ town.town }}
+      </mat-option>
+    </mat-select>
+    <label>License No :</label>
+    <input type="text" name="licenseNo" [(ngModel)]="estate.licenseNo" />
+  </div>
 
-    <div style="columns: 2">
-      <label>Membership :</label>
-      <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="estate.membershipTypeId" >
-        <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
-          {{ membership.membershipType }}
-        </mat-option>
-      </mat-select>
-      <label>Establishment :</label>
-      <mat-select name="establishment" placeholder="Please Choose" [(ngModel)]="estate.establishmentId" >
-        <mat-option *ngFor="let establishment of filterEstablishments" [value]="establishment.id">
-          {{ establishment.establishment }}
-        </mat-option>
-      </mat-select>
-    </div>
+  <div style="columns: 2">
+    <label>Total Area (Ha) :</label>
+    <input type="number" name="totalArea" [(ngModel)]="estate.totalArea" />
+    <label>Financial Year :</label>
+    <mat-select name="financialYear" placeholder="Please Choose" [(ngModel)]="estate.financialYearId">
+      <mat-option *ngFor="let financialYear of filterFinancialYears" [value]="financialYear.id">
+        {{ financialYear.financialYear }}
+      </mat-option>
+    </mat-select>
+  </div>
 
-    <div style="columns: 2">
-      <label>Email :</label>
-      <input type="text" name="email" [(ngModel)]="estate.email" />
-      <label>Phone :</label>
-      <input type="text" name="phone" [(ngModel)]="estate.phone" />
-    </div>
+  <div style="columns: 2">
+    <label>Membership :</label>
+    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="estate.membershipTypeId">
+      <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
+        {{ membership.membershipType }}
+      </mat-option>
+    </mat-select>
+    <label>Establishment :</label>
+    <mat-select name="establishment" placeholder="Please Choose" [(ngModel)]="estate.establishmentId">
+      <mat-option *ngFor="let establishment of filterEstablishments" [value]="establishment.id">
+        {{ establishment.establishment }}
+      </mat-option>
+    </mat-select>
+  </div>
 
-    <div style="columns: 2">
-      <label>Fax :</label>
-      <input type="text" name="fax" [(ngModel)]="estate.fax" />
-      <label>Name of Estate Manager :</label>
-      <input type="text" name="managerName" [(ngModel)]="estate.managerName" />
-    </div>
+  <div style="columns: 2">
+    <label>Email :</label>
+    <input type="text" name="email" [(ngModel)]="estate.email" />
+    <label>Phone :</label>
+    <input type="text" name="phone" [(ngModel)]="estate.phone" />
+  </div>
 
-    <div style="columns: 2">
-      <label>Latitude-Longitude :</label>
-      <input type="text" name="latLong" [(ngModel)]="estate.latitudeLongitude" />
-    </div>
+  <div style="columns: 2">
+    <label>Fax :</label>
+    <input type="text" name="fax" [(ngModel)]="estate.fax" />
+    <label>Name of Estate Manager :</label>
+    <input type="text" name="managerName" [(ngModel)]="estate.managerName" />
+  </div>
 
-    <div style="margin-top: 10px">
-      <button style="float: right" class="btn-add" (click)="onSubmit()">
-        Add &nbsp; <i class="fa fa-plus"></i>
-      </button>
-    </div>
+  <div style="columns: 2">
+    <label>Latitude-Longitude :</label>
+    <input type="text" name="latLong" [(ngModel)]="estate.latitudeLongitude" />
+  </div>
 
-    <div style="margin-top: 10px">
-      <button class="btn-back" (click)="back()">
-        <i class="fa fa-arrow-left"></i> &nbsp; Back
-      </button>
-    </div>
+  <div style="margin-top: 10px">
+    <button style="float: right" class="btn-add" (click)="onSubmit()">
+      Add &nbsp; <i class="fa fa-plus"></i>
+    </button>
+  </div>
+
+  <div style="margin-top: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
 
 </div>

@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Repository;
 using System.Security.Cryptography;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +49,6 @@ builder.Services.AddScoped<IFieldCloneRepository, FieldCloneRepository>();
 builder.Services.AddScoped<IFieldConversionRepository, FieldConversionRepository>();
 builder.Services.AddScoped<IFieldProductionRepository, FieldProductionRepository>();
 builder.Services.AddScoped<IFieldRepository, FieldRepository>();
-//builder.Services.AddScoped<IForeignLaborRepository, ForeignLaborRepository>();
 builder.Services.AddScoped<ILocalLaborRepository, LocalLaborRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRubberPurchaseRepository, RubberPurchaseRepository>();
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IFieldInfectedRepository, FieldInfectedRepository>();
 builder.Services.AddScoped<ICompanyDetailRepository, CompanyDetailRepository>();
 builder.Services.AddScoped<ILaborInformationRepository, LaborInformationRepository>();
 builder.Services.AddScoped<ILaborByCategoryRepository, LaborByCategoryRepository>();
+builder.Services.AddScoped<IRubberSaleIntegrationRepository, RubberSaleIntegrationRepository>();
 
 //configure password
 builder.Services.Configure<IdentityOptions>(options =>
@@ -88,31 +90,29 @@ object GenerateRandomKey()
     return keyBytes;
 }
 
-builder.Services.AddAuthentication(x =>
-{
-    //scheme
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 
-}).AddJwtBearer(x =>
-{
-    //restrict certain authentication data 
-    x.RequireHttpsMetadata = false;
-    //save token in server
-    x.SaveToken = false;
-    //validate Token after success
-    x.TokenValidationParameters = new TokenValidationParameters
+builder.Services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, jwtBearerOptions =>
     {
-        //validate key
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ClockSkew = TimeSpan.Zero
-    };
-});
+        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    })
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAD"), AzureADDefaults.BearerAuthenticationScheme);
 
+
+// Add authorization policies
+builder.Services.AddAuthorization(config =>
+{
+    config.AddPolicy("AdminPolicy", policyBuilder =>
+        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAD:Scopes" }));
+});
 
 builder.Services.AddCors(options =>
 {

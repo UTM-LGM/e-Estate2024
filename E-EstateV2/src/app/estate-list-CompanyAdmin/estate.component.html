@@ -5,11 +5,6 @@
   <hr />
 
   <div class="box-container">
-    <!-- <div style="margin-top: -10px">
-      <button class="btn-add" routerLink="/e-estate/add-estate/{{company.id}}">
-        Add New Estate &nbsp; <i class="fa fa-plus"></i>
-      </button>
-    </div> -->
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
 
@@ -43,7 +38,6 @@
           routerLink="/e-estate/estate-detail/{{ estate.id }}">
           <td><a>{{estate.name}}</a></td>
           <td>{{estate.state}}</td>
-          <!-- <td *ngFor="let town of estate.towns">{{ town.town }}</td> -->
           <td> {{estate.town }} </td>
           <td>{{ estate.email }}</td>
         </tr>

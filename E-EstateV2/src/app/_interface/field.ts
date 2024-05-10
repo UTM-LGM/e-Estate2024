@@ -33,4 +33,6 @@ export interface Field {
     conversionId: number
     fieldDiseaseId:number
     areaInfected:number
+    estate:any
+    otherCropId:number
 }

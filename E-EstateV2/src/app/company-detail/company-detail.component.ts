@@ -29,13 +29,13 @@ export class CompanyDetailComponent implements OnInit {
 
   activityLog: UserActivityLog = {} as UserActivityLog
 
-  contacts:any[]=[]
+  contacts: any[] = []
 
   estate: any = {} as any
 
   isLoading = true
 
-  companyDetail:CompanyDetail = {} as CompanyDetail
+  companyDetail: CompanyDetail = {} as CompanyDetail
 
   term = ''
   userRole = ''
@@ -56,7 +56,7 @@ export class CompanyDetailComponent implements OnInit {
     { columnName: 'name', displayText: 'Name' },
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
-    { columnName: 'email', displayText: 'Email' },
+    { columnName: 'email', displayText: 'Email' },
   ];
 
   constructor(
@@ -68,12 +68,12 @@ export class CompanyDetailComponent implements OnInit {
     private sharedService: SharedService,
     private auth: AuthGuard,
     private dialog: MatDialog,
-    private companyContactService:CompanyContactService,
-    private myLesenService:MyLesenIntegrationService
+    private companyContactService: CompanyContactService,
+    private myLesenService: MyLesenIntegrationService
   ) { }
 
   ngOnInit() {
-    this.userRole = this.auth.getRole()
+    this.userRole = this.sharedService.role
     this.getCompany()
   }
 
@@ -82,26 +82,26 @@ export class CompanyDetailComponent implements OnInit {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
           this.myLesenService.getOneCompany(routeParams['id'])
-          .subscribe(
-            Response =>{
-              this.company = Response
-              this.getContact()
-              this.isLoading = false
-            }
-          )
+            .subscribe(
+              Response => {
+                this.company = Response
+                this.getContact()
+                this.isLoading = false
+              }
+            )
         }
       });
     }, 2000)
   }
 
-  getContact(){
+  getContact() {
     this.companyContactService.getCompanyContact()
-    .subscribe(
-      Response =>{
-        const contacts = Response
-        this.contacts = contacts.filter(x=>x.companyId == this.company.id)
-      }
-    )
+      .subscribe(
+        Response => {
+          const contacts = Response
+          this.contacts = contacts.filter(x => x.companyId == this.company.id)
+        }
+      )
   }
 
   statusCompany(company: Company) {
@@ -128,18 +128,18 @@ export class CompanyDetailComponent implements OnInit {
     contact.updatedDate = new Date()
     contact.isActive = !contact.isActive
     this.companyContactService.updateCompanyContact(contact)
-    .subscribe(
-      Response =>{
-        swal.fire({
-          title: 'Done!',
-          text: 'Contact Status successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        });
-        this.ngOnInit()
-      }
-    )
+      .subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Contact Status successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
   }
 
   back() {
@@ -201,7 +201,7 @@ export class CompanyDetailComponent implements OnInit {
     }
   }
 
-  openDialog(company: Company, companyDetail:CompanyDetail) {
+  openDialog(company: Company, companyDetail: CompanyDetail) {
     const dialogRef = this.dialog.open(EditCompanyDetailComponent, {
       data: { data: company, companyDetail: companyDetail },
     });
@@ -213,10 +213,9 @@ export class CompanyDetailComponent implements OnInit {
       )
   }
 
-  openDialogCompanyContact(contact:CompanyContact[], company:Company)
-  {
+  openDialogCompanyContact(contact: CompanyContact[], company: Company) {
     const dialogRef = this.dialog.open(ContactDetailComponent, {
-      data:{contact: contact, companyId: company.id},
+      data: { contact: contact, companyId: company.id },
     })
     dialogRef.afterClosed()
       .subscribe(

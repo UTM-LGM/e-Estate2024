@@ -107,5 +107,4 @@ export class StateComponent implements OnInit {
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
   }
-
 }

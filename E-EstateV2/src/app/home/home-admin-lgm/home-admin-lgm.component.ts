@@ -47,11 +47,16 @@ export class HomeAdminLGMComponent implements OnInit {
   isLoadingTapperNeeded = true
   isLoadingFieldNeeded = true
   isLoadingProduction = true
+  isLoadingTapperShortage = true
+  isLoadingFieldShortage = true
+
   chart: any
   productivityByYear:any
 
   totalTapperNeeded = 0
   totalFieldNeeded = 0
+  tapperShortage = 0
+  fieldShortage =0
 
 
   constructor(
@@ -77,17 +82,31 @@ export class HomeAdminLGMComponent implements OnInit {
     this.reportService.getWorkerShortageEstate().subscribe(
       response => {
         this.workerShortages = response;
-        const estateRequests = this.workerShortages.map(workerShortage => {
-          return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
-            map(estateResponse => {
-              workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
-            })
-          );
-        });
-        forkJoin(estateRequests).subscribe(() => {
-          this.getLabor();
-          this.isLoadingTapper = false;
-        });
+        if(this.workerShortages.length === 0)
+          {
+            this.totalTapperNeeded = 0
+            this.totalFieldNeeded = 0
+            this.tapperShortage = 0
+            this.fieldShortage = 0
+            this.isLoadingTapperNeeded = false
+            this.isLoadingFieldNeeded = false
+          }
+          else{
+            this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
+            this.fieldShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.fieldShortage, 0);
+            this.isLoadingTapperShortage = false
+            this.isLoadingFieldShortage = false
+            const estateRequests = this.workerShortages.map(workerShortage => {
+              return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
+                map(estateResponse => {
+                  workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
+                })
+              );
+            });
+            forkJoin(estateRequests).subscribe(() => {
+              this.getLabor();
+            });
+          }
       }
     );
   }
@@ -137,7 +156,6 @@ export class HomeAdminLGMComponent implements OnInit {
       .subscribe(
         Response => {
           this.filterCompanies = Response
-          
           this.totalCompany = this.filterCompanies.length
           this.isLoadingCompany = false
         }
@@ -150,7 +168,6 @@ export class HomeAdminLGMComponent implements OnInit {
       .subscribe(
         Response => {
           this.filterEstates = Response
-          console.log(this.filterEstates)
           this.totalEstate = this.filterEstates.length
           this.isLoadingEstate = false
         }
@@ -170,6 +187,7 @@ export class HomeAdminLGMComponent implements OnInit {
               othersDry: 0,
             };
             this.productions.push(product)
+            
           }
           else {
             for (const production of this.productions) {
@@ -285,35 +303,27 @@ export class HomeAdminLGMComponent implements OnInit {
     this.reportService.getCurrentTapperAndFieldWorker()
       .subscribe(
         Response => {
-          Response.forEach(item => {
-            // Add values with "tapper" in their keys to currentTotalTapper
-            this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
+          if (Response.length === 0) {
+            this.currentTotalTapper = 0;
+            this.currentTotalField = 0;
             this.isLoadingTapper = false
-
-            // Add values with "field" in their keys to currentTotalField
-            this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
             this.isLoadingField = false
-          });
+
+
+          } else {
+            Response.forEach(item => {
+              // Add values with "tapper" in their keys to currentTotalTapper
+              this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
+              this.isLoadingTapper = false
+  
+              // Add values with "field" in their keys to currentTotalField
+              this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
+              this.isLoadingField = false
+            });
+          }
+          
+          
         }
       )
   }
-
-  // calculateTapperSum(worker: any): number {
-  //   if (worker && worker.filterLabors && worker.tapperShortage) {
-  //     return worker.filterLabors.reduce((sum:any, labor:any) => sum + labor.tapperCheckrole + labor.tapperContractor, 0) + worker.tapperShortage;
-  //   } else {
-  //     return 0; // Return 0 if any of the properties are undefined or null
-  //   }
-  // }
-  
-  
-  // calculateFieldSum(worker: any) {
-  //   if (worker && worker.filterLabors && worker.tapperShortage) {
-  //     return worker.filterLabors.reduce((sum:any, labor:any) => sum + labor.fieldCheckrole + labor.fieldContractor, 0) + worker.fieldShortage;
-  //   } else {
-  //     return 0; // Return 0 if any of the properties are undefined or null
-  //   }
-  // }
-
-
 }

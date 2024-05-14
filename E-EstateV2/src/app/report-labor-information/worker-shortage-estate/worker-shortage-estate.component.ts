@@ -93,22 +93,28 @@ export class WorkerShortageEstateComponent implements OnInit {
     this.reportService.getWorkerShortageEstate().subscribe(
       response => {
         this.workerShortages = response;
-        if(this.role == 'CompanyAdmin' || this.role == 'EstateClerk')
+        if(this.workerShortages.length === 0)
           {
-            this.workerShortages = response.filter(x=>x.estateId == this.estate.id)
+            this.isLoading = false
           }
-        const estateRequests = this.workerShortages.map(workerShortage => {
-          return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
-            map(estateResponse => {
-              workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
-            })
-          );
-        });
-        forkJoin(estateRequests).subscribe(() => {
-          this.getLabor();
-          this.isLoading = false;
-        });
-      }
+          else{
+            if(this.role == 'CompanyAdmin' || this.role == 'EstateClerk')
+              {
+                this.workerShortages = response.filter(x=>x.estateId == this.estate.id)
+              }
+            const estateRequests = this.workerShortages.map(workerShortage => {
+              return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
+                map(estateResponse => {
+                  workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
+                })
+              );
+            });
+            forkJoin(estateRequests).subscribe(() => {
+              this.getLabor();
+              this.isLoading = false;
+            });
+          }
+        }
     );
   }
   

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Estate } from '../_interface/estate';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
@@ -18,13 +18,14 @@ import { PlantingMaterialService } from '../_services/planting-material.service'
 import { PlantingMaterial } from '../_interface/planting-material';
 import { EstateDetail } from '../_interface/estate-detail';
 import { EstateDetailService } from '../_services/estate-detail.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-edit-estate-detail',
   templateUrl: './edit-estate-detail.component.html',
   styleUrls: ['./edit-estate-detail.component.css']
 })
-export class EditEstateDetailComponent implements OnInit {
+export class EditEstateDetailComponent implements OnInit, OnDestroy {
 
   estate: any = {} as any
   filteredEstate: any = {} as any
@@ -58,7 +59,8 @@ export class EditEstateDetailComponent implements OnInit {
     private establishmentService: EstablishmentService,
     private sharedService: SharedService,
     private plantingMaterialService: PlantingMaterialService,
-    private estateDetailService: EstateDetailService
+    private estateDetailService: EstateDetailService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -73,40 +75,45 @@ export class EditEstateDetailComponent implements OnInit {
   }
 
   getFinancialYear() {
-    this.financialYearService.getFinancialYear()
+    const getFinancialYear = this.financialYearService.getFinancialYear()
       .subscribe(
         Response => {
           const financialYears = Response
           this.filterFinancialYears = financialYears.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getFinancialYear);
   }
 
   getPlantingMaterial() {
-    this.plantingMaterialService.getPlantingMaterial()
+    const getPlantingMaterial = this.plantingMaterialService.getPlantingMaterial()
       .subscribe(
         Response => {
           const plantingMaterial = Response
           this.filterPlantingMaterial = plantingMaterial.filter(p => p.isActive == true)
         }
       )
+    this.subscriptionService.add(getPlantingMaterial);
+    
   }
 
   getMembership() {
-    this.membershipService.getMembership()
+    const getMembership = this.membershipService.getMembership()
       .subscribe(
         Response => {
           const memberships = Response
           this.filterMemberships = memberships.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getMembership);
   }
 
   getEstablishment() {
-    this.establishmentService.getEstablishment()
+    const getEstablishment = this.establishmentService.getEstablishment()
       .subscribe(
         Response => {
           const establishments = Response
           this.filterEstablishments = establishments.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getEstablishment);
   }
 
   gettown(event: any) {
@@ -117,21 +124,24 @@ export class EditEstateDetailComponent implements OnInit {
   }
 
   getTown() {
-    this.townService.getTown()
+    const getTown = this.townService.getTown()
       .subscribe(
         Response => {
           this.towns = Response
           this.filterTowns = this.towns.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getTown);
   }
 
   getState() {
-    this.stateService.getState()
+    const getState = this.stateService.getState()
       .subscribe(
         Response => {
           const states = Response
           this.filterStates = states.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getState);
+
   }
 
   back() {
@@ -177,6 +187,10 @@ export class EditEstateDetailComponent implements OnInit {
             this.dialog.close()
           })
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

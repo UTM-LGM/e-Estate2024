@@ -31,11 +31,11 @@ export class RubberProductionYearlyComponent implements OnInit {
 
   sortableColumns = [
     { columnName: 'monthYear', displayText: 'Month and Year' },
-    { columnName: 'cuplump', displayText: 'Cuplump 100% dry (Kg)' },
-    { columnName: 'latex', displayText: 'Latex 100% dry (Kg)' },
-    { columnName: 'uss', displayText: 'USS 100% dry (Kg)' },
-    { columnName: 'other', displayText: 'Other rubber 100% dry (Kg)' },
-    { columnName: 'totalProduction', displayText: 'Total Production 100% dry (Kg)' },
+    { columnName: 'cuplump', displayText: 'Cuplump dry (Kg)' },
+    { columnName: 'latex', displayText: 'Latex dry (Kg)' },
+    { columnName: 'uss', displayText: 'USS dry (Kg)' },
+    { columnName: 'other', displayText: 'Other rubber dry (Kg)' },
+    { columnName: 'totalProduction', displayText: 'Total Production dry (Kg)' },
   ];
 
   constructor(

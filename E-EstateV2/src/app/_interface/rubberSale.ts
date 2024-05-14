@@ -9,7 +9,7 @@ export interface RubberSale {
     wetWeight: number
     drc: number
     unitPrice: number
-    total:string
+    //total:string
     isActive: boolean
     buyerId: number
     buyer: Buyer[]
@@ -22,6 +22,7 @@ export interface RubberSale {
     estateId: number
     transportPlateNo:string
     paymentStatusId:number
+    paymentStatus : string,
     buyerLicenseNo:string
     driverName:string
     remark:string

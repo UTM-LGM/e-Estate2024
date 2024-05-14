@@ -38,16 +38,17 @@
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" />
   </div>
 
-  <div style="columns: 2">
+  <!-- <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
     <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00"
       (input)="calculateTotalPrice()" />
     <label>Total Price (RM) :</label>
     <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
-  </div>
+  </div> -->
 
   <div>
-    <label>Remark :</label>
+    <label>Remark :</label><br/>
+    <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span>
     <textarea name="remark" [(ngModel)]="rubberSale.remark"></textarea>
   </div>
 

@@ -143,6 +143,7 @@ import { ReportCostInformationComponent } from './report-cost-information/report
 import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { AuthInterceptor } from './_interceptor/token.interceptor';
+import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
 
 register()
 
@@ -255,6 +256,7 @@ register()
     LaborInformationYearlyComponent,
     WorkerShortageEstateComponent,
     ReportCostInformationComponent,
+    ReportRubberAreaByCloneComponent,
   ],
   imports: [
     BrowserModule,
@@ -287,7 +289,7 @@ register()
           clientId: "4c278748-3ef9-49f9-94ec-9591a665a4b7", // Application (client) ID from the app registration
           authority:
             "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
-          redirectUri: "http://localhost:4200", // This is your redirect URI
+          redirectUri: "https://lgm20.lgm.gov.my/e-Estate", // This is your redirect URI
           //redirectUri: "http://localhost:4300", // This is your redirect URI
 
         },

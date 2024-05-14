@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EstateService } from '../_services/estate.service';
 import { Estate } from '../_interface/estate';
@@ -10,13 +10,14 @@ import swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { TappingSystem } from '../_interface/tappingSystem';
 import { TappingSystemService } from '../_services/tapping-system.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-field-info-yearly',
   templateUrl: './field-info-yearly.component.html',
   styleUrls: ['./field-info-yearly.component.css']
 })
-export class FieldInfoYearlyComponent {
+export class FieldInfoYearlyComponent implements OnInit, OnDestroy {
   yearNow = 0
   estate: Estate = {} as Estate
 
@@ -34,7 +35,8 @@ export class FieldInfoYearlyComponent {
     private fieldInfoYearlyService: FieldInfoYearlyService,
     private router: Router,
     private location: Location,
-    private tappingSystemService: TappingSystemService
+    private tappingSystemService: TappingSystemService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -47,26 +49,30 @@ export class FieldInfoYearlyComponent {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.estateService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.filterFields = this.estate.fields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatuses.some(y => y.fieldStatus.toLowerCase().includes("conversion")))
                 this.getExtraFieldInfo(this.filterFields)
               });
+        this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
   }
 
   getTappingSystem() {
-    this.tappingSystemService.getTappingSystem()
+    const getTappingSystem = this.tappingSystemService.getTappingSystem()
       .subscribe(
         Response => {
           const tapping = Response
           this.tappingSystems = tapping.filter(x => x.isActive == true)
         }
       )
+    this.subscriptionService.add(getTappingSystem);
+    
   }
 
   getExtraFieldInfo(fields: Field[]) {
@@ -112,4 +118,9 @@ export class FieldInfoYearlyComponent {
   back() {
     this.location.back()
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

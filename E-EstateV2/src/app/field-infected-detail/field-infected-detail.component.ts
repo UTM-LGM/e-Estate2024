@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FieldInfected } from '../_interface/fieldInfected';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FieldDiseaseService } from '../_services/field-disease.service';
@@ -8,6 +8,7 @@ import { FieldInfectedComponent } from '../field-infected/field-infected.compone
 import { FieldInfectedService } from '../_services/field-infected.service';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { SharedService } from '../_services/shared.service';
   templateUrl: './field-infected-detail.component.html',
   styleUrls: ['./field-infected-detail.component.css']
 })
-export class FieldInfectedDetailComponent implements OnInit {
+export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
 
   fieldInfected: FieldInfected = {} as FieldInfected
   filterFieldDisease: FieldDisease[] = []
@@ -30,7 +31,8 @@ export class FieldInfectedDetailComponent implements OnInit {
     private datePipe: DatePipe,
     private fieldInfectedService: FieldInfectedService,
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
 
   ) { }
 
@@ -47,13 +49,14 @@ export class FieldInfectedDetailComponent implements OnInit {
   }
 
   getFieldDisease() {
-    this.fieldDiseaseService.getFieldDisease()
+    const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
         Response => {
           const disease = Response
           this.filterFieldDisease = disease.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getFieldDisease);
   }
 
   back() {
@@ -88,5 +91,9 @@ export class FieldInfectedDetailComponent implements OnInit {
           this.dialogRef.close()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

@@ -1,5 +1,5 @@
 <div class="box-container">
-  <h1>Estate Rubber Area by state</h1>
+  <h1>Rubber Area by State</h1>
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
     <table style="width: 100%">
@@ -20,14 +20,17 @@
         </td>
       </tr>
 
+      <ng-container *ngIf="!isLoading">
       <tr
-        *ngFor="let town of stateTotalAreas | keyvalue | filter: term | paginate: { itemsPerPage: 20, currentPage: pageNumber }; let i = index">
+        *ngFor="let town of stateTotalAreas | keyvalue | filter: term; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ town.value.count }}</td>
         <td>{{ town.key }}</td>
+        <td>{{ town.value.count }}</td>
         <td>{{ town.value.totalArea }}</td>
       </tr>
+    </ng-container>
+
     </table>
   </div>
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  <!-- <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls> -->
 </div>

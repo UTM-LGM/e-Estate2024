@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj": {}
+    "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj": {
+    "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
+        "projectUniqueName": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
         "projectName": "E-EstateV2 API",
-        "projectPath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
+        "projectPath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\E-EstateV2 API.csproj",
         "packagesPath": "C:\\Users\\sabariah\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-(Latest)\\E-EstateV2 API\\E-EstateV2 API\\obj\\",
+        "outputPath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

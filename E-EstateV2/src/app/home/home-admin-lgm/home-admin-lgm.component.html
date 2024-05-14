@@ -53,8 +53,25 @@
   </div>
   <div class="column box-container color2">
     <span>Field Worker Needed</span><br />
-    <span style="font-weight: bold;" *ngIf="!isLoadingTapperNeeded">{{totalFieldNeeded}}</span>
+    <span style="font-weight: bold;" *ngIf="!isLoadingFieldNeeded">{{totalFieldNeeded}}</span>
     <div *ngIf="isLoadingFieldNeeded">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+
+  <div class="column box-container color1">
+    <span>Tapper Worker Shortage</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingTapperShortage">{{tapperShortage}}</span>
+    <div *ngIf="isLoadingTapperShortage">
+      <ngx-skeleton-loader appearance="line" animation="progress-dark"
+        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+    </div>
+  </div>
+  <div class="column box-container color2">
+    <span>Field Worker Shortage</span><br />
+    <span style="font-weight: bold;" *ngIf="!isLoadingFieldShortage">{{fieldShortage}}</span>
+    <div *ngIf="isLoadingFieldShortage">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
     </div>
@@ -65,7 +82,7 @@
 
 <div class="box">
   <div class="column box-container color3">
-    <span>Total Cuplump Dry Production (Kg) for {{yearNow}}</span><br />
+    <span>Cuplump Dry Production (Kg)</span><br />
     <div *ngIf="isLoadingProduction">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
@@ -76,7 +93,7 @@
   </div>
 
   <div class="column box-container color4">
-    <span>Total Latex Dry Production (Kg) for {{yearNow}}</span><br />
+    <span>Latex Dry Production (Kg)</span><br />
     <div *ngIf="isLoadingProduction">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
@@ -87,7 +104,7 @@
   </div>
 
   <div class="column box-container color5">
-    <span>Total USS Dry Production (Kg) for {{yearNow}}</span><br />
+    <span>USS Dry Production (Kg)</span><br />
     <div *ngIf="isLoadingProduction">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#48aaad91'}"></ngx-skeleton-loader>
@@ -98,7 +115,7 @@
   </div>
 
   <div class="column box-container color6">
-    <span>Total Other Dry Production (Kg) for {{yearNow}}</span><br />
+    <span>Other Dry Production (Kg)</span><br />
     <div *ngIf="isLoadingProduction">
       <ngx-skeleton-loader appearance="line" animation="progress-dark"
         [theme]="{'height':'30px', 'width':'80px', 'background-color':'#4872ad8a'}"></ngx-skeleton-loader>

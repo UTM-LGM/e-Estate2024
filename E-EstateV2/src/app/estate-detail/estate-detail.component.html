@@ -185,7 +185,7 @@
         </tr>
 
         <tr *ngIf="contacts.length == 0">
-          <td colspan="6"><b>No Additional Contact</b></td>
+          <td colspan="6" style="color: red;"><b>No Additional Contact</b></td>
         </tr>
 
         <tbody
@@ -242,7 +242,7 @@
         </tr>
 
         <tr *ngIf="fields.length == 0">
-          <td colspan="10"><b>No Field</b></td>
+          <td colspan="10" style="color: red;"><b>No Field</b></td>
         </tr>
 
         <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
@@ -299,7 +299,7 @@
 
 
           <tr *ngIf="selectedField === field && conversionField.length ==0">
-            <td style="width: 100%; background-color: antiquewhite;" colspan="12"> <b> No field conversion data found
+            <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;"> <b> No field conversion data found
               </b> </td>
           <tr>
 

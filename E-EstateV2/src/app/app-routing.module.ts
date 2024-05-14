@@ -69,6 +69,7 @@ import { LaborInformationYearlyComponent } from './report-labor-information/labo
 import { WorkerShortageEstateComponent } from './report-labor-information/worker-shortage-estate/worker-shortage-estate.component';
 import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
 import { MsalGuard } from '@azure/msal-angular';
+import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
@@ -172,6 +173,10 @@ const routes: Routes = [
           { path: 'estate-by-state', component: EstateByStateComponent },
           { path: 'rubber-crops-by-state', component:RubberCropsByStateComponent},
         ]
+      },
+      {
+        path: 'report-rubber-area-by-clone',
+        component: ReportRubberAreaByCloneComponent, canActivate : [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
         path:'report-production-by-year',

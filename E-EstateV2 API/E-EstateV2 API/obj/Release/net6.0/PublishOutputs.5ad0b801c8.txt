@@ -12,6 +12,7 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\EntityFramework.SqlServer.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\EntityFramework.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\MailKit.dll
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.AzureAD.UI.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.AspNetCore.Cryptography.Internal.dll
@@ -50,6 +51,7 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\System.ClientModel.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\System.CodeDom.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\System.Configuration.ConfigurationManager.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll

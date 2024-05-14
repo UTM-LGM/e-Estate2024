@@ -9,7 +9,7 @@ namespace E_EstateV2_API.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            /*migrationBuilder.CreateTable(
                 name: "announcements",
                 columns: table => new
                 {
@@ -1823,7 +1823,7 @@ namespace E_EstateV2_API.Migrations
                 name: "towns");
 
             migrationBuilder.DropTable(
-                name: "states");
+                name: "states");*/
         }
     }
 }

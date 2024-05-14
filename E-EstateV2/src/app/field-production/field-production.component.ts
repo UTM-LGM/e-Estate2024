@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Field } from '../_interface/field';
 import { FieldProduction } from '../_interface/fieldProduction';
 import { FieldProductionService } from '../_services/field-production.service';
@@ -10,6 +10,7 @@ import { SharedService } from '../_services/shared.service';
 import { ActivatedRoute } from '@angular/router';
 import { FieldService } from '../_services/field.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { MyLesenIntegrationService } from '../_services/my-lesen-integration.ser
   templateUrl: './field-production.component.html',
   styleUrls: ['./field-production.component.css'],
 })
-export class FieldProductionComponent implements OnInit {
+export class FieldProductionComponent implements OnInit, OnDestroy {
   @ViewChild('content') content: ElementRef | undefined
   previousMonth = new Date()
   currentDate = new Date()
@@ -65,6 +66,7 @@ export class FieldProductionComponent implements OnInit {
     private fieldProductionService: FieldProductionService,
     private fieldService: FieldService,
     private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
 
   ) { }
 
@@ -78,7 +80,7 @@ export class FieldProductionComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response;
@@ -88,13 +90,15 @@ export class FieldProductionComponent implements OnInit {
                 this.isLoading = false
               }
             )
+        this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const filterFields = Response.filter(x => x.estateId == this.estate.id)
@@ -103,6 +107,8 @@ export class FieldProductionComponent implements OnInit {
           this.getAllProduction(this.filterFields)
         }
       )
+      this.subscriptionService.add(getField);
+
   }
 
   taskTap(index: any, totalTask: number, i: number) {
@@ -184,7 +190,7 @@ export class FieldProductionComponent implements OnInit {
   }
 
   getAllProduction(Fields: Field[]) {
-    this.fieldProductionService.getProduction()
+    const getProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {
           const productions = Response
@@ -198,6 +204,8 @@ export class FieldProductionComponent implements OnInit {
           this.TotalUSS()
           this.TotalOthers()
         });
+      this.subscriptionService.add(getProduction);
+
   }
 
   TotalCuplump() {
@@ -324,5 +332,9 @@ export class FieldProductionComponent implements OnInit {
     if (index == 0) {
       this.products[i].othersDRC = 0
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

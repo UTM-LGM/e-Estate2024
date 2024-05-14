@@ -1,5 +1,5 @@
 <div class="box-container">
-  <h1>Rubber Crops Area by state</h1>
+  <h1>Rubber Area by State and Maturity </h1>
 
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
@@ -9,7 +9,7 @@
         <th>State</th>
         <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Immature</th>
         <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Mature</th>
-        <th>Total area of rubber crop</th>
+        <th>Total Rubber Area (Ha)</th>
       </tr>
 
       <tr>
@@ -46,5 +46,4 @@
       </ng-container>
     </table>
   </div>
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 </div>

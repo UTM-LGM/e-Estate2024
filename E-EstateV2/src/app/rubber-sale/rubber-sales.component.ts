@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RubberSaleService } from '../_services/rubber-sale.service';
 import { EstateService } from '../_services/estate.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 
 @Component({
   selector: 'app-rubber-sales',
@@ -28,15 +29,19 @@ export class RubberSalesComponent implements OnInit {
 
   sortableColumns = [
     { columnName: 'date', displayText: 'Date' },
-    { columnName: 'status', displayText: 'Status' },
+    // { columnName: 'status', displayText: 'Status' },
     { columnName: 'buyerName', displayText: 'Buyer Name' },
     { columnName: 'transportPlateNo', displayText: 'Transport Plate No' },
     { columnName: 'driverName', displayText: 'Driver Name' },
     { columnName: 'rubberType', displayText: 'Rubber Type' },
     { columnName: 'letterOfConsentNo', displayText: 'Letter of Consent No (Form 1)' },
+    { columnName: 'weightSlipNo', displayText: 'Weight Slip No'},
+    { columnName: 'receiptNo', displayText: 'Receipt No'},
     { columnName: 'wetWeight', displayText: 'Wet Weight (Kg)' },
+    { columnName: 'drc', displayText: 'DRC (%)'},
     { columnName: 'buyerWetWeight', displayText: 'Buyer Wet Weight (Kg)' },
     { columnName: 'buyerDRC', displayText: 'Buyer DRC (%)' },
+    { columnName: 'buyerWeightDry', displayText: 'Buyer Weight Dry (Kg)'},
     { columnName: 'unitPrice', displayText: 'Unit Price (RM/kg)' },
     { columnName: 'total', displayText: 'Total Price (RM)' },
     { columnName: 'remark', displayText: 'Remark' }
@@ -78,7 +83,6 @@ export class RubberSalesComponent implements OnInit {
           Response => {
             const rubberSales = Response
             this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId)
-            console.log(this.filterSales)
             this.isLoading = false
           })
     }, 2000)
@@ -123,9 +127,21 @@ export class RubberSalesComponent implements OnInit {
     }
   }
 
-  print(sale: RubberSale) {
+  printForm1(sale: RubberSale) {
     const url = 'generate-form-1/' + sale.id;
     window.open(url, '_blank');
+  }
+
+  print(sale:RubberSale){
+
+  }
+
+  getPaymentStatus(sale:RubberSale): { status: string, color: string } {
+    if (sale.paymentStatusId === 3) {
+      return { status: 'Complete', color: 'green' };
+    } else {
+      return { status: 'In Process', color: '#c9c912' };
+    }
   }
 
 }

@@ -13,3 +13,12 @@ th {
 .box-container {
   box-shadow: none;
 }
+
+.complete-row {
+  color: green;
+}
+
+.in-progress-row {
+  color: #d5d525;
+}
+

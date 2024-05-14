@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RubberSaleService } from '../_services/rubber-sale.service';
 import { RubberSale } from '../_interface/rubberSale';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-generate-form1',
   templateUrl: './generate-form1.component.html',
   styleUrls: ['./generate-form1.component.css']
 })
-export class GenerateForm1Component implements OnInit {
+export class GenerateForm1Component implements OnInit, OnDestroy {
 
   rubberSale: RubberSale = {} as RubberSale
   estate: any = {} as any
@@ -20,7 +21,9 @@ export class GenerateForm1Component implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private rubberSaleService: RubberSaleService,
-    private myLesenService: MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit(): void {
@@ -31,7 +34,7 @@ export class GenerateForm1Component implements OnInit {
   getRubberSale() {
     this.route.params.subscribe((routerParams) => {
       if (routerParams['id'] != null) {
-        this.rubberSaleService.getRubberSaleById(routerParams['id'])
+        const getRubberSale = this.rubberSaleService.getRubberSaleById(routerParams['id'])
           .subscribe(
             Response => {
               this.rubberSale = Response
@@ -43,29 +46,40 @@ export class GenerateForm1Component implements OnInit {
               this.getBuyerDetail()
             }
           )
+      this.subscriptionService.add(getRubberSale);
+
       }
     })
   }
 
   getEstateDetail() {
-    this.myLesenService.getOneEstate(this.rubberSale.estateId)
+    const getEstateDetail = this.myLesenService.getOneEstate(this.rubberSale.estateId)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+      this.subscriptionService.add(getEstateDetail);
+
   }
 
   getBuyerDetail() {
-    this.myLesenService.getLicenseNo(this.rubberSale.buyerLicenseNo)
+    const getLicenseNo = this.myLesenService.getLicenseNo(this.rubberSale.buyerLicenseNo)
       .subscribe(
         Response => {
           this.buyer = Response
         }
       )
+      this.subscriptionService.add(getLicenseNo);
+
   }
 
   print() {
     window.print()
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

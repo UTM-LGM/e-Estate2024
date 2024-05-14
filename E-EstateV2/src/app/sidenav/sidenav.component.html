@@ -142,6 +142,13 @@
     <hr />
   </div>
 
+  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/e-estate/report-rubber-area-by-clone" routerLinkActive="active">
+      Rubber Area by Clone
+    </button>
+    <hr />
+  </div>
+
   <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
     <button class="side-btn" routerLink="/e-estate/report-field-information" routerLinkActive="active">
       Field Information

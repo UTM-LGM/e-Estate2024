@@ -23,35 +23,41 @@
                                     'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
             <th width="30px">Action</th>
+            <th width="30px">Status</th>
           </tr>
         </thead>
 
         <tr *ngIf="isLoading">
-          <td colspan="14">
+          <td colspan="18">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
         </tr>
 
         <tr *ngIf="filterSales.length == 0 && !isLoading">
-          <td colspan="13"><b>No Rubber Sale Transaction</b></td>
+          <td colspan="18" style="color: red;"><b>No Rubber Sale Transaction</b></td>
         </tr>
 
+        <ng-container *ngIf="!isLoading">
         <tbody
           *ngFor="let sale of filterSales | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor: default;">
             <td>{{sale.saleDateTime | date : "dd/MM/YYYY"}}</td>
-            <td>{{sale.paymentStatus}}
+            <!-- <td>{{sale.paymentStatus}} -->
             <td>{{sale.buyerName}}</td>
             <td>{{sale.transportPlateNo}}</td>
             <td>{{sale.driverName}}</td>
             <td>{{sale.rubberType}}</td>
             <td>{{sale.letterOfConsentNo}}</td>
-            <td>{{sale.wetWeight }}</td>
-            <td>{{ sale.buyerWetWeight || null }}</td>
-            <td>{{sale.buyerDRC || null}}</td>
-            <td>{{sale.unitPrice || null}}</td>
-            <td>{{sale.total || null}}</td>
+            <td>{{sale.weightSlipNo}}</td>
+            <td>{{sale.receiptNo}}</td>
+            <td>{{sale.wetWeight | number : "1.2-2" }}</td>
+            <td>{{sale.drc | number : "1.2-2"}}</td>
+            <td>{{ sale.buyerWetWeight || null | number : "1.2-2" }}</td>
+            <td>{{sale.buyerDRC || null | number : "1.2-2"}}</td>
+            <td>{{sale.buyerWetWeight * (sale.buyerDRC/100) || null | number : "1.2-2"}}</td>
+            <td>{{sale.unitPrice || null | number : "1.2-2"}}</td>
+            <td>{{sale.total || null | number : "1.2-2"}}</td>
             <td>{{sale.remark}}</td>
             <!-- <td><button (click)="status(sale)" style="cursor: pointer;" [ngClass]="{
                 'active-btn': sale.isActive == true,
@@ -65,13 +71,20 @@
                 <button class="btn-update" (click)="openDialog(sale)">
                   <i class="fa fa-pencil"></i>
                 </button> &nbsp;
-                <button class="btn-update" (click)="print(sale)">
+                <button class="btn-update" (click)="printForm1(sale)"  title="Print Form 1">
+                  <i class="fa fa-print"></i>
+                </button> &nbsp;
+                <button class="btn-update" (click)="print(sale)"  title="Print Receipt">
                   <i class="fa fa-print"></i>
                 </button>
               </div>
             </td>
+            <td [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">
+              {{ sale.paymentStatusId === 3 ? 'Complete' : 'In Process' }}
+            </td>
           </tr>
         </tbody>
+      </ng-container>
       </table>
       <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
     </div>

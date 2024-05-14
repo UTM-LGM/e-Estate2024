@@ -17,6 +17,8 @@ import { RubberSaleService } from '../_services/rubber-sale.service';
 })
 export class RubberSaleDetailComponent implements OnInit {
   rubberSale: RubberSale = {} as RubberSale
+filterRubberSale: any = {} as any
+
 
   buyers: Buyer[] = []
 
@@ -64,7 +66,9 @@ export class RubberSaleDetailComponent implements OnInit {
   update() {
     this.rubberSale.updatedBy = this.sharedService.userId.toString()
     this.rubberSale.updatedDate = new Date()
-    this.rubberSaleService.updateSale(this.rubberSale)
+    const {paymentStatus, ...filterSale} = this.rubberSale
+    this.filterRubberSale = filterSale
+    this.rubberSaleService.updateSale(this.filterRubberSale)
       .subscribe(
         Response => {
           swal.fire({
@@ -81,7 +85,7 @@ export class RubberSaleDetailComponent implements OnInit {
 
   calculateTotalPrice() {
     const total = this.rubberSale.unitPrice * this.rubberSale.wetWeight
-    this.rubberSale.total = total.toFixed(2)
+    // this.rubberSale.total = total.toFixed(2)
   }
 
 }

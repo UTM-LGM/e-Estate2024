@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Cost } from 'src/app/_interface/cost';
 import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -11,7 +12,7 @@ import swal from 'sweetalert2';
   templateUrl: './indirect-cost.component.html',
   styleUrls: ['./indirect-cost.component.css'],
 })
-export class IndirectCostComponent implements OnInit {
+export class IndirectCostComponent implements OnInit,OnDestroy {
 
   @Input() costTypeId = 0
   @Input() selectedYear = ''
@@ -40,7 +41,8 @@ export class IndirectCostComponent implements OnInit {
   constructor(
     private costService: CostService,
     private costAmountService: CostAmountService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -60,13 +62,15 @@ export class IndirectCostComponent implements OnInit {
 
   getIndirectCost() {
     setTimeout(() => {
-      this.costService.getIndirectCost(this.costTypeId)
+      const getIndirectCost = this.costService.getIndirectCost(this.costTypeId)
         .subscribe(
           Response => {
             this.indirectCosts = Response
             this.indirectCosts.forEach(sub => sub.amount = 0)
             this.isLoading = false
           });
+      this.subscriptionService.add(getIndirectCost);
+
     }, 1000)
   }
 
@@ -87,7 +91,7 @@ export class IndirectCostComponent implements OnInit {
   }
 
   getIndirectCostAmount() {
-    this.costAmountService.getCostAmount()
+    const getCostAmount = this.costAmountService.getCostAmount()
       .subscribe(
         Response => {
           this.indirectCostAmount = Response;
@@ -98,6 +102,8 @@ export class IndirectCostComponent implements OnInit {
           this.totalCost(this.filterIndirectCostAmount)
         }
       )
+      this.subscriptionService.add(getCostAmount);
+    
   }
 
   add() {
@@ -184,6 +190,10 @@ export class IndirectCostComponent implements OnInit {
             )
         }
       })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RubberStockComponent } from '../rubber-stock/rubber-stock.component';
 import { FieldService } from '../_services/field.service';
@@ -12,13 +12,14 @@ import { SharedService } from '../_services/shared.service';
 import { RubberStock } from '../_interface/rubberStock';
 import { RubberStockService } from '../_services/rubber-stock.service';
 import swal from 'sweetalert2';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-add-rubber-stock',
   templateUrl: './add-rubber-stock.component.html',
   styleUrls: ['./add-rubber-stock.component.css']
 })
-export class AddRubberStockComponent implements OnInit {
+export class AddRubberStockComponent implements OnInit, OnDestroy {
 
   estate: any = {} as any
   filterProductions: FieldProduction[] = []
@@ -76,6 +77,7 @@ export class AddRubberStockComponent implements OnInit {
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
     private rubberStockService: RubberStockService,
+    private subscriptionService:SubscriptionService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.estate = data.estate;
@@ -94,7 +96,7 @@ export class AddRubberStockComponent implements OnInit {
   }
 
   getStock() {
-    this.rubberStockService.getRubberStock()
+    const getStock = this.rubberStockService.getRubberStock()
       .subscribe(
         Response => {
           this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true)
@@ -105,6 +107,7 @@ export class AddRubberStockComponent implements OnInit {
           }
         }
       )
+    this.subscriptionService.add(getStock);
   }
 
   getDate() {
@@ -138,7 +141,7 @@ export class AddRubberStockComponent implements OnInit {
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const filterFields = Response.filter(x => x.estateId == this.estate.id)
@@ -146,10 +149,11 @@ export class AddRubberStockComponent implements OnInit {
           this.getAllProduction(this.filterFields)
         }
       )
+    this.subscriptionService.add(getField);
   }
 
   getAllProduction(Fields: Field[]) {
-    this.fieldProductionService.getProduction()
+    const getAllProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {
           const productions = Response
@@ -167,6 +171,7 @@ export class AddRubberStockComponent implements OnInit {
           }
           this.isLoadingProduction = false
         });
+    this.subscriptionService.add(getAllProduction);
   }
 
   calculateCuplumpDry(data: FieldProduction[], cuplump: FieldProduction[]) {
@@ -244,7 +249,7 @@ export class AddRubberStockComponent implements OnInit {
   }
 
   getSales() {
-    this.rubberSaleService.getSale()
+    const getSale = this.rubberSaleService.getSale()
       .subscribe(
         Response => {
           const rubberSales = Response
@@ -255,6 +260,7 @@ export class AddRubberStockComponent implements OnInit {
           this.calculateSale()
           this.isLoadingSale = false
         })
+    this.subscriptionService.add(getSale);
   }
 
   calculateSale() {
@@ -281,6 +287,10 @@ export class AddRubberStockComponent implements OnInit {
         }
       )
 
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

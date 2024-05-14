@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Field } from '../_interface/field';
 import { FieldStatus } from '../_interface/fieldStatus';
 import { Clone } from '../_interface/clone';
@@ -18,13 +18,14 @@ import { FieldDiseaseService } from '../_services/field-disease.service';
 import { FieldDisease } from '../_interface/fieldDisease';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-field-info',
   templateUrl: './field-info.component.html',
   styleUrls: ['./field-info.component.css'],
 })
-export class FieldInfoComponent implements OnInit {
+export class FieldInfoComponent implements OnInit,OnDestroy {
   field: Field = {} as Field
 
   estate: any = {} as any
@@ -86,7 +87,8 @@ export class FieldInfoComponent implements OnInit {
     private location: Location,
     private fieldDiseaseService: FieldDiseaseService,
     private myLesenService: MyLesenIntegrationService,
-    private fieldInfectedService: FieldInfectedService
+    private fieldInfectedService: FieldInfectedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -102,20 +104,21 @@ export class FieldInfoComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.getField()
                 this.isLoading = false
               })
+        this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const fields = Response
@@ -134,6 +137,8 @@ export class FieldInfoComponent implements OnInit {
           this.sum(this.fields)
         }
       )
+      this.subscriptionService.add(getField);
+      
   }
 
   toggleSelectedField(field: Field) {
@@ -146,13 +151,15 @@ export class FieldInfoComponent implements OnInit {
   }
 
   getConversion(field: Field) {
-    this.fieldConversionService.getConversion()
+    const getConversion = this.fieldConversionService.getConversion()
       .subscribe(
         Response => {
           const conversion = Response
           this.conversionField = conversion.filter(x => x.fieldId == field.id)
         }
       )
+      this.subscriptionService.add(getConversion);
+    
   }
 
   toggleSort(columnName: string) {
@@ -233,30 +240,36 @@ export class FieldInfoComponent implements OnInit {
   }
 
   getFieldDisease() {
-    this.fieldDiseaseService.getFieldDisease()
+    const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
         Response => {
           const fieldDisease = Response
           this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
         }
       )
+      this.subscriptionService.add(getFieldDisease);
+    
   }
 
   getCrop() {
-    this.fieldStatusService.getFieldStatus()
+    const getCrop = this.fieldStatusService.getFieldStatus()
       .subscribe(
         Response => {
           this.cropCategories = Response
         });
+      this.subscriptionService.add(getCrop);
+
   }
 
   getClone() {
-    this.cloneService.getClone()
+    const getClone = this.cloneService.getClone()
       .subscribe(Response => {
         this.clones = Response
         this.filterClones = this.clones.filter((e) => e.isActive == true)
         this.availableClones = this.filterClones
       });
+      this.subscriptionService.add(getClone);
+
   }
 
   selectedClone(value: Field) {
@@ -314,6 +327,10 @@ export class FieldInfoComponent implements OnInit {
       }
     }
 
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

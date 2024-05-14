@@ -9,6 +9,6 @@ export const MyLesenEnv = {
 }
 
   // export const environment = {
-  //   production: true,
+  //   production: false,
   //   apiUrl: 'https://lgm20.lgm.gov.my/e-EstateApi/api'
   // };

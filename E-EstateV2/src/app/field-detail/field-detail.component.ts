@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Field } from '../_interface/field';
 import { DatePipe } from '@angular/common';
@@ -20,13 +20,14 @@ import { FieldInfected } from '../_interface/fieldInfected';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { OtherCrop } from '../_interface/otherCrop';
 import { OtherCropService } from '../_services/other-crop.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-field-detail',
   templateUrl: './field-detail.component.html',
   styleUrls: ['./field-detail.component.css'],
 })
-export class FieldDetailComponent implements OnInit {
+export class FieldDetailComponent implements OnInit,OnDestroy {
   field: Field = {} as Field
   filteredFields: any = {}
 
@@ -95,7 +96,8 @@ export class FieldDetailComponent implements OnInit {
     private fieldCloneService: FieldCloneService,
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
-    private otherCropService: OtherCropService
+    private otherCropService: OtherCropService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -108,18 +110,19 @@ export class FieldDetailComponent implements OnInit {
   }
 
   getOtherCrop() {
-    this.otherCropService.getOtherCrop()
+    const getOtherCrop = this.otherCropService.getOtherCrop()
       .subscribe(
         Response => {
           this.otherCrops = Response.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getOtherCrop);
   }
 
   getOneField() {
     this.route.params.subscribe((routeParams) => {
       if (routeParams['id'] != null) {
-        this.fieldService.getOneField(routeParams['id'])
+        const getOneField = this.fieldService.getOneField(routeParams['id'])
           .subscribe(
             Response => {
               this.field = Response
@@ -132,12 +135,14 @@ export class FieldDetailComponent implements OnInit {
               this.getDate(Response.dateOpenTapping)
               this.getFieldInfected()
             });
+      this.subscriptionService.add(getOneField);
+
       }
     })
   }
 
   getFieldInfected() {
-    this.fieldInfectedService.getFieldInfectedById(this.field.id)
+    const getFieldInfected = this.fieldInfectedService.getFieldInfectedById(this.field.id)
       .subscribe(
         Response => {
           this.filterFieldInfected = Response
@@ -146,16 +151,20 @@ export class FieldDetailComponent implements OnInit {
           }
         }
       )
+      this.subscriptionService.add(getFieldInfected);
+
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const fields = Response
           this.fields = fields.filter(x => x.estateId == this.sharedService.estateId)
         }
       )
+      this.subscriptionService.add(getField);
+
   }
 
   checkFieldStatus() {
@@ -176,7 +185,7 @@ export class FieldDetailComponent implements OnInit {
   }
 
   getcategory(field: Field) {
-    this.fieldStatusService.getFieldStatus()
+    const getFieldStatus = this.fieldStatusService.getFieldStatus()
       .subscribe(
         Response => {
           if (this.onInit == true) {
@@ -190,6 +199,7 @@ export class FieldDetailComponent implements OnInit {
             this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == this.field.isMature && c.isActive == true)
           }
         });
+      this.subscriptionService.add(getFieldStatus);
   }
 
   updateField(field: Field) {
@@ -241,12 +251,14 @@ export class FieldDetailComponent implements OnInit {
   }
 
   getClone() {
-    this.cloneService.getClone()
+    const getClone = this.cloneService.getClone()
       .subscribe(
         Response => {
           this.clones = Response
           this.filterClones = this.clones.filter((e) => e.isActive == true)
         });
+      this.subscriptionService.add(getClone);
+
   }
 
   status(field: Field) {
@@ -408,13 +420,15 @@ export class FieldDetailComponent implements OnInit {
   }
 
   getFieldDisease() {
-    this.fieldDiseaseService.getFieldDisease()
+    const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
         Response => {
           const fieldDisease = Response
           this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
         }
       )
+      this.subscriptionService.add(getFieldDisease);
+    
   }
 
   fieldInfected(field: Field) {
@@ -443,6 +457,10 @@ export class FieldDetailComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

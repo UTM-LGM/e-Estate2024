@@ -34,14 +34,18 @@
       </tr>
 
       <tr *ngIf="isLoading">
-        <td colspan="10">
+        <td colspan="5">
           <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
           </ngx-skeleton-loader>
         </td>
       </tr>
 
       <tr *ngIf="!isLoading && labors.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose estate</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose estate</td>
+      </tr>
+
+      <tr *ngIf="!isLoading && labors.length == 0 && role == 'Admin'">
+        <td colspan="5" style="color: red; text-align: center;">No data found.</td>
       </tr>
 
       <tbody *ngIf="!isLoading && labors.length > 0">

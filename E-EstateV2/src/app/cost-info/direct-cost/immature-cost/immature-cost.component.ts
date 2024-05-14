@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Cost } from 'src/app/_interface/cost';
 import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -11,7 +12,7 @@ import swal from 'sweetalert2';
   templateUrl: './immature-cost.component.html',
   styleUrls: ['./immature-cost.component.css']
 })
-export class ImmatureCostComponent implements OnInit {
+export class ImmatureCostComponent implements OnInit, OnDestroy {
 
   @Input() costTypeId: number = 0
   @Input() selectedYear = ''
@@ -36,7 +37,9 @@ export class ImmatureCostComponent implements OnInit {
   constructor(
     private costAmountService: CostAmountService,
     private costService: CostService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit() {
@@ -57,18 +60,19 @@ export class ImmatureCostComponent implements OnInit {
 
   getImmatureCostSub() {
     setTimeout(() => {
-      this.costService.getDirectImmatureSubCategory()
+      const getSubCategory = this.costService.getDirectImmatureSubCategory()
         .subscribe(
           Response => {
             this.subCategories2IM = Response
             this.subCategories2IM.forEach(sub => sub.amount = 0)
             this.isLoading = false
           });
+      this.subscriptionService.add(getSubCategory);
     }, 1000)
   }
 
   getImmatureDirectCost() {
-    this.costAmountService.getCostAmount()
+    const getCostAmount = this.costAmountService.getCostAmount()
       .subscribe(
         Response => {
           this.immatureDirectCostAmount = Response
@@ -80,6 +84,8 @@ export class ImmatureCostComponent implements OnInit {
           this.totalImmatureCost(this.filterImmatureDirectCostAmount)
         }
       )
+      this.subscriptionService.add(getCostAmount);
+
   }
 
   totalImmatureCost(data: CostAmount[]) {
@@ -182,6 +188,10 @@ export class ImmatureCostComponent implements OnInit {
             )
         }
       })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

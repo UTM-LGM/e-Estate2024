@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Estate } from '../_interface/estate';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-estate-list',
   templateUrl: './estate-list.component.html',
   styleUrls: ['./estate-list.component.css'],
 })
-export class EstateListComponent implements OnInit {
+export class EstateListComponent implements OnInit, OnDestroy {
   estates: any[] = []
   activeEstates: Estate[] = []
   inactiveEstates: Estate[] = []
@@ -22,7 +23,8 @@ export class EstateListComponent implements OnInit {
   isBtnInactive = false
 
   constructor(
-    private myLesenService: MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -31,13 +33,15 @@ export class EstateListComponent implements OnInit {
 
   getEstate() {
     setTimeout(() => {
-      this.myLesenService.getAllEstate()
+      const getAllEstate = this.myLesenService.getAllEstate()
         .subscribe(
           Response => {
             this.estates = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getAllEstate);
+
     }, 2000)
   }
 
@@ -66,5 +70,9 @@ export class EstateListComponent implements OnInit {
     this.showDefault = true
     this.isBtnInactive = false
     this.isBtnActive = false
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

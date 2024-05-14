@@ -20,7 +20,7 @@
     </mat-select>
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+  <!-- <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
   <label class="switch" >
     <input type="checkbox" [(ngModel)]="showAll" (change)="toggleShowAll()" >
     <span class="slider round"></span>
@@ -29,7 +29,7 @@
   <div class="show-all-text">
     <label>Show All</label>
   </div>
-  </div>
+  </div> -->
 
   <div style="columns:2"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
@@ -135,7 +135,7 @@
 
 
         <tr *ngIf="selectedField === field && conversionField.length ==0">
-          <td style="width: 100%; background-color: antiquewhite;" colspan="12"> <b> No field conversion data found
+          <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;"> <b> No field conversion data found
             </b> </td>
         <tr>
 

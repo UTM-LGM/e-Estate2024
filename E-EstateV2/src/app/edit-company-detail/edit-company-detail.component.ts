@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Company } from '../_interface/company';
 import { StateService } from '../_services/state.service';
@@ -12,6 +12,7 @@ import { CompanyDetail } from '../_interface/company-detail';
 import { MembershipType } from '../_interface/membership';
 import { MembershipService } from '../_services/membership.service';
 import { CompanyDetailService } from '../_services/company-detail.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { CompanyDetailService } from '../_services/company-detail.service';
   templateUrl: './edit-company-detail.component.html',
   styleUrls: ['./edit-company-detail.component.css']
 })
-export class EditCompanyDetailComponent {
+export class EditCompanyDetailComponent implements OnInit, OnDestroy {
 
   company: any = {} as any
 
@@ -45,7 +46,8 @@ export class EditCompanyDetailComponent {
     private townService: TownService,
     private sharedService: SharedService,
     private membershipService: MembershipService,
-    private companyDetailService: CompanyDetailService
+    private companyDetailService: CompanyDetailService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -57,21 +59,24 @@ export class EditCompanyDetailComponent {
   }
 
   getState() {
-    this.stateService.getState()
+    const getState = this.stateService.getState()
       .subscribe(
         Response => {
           const states = Response
           this.filterStates = states.filter(e => e.isActive == true)
         });
+      this.subscriptionService.add(getState);
+
   }
 
   getMembership() {
-    this.membershipService.getMembership()
+    const getMembership = this.membershipService.getMembership()
       .subscribe(
         Response => {
           const memberships = Response
           this.filterMemberships = memberships.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getMembership);
   }
 
   gettown(event: any) {
@@ -82,12 +87,13 @@ export class EditCompanyDetailComponent {
   }
 
   getTown() {
-    this.townService.getTown()
+    const getTown = this.townService.getTown()
       .subscribe(
         Response => {
           this.towns = Response
           this.filterTowns = this.towns.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getTown);
   }
 
   update() {
@@ -132,6 +138,10 @@ export class EditCompanyDetailComponent {
 
   back() {
     this.dialog.close()
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

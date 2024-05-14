@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Estate } from '../_interface/estate';
 import { EstateStatus } from '../_interface/estateStatus';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-estate',
   templateUrl: './estate.component.html',
   styleUrls: ['./estate.component.css'],
 })
-export class EstateComponent implements OnInit {
+export class EstateComponent implements OnInit,OnDestroy {
   estates: Estate[] = []
 
   company: any = {} as any
@@ -31,7 +32,8 @@ export class EstateComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private myLesenService: MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -42,13 +44,15 @@ export class EstateComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
-          this.myLesenService.getOneCompany(routeParams['id'])
+          const getOneCompany = this.myLesenService.getOneCompany(routeParams['id'])
             .subscribe(
               Response => {
                 this.company = Response
                 this.isLoading = false
               }
             )
+          this.subscriptionService.add(getOneCompany);
+
         }
       });
     }, 2000)
@@ -61,6 +65,10 @@ export class EstateComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Field } from '../_interface/field';
 import { FieldDisease } from '../_interface/fieldDisease';
 import { ActivatedRoute } from '@angular/router';
@@ -12,13 +12,14 @@ import { FieldInfected } from '../_interface/fieldInfected';
 import { MatDialog } from '@angular/material/dialog';
 import { FieldInfectedDetailComponent } from '../field-infected-detail/field-infected-detail.component';
 import { FieldInfectedStatusComponent } from '../field-infected-status/field-infected-status.component';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-field-infected',
   templateUrl: './field-infected.component.html',
   styleUrls: ['./field-infected.component.css']
 })
-export class FieldInfectedComponent {
+export class FieldInfectedComponent implements OnInit, OnDestroy {
   estate: any = {} as any
   selectedField = ''
   term = ''
@@ -56,6 +57,7 @@ export class FieldInfectedComponent {
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
     private dialog: MatDialog,
+    private subscriptionService:SubscriptionService
   ) { }
 
 
@@ -70,45 +72,52 @@ export class FieldInfectedComponent {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.getFieldInfected(routerParams['id'])
                 this.isLoading = false
               })
+          this.subscriptionService.add(getOneEstate);    
         }
       });
     }, 2000)
   }
 
   getFieldInfected(estateId: number) {
-    this.fieldInfectedService.getFieldInfectedByEstateId(estateId)
+    const getFieldInfected = this.fieldInfectedService.getFieldInfectedByEstateId(estateId)
       .subscribe(
         Response => {
           this.fieldInfecteds = Response
         }
       )
+      this.subscriptionService.add(getFieldInfected);
+
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           this.allField = Response
           this.filteredFields = this.allField.filter(x => x.estateId == this.sharedService.estateId && x.isActive == true && !x.fieldStatus.toLowerCase().includes("conversion to other crop"))
         }
       )
+      this.subscriptionService.add(getField);
+
   }
 
   getFieldDisease() {
-    this.fieldDiseaseService.getFieldDisease()
+    const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
         Response => {
           const disease = Response
           this.filterFieldDisease = disease.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getFieldDisease);
+
   }
 
   toggleField(event: any) {
@@ -188,4 +197,9 @@ export class FieldInfectedComponent {
         }
       )
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

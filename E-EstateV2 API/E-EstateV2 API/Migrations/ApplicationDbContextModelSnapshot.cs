@@ -1646,6 +1646,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("deliveryAgent")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("driverName")
                         .HasColumnType("nvarchar(max)");
 
@@ -1663,6 +1666,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<string>("receiptNo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("receiptNoDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("remark")
                         .HasColumnType("nvarchar(max)");
@@ -1690,6 +1696,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<string>("weightSlipNo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("weightSlipNoDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<float>("wetWeight")
                         .HasColumnType("real");

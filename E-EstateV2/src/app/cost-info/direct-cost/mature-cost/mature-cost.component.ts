@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Cost } from 'src/app/_interface/cost';
 import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 
@@ -12,7 +13,7 @@ import swal from 'sweetalert2';
   templateUrl: './mature-cost.component.html',
   styleUrls: ['./mature-cost.component.css']
 })
-export class MatureCostComponent implements OnInit {
+export class MatureCostComponent implements OnInit, OnDestroy {
 
   @Input() costTypeId: number = 0
   @Input() selectedYear = ''
@@ -40,7 +41,8 @@ export class MatureCostComponent implements OnInit {
   constructor(
     private costService: CostService,
     private costAmountService: CostAmountService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -61,26 +63,30 @@ export class MatureCostComponent implements OnInit {
 
   getCostCategory() {
     setTimeout(() => {
-      this.costService.getDirectMatureCostCategory()
+      const getCategory = this.costService.getDirectMatureCostCategory()
         .subscribe(
           Response => {
             this.costCategories = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getCategory);
+      
     }, 1000)
   }
 
   getCostSub1() {
-    this.costService.getDirectMatureSubCategory()
+    const getSubCategory = this.costService.getDirectMatureSubCategory()
       .subscribe(
         Response => {
           this.subCategories1 = Response
           this.subCategories1.forEach(sub => sub.amount = 0);
         })
+    this.subscriptionService.add(getSubCategory);
+    
   }
 
   getMatureDirectCost() {
-    this.costAmountService.getCostAmount()
+    const getCostAmount = this.costAmountService.getCostAmount()
       .subscribe(
         Response => {
           this.matureDirectCostAmount = Response
@@ -90,10 +96,11 @@ export class MatureCostComponent implements OnInit {
             .filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }));
           this.submitFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
-          console.log(this.submitFilterMatureDirectCostAmount)
           this.totalMatureCost(this.filterMatureDirectCostAmount)
         }
       )
+      this.subscriptionService.add(getCostAmount);
+
   }
 
   totalMatureCost(data: CostAmount[]) {
@@ -216,6 +223,10 @@ export class MatureCostComponent implements OnInit {
     else {
       return
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 

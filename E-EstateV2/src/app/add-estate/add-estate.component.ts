@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Establishment } from '../_interface/establishment';
 import { Estate } from '../_interface/estate';
 import { FinancialYear } from '../_interface/financialYear';
@@ -15,13 +15,14 @@ import { MembershipService } from '../_services/membership.service';
 import { EstablishmentService } from '../_services/establishment.service';
 import { StateService } from '../_services/state.service';
 import { EstateService } from '../_services/estate.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-add-estate',
   templateUrl: './add-estate.component.html',
   styleUrls: ['./add-estate.component.css'],
 })
-export class AddEstateComponent implements OnInit {
+export class AddEstateComponent implements OnInit, OnDestroy {
   estate: Estate = {} as Estate
 
   filterStates: State[] = []
@@ -44,7 +45,8 @@ export class AddEstateComponent implements OnInit {
     private estateService: EstateService,
     private route: ActivatedRoute,
     private location: Location,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService: SubscriptionService,
   ) { }
 
   ngOnInit() {
@@ -107,48 +109,54 @@ export class AddEstateComponent implements OnInit {
   }
 
   getTown() {
-    this.townService.getTown()
+    const getTown = this.townService.getTown()
       .subscribe(
         Response => {
           const towns = Response
           this.towns = towns.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getTown);
   }
 
   getFinancialYear() {
-    this.financialYearService.getFinancialYear()
+    const getFinancial = this.financialYearService.getFinancialYear()
       .subscribe(
         Response => {
           const financialYears = Response
           this.filterFinancialYears = financialYears.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getFinancial);
   }
 
   getMembership() {
-    this.membershipService.getMembership()
+    const getMembership = this.membershipService.getMembership()
       .subscribe(
         Response => {
           const memberships = Response
           this.filterMemberships = memberships.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getMembership);
   }
 
   getEstablishment() {
-    this.establishmentService.getEstablishment()
+    const getEstablishment = this.establishmentService.getEstablishment()
       .subscribe(
         Response => {
           const establishments = Response
           this.filterEstablishments = establishments.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getEstablishment);
   }
 
   getState() {
-    this.stateService.getState()
+    const getEstate = this.stateService.getState()
       .subscribe(
         Response => {
           const states = Response
           this.filterStates = states.filter(e => e.isActive == true)
         });
+    this.subscriptionService.add(getEstate);
+
   }
 
   back() {
@@ -171,6 +179,10 @@ export class AddEstateComponent implements OnInit {
           }
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { User } from 'src/app/_interface/user';
@@ -12,13 +12,14 @@ import { ChangePasswordComponent } from 'src/app/change-password/change-password
 import { MsalService } from '@azure/msal-angular';
 import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-home-layout',
   templateUrl: './home-layout.component.html',
   styleUrls: ['./home-layout.component.css'],
 })
-export class HomeLayoutComponent implements OnInit {
+export class HomeLayoutComponent implements OnInit, OnDestroy {
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav
 
@@ -40,7 +41,8 @@ export class HomeLayoutComponent implements OnInit {
     private badgeServie: BadgeService,
     private dialog: MatDialog,
     private msalService: MsalService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService: SubscriptionService,
   ) { }
 
   ngOnInit() {
@@ -48,7 +50,7 @@ export class HomeLayoutComponent implements OnInit {
     this.success(this.username)
     this.role = this.sharedService.role
     if (this.role != 'Admin') {
-      this.userService.getUser(this.username)
+      const userSubscribe = this.userService.getUser(this.username)
         .subscribe(
           Response => {
             this.user = Response
@@ -57,6 +59,7 @@ export class HomeLayoutComponent implements OnInit {
             this.position = Response.position
           }
         )
+        this.subscriptionService.add(userSubscribe);
     } else {
       this.email = this.sharedService.email
       this.fullName = this.sharedService.fullName
@@ -96,10 +99,9 @@ export class HomeLayoutComponent implements OnInit {
 
   logOutStaff() {
     this.msalService.logoutRedirect({
-      postLogoutRedirectUri: 'http://localhost:4200/login'
+      postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/e-Estate'
     });
     localStorage.clear();
-
   }
 
   changePassword() {
@@ -112,4 +114,9 @@ export class HomeLayoutComponent implements OnInit {
         }
       )
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { RubberPurchase } from '../_interface/rubberPurchase';
 import { SharedService } from '../_services/shared.service';
@@ -6,13 +6,14 @@ import { RubberPurchaseService } from '../_services/rubber-purchase.service';
 import swal from 'sweetalert2';
 import { Seller } from '../_interface/seller';
 import { SellerService } from '../_services/seller.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-add-rubber-purchase',
   templateUrl: './add-rubber-purchase.component.html',
   styleUrls: ['./add-rubber-purchase.component.css']
 })
-export class AddRubberPurchaseComponent implements OnInit {
+export class AddRubberPurchaseComponent implements OnInit, OnDestroy {
   currentDate = ''
 
   rubberPurchase: RubberPurchase = {} as RubberPurchase
@@ -23,7 +24,8 @@ export class AddRubberPurchaseComponent implements OnInit {
     private location: Location,
     private sellerService: SellerService,
     private sharedService: SharedService,
-    private rubberPurchaseService: RubberPurchaseService
+    private rubberPurchaseService: RubberPurchaseService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -43,13 +45,14 @@ export class AddRubberPurchaseComponent implements OnInit {
   }
 
   getSeller() {
-    this.sellerService.getSeller()
+    const getSeller = this.sellerService.getSeller()
       .subscribe(
         Response => {
           const sellers = Response
           this.sellers = sellers.filter(x => x.isActive == true)
         }
       )
+    this.subscriptionService.add(getSeller);
   }
 
   selectedDate(date: string) {
@@ -95,4 +98,9 @@ export class AddRubberPurchaseComponent implements OnInit {
     const total = this.rubberPurchase.price * this.rubberPurchase.weight
     this.rubberPurchase.totalPrice = total
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

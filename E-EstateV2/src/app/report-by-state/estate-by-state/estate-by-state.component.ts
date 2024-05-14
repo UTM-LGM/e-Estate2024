@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
+import { ReportService } from 'src/app/_services/report.service';
 
 @Component({
   selector: 'app-estate-by-state',
@@ -17,13 +18,14 @@ export class EstateByStateComponent implements OnInit {
   stateTotalAreas = {} as any;
 
   sortableColumns = [
-    { columnName: 'estateNo', displayText: 'No of estate' },
     { columnName: 'state', displayText: 'State' },
+    { columnName: 'estateNo', displayText: 'No of Estate' },
     { columnName: 'rubberArea', displayText: 'Total Rubber Area (Ha)' },
   ];
 
   constructor(
-    private myLesenService: MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private reportService:ReportService
   ) { }
 
   ngOnInit(): void {
@@ -41,38 +43,28 @@ export class EstateByStateComponent implements OnInit {
 
   getEstate() {
     setTimeout(() => {
-      this.myLesenService.getAllEstate()
-        .subscribe(
-          Response => {
-            this.estates = Response;
-            this.estates.forEach(estate => {
-              if (estate.state) { // Check if estate.state is not null or undefined
-                if (estate.state in this.stateTotalAreas) {
-                  // Increment count of estates with area
-                  this.stateTotalAreas[estate.state].count++;
-                  // Accumulate total area
-                  if (!isNaN(estate.area)) { // Check if estate.area is a valid number
-                    this.stateTotalAreas[estate.state].totalArea += estate.area;
-                  }
-                } else {
-                  // Initialize count and total area
-                  if (!isNaN(estate.area) && estate.area > 0) {
-                    this.stateTotalAreas[estate.state] = {
-                      count: 1,
-                      totalArea: estate.area
-                    };
-                  } else {
-                    this.stateTotalAreas[estate.state] = {
-                      count: 0,
-                      totalArea: 0
-                    };
-                  }
-                }
-              }
-            });
-            this.isLoading = false;
-          }
-        );
+      this.myLesenService.getAllEstate().subscribe(estates => {
+        this.estates = estates;
+        this.calculateTotalArea();
+      });
     }, 2000);
   }
+
+  calculateTotalArea() {
+    this.estates.forEach(estate => {
+      this.reportService.getFieldArea().subscribe(Response => {
+        const area = Response.filter(x => x.estateId === estate.id && x.isActive == true);
+        const totalArea = area.reduce((acc, curr) => acc + curr.area, 0);
+        // Accumulate the total area for each state
+        if (!this.stateTotalAreas[estate.state]) {
+          this.stateTotalAreas[estate.state] = { count: 1, totalArea: totalArea };
+        } else {
+          this.stateTotalAreas[estate.state].count++;
+          this.stateTotalAreas[estate.state].totalArea += totalArea;
+        }
+        this.isLoading = false;
+      });
+    });
+  }
+
 }

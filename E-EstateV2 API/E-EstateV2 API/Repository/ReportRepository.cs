@@ -244,7 +244,8 @@ namespace E_EstateV2_API.Repository
                 fieldId = x.Id,
                 area = x.area,
                 isMature = x.isMature,
-                estateId = x.estateId
+                estateId = x.estateId,
+                isActive = x.isActive
             }).ToListAsync();
 
             return field;

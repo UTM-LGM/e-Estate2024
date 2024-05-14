@@ -18,6 +18,7 @@ export class CloneProductionYearlyComponent implements OnInit {
   currentSortedColumn = ''
   term = ''
 
+
   estate: any = {} as any
   companies: any[] = []
 
@@ -26,11 +27,12 @@ export class CloneProductionYearlyComponent implements OnInit {
   company: any = {} as any
 
   cloneProduction: any[] = []
-  cloneAreaData: any = [];
+  cloneProductionData: any = [];
+
 
   sortableColumns = [
     { columnName: 'cloneName', displayText: 'Clone Name' },
-    { columnName: 'area', displayText: 'Clone Area (Ha)' },
+    { columnName: 'totalProduction', displayText: 'Total Production dry (Kg)' },
   ];
 
   constructor(
@@ -48,7 +50,7 @@ export class CloneProductionYearlyComponent implements OnInit {
   }
 
   yearSelected() {
-    this.cloneAreaData = []
+    this.cloneProductionData = []
     const yearAsString = this.year.toString();
     if (yearAsString.length === 4) {
       this.isLoading = true
@@ -69,52 +71,51 @@ export class CloneProductionYearlyComponent implements OnInit {
         this.isLoading = false;
         this.cloneProduction = [];
       } else {
-        this.reportService.getProductionByClone(this.year)
+        this.reportService.getProductivityByClone(this.year)
           .subscribe(
             Response => {
               this.cloneProduction = Response;
               this.isLoading = false;
-
-              // Create a map to store unique cloneName entries and their areas
-              const cloneAreaMap = new Map();
-
-              // Iterate through the cloneProduction array
+  
+              const cloneProduction = new Map();
               this.cloneProduction.forEach(field => {
-                const { fieldId, area, fieldClone } = field;
-
-                if (fieldClone.length > 1) {
-                  // If fieldClone length is greater than 1, sum up the area for 'MixedClone'
+                const { fieldId, cuplumpDry, latexDry, ussDry, othersDry, fieldClone, area } = field;
+                const totalProduction = cuplumpDry + latexDry + ussDry + othersDry;
+  
+                if (fieldClone && fieldClone.length > 1) { // Check if fieldClone has more than 1 element
                   const mixedCloneName = 'MIXED CLONE';
-                  if (cloneAreaMap.has(mixedCloneName)) {
-                    // If 'MixedClone' already exists in the map, add area to existing value
-                    cloneAreaMap.set(mixedCloneName, cloneAreaMap.get(mixedCloneName) + area);
+                  if (cloneProduction.has(mixedCloneName)) {
+                    cloneProduction.set(mixedCloneName, {
+                      totalProduction: cloneProduction.get(mixedCloneName).totalProduction + totalProduction,
+                      area: cloneProduction.get(mixedCloneName).area + area
+                    });
                   } else {
-                    // If 'MixedClone' doesn't exist in the map, add it with current area
-                    cloneAreaMap.set(mixedCloneName, area);
+                    cloneProduction.set(mixedCloneName, { totalProduction, area });
                   }
-                } else {
-                  // If fieldClone length is 1, proceed normally
-                  const { cloneId, cloneName } = fieldClone[0];
-                  if (cloneAreaMap.has(cloneName)) {
-                    // If cloneName already exists in the map, add area to existing value
-                    cloneAreaMap.set(cloneName, cloneAreaMap.get(cloneName) + area);
+                } else if (fieldClone && fieldClone.length === 1) { // Check if fieldClone has exactly 1 element
+                  const { cloneName } = fieldClone[0];
+                  if (cloneProduction.has(cloneName)) {
+                    cloneProduction.set(cloneName, {
+                      totalProduction: cloneProduction.get(cloneName).totalProduction + totalProduction,
+                      area: cloneProduction.get(cloneName).area + area
+                    });
                   } else {
-                    // If cloneName doesn't exist in the map, add it with current area
-                    cloneAreaMap.set(cloneName, area);
+                    cloneProduction.set(cloneName, { totalProduction, area });
                   }
                 }
+                // Do nothing if fieldClone is empty
               });
-
-              // Convert the map to an array of objects
-              this.cloneAreaData = [];
-              cloneAreaMap.forEach((area, cloneName) => {
-                this.cloneAreaData.push({ cloneName: cloneName, area: area });
+  
+              cloneProduction.forEach((value, cloneName) => {
+                this.cloneProductionData.push({ cloneName, ...value });
               });
-            }
-          );
+  
+            });
       }
     }, 2000);
   }
+  
+  
 
   toggleSort(columnName: string) {
     if (this.currentSortedColumn === columnName) {

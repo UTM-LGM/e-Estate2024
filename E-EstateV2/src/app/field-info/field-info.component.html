@@ -84,7 +84,7 @@
             </tr>
 
             <tr *ngIf="selectedValues.length == 0">
-              <td colspan="3"><b>No Clone</b></td>
+              <td colspan="3" style="color: red;"><b>No Clone</b></td>
             </tr>
 
             <tr *ngFor="let value of selectedValues; let i = index">
@@ -131,7 +131,7 @@
         </tr>
 
         <tr *ngIf="fields.length == 0 && !isLoading">
-          <td colspan="10"><b>No Field</b></td>
+          <td colspan="10" style="color: red;"><b>No Field</b></td>
         </tr>
 
         <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
@@ -186,7 +186,7 @@
           </tr>
 
           <tr *ngIf="selectedField === field && conversionField.length ==0">
-            <td style="width: 100%; background-color: antiquewhite;" colspan="10"> <b> No field conversion data found
+            <td style="width: 100%; background-color: antiquewhite;" colspan="10" style="color: red;"> <b> No field conversion data found
               </b> </td>
           <tr>
         </tbody>

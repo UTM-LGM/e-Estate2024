@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Company } from '../_interface/company';
 import { CompanyService } from '../_services/company.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-company-list',
   templateUrl: './company-list.component.html',
   styleUrls: ['./company-list.component.css'],
 })
-export class CompanyListComponent implements OnInit {
+export class CompanyListComponent implements OnInit, OnDestroy {
   companies: any[] = []
   activeCompanies: Company[] = []
   inactiveCompanies: Company[] = []
@@ -24,7 +25,9 @@ export class CompanyListComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
-    private mylesenService: MyLesenIntegrationService
+    private mylesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit() {
@@ -33,13 +36,15 @@ export class CompanyListComponent implements OnInit {
 
   getCompany() {
     setTimeout(() => {
-      this.mylesenService.getAllCompany()
+      const getCompany = this.mylesenService.getAllCompany()
         .subscribe(
           Response => {
             this.companies = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getCompany);
+
     }, 2000)
   }
 
@@ -69,5 +74,9 @@ export class CompanyListComponent implements OnInit {
     this.showDefault = true
     this.isBtnInactive = false
     this.isBtnActive = false
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

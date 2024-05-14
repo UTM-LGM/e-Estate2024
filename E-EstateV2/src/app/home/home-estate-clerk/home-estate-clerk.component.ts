@@ -164,15 +164,23 @@ export class HomeEstateClerkComponent implements OnInit {
       .subscribe(
         Response => {
           const worker = Response.filter(x => x.estateId == this.sharedService.estateId)
-          worker.forEach(item => {
-            // Add values with "tapper" in their keys to currentTotalTapper
-            this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
+          if(worker.length === 0){
+            this.currentTotalTapper = 0
+            this.currentTotalField = 0
             this.isLoadingTapper = false
-
-            // Add values with "field" in their keys to currentTotalField
-            this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
             this.isLoadingField = false
-          });
+          }
+          else{
+            worker.forEach(item => {
+              // Add values with "tapper" in their keys to currentTotalTapper
+              this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
+              this.isLoadingTapper = false
+  
+              // Add values with "field" in their keys to currentTotalField
+              this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
+              this.isLoadingField = false
+            });
+          }  
         }
       )
   }

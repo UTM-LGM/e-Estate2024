@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Estate } from '../_interface/estate';
 import { EstateService } from '../_services/estate.service';
@@ -18,13 +18,14 @@ import { EstateDetailService } from '../_services/estate-detail.service';
 import { EstateDetail } from '../_interface/estate-detail';
 import { FieldService } from '../_services/field.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-estate-detail',
   templateUrl: './estate-detail.component.html',
   styleUrls: ['./estate-detail.component.css'],
 })
-export class EstateDetailComponent implements OnInit {
+export class EstateDetailComponent implements OnInit,OnDestroy {
   estate: any = {} as any
 
   contacts: any[] = []
@@ -76,7 +77,8 @@ export class EstateDetailComponent implements OnInit {
     private myLesenService: MyLesenIntegrationService,
     private estateDetailService: EstateDetailService,
     private fieldService: FieldService,
-    private fieldInfectedService: FieldInfectedService
+    private fieldInfectedService: FieldInfectedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -88,7 +90,7 @@ export class EstateDetailComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
@@ -97,7 +99,9 @@ export class EstateDetailComponent implements OnInit {
                 this.isLoading = false
               }
             )
-          this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
+          this.subscriptionService.add(getOneEstate);
+       
+          const getEstateDetail = this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
             .subscribe(
               Response => {
                 if (Response != null) {
@@ -105,13 +109,14 @@ export class EstateDetailComponent implements OnInit {
                 }
               }
             )
+            this.subscriptionService.add(getEstateDetail);
         }
       });
     }, 2000)
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const fields = Response
@@ -129,16 +134,20 @@ export class EstateDetailComponent implements OnInit {
           this.sum(this.fields)
         }
       )
+      this.subscriptionService.add(getField);
+
   }
 
   getContact() {
-    this.estateContactService.getCompanyContact()
+    const getContact =this.estateContactService.getCompanyContact()
       .subscribe(
         Response => {
           const contacts = Response
           this.contacts = contacts.filter(x => x.estateId == this.estate.id)
         }
       )
+      this.subscriptionService.add(getContact);
+
   }
 
   statusEstate(estate: Estate) {
@@ -220,13 +229,15 @@ export class EstateDetailComponent implements OnInit {
   }
 
   getConversion(field: Field) {
-    this.fieldConversionService.getConversion()
+     const getConversion = this.fieldConversionService.getConversion()
       .subscribe(
         Response => {
           const conversion = Response
           this.conversionField = conversion.filter(x => x.fieldId == field.id)
         }
       )
+      this.subscriptionService.add(getConversion);
+
   }
 
   openDialogContact(contact: EstateContact[], estate: Estate) {
@@ -239,6 +250,10 @@ export class EstateDetailComponent implements OnInit {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Buyer } from '../_interface/buyer';
 import { RubberSale } from '../_interface/rubberSale';
 import { RubberSaleService } from '../_services/rubber-sale.service';
@@ -6,13 +6,14 @@ import swal from 'sweetalert2';
 import { Location } from '@angular/common';
 import { SharedService } from '../_services/shared.service';
 import { BuyerService } from '../_services/buyer.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-add-rubber-sale',
   templateUrl: './add-rubber-sale.component.html',
   styleUrls: ['./add-rubber-sale.component.css']
 })
-export class AddRubberSaleComponent implements OnInit {
+export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   buyers: Buyer[] = []
 
@@ -26,6 +27,7 @@ export class AddRubberSaleComponent implements OnInit {
     private rubberSaleService: RubberSaleService,
     private location: Location,
     private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -44,13 +46,15 @@ export class AddRubberSaleComponent implements OnInit {
   }
 
   getBuyer() {
-    this.buyerService.getBuyer()
+    const getBuyer = this.buyerService.getBuyer()
       .subscribe(
         Response => {
           const buyers = Response
           this.buyers = buyers.filter(x => x.isActive == true && x.estateId == this.sharedService.estateId)
         }
       )
+    this.subscriptionService.add(getBuyer);
+    
   }
 
   selectedDate(date: string) {
@@ -98,7 +102,7 @@ export class AddRubberSaleComponent implements OnInit {
 
   calculateTotalPrice() {
     const total = this.rubberSale.unitPrice * this.rubberSale.wetWeight
-    this.rubberSale.total = total.toFixed(2)
+    //this.rubberSale.total = total.toFixed(2)
   }
 
   generateLetterOfConsetnNo() {
@@ -110,12 +114,16 @@ export class AddRubberSaleComponent implements OnInit {
     const hours = ('0' + currentDate.getHours()).slice(-2); // Ensure two digits for hours
     const minutes = ('0' + currentDate.getMinutes()).slice(-2); // Ensure two digits for minutes
 
-    this.letterOfConsentNo = `E1${year}${month}${day}${hours}${minutes}`;
+    this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}`;
   }
 
   print(sale: RubberSale) {
     const url = 'generate-form-1/' + sale.id;
     window.open(url, '_blank');
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

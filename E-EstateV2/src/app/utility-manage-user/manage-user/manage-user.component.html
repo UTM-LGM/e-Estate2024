@@ -1,9 +1,9 @@
 <div class="box-container">
     <h1>List of users</h1>
 
-    <button class="btn-add" (click)="addUser()">
+    <!-- <button class="btn-add" (click)="addUser()">
         Add New User &nbsp; <i class="fa fa-plus"></i>
-      </button>
+      </button> -->
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Users" />
 
@@ -30,9 +30,10 @@
             </tr>
 
             <tr *ngIf="users.length == 0 && !isLoading">
-                <td colspan="8"><b>No new user</b></td>
+                <td colspan="8" style="color: red;"><b>No new user</b></td>
             </tr>
 
+            <ng-container *ngIf="!isLoading">
             <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
                 <td>{{user.fullName}}</td>
                 <td>{{user.email}}</td>
@@ -45,6 +46,7 @@
                         <i class="fa fa fa-pencil"></i>
                     </button></td>
             </tr>
+        </ng-container>
         </table>
 
         <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>

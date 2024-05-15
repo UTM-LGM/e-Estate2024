@@ -144,7 +144,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
             const labors = Response
             this.filterLabors = labors.filter(e => e.monthYear == this.date.toUpperCase() && e.estateId == this.sharedService.estateId)
             this.getCountry()
-            this.sumTable(this.filterLabors,)
+            this.sumTable(this.filterLabors)
             this.TotalForeign()
             this.isLoading = false
           });

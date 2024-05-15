@@ -90,11 +90,19 @@
           <td>{{production.monthYear}}</td>
           <td>{{production.cuplumpDry | number:'1.2-2'}}</td>
           <td>{{production.latexDry | number:'1.2-2'}}</td>
-          <td>{{production.ussDry | number:'1.2-2'}}</td>
-          <td>{{production.othersDry | number:'1.2-2'}}</td>
           <td>{{production.totalDry | number:'1.2-2'}}</td>
         </tr>
+
+        <tr *ngIf="filterProductionYearly.length > 0">
+          <th>Total Production dry(Kg) </th>
+          <th>{{totalCuplumpDry | number:'1.2-2'}}</th>
+          <th>{{totalLatexDry | number: '1.2-2'}}</th>
+          <th>{{totalAllDry | number: '1.2-2'}}</th>
+        </tr>
+
       </ng-container>
+
+      
     </table>
   </div>
 </div>

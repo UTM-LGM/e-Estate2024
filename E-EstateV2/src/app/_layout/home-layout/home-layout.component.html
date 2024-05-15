@@ -33,7 +33,9 @@
         <span><i class="fa fa-user"></i> Position : {{position}}</span><br />
         <hr>
         <div style="text-align: center;">
-          <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
+          <div *ngIf="role != 'Admin'">
+            <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
+          </div>
           <button *ngIf="role != 'Admin'" class="btn-danger" (click)="logOut()">LOGOUT</button>
           <button *ngIf="role == 'Admin'" class="btn-danger" (click)="logOutStaff()">LogOut Staff</button>
         </div>

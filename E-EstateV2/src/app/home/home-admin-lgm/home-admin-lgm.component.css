@@ -6,30 +6,32 @@
 
 .column {
   width: 100%;
-  margin: 0 10px;
+  margin: 0 5px;
   text-align: center;
   color: black;
 }
 
 .color1 {
-  background-color: #a6cbd8; /* Similar to color 3 */
+  background-color: #a6cbd8; 
   height: 65px;
 }
 
 .color2 {
-  background-color: #84d9e5; /* Similar to color 4 */
+  background-color: #84d9e5;
   height: 65px;
 }
 
 .color3 {
+  background-color: #0492c259;
+  height: 65px;
+}
+
+
+.color4 {
   background-color: #59788e96;
   height: 65px;
 }
 
-.color4 {
-  background-color: #0492c259;
-  height: 65px;
-}
 
 .color5 {
   background-color: #48aaad91;

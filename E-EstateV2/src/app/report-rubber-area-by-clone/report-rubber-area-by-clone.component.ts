@@ -25,7 +25,7 @@ export class ReportRubberAreaByCloneComponent {
   filterCompanyAdmin: any[] = []
   company: any = {} as any
 
-  cloneProduction: any[] = []
+  cloneArea: any[] = []
   cloneAreaData: any = [];
 
   sortableColumns = [
@@ -40,7 +40,7 @@ export class ReportRubberAreaByCloneComponent {
 
   ngOnInit(): void {
     this.role = this.sharedService.role
-    this.getProductionYearly()
+    this.getAreaClone()
   }
 
   companySelected() {
@@ -52,7 +52,7 @@ export class ReportRubberAreaByCloneComponent {
     const yearAsString = this.year.toString();
     if (yearAsString.length === 4) {
       this.isLoading = true
-      this.getProductionYearly()
+      this.getAreaClone()
     } else {
       swal.fire({
         icon: 'error',
@@ -63,58 +63,55 @@ export class ReportRubberAreaByCloneComponent {
     }
   }
 
-  getProductionYearly() {
+  getAreaClone() {
     setTimeout(() => {
-      if (this.year == '') {
+      if (this.year === '') {
         this.isLoading = false;
-        this.cloneProduction = [];
+        this.cloneArea = [];
       } else {
-        this.reportService.getProductionByClone(this.year)
+        this.reportService.getAreaByClone(this.year)
           .subscribe(
-            Response => {
-              this.cloneProduction = Response;
+            Response=>{
+              this.cloneArea = this.processCloneArea(Response);
               this.isLoading = false;
-  
-              // Create a map to store unique cloneName entries and their areas
-              const cloneAreaMap = new Map();
-  
-              // Iterate through the cloneProduction array
-              this.cloneProduction.forEach(field => {
-                const { fieldId, area, fieldClone } = field;
-  
-                if (fieldClone.length > 0) {
-                  // Check if fieldClone array is not empty
-                  const { cloneId, cloneName } = fieldClone[0]; // Destructure only when array is not empty
-                  if (cloneAreaMap.has(cloneName)) {
-                    // If cloneName already exists in the map, add area to existing value
-                    cloneAreaMap.set(cloneName, cloneAreaMap.get(cloneName) + area);
-                  } else {
-                    // If cloneName doesn't exist in the map, add it with current area
-                    cloneAreaMap.set(cloneName, area);
-                  }
-                } else {
-                  // Handle the case when fieldClone array is empty
-                  const mixedCloneName = 'MIXED CLONE';
-                  if (cloneAreaMap.has(mixedCloneName)) {
-                    // If 'MixedClone' already exists in the map, add area to existing value
-                    cloneAreaMap.set(mixedCloneName, cloneAreaMap.get(mixedCloneName) + area);
-                  } else {
-                    // If 'MixedClone' doesn't exist in the map, add it with current area
-                    cloneAreaMap.set(mixedCloneName, area);
-                  }
-                }
-              });
-  
-              // Convert the map to an array of objects
-              this.cloneAreaData = [];
-              cloneAreaMap.forEach((area, cloneName) => {
-                this.cloneAreaData.push({ cloneName: cloneName, area: area });
-              });
             }
-          );
+          )
       }
-    }, 2000);
+    }, 0);
   }
+  
+  processCloneArea(data: any[]) {
+    let cloneAreaMap = new Map<string, number>();
+    let mixedCloneArea = 0;
+  
+    data.forEach(field => {
+      if (field.cloneNames.length > 1) {
+        mixedCloneArea += field.area;
+      } else {
+        const cloneNames = field.cloneNames[0];
+        if (cloneAreaMap.has(cloneNames)) {
+          cloneAreaMap.set(cloneNames, cloneAreaMap.get(cloneNames)! + field.area);
+        } else {
+          cloneAreaMap.set(cloneNames, field.area);
+        }
+      }
+    });
+  
+    let result = Array.from(cloneAreaMap.entries()).map(([cloneName, totalArea]) => ({
+      cloneName: cloneName,
+      totalArea: totalArea
+    }));
+  
+    if (mixedCloneArea > 0) {
+      result.push({
+        cloneName: 'MIXED CLONE',
+        totalArea: mixedCloneArea
+      });
+    }
+  
+    return result;
+  }
+  
   
 
   toggleSort(columnName: string) {

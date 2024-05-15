@@ -2,6 +2,8 @@
   <h1>Cost Information Yearly</h1>
   <hr />
 
+  <span style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span>
+
   <div style="columns:3"
     [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
@@ -50,8 +52,6 @@
     <label>Please choose year : </label>
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
-
-  <br />
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">

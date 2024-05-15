@@ -33,8 +33,8 @@
         <tr *ngFor="let data of cloneProductionData">
           <td>{{ data.cloneName }}</td>
           <td>{{ data.totalProduction | number:'1.2-2' }}</td>
-          <td>{{ data.area }}</td>
-          <td>{{ data.totalProduction/data.area | number:'1.2-2'}}</td>
+          <td>{{ data.totalArea }}</td>
+          <td>{{ (data.totalProduction / data.totalArea) | number:'1.2-2' }}</td>
         </tr>
       </ng-container>
 

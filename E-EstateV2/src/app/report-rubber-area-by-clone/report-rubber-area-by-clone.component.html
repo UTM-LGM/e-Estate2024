@@ -10,7 +10,7 @@
     <div style="overflow-x: auto;">
       <table style="width: 100%">
         <tr>
-          <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="cloneProduction"
+          <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="cloneArea"
             [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
             <i class="fa"
@@ -26,14 +26,14 @@
           </td>
         </tr>
   
-        <tr *ngIf="!isLoading && cloneProduction.length == 0 && role == 'Admin'">
+        <tr *ngIf="!isLoading && cloneArea.length == 0 && role == 'Admin'">
           <td colspan="2" style="color: red; text-align: center;">No data found. Please choose year</td>
         </tr>
   
         <ng-container *ngIf="!isLoading">
-          <tr *ngFor="let data of cloneAreaData">
+          <tr *ngFor="let data of cloneArea">
             <td>{{ data.cloneName }}</td>
-            <td>{{ data.area }}</td>
+            <td>{{ data.totalArea }}</td>
           </tr>
         </ng-container>
   

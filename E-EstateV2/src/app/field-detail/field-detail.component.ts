@@ -290,6 +290,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     } else {
       this.fieldClone.fieldId = field.id
       this.fieldClone.cloneId = field.cloneId
+      this.fieldClone.isActive = true
       this.fieldClone.createdBy = this.sharedService.userId.toString()
       this.fieldClone.createdDate = new Date()
       this.fieldService.addClone(this.fieldClone)
@@ -437,7 +438,6 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     this.fieldInfect.fieldDiseaseId = this.field.fieldDiseaseId
     this.fieldConversion.createdBy = this.sharedService.userId.toString()
     this.fieldConversion.createdDate = new Date()
-
   }
 
   checkFieldName() {

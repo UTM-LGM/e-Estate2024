@@ -4,6 +4,7 @@ import { forkJoin, map } from 'rxjs';
 import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
+import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 
@@ -49,6 +50,8 @@ export class HomeAdminLGMComponent implements OnInit {
   isLoadingProduction = true
   isLoadingTapperShortage = true
   isLoadingFieldShortage = true
+  isLoadingTapped = true
+  isLoadingCop = true
 
   chart: any
   productivityByYear:any
@@ -57,11 +60,14 @@ export class HomeAdminLGMComponent implements OnInit {
   totalFieldNeeded = 0
   tapperShortage = 0
   fieldShortage =0
+  tappedArea = 0
+  costAmount = 0
 
 
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
+    private fieldService:FieldService
   ) { }
 
   ngOnInit() {
@@ -71,11 +77,34 @@ export class HomeAdminLGMComponent implements OnInit {
     this.yearNow = new Date().getFullYear()
     this.getWorker()
     this.getWorkerShortage()
+    this.getField()
+    this.getCostInformation()
   }
 
   ngAfterViewInit() {
     this.getProductivity()
 
+  }
+
+  getCostInformation(){
+    this.reportService.getCostInformation(this.yearNow.toString())
+    .subscribe(
+      Response =>{
+        this.costAmount = Response.reduce((sum, estate)=> sum + estate.amount, 0)
+        this.isLoadingCop = false
+      }
+    )
+  }
+
+  getField(){
+    this.reportService.getCurrentField(this.yearNow.toString())
+    .subscribe(
+      Response =>{
+        const field = Response.filter(x=>x.isActive == true && x.fieldStatus.toLowerCase().includes('tapped area'))
+        this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
+        this.isLoadingTapped = false
+      }
+    )
   }
 
   getWorkerShortage() {
@@ -90,6 +119,8 @@ export class HomeAdminLGMComponent implements OnInit {
             this.fieldShortage = 0
             this.isLoadingTapperNeeded = false
             this.isLoadingFieldNeeded = false
+            this.isLoadingTapperShortage = false
+            this.isLoadingFieldShortage = false
           }
           else{
             this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
@@ -275,20 +306,6 @@ export class HomeAdminLGMComponent implements OnInit {
             backgroundColor: 'limegreen',
             borderColor: 'limegreen',
             fill: false
-          },
-          {
-            label: 'USS Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityUSSDry),
-            backgroundColor: 'orange',
-            borderColor: 'orange',
-            fill: false
-          },
-          {
-            label: 'Others Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityOthersDry),
-            backgroundColor: 'pink',
-            borderColor: 'pink',
-            fill: false
           }
         ]
       },
@@ -325,5 +342,10 @@ export class HomeAdminLGMComponent implements OnInit {
           
         }
       )
+  }
+
+  getCalculatedCop(){
+    const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
+    return isNaN(value) ? 0 : value;
   }
 }

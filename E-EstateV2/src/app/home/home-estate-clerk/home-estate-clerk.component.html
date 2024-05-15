@@ -8,96 +8,147 @@
 
 <div class="box" style="padding-bottom: 15px;" *ngIf="warningProductionDrafted">
   <div class="column box-container" style="background-color: yellow; text-align: left;">
-    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have rubber production in drafted, please submit <a  routerLink="/e-estate/field-production/{{estateId}}" style="text-decoration: underline; cursor: pointer;">here</a></span><br />
+    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have rubber production in drafted, please submit
+      <a routerLink="/e-estate/field-production/{{estateId}}"
+        style="text-decoration: underline; cursor: pointer;">here</a></span><br />
   </div>
 </div>
 
 <div class="box" style="padding-bottom: 15px;" *ngIf="warningCostDrafted">
   <div class="column box-container" style="background-color: yellow; text-align: left;">
-    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have cost information in drafted, please submit <a  routerLink="/e-estate/cost-info/{{estateId}}" style="text-decoration: underline; cursor: pointer;">here</a></span><br />
+    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have cost information in drafted, please submit <a
+        routerLink="/e-estate/cost-info/{{estateId}}"
+        style="text-decoration: underline; cursor: pointer;">here</a></span><br />
   </div>
 </div>
 
-<div class="box">
-  <div class="column box-container color1">
-    <span>Current Tapper Worker</span><br />
-    <span style="font-weight: bold;" *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
-    <div *ngIf="isLoadingTapper">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+<div style="columns:2">
+  <div class="box-container-outer">
+    <span style="font-size: 11px;">Current Field Area (Ha)</span>
+    <div class="box">
+      <div class="column box-container color3">
+        <div class="span-word">
+          <span>Mature</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingMatureArea">{{matureArea}}</span>
+        </div>
+        <div *ngIf="isLoadingMatureArea">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+
+      <div class="column box-container color4">
+        <div class="span-word">
+          <span>Immature</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingImmatureArea">{{immatureArea}}</span>
+        </div>
+        <div *ngIf="isLoadingImmatureArea">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+
+      <div class="column box-container color4">
+        <div class="span-word">
+          <span>Tapped</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingTappedArea">{{tappedArea}}</span>
+        </div>
+        <div *ngIf="isLoadingTappedArea">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="column box-container color2">
-    <span>Current Field Worker</span><br />
-    <span style="font-weight: bold;" *ngIf="!isLoadingField">{{currentTotalField}}</span>
-    <div *ngIf="isLoadingField">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+  <br />
+
+  <div class="box-container-outer">
+    <span style="font-size: 11px;">Current Rubber Dry Production (Kg)</span>
+    <div class="box">
+      <div class="column box-container color1">
+        <div class="span-word">
+          <span>Cuplump</span><br />
+          <div *ngIf="!isLoadingProduction">
+            <b><span *ngFor="let production of filterProductions">{{production.cuplumpDry | number: '1.2-2'}}</span></b>
+          </div>
+        </div>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span>Latex</span><br />
+          <b><span *ngFor="let production of filterProductions">{{production.latexDry | number: '1.2-2'}}</span></b>
+        </div>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+<div style="columns:2">
+  <div class="box-container-outer">
+    <span style="font-size: 11px;">Current Worker</span>
+    <div class="box">
+      <div class="column box-container color1">
+        <div class="span-word">
+          <span>Tapper</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
+        </div>
+        <div *ngIf="isLoadingTapper">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span>Field</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingField">{{currentTotalField}}</span>
+        </div>
+        <div *ngIf="isLoadingField">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box-container-outer">
+    <span style="font-size: 11px;">Current Worker Shortage</span>
+    <div class="box">
+      <div class="column box-container color1">
+        <div class="span-word">
+          <span>Tapper</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingTapperShortage">{{tapperShortage}}</span>
+        </div>
+        <div *ngIf="isLoadingTapperShortage">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span>Field</span><br />
+          <span style="font-weight: bold;" *ngIf="!isLoadingFieldShortage">{{fieldShortage}}</span>
+        </div>
+        <div *ngIf="isLoadingFieldShortage">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 <br />
 
-<div class="box">
-  <div class="column box-container color3">
-    <span>Current Mature Field Area</span><br />
-    <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{matureArea}}</span>
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-    </div>
-  </div>
-  <div class="column box-container color4">
-    <span>Current Immature Field Area</span><br />
-    <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{immatureArea}}</span>
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
-    </div>
-  </div>
-</div>
-<br />
 
-<div class="box">
-  <div class="column box-container color1">
-    <span>Total Cuplump Dry Production (Kg) for {{yearNow}}</span><br />
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-    </div>
-    <div *ngIf="!isLoadingProduction">
-      <b><span *ngFor="let production of filterProductions">{{production.cuplumpDry | number: '1.2-2'}}</span></b>
-    </div>
-  </div>
-
-  <div class="column box-container color2">
-    <span>Total Latex Dry Production (Kg) for {{yearNow}}</span><br />
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
-    </div>
-    <b><span *ngFor="let production of filterProductions">{{production.latexDry | number: '1.2-2'}}</span></b>
-  </div>
-
-  <div class="column box-container color3">
-    <span>Total USS Dry Production (Kg) for {{yearNow}}</span><br />
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#48aaad91'}"></ngx-skeleton-loader>
-    </div>
-    <b><span *ngFor="let production of filterProductions">{{production.ussDry | number: '1.2-2'}}</span></b>
-  </div>
-
-  <div class="column box-container color4">
-    <span>Total Other Dry Production (Kg) for {{yearNow}}</span><br />
-    <div *ngIf="isLoadingProduction">
-      <ngx-skeleton-loader appearance="line" animation="progress-dark"
-        [theme]="{'height':'30px', 'width':'80px', 'background-color':'#4872ad8a'}"></ngx-skeleton-loader>
-    </div>
-    <b><span *ngFor="let production of filterProductions">{{production.othersDry | number: '1.2-2'}}</span></b>
-  </div>
-</div>
-<br />
 
 <div class="box" style="justify-content: left;">
   <div class="column box-container" style="color:black;margin: none;">

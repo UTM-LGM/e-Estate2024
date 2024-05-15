@@ -55,8 +55,6 @@ namespace E_EstateV2_API.Repository
                     EstateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
                     CuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                     LatexDry = x.latex * (x.latexDRC / 100),
-                    UssDry = x.USS * (x.USSDRC / 100),
-                    OthersDry = x.others * (x.othersDRC / 100),
                     Area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
                     MonthYear = x.monthYear
                 })
@@ -66,11 +64,10 @@ namespace E_EstateV2_API.Repository
                 .Select(x => new
                 {
                     x.MonthYear,
+                    x.Area,
                     x.EstateId,
-                    ProductivityCuplumpDry = x.CuplumpDry / x.Area,
-                    ProductivityLatexDry = x.LatexDry / x.Area,
-                    ProductivityUssDry = x.UssDry / x.Area,
-                    ProductivityOthersDry = x.OthersDry / x.Area
+                    x.CuplumpDry,
+                    x.LatexDry,
                 })
                 .ToList();
 
@@ -239,7 +236,8 @@ namespace E_EstateV2_API.Repository
         //EstateClerk
         public async Task<object> GetFieldArea()
         {
-            var field = await _context.fields.Where(x => x.isActive == true).Select(x => new
+            int year = DateTime.Now.Year;
+            var field = await _context.fields.Where(x => x.isActive == true && x.createdDate.Year == year).Select(x => new
             {
                 fieldId = x.Id,
                 area = x.area,
@@ -266,6 +264,50 @@ namespace E_EstateV2_API.Repository
             }).ToListAsync();
             return fieldProduction;
         }
+
+        public async Task<object> GetAreaByClone(int year)
+        {
+            // Fetch the raw data
+            var fieldClone = await _context.fieldClones.Where(x=>x.createdDate.Year == year).Select(x => new
+            {
+                fieldId = x.fieldId,
+                cloneId = x.cloneId,
+                cloneName = _context.clones.Where(y=>y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+            }).ToListAsync();
+
+            // Group by fieldId and create a list of cloneId for each fieldId
+            var groupedResult = fieldClone
+                .GroupBy(x => new { x.fieldId, x.area })
+                .Select(g => new
+                {
+                    fieldId = g.Key.fieldId,
+                    area = g.Key.area,
+                    cloneNames = g.Select(x => x.cloneName).ToList()
+                }).ToList();
+
+            return groupedResult;
+        }
+
+        public async Task<object> GetCurrentField(int year)
+        {
+            var field = await _context.fields.Where(x => x.createdDate.Year == year).Select(x => new
+            {
+                id = x.Id,
+                fieldName = x.fieldName,
+                area = x.area,
+                isMature = x.isMature,
+                isActive = x.isActive,
+                dateOpenTapping = x.dateOpenTapping,
+                yearPlanted = x.yearPlanted,
+                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
+                initialTreeStand = x.initialTreeStand,
+                totalTask = x.totalTask,
+                estateId = x.estateId,
+            }).ToListAsync();
+            return field;
+        }
+
 
         public async Task<object> GetProductivityYearlyByClone(int year)
         {

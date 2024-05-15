@@ -4,4 +4,5 @@ export interface FieldClone {
     cloneId: number
     createdBy: string
     createdDate: Date
+    isActive:boolean
 }

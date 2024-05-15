@@ -31,6 +31,8 @@ export class CloneProductivityYearlyComponent implements OnInit {
   cloneProduction: any[] = []
   cloneProductionData: any = [];
 
+  cloneArea :any[]=[]
+
 
   sortableColumns = [
     { columnName: 'cloneName', displayText: 'Clone Name' },
@@ -71,53 +73,116 @@ export class CloneProductivityYearlyComponent implements OnInit {
 
   getProductionYearly() {
     setTimeout(() => {
-      if (this.year == '') {
+      if (this.year === '') {
         this.isLoading = false;
         this.cloneProduction = [];
       } else {
         this.reportService.getProductivityByClone(this.year)
           .subscribe(
-            Response => {
-              this.cloneProduction = Response;
-              this.isLoading = false
-
-              const cloneProduction = new Map();
+            (response: any) => {
+              this.cloneProduction = response;
+              this.isLoading = false;
+  
+              const cloneProduction = new Map<string, { totalProduction: number }>();
               this.cloneProduction.forEach(field => {
-                const { fieldId, cuplumpDry, latexDry, ussDry, othersDry, fieldClone, area } = field;
+                const { fieldId, cuplumpDry, latexDry, ussDry, othersDry, fieldClone } = field;
                 const totalProduction = cuplumpDry + latexDry + ussDry + othersDry;
-
+  
                 if (fieldClone.length > 1) {
                   const mixedCloneName = 'MIXED CLONE';
                   if (cloneProduction.has(mixedCloneName)) {
                     cloneProduction.set(mixedCloneName, {
-                      totalProduction: cloneProduction.get(mixedCloneName).totalProduction + totalProduction,
-                      area: cloneProduction.get(mixedCloneName).area + area
+                      totalProduction: cloneProduction.get(mixedCloneName)!.totalProduction + totalProduction,
                     });
-
                   } else {
-                    cloneProduction.set(mixedCloneName, { totalProduction, area });
+                    cloneProduction.set(mixedCloneName, { totalProduction });
                   }
-                } else {
+                } else if (fieldClone.length === 1) {
                   const { cloneName } = fieldClone[0];
                   if (cloneProduction.has(cloneName)) {
                     cloneProduction.set(cloneName, {
-                      totalProduction: cloneProduction.get(cloneName).totalProduction + totalProduction,
-                      area: cloneProduction.get(cloneName).area + area
+                      totalProduction: cloneProduction.get(cloneName)!.totalProduction + totalProduction,
                     });
                   } else {
-                    cloneProduction.set(cloneName, { totalProduction, area });
+                    cloneProduction.set(cloneName, { totalProduction });
                   }
                 }
               });
-
+  
+              this.cloneProductionData = [];
               cloneProduction.forEach((value, cloneName) => {
                 this.cloneProductionData.push({ cloneName, ...value });
               });
-
-            });
+              this.getAreaClone()  
+            },
+            error => {
+              console.error('Error fetching data', error);
+              this.isLoading = false;
+            }
+          );
       }
     }, 2000);
   }
+
+  getAreaClone() {
+    setTimeout(() => {
+      if (this.year === '') {
+        this.isLoading = false;
+        this.cloneArea = [];
+      } else {
+        this.reportService.getAreaByClone(this.year)
+          .subscribe(
+            Response=>{
+              this.cloneArea = this.processCloneArea(Response);
+              this.isLoading = false;
+
+              // Iterate over each object in this.cloneProductionData
+              this.cloneProductionData.forEach((prod: any) => {
+                // Find the corresponding area data using the cloneName
+                const area = this.cloneArea.find((area: any) => area.cloneName === prod.cloneName);
+            
+                // If area data is found, add the totalArea property to the existing object
+                if (area) {
+                    prod.totalArea = area.totalArea;
+                }
+            });            
+            }
+          )
+      }
+    }, 0);
+  }
+  
+  processCloneArea(data: any[]) {
+    let cloneAreaMap = new Map<string, number>();
+    let mixedCloneArea = 0;
+  
+    data.forEach(field => {
+      if (field.cloneNames.length > 1) {
+        mixedCloneArea += field.area;
+      } else {
+        const cloneNames = field.cloneNames[0];
+        if (cloneAreaMap.has(cloneNames)) {
+          cloneAreaMap.set(cloneNames, cloneAreaMap.get(cloneNames)! + field.area);
+        } else {
+          cloneAreaMap.set(cloneNames, field.area);
+        }
+      }
+    });
+  
+    let result = Array.from(cloneAreaMap.entries()).map(([cloneName, totalArea]) => ({
+      cloneName: cloneName,
+      totalArea: totalArea
+    }));
+  
+    if (mixedCloneArea > 0) {
+      result.push({
+        cloneName: 'MIXED CLONE',
+        totalArea: mixedCloneArea
+      });
+    }
+    return result;
+  }
+  
 
   toggleSort(columnName: string) {
     if (this.currentSortedColumn === columnName) {

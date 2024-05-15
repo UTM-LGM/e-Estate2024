@@ -38,6 +38,22 @@ namespace E_EstateV2_API.Controllers
             return Ok(productionYearly);
         }
 
+        [HttpGet]
+        [Route("{year:int}")]
+        public async Task<IActionResult> GetAreaByClone(int year)
+        {
+            var clone = await _reportRepository.GetAreaByClone(year);
+            return Ok(clone);
+        }
+
+        [HttpGet]
+        [Route("{year:int}")]
+        public async Task<IActionResult> GetCurrentField (int year)
+        {
+            var field = await _reportRepository.GetCurrentField(year);
+            return Ok(field);
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> CurrentProductions()

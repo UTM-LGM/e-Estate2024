@@ -35,4 +35,5 @@ export interface Field {
     areaInfected:number
     estate:any
     otherCropId:number
+    companyId:number
 }

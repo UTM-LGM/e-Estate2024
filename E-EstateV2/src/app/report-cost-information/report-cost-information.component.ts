@@ -78,8 +78,7 @@ export class ReportCostInformationComponent implements OnInit {
         }
       )
   }
-
-
+  
   companySelected() {
     this.estate.id = 0
     this.getAllEstate()

@@ -41,7 +41,7 @@ export class PendingRoleDetailComponent implements OnInit {
     this.roleService.getRole()
     .subscribe(
       Response =>{
-        this.roles = Response
+        this.roles = Response.filter(x => x.name.toLowerCase() != 'admin');
       }
     )
 

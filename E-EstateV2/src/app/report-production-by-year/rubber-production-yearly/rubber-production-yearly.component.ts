@@ -20,6 +20,10 @@ export class RubberProductionYearlyComponent implements OnInit {
   role = ''
   year = ''
 
+  totalCuplumpDry = 0
+  totalLatexDry = 0
+  totalAllDry = 0
+
   estate: any = {} as any
   companies: any[] = []
   filterLGMAdmin: any[] = []
@@ -33,9 +37,7 @@ export class RubberProductionYearlyComponent implements OnInit {
     { columnName: 'monthYear', displayText: 'Month and Year' },
     { columnName: 'cuplump', displayText: 'Cuplump dry (Kg)' },
     { columnName: 'latex', displayText: 'Latex dry (Kg)' },
-    { columnName: 'uss', displayText: 'USS dry (Kg)' },
-    { columnName: 'other', displayText: 'Other rubber dry (Kg)' },
-    { columnName: 'totalProduction', displayText: 'Total Production dry (Kg)' },
+    { columnName: 'totalProduction', displayText: 'Total Production dry monthly (Kg)' },
   ];
 
   constructor(
@@ -147,9 +149,14 @@ export class RubberProductionYearlyComponent implements OnInit {
               this.filterProductionYearly.forEach(fil =>
                 fil.totalDry = fil.cuplumpDry + fil.latexDry + fil.ussDry + fil.othersDry
               )
+              this.totalCuplumpDry = this.filterProductionYearly.reduce((total, item) => total + item.cuplumpDry, 0)
+              this.totalLatexDry = this.filterProductionYearly.reduce((total, item) => total + item.latexDry, 0)
+              this.totalAllDry = this.filterProductionYearly.reduce((total, item)=> total + item.totalDry, 0)
+
               this.isLoading = false
             })
       }
     }, 2000)
   }
+
 }

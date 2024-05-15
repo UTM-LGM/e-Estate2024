@@ -16,7 +16,6 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductionYearlyByField/' + year)
   }
 
-
   getCurrentCropProduction(): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/reports/CurrentProductions')
   }
@@ -67,6 +66,14 @@ export class ReportService {
 
   getCostInformation(year: string):Observable<any[]>{
     return this.http.get<any[]>(this.baseUrl + '/reports/GetCostInformation/' + year)
+  }
+
+  getAreaByClone(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetAreaByClone/' + year)
+  }
+
+  getCurrentField(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentField/'+ year)
   }
 
 }

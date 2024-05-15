@@ -5,6 +5,7 @@ import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { LocalLabor } from 'src/app/_interface/localLabor';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { FieldProductionService } from 'src/app/_services/field-production.service';
+import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -25,12 +26,10 @@ export class HomeEstateClerkComponent implements OnInit {
   sumCuplumpByMonthYear: any
   chartEstate: any
 
-
-
   estate: any = {} as any
 
   productivity: any[] = []
-
+  workerShortages: any[] = []
 
   yearNow = 0
   totalCuplump = 0
@@ -41,6 +40,8 @@ export class HomeEstateClerkComponent implements OnInit {
 
   currentTotalTapper = 0
   currentTotalField = 0
+  tapperShortage = 0
+  fieldShortage =0
 
   productivityCuplumpDry = 0
   productivityLatexDry = 0
@@ -49,6 +50,7 @@ export class HomeEstateClerkComponent implements OnInit {
 
   matureArea = 0
   immatureArea = 0
+  tappedArea = 0
 
   isLoadingEstateName = true
   isLoadingProduction = true
@@ -58,6 +60,11 @@ export class HomeEstateClerkComponent implements OnInit {
 
   isLoadingTapper = true
   isLoadingField = true
+  isLoadingMatureArea = true
+  isLoadingImmatureArea = true
+  isLoadingTappedArea = true
+  isLoadingTapperShortage = true
+  isLoadingFieldShortage = true
 
   warningProductionDrafted = false
   warningCostDrafted = false
@@ -71,7 +78,8 @@ export class HomeEstateClerkComponent implements OnInit {
     private sharedService: SharedService,
     private productionService:FieldProductionService,
     private datePipe: DatePipe,
-    private costInformationService:CostAmountService
+    private costInformationService:CostAmountService,
+    private fieldService:FieldService
   ) { }
 
   ngOnInit() {
@@ -85,11 +93,24 @@ export class HomeEstateClerkComponent implements OnInit {
       this.getFieldArea()
       this.getProduction()
       this.getCost()
+      this.getWorkerShortage()
+      this.getField()
     }
   }
 
   ngAfterViewInit() {
     this.getProductivity()
+  }
+
+  getField(){
+    this.reportService.getCurrentField(this.yearNow.toString())
+    .subscribe(
+      Response =>{
+        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus.toLowerCase().includes('tapped area'))
+        this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
+        this.isLoadingTappedArea = false
+      }
+    )
   }
 
   getProduction(){
@@ -106,6 +127,27 @@ export class HomeEstateClerkComponent implements OnInit {
           }
       }
     )
+  }
+
+  getWorkerShortage() {
+    this.reportService.getWorkerShortageEstate().subscribe(
+      response => {
+        this.workerShortages = response.filter(x=>x.estateId == this.sharedService.estateId);
+        if(this.workerShortages.length === 0)
+          {
+            this.tapperShortage = 0
+            this.fieldShortage = 0
+            this.isLoadingTapperShortage = false
+            this.isLoadingFieldShortage = false
+          }
+          else{
+            this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
+            this.isLoadingTapperShortage = false
+            this.fieldShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.fieldShortage, 0)
+            this.isLoadingFieldShortage = false
+          }
+      }
+    );
   }
 
   getCost(){
@@ -258,20 +300,6 @@ export class HomeEstateClerkComponent implements OnInit {
             backgroundColor: 'limegreen',
             borderColor: 'limegreen',
             fill: false
-          },
-          {
-            label: 'USS Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityUSSDry),
-            backgroundColor: 'orange',
-            borderColor: 'orange',
-            fill: false
-          },
-          {
-            label: 'Others Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityOthersDry),
-            backgroundColor: 'pink',
-            borderColor: 'pink',
-            fill: false
           }
         ]
       },
@@ -288,9 +316,11 @@ export class HomeEstateClerkComponent implements OnInit {
         Response => {
           const matureArea = Response.filter(x => x.isMature == true && x.estateId == this.sharedService.estateId)
           this.matureArea = matureArea.reduce((total, current) => total + current.area, 0);
+          this.isLoadingMatureArea = false
 
           const immatureArea = Response.filter(x => x.isMature == false && x.estateId == this.sharedService.estateId)
           this.immatureArea = immatureArea.reduce((total, current) => total + current.area, 0);
+          this.isLoadingImmatureArea = false
         }
 
       )

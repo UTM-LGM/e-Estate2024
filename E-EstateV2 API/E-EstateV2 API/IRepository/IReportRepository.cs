@@ -21,6 +21,9 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetWorkerShortageEstate();
 
         Task<object> GetCostInformation(int year);
+        Task<object> GetAreaByClone(int year);
+
+        Task<object> GetCurrentField(int year);
 
 
 

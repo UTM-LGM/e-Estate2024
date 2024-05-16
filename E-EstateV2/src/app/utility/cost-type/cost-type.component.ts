@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CostType } from 'src/app/_interface/costType';
 import { CostTypeService } from 'src/app/_services/cost-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,9 @@ export class CostTypeComponent implements OnInit {
 
   constructor(
     private costTypeService: CostTypeService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit() {
@@ -92,12 +95,14 @@ export class CostTypeComponent implements OnInit {
 
   getCostType() {
     setTimeout(() => {
-      this.costTypeService.getCostType()
+      const getCostType = this.costTypeService.getCostType()
         .subscribe(
           Response => {
             this.costTypes = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getCostType);
+
     }, 2000)
   }
 
@@ -108,6 +113,10 @@ export class CostTypeComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

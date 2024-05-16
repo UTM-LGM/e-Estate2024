@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import swal from 'sweetalert2';
 import { ReportService } from '../_services/report.service';
 import { SharedService } from '../_services/shared.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-report-rubber-area-by-clone',
@@ -29,16 +30,19 @@ export class ReportRubberAreaByCloneComponent {
   cloneAreaData: any = [];
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No'},
     { columnName: 'cloneName', displayText: 'Clone Name' },
     { columnName: 'area', displayText: 'Rubber Area (Ha)' },
   ];
 
   constructor(
     private reportService: ReportService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
+    this.year = new Date().getFullYear().toString()
     this.role = this.sharedService.role
     this.getAreaClone()
   }
@@ -69,13 +73,15 @@ export class ReportRubberAreaByCloneComponent {
         this.isLoading = false;
         this.cloneArea = [];
       } else {
-        this.reportService.getAreaByClone(this.year)
+        const getArea = this.reportService.getAreaByClone(this.year)
           .subscribe(
             Response=>{
               this.cloneArea = this.processCloneArea(Response);
               this.isLoading = false;
             }
           )
+      this.subscriptionService.add(getArea);
+
       }
     }, 0);
   }
@@ -122,4 +128,9 @@ export class ReportRubberAreaByCloneComponent {
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

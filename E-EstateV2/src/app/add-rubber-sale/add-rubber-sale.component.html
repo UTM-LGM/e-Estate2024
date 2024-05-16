@@ -19,6 +19,24 @@
       <mat-option value="CUPLUMP">CUPLUMP</mat-option>
       <mat-option value="LATEX">LATEX</mat-option>
     </mat-select>
+  </div><br />
+
+  <div [style.columns]="deliveryAgent === 'yes' ? '2' : '1'">
+    <label>Delivery agent : </label><br />
+    <div class="radio-container">
+      <label>
+        <input type="radio" name="choice" value="yes" [(ngModel)]="deliveryAgent" > Yes
+      </label>
+      <label>
+        <input type="radio" name="choice" value="no" [(ngModel)]="deliveryAgent"> No
+      </label>
+    </div>
+
+    <div *ngIf="deliveryAgent == 'yes'">
+      <label>Delivery agent name :</label>
+      <input type="text" name="plateNo" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()"/>
+    </div>
+
   </div>
 
   <div style="columns: 2">
@@ -29,8 +47,9 @@
   </div>
 
   <div style="columns: 2">
-    <label>Seller Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00" (input)="calculateTotalPrice()" />
+    <label>Wet Weight (Kg) :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00"
+      (input)="calculateTotalPrice()" />
     <label>DRC (%) :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
   </div>
@@ -43,9 +62,9 @@
     <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
   </div> -->
 
+
   <div>
-    <label>Remark :</label><br/>
-    <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span>
+    <label>Remark :</label><br />
     <textarea name="remark" [(ngModel)]="rubberSale.remark"></textarea>
   </div>
 

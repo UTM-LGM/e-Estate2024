@@ -3,6 +3,7 @@ import { MyLesenIntegrationService } from '../_services/my-lesen-integration.ser
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
 import { ReportService } from '../_services/report.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-report-cost-information',
@@ -42,7 +43,8 @@ export class ReportCostInformationComponent implements OnInit {
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -61,22 +63,26 @@ export class ReportCostInformationComponent implements OnInit {
   }
 
   getAllCompanies() {
-    this.myLesenService.getAllCompany()
+    const getAllCompany = this.myLesenService.getAllCompany()
       .subscribe(
         Response => {
           this.companies = Response
         }
       )
+      this.subscriptionService.add(getAllCompany);
+
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.estate.companyId)
+    const getOneCompany = this.myLesenService.getOneCompany(this.estate.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoading = false
         }
       )
+      this.subscriptionService.add(getOneCompany);
+
   }
   
   companySelected() {
@@ -93,22 +99,26 @@ export class ReportCostInformationComponent implements OnInit {
 
 
   getAllEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterLGMAdmin = Response.filter(x => x.companyId == this.estate.companyId)
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
+      this.subscriptionService.add(getAllEstate);
+    
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estate.id)
+    const getOneEstate = this.myLesenService.getOneEstate(this.estate.id)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+      this.subscriptionService.add(getOneEstate);
+      
   }
 
   yearSelected() {
@@ -141,7 +151,7 @@ export class ReportCostInformationComponent implements OnInit {
         this.isLoading = false;
         this.costInformations = [];
       } else {
-        this.reportService.getCostInformation(this.year)
+        const getCostInformation = this.reportService.getCostInformation(this.year)
           .subscribe(
             Response => {
               if (this.estate.id == null) {
@@ -172,6 +182,8 @@ export class ReportCostInformationComponent implements OnInit {
               this.isLoading = false;
             }
           )
+      this.subscriptionService.add(getCostInformation);
+
       }
     }, 2000);
   }
@@ -184,6 +196,10 @@ export class ReportCostInformationComponent implements OnInit {
         this.year = ''
         this.costInformations = [];
       }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
   
 }

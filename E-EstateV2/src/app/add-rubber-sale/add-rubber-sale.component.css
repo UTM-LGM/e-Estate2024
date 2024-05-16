@@ -20,3 +20,14 @@ mat-select {
 mat-option {
   font-size: 12px;
 }
+
+.radio-container {
+  display: flex;
+  gap: 10px; /* Adjust gap as needed */
+  padding-bottom: 33px;
+}
+
+.radio-container label {
+  display: flex;
+  align-items: center;
+}

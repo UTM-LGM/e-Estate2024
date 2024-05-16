@@ -28,5 +28,6 @@
         public int companyId { get; set; }
         public int paymentStatusId { get; set; }
         public string paymentStatus { get; set; }
+        public string deliveryAgent { get; set; }
     }
 }

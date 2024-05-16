@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FieldStatus } from 'src/app/_interface/fieldStatus';
 import { FieldStatusService } from 'src/app/_services/field-status.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +28,8 @@ export class CropCategoryComponent implements OnInit {
 
   constructor(
     private fieldStatusService: FieldStatusService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -77,12 +79,14 @@ export class CropCategoryComponent implements OnInit {
 
   getCrop() {
     setTimeout(() => {
-      this.fieldStatusService.getFieldStatus()
+      const getFieldStatus = this.fieldStatusService.getFieldStatus()
         .subscribe(
           (Response: any) => {
             this.cropCategories = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getFieldStatus);
+
     }, 2000)
   }
 
@@ -112,6 +116,10 @@ export class CropCategoryComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

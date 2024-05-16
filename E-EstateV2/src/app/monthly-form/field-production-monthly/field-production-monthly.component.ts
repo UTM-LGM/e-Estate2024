@@ -8,6 +8,7 @@ import { FieldProductionService } from 'src/app/_services/field-production.servi
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { FieldProductionDetailComponent } from 'src/app/field-production-detail/field-production-detail.component';
 import swal from 'sweetalert2';
 
@@ -65,6 +66,8 @@ export class FieldProductionMonthlyComponent implements OnInit {
     private datePipe: DatePipe,
     private fieldProductionService: FieldProductionService,
     private dialog: MatDialog,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit(): void {
@@ -76,7 +79,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response;
@@ -84,13 +87,15 @@ export class FieldProductionMonthlyComponent implements OnInit {
                 this.isLoading = false
               }
             )
+      this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
   }
 
   getField() {
-    this.fieldService.getField()
+    const getField = this.fieldService.getField()
       .subscribe(
         Response => {
           const filterFields = Response.filter(x => x.estateId == this.estate.id)
@@ -99,6 +104,8 @@ export class FieldProductionMonthlyComponent implements OnInit {
           this.getAllProduction(this.filterFields)
         }
       )
+      this.subscriptionService.add(getField);
+
   }
 
   getProducts(Fields: Field[]) {
@@ -254,7 +261,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
 
   getAllProduction(Fields: Field[]) {
     this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
-    this.fieldProductionService.getProduction()
+    const getProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {
           const productions = Response
@@ -270,6 +277,8 @@ export class FieldProductionMonthlyComponent implements OnInit {
           this.TotalUSS()
           this.TotalOthers()
         });
+      this.subscriptionService.add(getProduction);
+
   }
 
   TotalCuplump() {
@@ -384,4 +393,9 @@ export class FieldProductionMonthlyComponent implements OnInit {
         }
       )
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

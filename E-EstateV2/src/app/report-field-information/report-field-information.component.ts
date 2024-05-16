@@ -7,6 +7,7 @@ import { FieldConversion } from '../_interface/fieldConversion';
 import { FieldService } from '../_services/field.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { SharedService } from '../_services/shared.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-report-field-information',
@@ -40,6 +41,7 @@ export class ReportFieldInformationComponent implements OnInit {
   showAll: boolean = false;
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No'},
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'area', displayText: 'Field Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },
@@ -55,7 +57,8 @@ export class ReportFieldInformationComponent implements OnInit {
     private fieldConversionService: FieldConversionService,
     private fieldService: FieldService,
     private fieldInfectedService: FieldInfectedService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -74,27 +77,31 @@ export class ReportFieldInformationComponent implements OnInit {
   }
 
   getAllCompanies() {
-    this.myLesenService.getAllCompany()
+    const getAllCompany = this.myLesenService.getAllCompany()
       .subscribe(
         Response => {
           this.companies = Response
         }
       )
+      this.subscriptionService.add(getAllCompany);
+    
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.estate.companyId)
+    const getCompany = this.myLesenService.getOneCompany(this.estate.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoading = false
         }
       )
+      this.subscriptionService.add(getCompany);
+
   }
 
   getField() {
     setTimeout(() => {
-      this.fieldService.getField()
+      const getField = this.fieldService.getField()
           .subscribe(
             Response => {
               const fields = Response
@@ -113,37 +120,14 @@ export class ReportFieldInformationComponent implements OnInit {
               this.isLoading = false;
             }
           )
-      // if (this.estate.companyId == undefined) {
-      //   this.isLoading = false
-      //   this.fields = []
-      // }
-      // else {
-      //   this.fieldService.getField()
-      //     .subscribe(
-      //       Response => {
-      //         const fields = Response
-      //         this.allFields = Response
-      //         this.fields = fields.filter(x => x.estateId == this.estate.id)
-      //         // Fetch all field infected data
-      //         this.fieldInfectedService.getFieldInfected().subscribe(
-      //           allFieldInfectedData => {
-      //             // Filter field infected data based on field id and store in result object
-      //             fields.forEach(field => {
-      //               const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
-      //               this.result[field.id] = filteredData;
-      //             });
-      //           })
-      //         this.sum(this.fields)
-      //         this.isLoading = false;
-      //       }
-      //     )
-      // }
+      this.subscriptionService.add(getField);
+
     }, 2000)
   }
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned'));
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government'));
     this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 
@@ -164,22 +148,26 @@ export class ReportFieldInformationComponent implements OnInit {
   }
 
   getAllEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterLGMAdmin = Response.filter(x => x.companyId == this.estate.companyId)
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
+      this.subscriptionService.add(getAllEstate);
+
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estate.id)
+    const getOneEstate = this.myLesenService.getOneEstate(this.estate.id)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+      this.subscriptionService.add(getOneEstate);
+
   }
 
   toggleSort(columnName: string) {
@@ -201,13 +189,15 @@ export class ReportFieldInformationComponent implements OnInit {
   }
 
   getConversion(field: Field) {
-    this.fieldConversionService.getConversion()
+    const getConversion = this.fieldConversionService.getConversion()
       .subscribe(
         Response => {
           const conversion = Response
           this.conversionField = conversion.filter(x => x.fieldId == field.id)
         }
       )
+      this.subscriptionService.add(getConversion);
+
   }
 
   toggleShowAll(){
@@ -221,4 +211,9 @@ export class ReportFieldInformationComponent implements OnInit {
       this.fields = [];
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

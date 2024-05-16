@@ -4,6 +4,9 @@
   <h1>{{ estate.name }}</h1>
   <hr />
 
+  <h1>Field Information</h1>
+
+
   <div class="box">
     <div class="column">
       <form>
@@ -41,7 +44,7 @@
 
         <div style="columns: 2" *ngIf="field.isMature == true">
           <label>Date Open Tapping :</label>
-          <input name="dateopentapping" type="date" [(ngModel)]="field.dateOpenTapping" />
+          <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTapping" />
 
           <label>Total task :</label>
           <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
@@ -142,7 +145,7 @@
             <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
             <td>{{field.fieldStatus}}</td>
             <td>{{ field.yearPlanted !== 0 ? field.yearPlanted : '' }}</td>
-            <td>{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+            <td>{{ field.dateOpenTapping | date : "MMM-YYYY" }}</td>
             <td>{{ field.initialTreeStand !== 0 ? field.initialTreeStand : '' }}</td>
             <td>{{field.totalTask !== 0 ? field.totalTask : ''}}</td>
 

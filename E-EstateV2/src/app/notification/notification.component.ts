@@ -8,6 +8,7 @@ import { ProductionComparison } from '../_interface/productionComparison';
 import { FieldInfoYearlyService } from '../_services/field-info-yearly.service';
 import { FieldInfoYearly } from '../_interface/fieldInfoYearly';
 import { SharedService } from '../_services/shared.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-notification',
@@ -37,7 +38,8 @@ export class NotificationComponent implements OnInit {
     private dialog: MatDialog,
     private productionComparisonService: ProductionComparisonService,
     private fieldInfoYearlyService: FieldInfoYearlyService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService: SubscriptionService
 
   ) { }
 
@@ -50,9 +52,7 @@ export class NotificationComponent implements OnInit {
 
   checkProduction() {
     const currentDate = new Date()
-    const previousYear = 2010
-    const currentYear = 2011
-    this.reportService.getEstateProductivityByField(previousYear.toString())
+    const getProductivity = this.reportService.getEstateProductivityByField(currentDate.toString())
       .subscribe(
         (Response: any) => {
           const production = Response.production
@@ -62,7 +62,7 @@ export class NotificationComponent implements OnInit {
           const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
           this.sumTotalDryPreviousMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0)
 
-          this.reportService.getEstateProductivityByField(currentYear.toString())
+          const getEstateProductivity = this.reportService.getEstateProductivityByField(currentDate.toString())
             .subscribe(
               (Response: any) => {
                 const production = Response.production
@@ -72,11 +72,11 @@ export class NotificationComponent implements OnInit {
                 const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
                 this.sumTotalDryCurrentMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0);
 
-                this.productionComparisonService.getProductionComparison()
+                const getComparison = this.productionComparisonService.getProductionComparison()
                   .subscribe(
                     Response => {
                       const production = Response
-                      this.filterProduction = production.filter(x => x.estateId == this.estateId && x.createdYear == currentYear)
+                      this.filterProduction = production.filter(x => x.estateId == this.estateId)
 
                       if (this.responsePreviousMonthYear.some((item) => item.monthYear.includes('Dec')) &&
                         this.responseCurrentMonthYear.some((item) => item.monthYear.includes('Dec')) && this.filterProduction.length == 0) {
@@ -92,10 +92,16 @@ export class NotificationComponent implements OnInit {
                       this.updateBadge()
                     }
                   )
+                this.subscriptionService.add(getComparison);
+
               }
             )
+          this.subscriptionService.add(getEstateProductivity);
+
         }
       )
+    this.subscriptionService.add(getProductivity);
+
   }
 
   updateBadge() {
@@ -124,7 +130,7 @@ export class NotificationComponent implements OnInit {
   getFieldInfoYearly() {
     const today = new Date()
     const isNovember = today.getMonth() === 1 // Note: JavaScript months are 0-based
-    this.fieldInfoYearlyService.getExtraFieldInfo(this.yearNow)
+    const getExtra = this.fieldInfoYearlyService.getExtraFieldInfo(this.yearNow)
       .subscribe(
         Response => {
           this.fieldInfo = Response
@@ -133,5 +139,11 @@ export class NotificationComponent implements OnInit {
           }
         }
       )
+      this.subscriptionService.add(getExtra);
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

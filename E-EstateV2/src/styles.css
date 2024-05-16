@@ -195,6 +195,7 @@ a {
 input[type="text"],
 select,
 input[type="date"],
+input[type="month"],
 input[type="number"],
 input[type="email"],
 input[type="password"],

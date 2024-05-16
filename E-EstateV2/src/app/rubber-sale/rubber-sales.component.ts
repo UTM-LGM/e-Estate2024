@@ -9,6 +9,7 @@ import { RubberSaleService } from '../_services/rubber-sale.service';
 import { EstateService } from '../_services/estate.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-rubber-sales',
@@ -54,6 +55,7 @@ export class RubberSalesComponent implements OnInit {
     private sharedService: SharedService,
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -65,12 +67,14 @@ export class RubberSalesComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.isLoading = false
               })
+      this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
@@ -78,13 +82,15 @@ export class RubberSalesComponent implements OnInit {
 
   getSales() {
     setTimeout(() => {
-      this.rubberSaleService.getSale()
+     const getSale =  this.rubberSaleService.getSale()
         .subscribe(
           Response => {
             const rubberSales = Response
             this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId)
             this.isLoading = false
           })
+      this.subscriptionService.add(getSale);
+
     }, 2000)
   }
 
@@ -142,6 +148,10 @@ export class RubberSalesComponent implements OnInit {
     } else {
       return { status: 'In Process', color: '#c9c912' };
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

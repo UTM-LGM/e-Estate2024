@@ -1,5 +1,9 @@
 <div class="box-container">
   <h1>Rubber Area by State</h1>
+
+  <label>Please choose year : </label>
+  <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
     <table style="width: 100%">

@@ -56,23 +56,28 @@ namespace E_EstateV2_API.Repository
                     CuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                     LatexDry = x.latex * (x.latexDRC / 100),
                     Area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
-                    MonthYear = x.monthYear
+                    MonthYear = x.monthYear,
+                    Year = x.monthYear.Substring(x.monthYear.Length - 4), // Extracting year from MonthYear
+                    fieldId = x.fieldId,
                 })
                 .ToListAsync();
 
-            var productivityMetrics = fieldProduction
-                .Select(x => new
+            var groupedData = fieldProduction
+                .GroupBy(x => new { x.Year, x.fieldId })
+                .Select(g => new
                 {
-                    x.MonthYear,
-                    x.Area,
-                    x.EstateId,
-                    x.CuplumpDry,
-                    x.LatexDry,
+                    Year = g.Key.Year,
+                    FieldId = g.Key.fieldId,
+                    Area = g.First().Area, // Assuming Area is same for all in the group
+                    EstateId = g.First().EstateId, // Assuming EstateId is same for all in the group
+                    TotalCuplumpDry = g.Sum(x => x.CuplumpDry),
+                    TotalLatexDry = g.Sum(x => x.LatexDry),
                 })
                 .ToList();
 
-            return productivityMetrics;
+            return groupedData;
         }
+
 
         // Define the GetMonthValue 
         int GetMonthValue(string monthYear)
@@ -234,17 +239,18 @@ namespace E_EstateV2_API.Repository
         }
 
         //EstateClerk
-        public async Task<object> GetFieldArea()
+        public async Task<object> GetFieldArea(int year)
         {
-            int year = DateTime.Now.Year;
+            var excludedStatuses = new[] { "abandoned", "government" };
             var field = await _context.fields.Where(x => x.isActive == true && x.createdDate.Year == year).Select(x => new
             {
                 fieldId = x.Id,
                 area = x.area,
                 isMature = x.isMature,
                 estateId = x.estateId,
-                isActive = x.isActive
-            }).ToListAsync();
+                isActive = x.isActive,
+                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault()
+            }). ToListAsync();
 
             return field;
         }

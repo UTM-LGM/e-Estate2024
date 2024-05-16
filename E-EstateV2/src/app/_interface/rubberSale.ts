@@ -26,4 +26,5 @@ export interface RubberSale {
     buyerLicenseNo:string
     driverName:string
     remark:string
+    deliveryAgent:string
 }

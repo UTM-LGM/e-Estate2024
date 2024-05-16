@@ -5,6 +5,7 @@ import { LaborTypeService } from 'src/app/_services/labor-type.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-labor-information-yearly',
@@ -35,6 +36,7 @@ export class LaborInformationYearlyComponent implements OnInit {
     private reportService: ReportService,
     private sharedService: SharedService,
     private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -55,45 +57,53 @@ export class LaborInformationYearlyComponent implements OnInit {
   }
 
   getAllEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
+      this.subscriptionService.add(getAllEstate);
+      
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estate.id)
+    const getOneEstate = this.myLesenService.getOneEstate(this.estate.id)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+      this.subscriptionService.add(getOneEstate);
+
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.estate.companyId)
+    const getCompany = this.myLesenService.getOneCompany(this.estate.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoading = false
         }
       )
+      this.subscriptionService.add(getCompany);
+
   }
 
   getLaborType() {
-    this.laborTypeService.getType()
+    const getLaborType = this.laborTypeService.getType()
       .subscribe(
         Response => {
           const types = Response
           this.filterTypes = types.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getLaborType);
+
   }
 
   getLaborInformation() {
-    this.reportService.getLaborInformationCategory()
+    const getLabor = this.reportService.getLaborInformationCategory()
       .subscribe(
         Response => {
           this.labors = Response
@@ -123,11 +133,13 @@ export class LaborInformationYearlyComponent implements OnInit {
           this.getTapperAndFieldWorker()
         }
     })
+    this.subscriptionService.add(getLabor);
+
 
   }
 
   getTapperAndFieldWorker() {
-    this.reportService.getTapperAndFieldWorker()
+    const getWorker = this.reportService.getTapperAndFieldWorker()
       .subscribe(
         Response => {
           this.localTapperFieldWorker = Response.filter(x => x.isLocal == true && x.estateId == this.estate.id)
@@ -137,10 +149,12 @@ export class LaborInformationYearlyComponent implements OnInit {
           this.isLoading = false
         }
       )
+      this.subscriptionService.add(getWorker);
+
   }
 
   getTapperAndFieldWorkerAll() {
-    this.reportService.getTapperAndFieldWorker()
+    const getWorker = this.reportService.getTapperAndFieldWorker()
       .subscribe(
         Response => {
           const groupedResponse = Response.reduce((acc, obj) => {
@@ -163,6 +177,8 @@ export class LaborInformationYearlyComponent implements OnInit {
           this.totalFieldWorker = this.getTotalFieldWorkerAll();
         }
       )
+      this.subscriptionService.add(getWorker);
+
   }
 
   getTotalTapperWorkerAll() {
@@ -217,4 +233,9 @@ export class LaborInformationYearlyComponent implements OnInit {
     this.getLaborInformation()
     this.showAll = false
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

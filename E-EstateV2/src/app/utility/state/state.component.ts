@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { State } from 'src/app/_interface/state';
 import { SharedService } from 'src/app/_services/shared.service';
 import { StateService } from 'src/app/_services/state.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,8 @@ export class StateComponent implements OnInit {
 
   constructor(
     private stateService: StateService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -71,12 +73,13 @@ export class StateComponent implements OnInit {
 
   getState() {
     setTimeout(() => {
-      this.stateService.getState()
+      const getState = this.stateService.getState()
         .subscribe(
           Response => {
             this.states = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getState);
     }, 2000)
   }
 
@@ -107,4 +110,9 @@ export class StateComponent implements OnInit {
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
 import { LocalLaborService } from 'src/app/_services/local-labor.service';
 import { LaborLocalDetailComponent } from '../labor-local-detail/labor-local-detail.component';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-labor-local',
@@ -35,7 +36,8 @@ export class LaborLocalComponent implements OnInit {
     private datePipe: DatePipe,
     private localLaborService: LocalLaborService,
     private sharedService: SharedService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -69,13 +71,15 @@ export class LaborLocalComponent implements OnInit {
   }
 
   getLaborType() {
-    this.laborTypeService.getType()
+    const getType = this.laborTypeService.getType()
       .subscribe(
         Response => {
           const types = Response
           this.filterTypes = types.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getType);
+
   }
 
   calculateTotalWorker() {
@@ -114,7 +118,7 @@ export class LaborLocalComponent implements OnInit {
   }
 
   getLocalLabor() {
-    this.localLaborService.getLabor()
+    const getLabor = this.localLaborService.getLabor()
       .subscribe(
         Response => {
           const localLabors = Response
@@ -122,6 +126,8 @@ export class LaborLocalComponent implements OnInit {
           this.TotalWorker()
         }
       )
+      this.subscriptionService.add(getLabor);
+
   }
 
   TotalWorker() {
@@ -172,9 +178,9 @@ export class LaborLocalComponent implements OnInit {
     return false
   }
 
-
-
-
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
 
 
 }

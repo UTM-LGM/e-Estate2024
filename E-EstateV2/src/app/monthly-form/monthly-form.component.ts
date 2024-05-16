@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-monthly-form',
@@ -21,6 +22,7 @@ export class MonthlyFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -64,15 +66,22 @@ export class MonthlyFormComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response;
                 this.isLoading = false
               }
             )
+      this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

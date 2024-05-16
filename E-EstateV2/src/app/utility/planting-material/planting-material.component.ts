@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlantingMaterial } from 'src/app/_interface/planting-material';
 import { PlantingMaterialService } from 'src/app/_services/planting-material.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +28,8 @@ export class PlantingMaterialComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private plantingMaterialService: PlantingMaterialService
+    private plantingMaterialService: PlantingMaterialService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -37,13 +39,15 @@ export class PlantingMaterialComponent implements OnInit {
 
   getPlantingMaterial() {
     setTimeout(() => {
-      this.plantingMaterialService.getPlantingMaterial()
+      const getPlantingMaterial = this.plantingMaterialService.getPlantingMaterial()
         .subscribe(
           Response => {
             this.plantingMaterials = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getPlantingMaterial);
+
     })
   }
 
@@ -109,5 +113,9 @@ export class PlantingMaterialComponent implements OnInit {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

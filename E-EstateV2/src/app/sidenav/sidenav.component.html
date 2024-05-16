@@ -1,4 +1,22 @@
 <div class="sidebar-container">
+
+  <i class="fa fa-user"></i> &nbsp;
+  <span>Log in as: </span>
+  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'Admin' || role == 'CompanyAdmin'}">
+    <span style="text-align: left;">{{ estate.name }}</span>
+  </div>
+
+  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'Admin' || role == 'EstateClerk'}">
+    <span style="text-align: left;">{{ company.name }}</span>
+  </div>
+
+  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}">
+    <span style="text-align: left;">MALAYSIAN RUBBER BOARD</span>
+  </div>
+
+
+
+
   <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
     <button class="side-btn fixed" (click)="toggleGeneral()">
       General

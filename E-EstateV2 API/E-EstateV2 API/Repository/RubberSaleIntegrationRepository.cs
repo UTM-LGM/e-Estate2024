@@ -57,13 +57,14 @@ namespace E_EstateV2_API.Repository
 
         public async Task<RubberSales> UpdateWeightSlipNo(string LOC, RubberSales rubberSales)
         {
+            var currentDateTime = DateTime.Now;
             var existingSale = await _context.rubberSales.Where(x => x.letterOfConsentNo == LOC).FirstOrDefaultAsync();
             if (existingSale != null)
             {
                 existingSale.weightSlipNo = rubberSales.weightSlipNo;
                 existingSale.buyerWetWeight = rubberSales.buyerWetWeight;
                 existingSale.buyerDRC = rubberSales.buyerDRC;
-                existingSale.weightSlipNoDate = rubberSales.weightSlipNoDate;
+                existingSale.weightSlipNoDate = currentDateTime;
                 existingSale.paymentStatusId = 2;
                 await _context.SaveChangesAsync();
                 return existingSale;
@@ -73,12 +74,13 @@ namespace E_EstateV2_API.Repository
 
         public async Task<RubberSales> UpdateReceiptNo(string LOC, RubberSales rubberSales)
         {
+            var currentDateTime = DateTime.Now;
             var existingSale = await _context.rubberSales.Where(x => x.letterOfConsentNo == LOC && x.paymentStatusId != 3).FirstOrDefaultAsync();
             if (existingSale != null)
             {
                 existingSale.receiptNo = rubberSales.receiptNo;
                 existingSale.buyerDRC = rubberSales.buyerDRC;
-                existingSale.receiptNoDate = rubberSales.receiptNoDate;
+                existingSale.receiptNoDate = currentDateTime;
                 existingSale.unitPrice = rubberSales.unitPrice;
                 existingSale.total = rubberSales.total;
                 existingSale.paymentStatusId = 3;
@@ -90,13 +92,14 @@ namespace E_EstateV2_API.Repository
 
         public async Task<RubberSales> UpdateReceiptNoRimNiaga(string LOC, RubberSales rubberSales)
         {
+            var currentDateTime = DateTime.Now;
             var existingSale = await _context.rubberSales.Where(x => x.letterOfConsentNo == LOC && x.paymentStatusId != 3).FirstOrDefaultAsync();
             if (existingSale != null)
             {
                 existingSale.receiptNo = rubberSales.receiptNo;
                 existingSale.buyerWetWeight = rubberSales.buyerWetWeight;
                 existingSale.buyerDRC = rubberSales.buyerDRC;
-                existingSale.receiptNoDate = rubberSales.receiptNoDate;
+                existingSale.receiptNoDate = currentDateTime;
                 existingSale.unitPrice = rubberSales.unitPrice;
                 existingSale.total = rubberSales.total;
                 existingSale.paymentStatusId = 3;

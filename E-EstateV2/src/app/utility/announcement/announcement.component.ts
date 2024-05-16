@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Announcement } from 'src/app/_interface/annoucement';
 import { AnnoucementService } from 'src/app/_services/annoucement.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { environment } from 'src/environments/environments';
 import swal from 'sweetalert2';
 
@@ -31,7 +32,8 @@ export class AnnouncementComponent implements OnInit {
 
   constructor(
     private announcementService: AnnoucementService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -94,13 +96,15 @@ export class AnnouncementComponent implements OnInit {
 
   getAnnouncement() {
     setTimeout(() => {
-      this.announcementService.getAnnouncement()
+      const getAnnouncement = this.announcementService.getAnnouncement()
         .subscribe(
           Response => {
             this.announcements = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getAnnouncement);
+
     }, 2000)
   }
 
@@ -121,5 +125,9 @@ export class AnnouncementComponent implements OnInit {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

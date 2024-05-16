@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FinancialYear } from 'src/app/_interface/financialYear';
 import { FinancialYearService } from 'src/app/_services/financial-year.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,8 @@ export class FinancialYearComponent implements OnInit {
 
   constructor(
     private financialYearService: FinancialYearService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -74,12 +76,14 @@ export class FinancialYearComponent implements OnInit {
 
   getFinancialYear() {
     setTimeout(() => {
-      this.financialYearService.getFinancialYear()
+      const getFinanacialYear = this.financialYearService.getFinancialYear()
         .subscribe(
           Response => {
             this.financialYears = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getFinanacialYear);
+
     }, 2000)
   }
 
@@ -109,6 +113,10 @@ export class FinancialYearComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

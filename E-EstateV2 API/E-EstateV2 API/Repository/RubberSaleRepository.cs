@@ -58,6 +58,7 @@ namespace E_EstateV2_API.Repository
                 transportPlateNo = x.transportPlateNo,
                 driverName = x.driverName,
                 remark = x.remark,
+                deliveryAgent = x.deliveryAgent,
             }).OrderBy(x => x.saleDateTime).ToListAsync();
             return sales;
         }
@@ -87,6 +88,8 @@ namespace E_EstateV2_API.Repository
                 transportPlateNo = x.transportPlateNo,
                 driverName = x.driverName,
                 remark = x.remark,
+                deliveryAgent = x.deliveryAgent,
+
             }).FirstOrDefaultAsync();
             return rubberSale;
         }

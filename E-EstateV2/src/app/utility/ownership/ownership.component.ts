@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ownership } from 'src/app/_interface/ownership';
 import { OwnershipService } from 'src/app/_services/ownership.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -28,7 +29,9 @@ export class OwnershipComponent implements OnInit {
 
   constructor(
     private ownershipService: OwnershipService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit(): void {
@@ -38,12 +41,14 @@ export class OwnershipComponent implements OnInit {
 
   getOwnership() {
     setTimeout(() => {
-      this.ownershipService.getOwnership()
+      const getOwnership = this.ownershipService.getOwnership()
         .subscribe(
           Response => {
             this.ownerships = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getOwnership);
+
     }, 2000)
   }
 
@@ -108,6 +113,10 @@ export class OwnershipComponent implements OnInit {
           this.ngOnInit()
         }
       );
+  }
+  
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }
 

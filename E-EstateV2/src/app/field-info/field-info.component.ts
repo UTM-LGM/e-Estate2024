@@ -201,7 +201,12 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
       this.field.isActive = true
       this.field.createdBy = this.sharedService.userId.toString()
       this.field.createdDate = new Date()
-      this.field.dateOpenTapping = this.field.dateOpenTapping
+      if(this.field.dateOpenTapping){
+        this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
+      }
+      else{
+        this.field.dateOpenTapping = null
+      }
       this.fieldService.addField(this.field)
         .subscribe(
           {
@@ -231,6 +236,14 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
             }
           });
     }
+  }
+
+  convertToDateTime(monthYear: string): string {
+    // monthYear is in the format YYYY-MM
+    const [year, month] = monthYear.split('-').map(Number);
+    // Set the date to the first day of the selected month, time to midnight
+    const date = new Date(year, month - 1, 1, 0, 0, 0);
+    return date.toISOString(); // Convert to ISO string or any other desired format
   }
 
   getcategory() {
@@ -295,7 +308,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
     // Calculate sum excluding filtered fields
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned'));
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government'));
     this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 

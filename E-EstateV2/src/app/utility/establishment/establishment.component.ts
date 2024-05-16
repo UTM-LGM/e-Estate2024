@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Establishment } from 'src/app/_interface/establishment';
 import { EstablishmentService } from 'src/app/_services/establishment.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +28,8 @@ export class EstablishmentComponent implements OnInit {
 
   constructor(
     private establishmentService: EstablishmentService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -74,12 +76,14 @@ export class EstablishmentComponent implements OnInit {
 
   getEstablishment() {
     setTimeout(() => {
-      this.establishmentService.getEstablishment()
+      const getEstablishment = this.establishmentService.getEstablishment()
         .subscribe(
           Response => {
             this.establishments = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getEstablishment);
+
     }, 2000)
   }
 
@@ -109,6 +113,10 @@ export class EstablishmentComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

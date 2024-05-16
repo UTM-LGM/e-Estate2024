@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TappingSystem } from 'src/app/_interface/tappingSystem';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { TappingSystemService } from 'src/app/_services/tapping-system.service';
 import swal from 'sweetalert2';
 
@@ -26,7 +27,8 @@ export class TappingSystemComponent implements OnInit {
 
   constructor(
     private tappingSystemService: TappingSystemService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -71,12 +73,13 @@ export class TappingSystemComponent implements OnInit {
 
   getTappingSystem() {
     setTimeout(() => {
-      this.tappingSystemService.getTappingSystem()
+      const getTappingSystem = this.tappingSystemService.getTappingSystem()
         .subscribe(
           Response => {
             this.tappingSystems = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getTappingSystem);
     }, 2000)
   }
 
@@ -106,6 +109,10 @@ export class TappingSystemComponent implements OnInit {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

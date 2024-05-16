@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MembershipType } from 'src/app/_interface/membership';
 import { MembershipService } from 'src/app/_services/membership.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,9 @@ export class MembershipComponent implements OnInit {
 
   constructor(
     private membershipService: MembershipService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit() {
@@ -73,12 +76,14 @@ export class MembershipComponent implements OnInit {
 
   getMembership() {
     setTimeout(() => {
-      this.membershipService.getMembership()
+      const getMembership = this.membershipService.getMembership()
         .subscribe(
           Response => {
             this.membershipTypes = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getMembership);
+
     }, 2000)
   }
 
@@ -108,6 +113,10 @@ export class MembershipComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

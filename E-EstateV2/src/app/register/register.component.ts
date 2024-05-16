@@ -10,6 +10,7 @@ import { EmailService } from '../_services/email.service';
 import { Email } from '../_interface/email';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SpinnerService } from '../_services/spinner.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +33,8 @@ export class RegisterComponent implements OnInit {
     private userService: UserService,
     private emailService: EmailService,
     private myLesenService: MyLesenIntegrationService,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -40,12 +42,14 @@ export class RegisterComponent implements OnInit {
   }
 
   getRole() {
-    this.roleService.getRole()
+    const getRole = this.roleService.getRole()
       .subscribe(
         Response => {
           this.roles = Response;
         }
       )
+      this.subscriptionService.add(getRole);
+
   }
 
   openDialog(): void {
@@ -109,7 +113,7 @@ export class RegisterComponent implements OnInit {
   checkLicenseNo(event: any) {
     this.spinnerService.requestStarted()
     setTimeout(() => {
-      this.myLesenService.getLicenseNo(event.target.value.toString())
+      const getLicense = this.myLesenService.getLicenseNo(event.target.value.toString())
         .subscribe(
           {
             next: (Response) => {
@@ -133,6 +137,8 @@ export class RegisterComponent implements OnInit {
               this.result = {}
             }
           })
+      this.subscriptionService.add(getLicense);
+
     }, 1000)
   }
 
@@ -157,6 +163,10 @@ export class RegisterComponent implements OnInit {
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

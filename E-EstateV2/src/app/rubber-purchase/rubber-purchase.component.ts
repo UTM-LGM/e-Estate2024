@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Estate } from '../_interface/estate';
 import { RubberPurchaseService } from '../_services/rubber-purchase.service';
 import { EstateService } from '../_services/estate.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-rubber-purchase',
@@ -44,7 +45,8 @@ export class RubberPurchaseComponent implements OnInit {
     private sharedService: SharedService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private estateService: EstateService
+    private estateService: EstateService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -56,12 +58,14 @@ export class RubberPurchaseComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.estateService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.estateService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.isLoading = false
               });
+      this.subscriptionService.add(getOneEstate);
+
         }
       });
     }, 2000)
@@ -69,13 +73,15 @@ export class RubberPurchaseComponent implements OnInit {
 
   getPurchase() {
     setTimeout(() => {
-      this.rubberPurchaseService.getPurchase()
+      const getPurchase = this.rubberPurchaseService.getPurchase()
         .subscribe(
           Response => {
             const rubberPurchase = Response
             this.filterPurchase = rubberPurchase.filter((e) => e.companyId == this.sharedService.companyId && e.estateId == this.sharedService.estateId)
             this.isLoading = false
           });
+      this.subscriptionService.add(getPurchase);
+
     }, 2000)
   }
 
@@ -117,5 +123,10 @@ export class RubberPurchaseComponent implements OnInit {
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 
 }

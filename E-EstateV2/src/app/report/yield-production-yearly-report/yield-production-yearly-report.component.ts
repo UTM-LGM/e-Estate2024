@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { ReportService } from 'src/app/_services/report.service';
 import { EstateService } from 'src/app/_services/estate.service';
 import { CompanyService } from 'src/app/_services/company.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-yield-production-yearly-report',
@@ -47,7 +48,8 @@ export class YieldProductionYearlyReportComponent implements OnInit {
     private sharedService: SharedService,
     private estateService: EstateService,
     private auth: AuthGuard,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -64,13 +66,15 @@ export class YieldProductionYearlyReportComponent implements OnInit {
   }
 
   getAllCompany() {
-    this.companyService.getCompany()
+    const getCompany = this.companyService.getCompany()
       .subscribe(
         Response => {
           const companies = Response
           this.filteredCompanies = companies.filter(x => x.isActive == true)
         }
       )
+      this.subscriptionService.add(getCompany);
+
   }
 
   companySelected() {
@@ -81,7 +85,7 @@ export class YieldProductionYearlyReportComponent implements OnInit {
   }
 
   getAllEstate() {
-    this.estateService.getEstate()
+    const getEstate = this.estateService.getEstate()
       .subscribe(
         Response => {
           const estates = Response
@@ -90,6 +94,8 @@ export class YieldProductionYearlyReportComponent implements OnInit {
           this.filterEstatesAdmin = estates.filter(x => x.isActive == true && x.companyId == this.estate.companyId)
         }
       )
+      this.subscriptionService.add(getEstate);
+    
   }
 
   yearSelected() {
@@ -110,7 +116,7 @@ export class YieldProductionYearlyReportComponent implements OnInit {
 
   getProductionYearly() {
     setTimeout(() => {
-      this.reportService.getEstateProductivityByField(this.year)
+      const getProductivity = this.reportService.getEstateProductivityByField(this.year)
         .subscribe(
           (Response: any) => {
             this.productionYearly = Response.production
@@ -124,6 +130,8 @@ export class YieldProductionYearlyReportComponent implements OnInit {
             this.totalProductivity = this.filterProductionYearly.map(x => (x.cuplumpDry + x.latexDry + x.ussDry) / x.tappedAreaPerHa)
             this.isLoading = false
           })
+      this.subscriptionService.add(getProductivity);
+
     }, 2000)
   }
 
@@ -131,4 +139,9 @@ export class YieldProductionYearlyReportComponent implements OnInit {
     this.year = ''
     this.filterProductionYearly = []
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

@@ -6,6 +6,7 @@ import { CostCategoryService } from 'src/app/_services/cost-category.service';
 import { CostSubcategory1Service } from 'src/app/_services/cost-subcategory1.service';
 import { CostSubcategory2Service } from 'src/app/_services/cost-subcategory2.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -44,7 +45,8 @@ export class CostCategoryComponent implements OnInit {
     private costCategoryService: CostCategoryService,
     private costSubCategory1Service: CostSubcategory1Service,
     private costSubCategory2Service: CostSubcategory2Service,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -58,34 +60,40 @@ export class CostCategoryComponent implements OnInit {
 
   getCostCategory() {
     setTimeout(() => {
-      this.costCategoryService.getCostCategory()
+      const getCostCategory = this.costCategoryService.getCostCategory()
         .subscribe(
           Response => {
             this.costCategories = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getCostCategory);
+
     }, 2000)
   }
 
   getCostSub1() {
     setTimeout(() => {
-      this.costSubCategory1Service.getCostSubCategory()
+      const getSubCategory = this.costSubCategory1Service.getCostSubCategory()
         .subscribe(
           Response => {
             this.costSubCategories1 = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getSubCategory);
+
     }, 2000)
   }
 
   getCostSub2() {
     setTimeout(() => {
-      this.costSubCategory2Service.getCostSubCategory()
+      const getSubCategory = this.costSubCategory2Service.getCostSubCategory()
         .subscribe(
           Response => {
             this.costSubCategories2 = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getSubCategory);
+
     }, 2000)
   }
 
@@ -254,6 +262,10 @@ export class CostCategoryComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

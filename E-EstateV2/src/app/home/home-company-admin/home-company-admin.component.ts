@@ -10,6 +10,7 @@ import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-home-company-admin',
@@ -54,7 +55,8 @@ export class HomeCompanyAdminComponent implements OnInit {
     private fieldProductionService: FieldProductionService,
     private myLesenService: MyLesenIntegrationService,
     private fieldService: FieldService,
-    private reportService:ReportService
+    private reportService:ReportService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -68,7 +70,7 @@ export class HomeCompanyAdminComponent implements OnInit {
   }
 
   getField() {
-    this.reportService.getCurrentField(new Date().getFullYear().toString())
+    const getCurrentField = this.reportService.getCurrentField(new Date().getFullYear().toString())
     .subscribe(
       (Response: any[]) => {
         const filteredFields = Response.filter(x => x.fieldStatus.toLowerCase().includes('tapped area'));
@@ -104,21 +106,24 @@ export class HomeCompanyAdminComponent implements OnInit {
         }
       }
     );
+    this.subscriptionService.add(getCurrentField);
 }
 
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.companyId)
+   const getCompany =  this.myLesenService.getOneCompany(this.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoadingEstateName = false
         }
       )
+    this.subscriptionService.add(getCompany);
+
   }
 
   getEstate() {
-    this.myLesenService.getAllEstate()
+   const getEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           const estates = Response
@@ -127,10 +132,12 @@ export class HomeCompanyAdminComponent implements OnInit {
           this.isLoadingEstate = false
         }
       )
+    this.subscriptionService.add(getEstate);
+
   }
 
   getProduction() {
-    this.reportService.getCurrentCropProduction()
+   const getCurrentProduction = this.reportService.getCurrentCropProduction()
       .subscribe(
         Response => {
           const productions = Response
@@ -163,6 +170,12 @@ export class HomeCompanyAdminComponent implements OnInit {
           )
         }
       )
+    this.subscriptionService.add(getCurrentProduction);
+
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
  

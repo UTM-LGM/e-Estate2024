@@ -215,7 +215,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned'));
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government'));
     this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 

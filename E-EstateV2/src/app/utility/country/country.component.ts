@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Country } from 'src/app/_interface/country';
 import { CountryService } from 'src/app/_services/country.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,7 +28,8 @@ export class CountryComponent implements OnInit {
 
   constructor(
     private countryService: CountryService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -81,12 +83,14 @@ export class CountryComponent implements OnInit {
 
   getCountry() {
     setTimeout(() => {
-      this.countryService.getCountry()
+      const getCountry = this.countryService.getCountry()
         .subscribe(
           Response => {
             this.countries = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getCountry);
+
     }, 2000)
   }
 
@@ -116,6 +120,10 @@ export class CountryComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

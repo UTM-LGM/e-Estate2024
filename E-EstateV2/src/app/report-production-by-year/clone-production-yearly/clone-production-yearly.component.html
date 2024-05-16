@@ -30,7 +30,8 @@
       </tr>
 
       <ng-container *ngIf="!isLoading">
-        <tr *ngFor="let data of cloneProductionData">
+        <tr *ngFor="let data of cloneProductionData; let i = index">
+          <td>{{ i + 1}}</td>
           <td>{{ data.cloneName }}</td>
           <td>{{ data.totalProduction | number:'1.2-2' }}</td>
         </tr>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Company } from 'src/app/_interface/company';
 import { CompanyService } from 'src/app/_services/company.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-company-status',
@@ -19,6 +20,7 @@ export class CompanyStatusComponent {
 
   constructor(
     private companyService: CompanyService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -33,7 +35,7 @@ export class CompanyStatusComponent {
 
   getCompany(isActive: boolean) {
     setTimeout(() => {
-      this.companyService.getCompany()
+      const getCompany = this.companyService.getCompany()
         .subscribe(
           Response => {
             this.isActiveChoosen = true
@@ -41,6 +43,12 @@ export class CompanyStatusComponent {
             this.companies = companies.filter(x => x.isActive == isActive)
             this.isLoading = false
           });
+      this.subscriptionService.add(getCompany);
+          
     }, 2000)
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

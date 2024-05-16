@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Clone } from 'src/app/_interface/clone';
 import { CloneService } from 'src/app/_services/clone.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,8 @@ export class CloneComponent implements OnInit {
 
   constructor(
     private cloneService: CloneService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -73,12 +75,14 @@ export class CloneComponent implements OnInit {
 
   getClone() {
     setTimeout(() => {
-      this.cloneService.getClone()
+      const getClone = this.cloneService.getClone()
         .subscribe(
           Response => {
             this.clones = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getClone);
+
     }, 2000)
   }
 
@@ -108,6 +112,10 @@ export class CloneComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

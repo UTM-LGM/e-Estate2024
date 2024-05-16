@@ -24,8 +24,8 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/GetProductivity')
   }
 
-  getFieldArea():Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetFieldArea')
+  getFieldArea(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetFieldArea/' + year)
   }
 
   getCurrentTapperAndFieldWorker():Observable<any[]>{

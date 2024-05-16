@@ -8,6 +8,7 @@
         public bool isMature { get; set; }
         public bool isActive { get; set; }
         public DateTime? dateOpenTapping { get; set; }
+        public DateTime createdDate { get; set; }
         public string? dateOpenTappingFormatted { get; set; }
         public int yearPlanted { get; set; }
         public int fieldStatusId { get; set; }

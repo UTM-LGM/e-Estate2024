@@ -20,18 +20,19 @@
         </tr>
   
         <tr *ngIf="isLoading">
-          <td colspan="6">
+          <td colspan="3">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
         </tr>
   
         <tr *ngIf="!isLoading && cloneArea.length == 0 && role == 'Admin'">
-          <td colspan="2" style="color: red; text-align: center;">No data found. Please choose year</td>
+          <td colspan="3" style="color: red; text-align: center;">No data found. Please choose year</td>
         </tr>
   
         <ng-container *ngIf="!isLoading">
-          <tr *ngFor="let data of cloneArea">
+          <tr *ngFor="let data of cloneArea; let i = index">
+            <td>{{i + 1}}</td>
             <td>{{ data.cloneName }}</td>
             <td>{{ data.totalArea }}</td>
           </tr>

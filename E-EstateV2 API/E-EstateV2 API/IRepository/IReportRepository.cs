@@ -15,7 +15,7 @@ namespace E_EstateV2_API.IRepository
         Task<Object> GetProductivity();
         Task<Object> GetCurrentProduction();
 
-        Task<object> GetFieldArea();
+        Task<object> GetFieldArea(int year);
         Task<object> GetLatestMonthWorker();
         Task<object> GetTapperAndFieldWorker();
         Task<object> GetWorkerShortageEstate();

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Field } from 'src/app/_interface/field';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rubber-crops-by-state',
@@ -14,6 +16,8 @@ export class RubberCropsByStateComponent implements OnInit {
   order = ''
   isLoading = true
   pageNumber = 1
+  year = ''
+
 
   estates: any[] = []
 
@@ -27,16 +31,20 @@ export class RubberCropsByStateComponent implements OnInit {
 
   constructor(
     private fieldService: FieldService,
-    private myLesenService: MyLesenIntegrationService
+    private myLesenService: MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
+    this.year = new Date().getFullYear().toString()
     this.getFieldInfo()
   }
 
   getFieldInfo() {
     setTimeout(() => { 
-      this.myLesenService.getAllEstate().subscribe(estatesResponse => {
+      const getAllEstate = this.myLesenService.getAllEstate()
+      .subscribe(
+        estatesResponse => {
         this.estates = estatesResponse.filter(estate => estate.state); // Filter out estates with null or undefined state
   
         const promiseArray = this.estates.map(estate => {
@@ -52,7 +60,7 @@ export class RubberCropsByStateComponent implements OnInit {
     
             if (estate.state) {
               this.fieldService.getField().subscribe(fieldsResponse => {
-                const fields = fieldsResponse.filter(field => field.estateId == estate.id);
+                const fields = fieldsResponse.filter(field => field.estateId == estate.id && new Date(field.createdDate).getFullYear().toString() === this.year);
                 if (fields.length > 0) {
                   estate.fields = fields;                
                   // Calculate total areas for different statuses
@@ -66,6 +74,9 @@ export class RubberCropsByStateComponent implements OnInit {
                   estate.fields.forEach((field:any) => {
                     if (field.isActive) {
                       totalAreas[field.fieldStatus.toLowerCase()] += field.area;
+                      if (field.fieldStatus.toLowerCase().includes('abandoned')) {
+                        totalAreas['abandoned'] += field.area;
+                      }
                     }
                   });
     
@@ -96,6 +107,31 @@ export class RubberCropsByStateComponent implements OnInit {
           this.isLoading = false
         });
       });
+      this.subscriptionService.add(getAllEstate);
+
     }, 2000);
-  }   
+}
+
+
+  yearSelected() {
+    this.estates = []
+    const yearAsString = this.year.toString();
+    if (yearAsString.length === 4) {
+      this.isLoading = true
+      this.stateTotals = {}
+      this.getFieldInfo()
+    } else {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert correct year',
+      });
+      this.year = ''
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+
 }

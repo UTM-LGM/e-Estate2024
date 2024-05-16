@@ -4,6 +4,9 @@
   <h1>{{estate.name}}</h1>
   <hr />
 
+  <h1>Rubber Sale Information</h1>
+
+
   <div class="box-container">
     <div style="margin-top: -10px">
       <button class="btn-add" routerLink="/e-estate/add-rubber-sale/{{estate.id}}">
@@ -74,9 +77,9 @@
                 <button class="btn-update" (click)="printForm1(sale)"  title="Print Form 1">
                   <i class="fa fa-print"></i>
                 </button> &nbsp;
-                <button class="btn-update" (click)="print(sale)"  title="Print Receipt">
+                <!-- <button class="btn-update" (click)="print(sale)"  title="Print Receipt">
                   <i class="fa fa-print"></i>
-                </button>
+                </button> -->
               </div>
             </td>
             <td [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">

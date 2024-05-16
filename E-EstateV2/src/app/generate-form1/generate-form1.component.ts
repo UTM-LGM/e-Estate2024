@@ -38,6 +38,7 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
           .subscribe(
             Response => {
               this.rubberSale = Response
+              console.log(this.rubberSale)
               this.qrcodedata = JSON.stringify({
                 letterOfConsentNo: this.rubberSale.letterOfConsentNo,
                 buyerid: this.rubberSale.buyerLicenseNo

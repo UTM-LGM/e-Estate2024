@@ -22,6 +22,8 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   currentDate = ''
   letterOfConsentNo = ''
 
+  deliveryAgent: string = '';
+
   constructor(
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
@@ -40,6 +42,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   initialForm() {
+    this.deliveryAgent = ''
     this.rubberSale = {} as RubberSale
     this.rubberSale.buyerId = 0
     this.rubberSale.rubberType = '0'
@@ -108,13 +111,14 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   generateLetterOfConsetnNo() {
     const currentDate = new Date();
 
-    const year = currentDate.getFullYear().toString().substring(2); // Get last two digits of the year
-    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); // Ensure two digits for month
-    const day = ('0' + currentDate.getDate()).slice(-2); // Ensure two digits for day
-    const hours = ('0' + currentDate.getHours()).slice(-2); // Ensure two digits for hours
-    const minutes = ('0' + currentDate.getMinutes()).slice(-2); // Ensure two digits for minutes
-
-    this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}`;
+    const year = currentDate.getFullYear().toString().substring(2) // Get last two digits of the year
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2) // Ensure two digits for month
+    const day = ('0' + currentDate.getDate()).slice(-2) // Ensure two digits for day
+    const hours = ('0' + currentDate.getHours()).slice(-2) // Ensure two digits for hours
+    const minutes = ('0' + currentDate.getMinutes()).slice(-2);// Ensure two digits for minutes
+    const seconds = ('0' + currentDate.getSeconds()).slice(-2)
+    //const checksum = (year + month + day + hours + minutes + seconds).slice(-2)
+    this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}${seconds}`;
   }
 
   print(sale: RubberSale) {
@@ -124,6 +128,10 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  deliveryAgentRemark(){
+    this.rubberSale.remark = 'Menggunakan penghantaran ejen : ' + this.rubberSale.deliveryAgent
   }
 
 }

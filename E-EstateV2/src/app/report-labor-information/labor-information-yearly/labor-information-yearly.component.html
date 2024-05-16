@@ -48,6 +48,10 @@
         <td colspan="5" style="color: red; text-align: center;">No data found.</td>
       </tr>
 
+      <tr *ngIf="!isLoading && labors.length == 0 && role == 'EstateClerk'">
+        <td colspan="5" style="color: red; text-align: center;">No data found.</td>
+      </tr>
+
       <tbody *ngIf="!isLoading && labors.length > 0">
         <ng-container *ngIf="showAll">
         <tr *ngFor="let labor of labors; let i=index">

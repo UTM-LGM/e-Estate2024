@@ -9,6 +9,7 @@ import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-home-estate-clerk',
@@ -52,6 +53,9 @@ export class HomeEstateClerkComponent implements OnInit {
   immatureArea = 0
   tappedArea = 0
 
+  totalCuplumpDry = 0
+  totalLatexDry = 0
+
   isLoadingEstateName = true
   isLoadingProduction = true
   isLoadingLocal = true
@@ -79,7 +83,8 @@ export class HomeEstateClerkComponent implements OnInit {
     private productionService:FieldProductionService,
     private datePipe: DatePipe,
     private costInformationService:CostAmountService,
-    private fieldService:FieldService
+    private fieldService:FieldService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -103,7 +108,7 @@ export class HomeEstateClerkComponent implements OnInit {
   }
 
   getField(){
-    this.reportService.getCurrentField(this.yearNow.toString())
+   const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
     .subscribe(
       Response =>{
         const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus.toLowerCase().includes('tapped area'))
@@ -111,13 +116,15 @@ export class HomeEstateClerkComponent implements OnInit {
         this.isLoadingTappedArea = false
       }
     )
+    this.subscriptionService.add(getCurrentField);
+
   }
 
   getProduction(){
     const previousMonth = new Date()
     previousMonth.setMonth(previousMonth.getMonth() - 1)
     const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
-    this.productionService.getProduction()
+    const getProduction = this.productionService.getProduction()
     .subscribe(
       Response =>{
         const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "Draft" && x.monthYear == date)
@@ -127,10 +134,13 @@ export class HomeEstateClerkComponent implements OnInit {
           }
       }
     )
+    this.subscriptionService.add(getProduction);
+
   }
 
   getWorkerShortage() {
-    this.reportService.getWorkerShortageEstate().subscribe(
+    const getWorkerShortage = this.reportService.getWorkerShortageEstate()
+    .subscribe(
       response => {
         this.workerShortages = response.filter(x=>x.estateId == this.sharedService.estateId);
         if(this.workerShortages.length === 0)
@@ -148,10 +158,12 @@ export class HomeEstateClerkComponent implements OnInit {
           }
       }
     );
+    this.subscriptionService.add(getWorkerShortage);
+
   }
 
   getCost(){
-    this.costInformationService.getCostAmount()
+    const getCostAmount = this.costInformationService.getCostAmount()
     .subscribe(
       Response =>{
         const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.year == new Date().getFullYear())
@@ -160,6 +172,8 @@ export class HomeEstateClerkComponent implements OnInit {
         }
       }
     )
+    this.subscriptionService.add(getCostAmount);
+
   }
 
   checkDate() {
@@ -171,17 +185,19 @@ export class HomeEstateClerkComponent implements OnInit {
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estateId)
+    const getEstate = this.myLesenService.getOneEstate(this.estateId)
       .subscribe(
         Response => {
           this.estate = Response
           this.isLoadingEstateName = false
         }
       )
+      this.subscriptionService.add(getEstate);
+
   }
 
   getProductionReport() {
-    this.reportService.getCurrentCropProduction()
+    const getCurrentProduction = this.reportService.getCurrentCropProduction()
       .subscribe(
         Response => {
           const productions = Response
@@ -195,14 +211,23 @@ export class HomeEstateClerkComponent implements OnInit {
             };
             this.filterProductions.push(product)
           }
+          else{
+            for (const production of this.filterProductions) {
+              this.totalCuplumpDry += production.cuplumpDry || 0;
+              this.totalLatexDry += production.latexDry || 0;
+              this.isLoadingProduction = false
+            }
+          }
           this.isLoadingProduction = false
         }
       )
+      this.subscriptionService.add(getCurrentProduction);
+
 
   }
 
   getWorker() {
-    this.reportService.getCurrentTapperAndFieldWorker()
+    const getCurrentWorker = this.reportService.getCurrentTapperAndFieldWorker()
       .subscribe(
         Response => {
           const worker = Response.filter(x => x.estateId == this.sharedService.estateId)
@@ -225,20 +250,22 @@ export class HomeEstateClerkComponent implements OnInit {
           }  
         }
       )
+      this.subscriptionService.add(getCurrentWorker);
+
   }
 
   getProductivity() {
-    this.reportService.getCropProductivity()
+    const getProductivity = this.reportService.getCropProductivity()
       .subscribe(
         {
           next:(Response)=>{
             this.productivity = Response.filter(x=>x.estateId == this.sharedService.estateId);
             if (this.productivity.length === 0) {
               const product: any = {
-                productivityCuplumpDry: 0,
-                productivityLatexDry: 0,
-                productivityUSSDry: 0,
-                productivityOthersDry: 0,
+                totalCuplumpDry: 0,
+                totalLatexDry: 0,
+                totalArea: 0,
+                totalRubberDry : 0
               };
               this.productivity.push(product);
             } else {
@@ -254,51 +281,50 @@ export class HomeEstateClerkComponent implements OnInit {
           }
         }
       );
+      this.subscriptionService.add(getProductivity);
+
   }
 
   // Helper function to group data by year and calculate sums
   groupByYear(data:any) {
-    return data.reduce((acc:any, curr:any) => {
-      const year = curr.monthYear.split('-')[1];
+    const grouped = data.reduce((acc:any, curr:any) => {
+      const year = curr.year
       if (!acc[year]) {
         acc[year] = {
           year: year,
-          productivityCuplumpDry: 0,
-          productivityLatexDry: 0,
-          productivityUSSDry: 0,
-          productivityOthersDry: 0
+          totalCuplumpDry: 0,
+          totalLatexDry: 0,
+          totalArea: 0,
+          totalRubberDry : 0
         };
       }
-      acc[year].productivityCuplumpDry += curr.productivityCuplumpDry || 0;
-      acc[year].productivityLatexDry += curr.productivityLatexDry || 0;
-      acc[year].productivityUSSDry += curr.productivityUSSDry || 0;
-      acc[year].productivityOthersDry += curr.productivityOthersDry || 0;
+      acc[year].totalCuplumpDry += curr.totalCuplumpDry || 0;
+      acc[year].totalLatexDry += curr.totalLatexDry || 0;
+      acc[year].totalRubberDry += (curr.totalCuplumpDry || 0) + (curr.totalLatexDry || 0);
+      acc[year].totalArea += curr.area || 0;
       return acc;
     }, {});
+    return Object.values(grouped);
   }
 
   createProductivityChart() {
     if (this.chartEstate) {
       this.chartEstate.destroy();
     }
+
+    const years = this.productivityByYear.map((x: any) => x.year);
+    const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
   
     this.chartEstate = new Chart("chartProductivityEstate", {
       type: 'line',
       data: {
-        labels: Object.keys(this.productivityByYear), // Use years as labels
+        labels: years,
         datasets: [
           {
-            label: 'Cuplump Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityCuplumpDry),
+            label: 'Rubber Dry (Kg/Ha)',
+            data: totalRubberProductivity,
             backgroundColor: 'blue',
             borderColor: 'blue',
-            fill: false
-          },
-          {
-            label: 'Latex Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityLatexDry),
-            backgroundColor: 'limegreen',
-            borderColor: 'limegreen',
             fill: false
           }
         ]
@@ -310,8 +336,8 @@ export class HomeEstateClerkComponent implements OnInit {
     });
   }
 
-  getFieldArea() {
-    this.reportService.getFieldArea()
+  getFieldArea() { 
+    const getFieldArea = this.reportService.getFieldArea(this.yearNow.toString())
       .subscribe(
         Response => {
           const matureArea = Response.filter(x => x.isMature == true && x.estateId == this.sharedService.estateId)
@@ -324,35 +350,13 @@ export class HomeEstateClerkComponent implements OnInit {
         }
 
       )
+      this.subscriptionService.add(getFieldArea);
+
   }
 
-  // createAreaChart() {
-  //   if (this.barChart) {
-  //     this.barChart.destroy();
-  //   }
-
-  //   this.barChart = new Chart("barChart", {
-  //     type: 'bar',
-  //     data: {
-  //       labels: ['Mature Area', 'Immature Area'],
-  //       datasets: [
-  //         {
-  //           label: 'Mature Area',
-  //           data: [this.matureArea, 0], // Add 0 for the immature area to align bars
-  //           backgroundColor: 'blue'
-  //         },
-  //         {
-  //           label: 'Immature Area',
-  //           data: [0, this.immatureArea], // Add 0 for the mature area to align bars
-  //           backgroundColor: 'limegreen'
-  //         }
-  //       ]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       maintainAspectRatio: false,
-  //     }
-  //   });
-  // }
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }
 

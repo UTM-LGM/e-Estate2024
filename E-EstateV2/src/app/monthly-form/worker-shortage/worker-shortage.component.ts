@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { WorkerShortageDetailComponent } from '../worker-shortage-detail/worker-shortage-detail.component';
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
 import { LaborInfo } from 'src/app/_interface/laborInfo';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class WorkerShortageComponent implements OnInit {
     private workerShortageService: WorkerShortageService,
     private dialog: MatDialog,
     private laborInfoService: LaborInfoService,
+    private subscriptionService:SubscriptionService
 
   ) { }
 
@@ -105,7 +107,7 @@ export class WorkerShortageComponent implements OnInit {
   }
 
   getWorkerShortage() {
-    this.workerShortageService.getWorkerShortage()
+    const getWorkerShortage = this.workerShortageService.getWorkerShortage()
       .subscribe(
         Response => {
           const worker = Response
@@ -113,6 +115,8 @@ export class WorkerShortageComponent implements OnInit {
           this.getLabor()
         }
       )
+      this.subscriptionService.add(getWorkerShortage);
+
   }
 
   update(worker: WorkerShortage) {
@@ -134,7 +138,7 @@ export class WorkerShortageComponent implements OnInit {
   }
 
   getLabor() {
-    this.laborInfoService.getLabor()
+    const getLabor = this.laborInfoService.getLabor()
       .subscribe(
         Response => {
           const labors = Response
@@ -144,6 +148,8 @@ export class WorkerShortageComponent implements OnInit {
             this.sumNeeded()
           }
         });
+      this.subscriptionService.add(getLabor);
+
   }
 
   sumCurrent(row: LaborInfo[]) {
@@ -164,4 +170,9 @@ export class WorkerShortageComponent implements OnInit {
     this.neededTapper = this.totalSumTapper + tapperWorkerShortages[0]
     this.neededField = this.totalSumField + fieldWorkerShortages[0]
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

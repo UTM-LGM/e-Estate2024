@@ -5,6 +5,7 @@ import { LaborInfoService } from 'src/app/_services/labor-info.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-worker-shortage-estate',
@@ -40,7 +41,8 @@ export class WorkerShortageEstateComponent implements OnInit {
   constructor(
     private reportService: ReportService,
     private myLesenService: MyLesenIntegrationService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -62,35 +64,42 @@ export class WorkerShortageEstateComponent implements OnInit {
   }
 
   getAllEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
+      this.subscriptionService.add(getAllEstate);
+
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estate.id)
+    const getEstate = this.myLesenService.getOneEstate(this.estate.id)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+      this.subscriptionService.add(getEstate);
+
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.estate.companyId)
+    const getCompany = this.myLesenService.getOneCompany(this.estate.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoading = false
         }
       )
+      this.subscriptionService.add(getCompany);
+
   }
 
   getWorkerShortage() {
-    this.reportService.getWorkerShortageEstate().subscribe(
+    const getShortage = this.reportService.getWorkerShortageEstate()
+    .subscribe(
       response => {
         this.workerShortages = response;
         if(this.workerShortages.length === 0)
@@ -116,10 +125,12 @@ export class WorkerShortageEstateComponent implements OnInit {
           }
         }
     );
+    this.subscriptionService.add(getShortage);
+
   }
   
   getLabor() {
-    this.reportService.getCurrentTapperAndFieldWorker().subscribe(
+    const getCurrent = this.reportService.getCurrentTapperAndFieldWorker().subscribe(
       Response => {
         const labors = Response;
         this.workerShortages.forEach(workerShortage => {
@@ -127,6 +138,8 @@ export class WorkerShortageEstateComponent implements OnInit {
         });
       }
     );
+    this.subscriptionService.add(getCurrent);
+
   }
 
   calculateTapperSum(worker: any): number {
@@ -151,4 +164,9 @@ export class WorkerShortageEstateComponent implements OnInit {
     this.getLabor()
     this.getWorkerShortage()
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

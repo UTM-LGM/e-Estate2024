@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Estate } from 'src/app/_interface/estate';
 import { EstateService } from 'src/app/_services/estate.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-estate-status',
@@ -22,6 +23,7 @@ export class EstateStatusComponent implements OnInit {
   constructor(
     private estateService: EstateService,
     private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +38,7 @@ export class EstateStatusComponent implements OnInit {
 
   getEstate(isActive: boolean) {
     setTimeout(() => {
-      this.estateService.getEstate()
+      const getEstate = this.estateService.getEstate()
         .subscribe(
           Response => {
             this.isActiveChoosen = true
@@ -48,6 +50,13 @@ export class EstateStatusComponent implements OnInit {
             this.isLoading = false
           }
         );
+      this.subscriptionService.add(getEstate);
+
     }, 2000)
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LaborInformation } from 'src/app/_interface/laborInformation';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,8 @@ export class LaborInformationComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private laborTypeService: LaborTypeService
+    private laborTypeService: LaborTypeService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -73,12 +75,14 @@ export class LaborInformationComponent implements OnInit {
 
   getType() {
     setTimeout(() => {
-      this.laborTypeService.getType()
+      const getType = this.laborTypeService.getType()
         .subscribe(
           Response => {
             this.labors = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getType);
+
     }, 2000)
   }
 
@@ -108,6 +112,10 @@ export class LaborInformationComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

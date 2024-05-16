@@ -8,6 +8,7 @@ import swal from 'sweetalert2';
 import { Seller } from '../_interface/seller';
 import { SellerService } from '../_services/seller.service';
 import { RubberPurchaseService } from '../_services/rubber-purchase.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-rubber-purchase-detail',
@@ -27,7 +28,8 @@ export class RubberPurchaseDetailComponent implements OnInit {
     private datePipe: DatePipe,
     private sellerService: SellerService,
     private sharedService: SharedService,
-    private rubberPurchaseService: RubberPurchaseService
+    private rubberPurchaseService: RubberPurchaseService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -48,12 +50,14 @@ export class RubberPurchaseDetailComponent implements OnInit {
   }
 
   getSeller() {
-    this.sellerService.getSeller()
+    const getSeller = this.sellerService.getSeller()
       .subscribe(
         Response => {
           this.sellers = Response
         }
       )
+      this.subscriptionService.add(getSeller);
+
   }
 
   back() {
@@ -81,6 +85,10 @@ export class RubberPurchaseDetailComponent implements OnInit {
   calculateTotalPrice() {
     const total = this.rubberPurchase.price * this.rubberPurchase.weight
     this.rubberPurchase.totalPrice = total
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -73,9 +73,11 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetFieldArea()
+        [Route("{year:int}")]
+
+        public async Task<IActionResult> GetFieldArea(int year)
         {
-            var fieldArea = await _reportRepository.GetFieldArea();
+            var fieldArea = await _reportRepository.GetFieldArea(year);
             return Ok(fieldArea);
         }
 

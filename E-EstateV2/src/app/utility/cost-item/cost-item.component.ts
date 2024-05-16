@@ -10,6 +10,7 @@ import { CostSubcategory1Service } from 'src/app/_services/cost-subcategory1.ser
 import { CostSubcategory2Service } from 'src/app/_services/cost-subcategory2.service';
 import { CostTypeService } from 'src/app/_services/cost-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -51,7 +52,8 @@ export class CostItemComponent implements OnInit {
     private costSubCategory1Service: CostSubcategory1Service,
     private costSubCategory2Service: CostSubcategory2Service,
     private costItemService: CostItemService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -90,49 +92,59 @@ export class CostItemComponent implements OnInit {
   }
 
   getCostType() {
-    this.costTypeService.getCostType()
+    const getCostType = this.costTypeService.getCostType()
       .subscribe(
         Response => {
           const costTypes = Response
           this.filterCostTypes = costTypes.filter((e) => e.isActive == true)
         });
+      this.subscriptionService.add(getCostType);
+
   }
 
   getCostCategory() {
-    this.costCategoryService.getCostCategory()
+    const getCategory = this.costCategoryService.getCostCategory()
       .subscribe(
         Response => {
           const costCategories = Response
           this.filterCostCategories = costCategories.filter(e => e.isActive == true)
         });
+      this.subscriptionService.add(getCategory);
+
   }
 
   getCostSub1() {
-    this.costSubCategory1Service.getCostSubCategory()
+    const getSubCategory = this.costSubCategory1Service.getCostSubCategory()
       .subscribe(
         Response => {
           const costSubs1 = Response
           this.filterCostSubs1 = costSubs1.filter((e) => e.isActive == true)
         });
+      this.subscriptionService.add(getSubCategory);
+
   }
 
   getCostSub2() {
-    this.costSubCategory2Service.getCostSubCategory()
+    const getSubCategory = this.costSubCategory2Service.getCostSubCategory()
       .subscribe(
         Response => {
           const costSubs2 = Response
           this.filterCostSubs2 = costSubs2.filter((e) => e.isActive == true)
         });
+      this.subscriptionService.add(getSubCategory);
+
   }
 
   getCostItem() {
     setTimeout(() => {
-      this.costItemService.getCostItem()
+      const getCostItem = this.costItemService.getCostItem()
         .subscribe(
           Response => {
             this.costItem = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getCostItem);
+
     }, 2000)
   }
 
@@ -164,6 +176,10 @@ export class CostItemComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

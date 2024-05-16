@@ -10,6 +10,7 @@ import { SharedService } from '../_services/shared.service';
 import swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
 import { RubberStockDetailComponent } from '../rubber-stock-detail/rubber-stock-detail.component';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-rubber-stock',
@@ -25,6 +26,7 @@ export class RubberStockComponent implements OnInit {
     private rubberStockService: RubberStockService,
     private sharedService: SharedService,
     private datePipe: DatePipe,
+    private subscriptionService:SubscriptionService
   ) {
     this.previousDate.setMonth(this.previousDate.getMonth() - 1)
   }
@@ -62,12 +64,13 @@ export class RubberStockComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          this.myLesenService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
                 this.estate = Response
                 this.isLoading = false
               })
+      this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
@@ -106,13 +109,15 @@ export class RubberStockComponent implements OnInit {
 
   getStock() {
     setTimeout(() => {
-      this.rubberStockService.getRubberStock()
+      const getRubberStock = this.rubberStockService.getRubberStock()
         .subscribe(
           Response => {
             this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId)
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getRubberStock);
+
     }, 2000)
   }
 
@@ -151,6 +156,10 @@ export class RubberStockComponent implements OnInit {
     previousMonth.setMonth(previousMonth.getMonth() - 1)
     const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
     return monthYear === date?.toUpperCase()
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
   
 }

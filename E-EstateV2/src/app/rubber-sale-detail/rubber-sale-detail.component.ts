@@ -9,6 +9,7 @@ import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
 import { BuyerService } from '../_services/buyer.service';
 import { RubberSaleService } from '../_services/rubber-sale.service';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-rubber-sale-detail',
@@ -30,7 +31,8 @@ filterRubberSale: any = {} as any
     private datePipe: DatePipe,
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -51,12 +53,14 @@ filterRubberSale: any = {} as any
   }
 
   getBuyer() {
-    this.buyerService.getBuyer()
+    const getBuyer = this.buyerService.getBuyer()
       .subscribe(
         Response => {
           this.buyers = Response
         }
       )
+      this.subscriptionService.add(getBuyer);
+
   }
 
   back() {
@@ -86,6 +90,10 @@ filterRubberSale: any = {} as any
   calculateTotalPrice() {
     const total = this.rubberSale.unitPrice * this.rubberSale.wetWeight
     // this.rubberSale.total = total.toFixed(2)
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

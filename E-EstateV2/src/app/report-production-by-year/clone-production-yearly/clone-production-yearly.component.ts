@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -31,16 +32,20 @@ export class CloneProductionYearlyComponent implements OnInit {
 
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No'},
     { columnName: 'cloneName', displayText: 'Clone Name' },
     { columnName: 'totalProduction', displayText: 'Total Production dry (Kg)' },
   ];
 
   constructor(
     private reportService: ReportService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit(): void {
+    this.year = new Date().getFullYear().toString()
     this.role = this.sharedService.role
     this.getProductionYearly()
   }
@@ -71,7 +76,7 @@ export class CloneProductionYearlyComponent implements OnInit {
         this.isLoading = false;
         this.cloneProduction = [];
       } else {
-        this.reportService.getProductivityByClone(this.year)
+        const getProductivity = this.reportService.getProductivityByClone(this.year)
           .subscribe(
             Response => {
               this.cloneProduction = Response;
@@ -111,6 +116,8 @@ export class CloneProductionYearlyComponent implements OnInit {
               });
   
             });
+      this.subscriptionService.add(getProductivity);
+
       }
     }, 2000);
   }
@@ -124,6 +131,10 @@ export class CloneProductionYearlyComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

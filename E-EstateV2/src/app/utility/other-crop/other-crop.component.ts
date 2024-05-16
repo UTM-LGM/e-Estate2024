@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OtherCrop } from 'src/app/_interface/otherCrop';
 import { OtherCropService } from 'src/app/_services/other-crop.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -26,7 +27,8 @@ export class OtherCropComponent implements OnInit {
 
   constructor(
     private otherCropService: OtherCropService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -36,13 +38,15 @@ export class OtherCropComponent implements OnInit {
 
   getOtherCrop() {
     setTimeout(() => {
-      this.otherCropService.getOtherCrop()
+      const getOtherCrop = this.otherCropService.getOtherCrop()
         .subscribe(
           Response => {
             this.otherCrops = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getOtherCrop);
+
     })
   }
 
@@ -110,4 +114,9 @@ export class OtherCropComponent implements OnInit {
         }
       )
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

@@ -13,6 +13,7 @@ import { SharedService } from 'src/app/_services/shared.service';
 import { AddCountryComponent } from 'src/app/labor-info/labor-foreigner/add-country/add-country.component';
 import swal from 'sweetalert2';
 import { LaborInfoMonthlyDetailComponent } from '../labor-info-monthly-detail/labor-info-monthly-detail.component';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-labor-info-monthly',
@@ -45,7 +46,8 @@ export class LaborInfoMonthlyComponent implements OnInit {
     private laborTypeService: LaborTypeService,
     private sharedService: SharedService,
     private laborInfoService: LaborInfoService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
   }
 
   getLaborType() {
-    this.laborTypeService.getType()
+    const getType = this.laborTypeService.getType()
       .subscribe(
         Response => {
           const types = Response
@@ -66,6 +68,8 @@ export class LaborInfoMonthlyComponent implements OnInit {
           });
         }
       )
+      this.subscriptionService.add(getType);
+
   }
 
   back() {
@@ -75,12 +79,14 @@ export class LaborInfoMonthlyComponent implements OnInit {
 
   getCountry() {
     this.labor.countryId = 0
-    this.countryService.getCountryAsc()
+    const getCountry = this.countryService.getCountryAsc()
       .subscribe(
         Response => {
           const countries = Response
           this.filterCountries = countries.filter((e) => e.isActive == true && !this.filterLabors.some(x => x.countryId == e.id))
         });
+      this.subscriptionService.add(getCountry);
+
   }
 
   openCountry(): void {
@@ -138,7 +144,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
   getLabor() {
     this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     setTimeout(() => {
-      this.laborInfoService.getLabor()
+      const getLabor = this.laborInfoService.getLabor()
         .subscribe(
           Response => {
             const labors = Response
@@ -148,7 +154,10 @@ export class LaborInfoMonthlyComponent implements OnInit {
             this.TotalForeign()
             this.isLoading = false
           });
+    this.subscriptionService.add(getLabor);
+
     }, 2000)
+
   }
 
   sumTable(row: LaborInfo[]) {
@@ -202,6 +211,10 @@ export class LaborInfoMonthlyComponent implements OnInit {
 
   nextTab() {
     this.nextTabEvent.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FieldDisease } from 'src/app/_interface/fieldDisease';
 import { FieldDiseaseService } from 'src/app/_services/field-disease.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -27,23 +28,25 @@ export class FieldDiseaseComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private fieldDiseaseService: FieldDiseaseService
+    private fieldDiseaseService: FieldDiseaseService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit(): void {
     this.fieldDisease.diseaseName = ''
-    this, this.getFieldDisease()
+    this.getFieldDisease()
   }
 
   getFieldDisease() {
     setTimeout(() => {
-      this.fieldDiseaseService.getFieldDisease()
+      const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
         .subscribe(
           Response => {
             this.fieldDiseases = Response
             this.isLoading = false
           }
         )
+      this.subscriptionService.add(getFieldDisease);
     })
   }
 
@@ -109,5 +112,9 @@ export class FieldDiseaseComponent implements OnInit {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 }

@@ -7,6 +7,7 @@ import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-home-admin-lgm',
@@ -21,8 +22,6 @@ export class HomeAdminLGMComponent implements OnInit {
 
   totalCuplumpDry = 0
   totalLatexDry = 0
-  totalUSSDry = 0
-  totalOthersDry = 0
 
   productivityCuplumpDry = 0
   productivityLatexDry = 0
@@ -67,7 +66,9 @@ export class HomeAdminLGMComponent implements OnInit {
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
-    private fieldService:FieldService
+    private fieldService:FieldService,
+    private subscriptionService:SubscriptionService
+
   ) { }
 
   ngOnInit() {
@@ -87,17 +88,19 @@ export class HomeAdminLGMComponent implements OnInit {
   }
 
   getCostInformation(){
-    this.reportService.getCostInformation(this.yearNow.toString())
+    const getCostInformation = this.reportService.getCostInformation(this.yearNow.toString())
     .subscribe(
       Response =>{
         this.costAmount = Response.reduce((sum, estate)=> sum + estate.amount, 0)
         this.isLoadingCop = false
       }
     )
+    this.subscriptionService.add(getCostInformation);
+
   }
 
   getField(){
-    this.reportService.getCurrentField(this.yearNow.toString())
+    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
     .subscribe(
       Response =>{
         const field = Response.filter(x=>x.isActive == true && x.fieldStatus.toLowerCase().includes('tapped area'))
@@ -105,10 +108,12 @@ export class HomeAdminLGMComponent implements OnInit {
         this.isLoadingTapped = false
       }
     )
+    this.subscriptionService.add(getCurrentField);
+    
   }
 
   getWorkerShortage() {
-    this.reportService.getWorkerShortageEstate().subscribe(
+    const getWorkerShortage = this.reportService.getWorkerShortageEstate().subscribe(
       response => {
         this.workerShortages = response;
         if(this.workerShortages.length === 0)
@@ -140,10 +145,12 @@ export class HomeAdminLGMComponent implements OnInit {
           }
       }
     );
+    this.subscriptionService.add(getWorkerShortage);
+
   }
 
   getLabor() {
-    this.reportService.getCurrentTapperAndFieldWorker().subscribe(
+    const getLabor = this.reportService.getCurrentTapperAndFieldWorker().subscribe(
       Response => {
         const labors = Response;
         this.workerShortages.forEach(workerShortage => {
@@ -155,6 +162,8 @@ export class HomeAdminLGMComponent implements OnInit {
         this.isLoadingFieldNeeded = false
       }
     );
+    this.subscriptionService.add(getLabor);
+
   }
 
   calculateTapperSum(worker: any): number {
@@ -183,7 +192,7 @@ export class HomeAdminLGMComponent implements OnInit {
   }
 
   getCompany() {
-    this.myLesenService.getAllCompany()
+    const getCompany = this.myLesenService.getAllCompany()
       .subscribe(
         Response => {
           this.filterCompanies = Response
@@ -191,11 +200,13 @@ export class HomeAdminLGMComponent implements OnInit {
           this.isLoadingCompany = false
         }
       )
+    this.subscriptionService.add(getCompany);
+
 
   }
 
   getEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterEstates = Response
@@ -203,10 +214,12 @@ export class HomeAdminLGMComponent implements OnInit {
           this.isLoadingEstate = false
         }
       )
+      this.subscriptionService.add(getAllEstate);
+    
   }
 
   getProduction() {
-    this.reportService.getCurrentCropProduction()
+    const getProduction = this.reportService.getCurrentCropProduction()
       .subscribe(
         Response => {
           this.productions = Response
@@ -224,87 +237,86 @@ export class HomeAdminLGMComponent implements OnInit {
             for (const production of this.productions) {
               this.totalCuplumpDry += production.cuplumpDry || 0;
               this.totalLatexDry += production.latexDry || 0;
-              this.totalUSSDry += production.ussDry || 0;
-              this.totalOthersDry += production.othersDry || 0;
               this.isLoadingProduction = false
             }
           }
         }
       )
+    this.subscriptionService.add(getProduction);
+
   }
 
   getProductivity() {
-    this.reportService.getCropProductivity()
-      .subscribe(
-        {
-          next:(Response)=>{
-            this.productivity = Response;
-            if (this.productivity.length === 0) {
-              const product: any = {
-                productivityCuplumpDry: 0,
-                productivityLatexDry: 0,
-                productivityUSSDry: 0,
-                productivityOthersDry: 0,
-              };
-              this.productivity.push(product);
-            } else {
-              // Call the groupByYear function to group data by year and calculate sums
-              this.productivityByYear = this.groupByYear(this.productivity);
-              this.createProductivityChart(); // Call chart creation after data is processed
-            }
-            this.isLoadingProduction = false;
-          },
-          error:(err)=>{
-            console.error('Error fetching productivity data:', err);
-            this.isLoadingProduction = false;
+    const getProductivity = this.reportService.getCropProductivity()
+      .subscribe({
+        next: (Response) => {
+          this.productivity = Response;
+          if (this.productivity.length === 0) {
+            const product: any = {
+              totalCuplumpDry: 0,
+              totalLatexDry: 0,
+              totalArea: 0,
+              totalRubberDry : 0
+            };
+            this.productivity.push(product);
+          } else {
+            this.productivityByYear = this.groupByYear(this.productivity);
+            this.createProductivityChart(); // Call chart creation after data is processed
           }
+          this.isLoadingProduction = false;
+        },
+        error: (err) => {
+          console.error('Error fetching productivity data:', err);
+          this.isLoadingProduction = false;
         }
-      );
-  }
-  
+      });
+    this.subscriptionService.add(getProductivity);
+
+  } 
+
   // Helper function to group data by year and calculate sums
-  groupByYear(data:any) {
-    return data.reduce((acc:any, curr:any) => {
-      const year = curr.monthYear.split('-')[1];
-      if (!acc[year]) {
-        acc[year] = {
-          year: year,
-          productivityCuplumpDry: 0,
-          productivityLatexDry: 0,
-          productivityUSSDry: 0,
-          productivityOthersDry: 0
-        };
-      }
-      acc[year].productivityCuplumpDry += curr.productivityCuplumpDry || 0;
-      acc[year].productivityLatexDry += curr.productivityLatexDry || 0;
-      acc[year].productivityUSSDry += curr.productivityUSSDry || 0;
-      acc[year].productivityOthersDry += curr.productivityOthersDry || 0;
-      return acc;
-    }, {});
-  }
+groupByYear(data: any) {
+  const grouped = data.reduce((acc: any, curr: any) => {
+    const year = curr.year;
+    if (!acc[year]) {
+      acc[year] = {
+        year: year,
+        totalCuplumpDry: 0,
+        totalLatexDry: 0,
+        totalArea: 0,
+        totalRubberDry : 0
+      };
+    }
+    acc[year].totalCuplumpDry += curr.totalCuplumpDry || 0;
+    acc[year].totalLatexDry += curr.totalLatexDry || 0;
+    acc[year].totalRubberDry += (curr.totalCuplumpDry || 0) + (curr.totalLatexDry || 0);
+    acc[year].totalArea += curr.area || 0;
+    return acc;
+  }, {});
+
+  // Convert the grouped object into an array
+  return Object.values(grouped);
+}
+
   
   createProductivityChart() {
     if (this.chart) {
       this.chart.destroy();
     }
+
+    const years = this.productivityByYear.map((x: any) => x.year);
+    const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
   
     this.chart = new Chart("chartProductivityAdmin", {
       type: 'line',
       data: {
-        labels: Object.keys(this.productivityByYear), // Use years as labels
+        labels: years,
         datasets: [
           {
-            label: 'Cuplump Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityCuplumpDry),
+            label: 'Rubber Dry (Kg/Ha)',
+            data: totalRubberProductivity,
             backgroundColor: 'blue',
             borderColor: 'blue',
-            fill: false
-          },
-          {
-            label: 'Latex Dry (Kg/Ha)',
-            data: Object.values(this.productivityByYear).map((x:any) => x.productivityLatexDry),
-            backgroundColor: 'limegreen',
-            borderColor: 'limegreen',
             fill: false
           }
         ]
@@ -317,7 +329,7 @@ export class HomeAdminLGMComponent implements OnInit {
   }
   
   getWorker() {
-    this.reportService.getCurrentTapperAndFieldWorker()
+   const getCurrent =  this.reportService.getCurrentTapperAndFieldWorker()
       .subscribe(
         Response => {
           if (Response.length === 0) {
@@ -342,10 +354,17 @@ export class HomeAdminLGMComponent implements OnInit {
           
         }
       )
+    this.subscriptionService.add(getCurrent);
+
   }
 
   getCalculatedCop(){
     const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
     return isNaN(value) ? 0 : value;
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+  
 }

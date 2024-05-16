@@ -2,7 +2,7 @@
   <h1>Cost Information Yearly</h1>
   <hr />
 
-  <span style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span>
+  <span *ngIf="role == 'Admin'" style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span>
 
   <div style="columns:3"
     [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">

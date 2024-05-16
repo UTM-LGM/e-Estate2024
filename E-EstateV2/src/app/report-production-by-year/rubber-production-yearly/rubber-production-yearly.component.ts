@@ -3,6 +3,7 @@ import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -43,7 +44,8 @@ export class RubberProductionYearlyComponent implements OnInit {
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService: SubscriptionService
 
   ) { }
 
@@ -63,31 +65,37 @@ export class RubberProductionYearlyComponent implements OnInit {
   }
 
   getEstate() {
-    this.myLesenService.getOneEstate(this.estate.id)
+    const getOneEstate = this.myLesenService.getOneEstate(this.estate.id)
       .subscribe(
         Response => {
           this.estate = Response
         }
       )
+    this.subscriptionService.add(getOneEstate);
+
   }
 
   getAllCompanies() {
-    this.myLesenService.getAllCompany()
+    const getAllCompanies = this.myLesenService.getAllCompany()
       .subscribe(
         Response => {
           this.companies = Response
         }
       )
+    this.subscriptionService.add(getAllCompanies);
+
   }
 
   getCompany() {
-    this.myLesenService.getOneCompany(this.estate.companyId)
+    const getCompany = this.myLesenService.getOneCompany(this.estate.companyId)
       .subscribe(
         Response => {
           this.company = Response
           this.isLoading = false
         }
       )
+    this.subscriptionService.add(getCompany);
+
   }
 
   toggleSort(columnName: string) {
@@ -110,13 +118,15 @@ export class RubberProductionYearlyComponent implements OnInit {
   }
 
   getAllEstate() {
-    this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(
         Response => {
           this.filterLGMAdmin = Response.filter(x => x.companyId == this.estate.companyId)
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
+    this.subscriptionService.add(getAllEstate);
+
   }
 
   yearSelected() {
@@ -141,7 +151,7 @@ export class RubberProductionYearlyComponent implements OnInit {
         this.filterProductionYearly = []
       }
       else {
-        this.reportService.getProductionYearly(this.year)
+        const getProduction = this.reportService.getProductionYearly(this.year)
           .subscribe(
             (Response: any) => {
               const productionYearly = Response
@@ -151,12 +161,18 @@ export class RubberProductionYearlyComponent implements OnInit {
               )
               this.totalCuplumpDry = this.filterProductionYearly.reduce((total, item) => total + item.cuplumpDry, 0)
               this.totalLatexDry = this.filterProductionYearly.reduce((total, item) => total + item.latexDry, 0)
-              this.totalAllDry = this.filterProductionYearly.reduce((total, item)=> total + item.totalDry, 0)
+              this.totalAllDry = this.filterProductionYearly.reduce((total, item) => total + item.totalDry, 0)
 
               this.isLoading = false
             })
+        this.subscriptionService.add(getProduction);
+
       }
     }, 2000)
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

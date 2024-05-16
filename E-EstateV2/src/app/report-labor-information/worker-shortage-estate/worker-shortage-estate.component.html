@@ -29,6 +29,7 @@
   <div style="overflow-x: auto;">
     <table style="width: 100%">
       <tr>
+        <th>No</th>
         <th>Estate Name</th>
         <th>Current Tapper Worker</th>
         <th>Current Field Worker</th>
@@ -40,22 +41,27 @@
       </tr>
 
       <tr *ngIf="isLoading">
-        <td colspan="8">
+        <td colspan="9">
           <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
           </ngx-skeleton-loader>
         </td>
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="8" style="color: red; text-align: center;">No data found. Please choose estate</td>
+        <td colspan="9" style="color: red; text-align: center;">No data found. Please choose estate</td>
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'Admin'">
-        <td colspan="8" style="color: red; text-align: center;">No data found.</td>
+        <td colspan="9" style="color: red; text-align: center;">No data found.</td>
+      </tr>
+
+      <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'EstateClerk'">
+        <td colspan="9" style="color: red; text-align: center;">No data found.</td>
       </tr>
 
       <ng-container *ngIf="!isLoading">
-        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
+          <td>{{i + 1}}</td>
           <td>{{ worker.estateName }}</td>
           <ng-container *ngFor="let labor of worker.filterLabors">
             <td>{{ labor.tapperCheckrole + labor.tapperContractor }}</td>

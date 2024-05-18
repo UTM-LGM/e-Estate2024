@@ -92,9 +92,10 @@ namespace E_EstateV2_API.Repository
                 }).ToList(),
                 initialTreeStand = x.initialTreeStand,
                 totalTask = x.totalTask,
-                conversionCropName = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.conversionCropName).FirstOrDefault(),
+                conversionCropName = _context.otherCrops.Where(y => y.Id == (_context.fieldConversions.Where(z=>z.fieldId == x.Id).Select(z=>z.otherCropId).FirstOrDefault())).Select(y => y.otherCrop).FirstOrDefault(),
                 sinceYear = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.sinceYear).FirstOrDefault(),
-                conversionId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.Id).FirstOrDefault()
+                conversionId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.Id).FirstOrDefault(),
+                otherCropId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.otherCropId).FirstOrDefault()
             }).FirstOrDefaultAsync();
             return field;
         }

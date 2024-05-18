@@ -4,7 +4,7 @@
     {
         public int id { get; set; }
         public int companyId { get; set; }
-        public int membershipId { get; set; }
+        public int membershipTypeId { get; set; }
         public string membershipType { get; set; } 
     }
 }

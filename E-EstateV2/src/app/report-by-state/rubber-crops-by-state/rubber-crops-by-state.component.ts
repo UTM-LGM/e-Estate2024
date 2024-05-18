@@ -4,6 +4,7 @@ import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-rubber-crops-by-state',
@@ -129,6 +130,25 @@ export class RubberCropsByStateComponent implements OnInit {
       this.year = ''
     }
   }
+
+  exportToExcel(data: any[], fileName: string) {
+    let bilCounter = 1;
+    const filteredData = data.map(row => ({
+      No: bilCounter++,
+      State: row.state,
+      NewPlanting: row.totalNewPlantingArea,
+      Replanting: row.totalReplantingArea,
+      TappedArea: row.totalTappedArea,
+      Abandoned: row.totalAbandonedArea,
+      TotalRubberArea: row.totalNewPlantingArea + row.totalReplantingArea + row.totalTappedArea
+    }));
+  
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.year );
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+  }
+  
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();

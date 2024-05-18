@@ -8,6 +8,8 @@ import { FieldService } from '../_services/field.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { SharedService } from '../_services/shared.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import * as XLSX from 'xlsx';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-report-field-information',
@@ -39,6 +41,8 @@ export class ReportFieldInformationComponent implements OnInit {
   conversionField: FieldConversion[] = [];
 
   showAll: boolean = false;
+
+  selectedEstateName= ''
 
   sortableColumns = [
     { columnName: 'no', displayText: 'No'},
@@ -145,6 +149,7 @@ export class ReportFieldInformationComponent implements OnInit {
     setTimeout(() => {
       this.getField();
     }, 200)
+    this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
   }
 
   getAllEstate() {
@@ -211,6 +216,29 @@ export class ReportFieldInformationComponent implements OnInit {
       this.fields = [];
     }
   }
+
+  exportToExcel(data:any[], fileName:String){
+    let bilCounter = 1
+    const datePipe = new DatePipe('en-US');
+    const filteredData = data.map(row =>({
+      No:bilCounter++,
+      Field:row.fieldName,
+      FieldArea: row.area,
+      Maturity: row.isMature ? "Mature" : "Immature",
+      FieldStatus:row.fieldStatus,
+      YearPlanted:row.yearPlanted,
+      DateOpenTapping: row.dateOpenTapping ? datePipe.transform(row.dateOpenTapping, 'MMM-yyyy') : '',
+      InitialTreeStand:row.initialTreeStand,
+      TotalTask:row.totalTask,
+      Status:row.isActive ? "Active" : "Inactive"
+    }))
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.selectedEstateName);
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+  }
+
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();

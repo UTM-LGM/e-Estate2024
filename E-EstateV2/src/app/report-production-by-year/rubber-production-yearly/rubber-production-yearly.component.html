@@ -12,7 +12,7 @@
     </mat-select>
 
     <label>Estate : </label>
-    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id">
+    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
         {{estate.name}}
       </mat-option>
@@ -48,7 +48,11 @@
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
 
-  <br />
+  <div style="float: left; margin-bottom: 3px; margin-top: 3px;">
+    <button class="btn-add"  (click)="exportToExcel(filterProductionYearly, selectedEstateName + 'Rubber Production Report ' + year )">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>    
+  </div><br/><br/>
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">

@@ -30,7 +30,7 @@ namespace E_EstateV2_API.Controllers
             return Ok(addedCompany);
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> UpdateCompanyDetail([FromBody] CompanyDetail companyDetail)
         {
             var updatedTown = await _companyDetailRepository.UpdateCompanyDetail(companyDetail);

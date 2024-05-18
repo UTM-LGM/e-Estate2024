@@ -12,8 +12,9 @@ namespace E_EstateV2_API.Models
         public DateTime createdDate { get; set; }
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
-        [ForeignKey("MembershipId")]
-        public int membershipId { get; set; }
-        public MembershipType MembershipType { get; set; }
+
+        [ForeignKey("MembershipTypeId")]
+        public int membershipTypeId { get; set; }
+
     }
 }

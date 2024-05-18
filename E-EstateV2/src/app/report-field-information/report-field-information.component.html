@@ -51,6 +51,12 @@
     <input type="text" [value]="estate.name" disabled />
   </div>
 
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(fields, selectedEstateName +  'Field Information Report')">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>    
+  </div>
+
   <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
   <div style="overflow-x: auto;">
     <table style="width: 100%;">
@@ -104,7 +110,7 @@
                     'active-btn': field.isActive == true,
                     'inactive-btn': field.isActive == false
                   }">
-              {{ field.isActive == true ? "Active" : "Inactive" }}
+              {{ field.isActive == true ? "Active" : "Active" }}
             </button>
           </td>
 
@@ -131,7 +137,7 @@
 
               <tr *ngFor="let conversion of conversionField">
                 <td>{{conversion.fieldName}}</td>
-                <td>{{conversion.otherCrop}}</td>
+                <td>{{conversion.conversionCropName}}</td>
                 <td>{{conversion.sinceYear}}</td>
               </tr>
             </table>

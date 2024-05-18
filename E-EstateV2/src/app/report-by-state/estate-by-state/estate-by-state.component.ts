@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin, map } from 'rxjs';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-estate-by-state',
@@ -21,6 +22,7 @@ export class EstateByStateComponent implements OnInit {
   isLoading = true
   estates: any[] = []
   stateTotalAreas = {} as any;
+  stateTotalAreasArray:any[]=[]
 
   sortableColumns = [
     { columnName: 'state', displayText: 'State' },
@@ -61,23 +63,41 @@ export class EstateByStateComponent implements OnInit {
   }
 
   calculateTotalAllArea() {
-    this.estates.forEach(estate => {
-      const getField = this.reportService.getFieldArea(this.year)
-      .subscribe(
-        Response => {
-        const area = Response.filter(x => x.estateId === estate.id && x.isActive === true && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government') && !x.fieldStatus.toLowerCase().includes('conversion to other crop'));
-        const totalArea = area.reduce((acc, curr) => acc + curr.area, 0);
-        // Accumulate the total area for each state
-        if (!this.stateTotalAreas[estate.state]) {
-          this.stateTotalAreas[estate.state] = { count: 1, totalArea: totalArea };
+    const observables = this.estates.map(estate => 
+      this.reportService.getFieldArea(this.year).pipe(
+        map(response => ({
+          estateId: estate.id,
+          state: estate.state,
+          fields: response.filter(x => x.estateId === estate.id && x.isActive === true && 
+            !x.fieldStatus.toLowerCase().includes('abandoned') && 
+            !x.fieldStatus.toLowerCase().includes('government') && 
+            !x.fieldStatus.toLowerCase().includes('conversion to other crop'))
+        }))
+      )
+    );
+  
+    forkJoin(observables).subscribe(results => {
+      this.stateTotalAreas = {};
+  
+      results.forEach(result => {
+        const totalArea = result.fields.reduce((acc, curr) => acc + curr.area, 0);
+  
+        if (!this.stateTotalAreas[result.state]) {
+          this.stateTotalAreas[result.state] = { count: 1, totalArea: totalArea };
         } else {
-          this.stateTotalAreas[estate.state].count++;
-          this.stateTotalAreas[estate.state].totalArea += totalArea;
+          this.stateTotalAreas[result.state].count++;
+          this.stateTotalAreas[result.state].totalArea += totalArea;
         }
-        this.isLoading = false;
       });
-      this.subscriptionService.add(getField);
-
+  
+      // Convert object to array
+      this.stateTotalAreasArray = Object.keys(this.stateTotalAreas).map(key => ({
+        state: key,
+        estateNo: this.stateTotalAreas[key].count,
+        totalArea: this.stateTotalAreas[key].totalArea
+      }));
+ 
+      this.isLoading = false;
     });
   }
 
@@ -96,6 +116,22 @@ export class EstateByStateComponent implements OnInit {
       });
       this.year = ''
     }
+  }
+
+  exportToExcel(data:any[], fileName:String){
+    let bilCounter = 1
+    const filteredData = data.map(row =>({
+      No:bilCounter++,
+      State:row.state,
+      EstateNo: row.estateNo,
+      TotalRubberArea: row.totalArea
+    }))
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.year);
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+
   }
 
   ngOnDestroy(): void {

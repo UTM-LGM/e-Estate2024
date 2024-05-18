@@ -13,5 +13,7 @@ export interface FieldConversion {
     fieldName: string
     isActive: boolean
     otherCropId:number
+    conversionCropName: string
+
 
 }

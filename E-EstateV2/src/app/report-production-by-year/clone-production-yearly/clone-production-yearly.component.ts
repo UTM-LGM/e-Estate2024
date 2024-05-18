@@ -3,6 +3,8 @@ import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-clone-production-yearly',
@@ -131,6 +133,20 @@ export class CloneProductionYearlyComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  exportToExcel(data:any[], fileName:String){
+    let bilCounter = 1
+    const filteredData = data.map(row =>({
+      No:bilCounter++,
+      CloneName:row.cloneName,
+      TotalProductionDry: row.totalProduction.toFixed(2),
+    }))
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.year);
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
   }
 
   ngOnDestroy(): void {

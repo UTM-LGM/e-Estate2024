@@ -1,8 +1,8 @@
 export interface CompanyDetail {
     id:number
     companyId:number
-    membershipId:number
-    membership:string
+    membershipTypeId:number
+    membershipType:string
     createdBy: string
     createdDate: Date
     updatedBy: string

@@ -99,9 +99,10 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
   update() {
     if (this.companyDetail.id == undefined) {
       this.companyDetail.companyId = this.company.id
-      this.companyDetail.membershipId = this.companyDetail.membershipId
+      this.companyDetail.membershipTypeId = this.companyDetail.membershipTypeId
       this.companyDetail.createdBy = this.sharedService.userId.toString()
       this.companyDetail.createdDate = new Date()
+      // console.log(this.companyDetail)
       this.companyDetailService.addCompanyDetail(this.companyDetail)
         .subscribe(
           Response => {
@@ -116,12 +117,10 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
           }
         )
     } else {
-      this.companyDetail.membershipId = this.companyDetail.membershipId
+      this.companyDetail.membershipTypeId = this.companyDetail.membershipTypeId
       this.companyDetail.updatedBy = this.sharedService.userId.toString()
       this.companyDetail.updatedDate = new Date()
-      const { membership, ...newObj } = this.companyDetail
-      this.filteredCompany = newObj
-      this.companyDetailService.updateCompanyDetail(this.filteredCompany)
+      this.companyDetailService.updateCompanyDetail(this.companyDetail)
         .subscribe(
           Response => {
             swal.fire({

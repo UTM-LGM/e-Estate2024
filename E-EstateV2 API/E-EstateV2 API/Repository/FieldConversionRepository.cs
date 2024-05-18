@@ -29,7 +29,7 @@ namespace E_EstateV2_API.Repository
                 id = x.Id,
                 fieldId = x.fieldId,
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
-                conversionCropName = x.conversionCropName,
+                conversionCropName = _context.otherCrops.Where(y => y.Id == x.otherCropId).Select(y=>y.otherCrop).FirstOrDefault(),
                 sinceYear = x.sinceYear
             }).ToListAsync();
             return conversion;
@@ -42,7 +42,7 @@ namespace E_EstateV2_API.Repository
             {
                 existingConversion.updatedBy = fieldConversion.updatedBy;
                 existingConversion.updatedDate = DateTime.Now;
-                existingConversion.conversionCropName = fieldConversion.conversionCropName;
+                existingConversion.otherCropId = fieldConversion.otherCropId;
                 existingConversion.sinceYear = fieldConversion.sinceYear;
                 await _context.SaveChangesAsync();
                 return existingConversion;

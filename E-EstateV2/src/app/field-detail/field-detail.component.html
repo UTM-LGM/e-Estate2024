@@ -3,7 +3,7 @@
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
   <h1>
     {{ field.fieldName }}
-    <button *ngIf="!fieldInfecteds" style="float: right" (click)="status(field)" [ngClass]="{
+    <button *ngIf="!fieldInfecteds" style="float: right; border-radius: 10px;" (click)="status(field)" [ngClass]="{
         'active-btn': field.isActive == true,
         'inactive-btn': field.isActive == false
       }">
@@ -129,6 +129,11 @@
               <th>Clone Name</th>
               <th>Action</th>
             </tr>
+
+            <tr *ngIf="selectedValues.length == 0">
+              <td colspan="3" style="color: red;"><b>No Clone</b></td>
+            </tr>
+
             <tr *ngFor="let clone of fieldClones, let i=index">
               <td>{{i+1}}</td>
               <td>{{clone.cloneName}}</td>

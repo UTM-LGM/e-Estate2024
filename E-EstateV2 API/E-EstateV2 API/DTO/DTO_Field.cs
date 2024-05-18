@@ -18,6 +18,7 @@
         public int totalTask { get; set; }
         public string fieldStatus { get; set; }
         public string conversionCropName { get; set; }
+        public int otherCropId { get; set; }
         public int sinceYear { get; set; }
         public int conversionId { get; set; }
         public int infectedPercentage { get; set; }

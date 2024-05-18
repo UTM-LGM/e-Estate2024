@@ -51,7 +51,7 @@ export class NotificationComponent implements OnInit {
   }
 
   checkProduction() {
-    const currentDate = new Date()
+    const currentDate = new Date().getFullYear()
     const getProductivity = this.reportService.getEstateProductivityByField(currentDate.toString())
       .subscribe(
         (Response: any) => {

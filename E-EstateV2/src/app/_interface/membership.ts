@@ -6,4 +6,5 @@ export interface MembershipType {
     createdDate: Date
     updatedBy: string
     updatedDate: Date
+    companyId:number
 }

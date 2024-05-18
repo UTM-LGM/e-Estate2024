@@ -5,6 +5,8 @@ import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-rubber-production-yearly',
@@ -20,6 +22,8 @@ export class RubberProductionYearlyComponent implements OnInit {
   pageNumber = 1
   role = ''
   year = ''
+  selectedEstateName= ''
+
 
   totalCuplumpDry = 0
   totalLatexDry = 0
@@ -115,6 +119,7 @@ export class RubberProductionYearlyComponent implements OnInit {
 
   estateSelected() {
     this.filterProductionYearly = []
+    this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
   }
 
   getAllEstate() {
@@ -169,6 +174,22 @@ export class RubberProductionYearlyComponent implements OnInit {
 
       }
     }, 2000)
+  }
+
+  exportToExcel(data:any[], fileName:String){
+    let bilCounter = 1
+    const filteredData = data.map(row =>({
+      No:bilCounter++,
+      MonthAndYear:row.monthYear,
+      CuplumpDry: row.cuplumpDry.toFixed(2),
+      LatexDry: row.latexDry.toFixed(2),
+      TotalProductionDryMonthly:row.totalDry.toFixed(2),
+    }))
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.selectedEstateName);
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
   }
 
   ngOnDestroy(): void {

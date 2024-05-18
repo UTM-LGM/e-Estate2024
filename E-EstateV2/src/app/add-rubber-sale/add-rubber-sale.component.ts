@@ -131,7 +131,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   deliveryAgentRemark(){
-    this.rubberSale.remark = 'Menggunakan penghantaran ejen : ' + this.rubberSale.deliveryAgent
+    this.rubberSale.remark = 'Using delivery agent : ' + this.rubberSale.deliveryAgent
   }
 
 }

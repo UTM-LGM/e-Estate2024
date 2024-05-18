@@ -4,6 +4,12 @@
   <label>Please choose year : </label>
   <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
 
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(stateTotalsArray, 'Rubber Area By Maturity Report '+year)">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div>
+
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
     <table style="width: 100%">

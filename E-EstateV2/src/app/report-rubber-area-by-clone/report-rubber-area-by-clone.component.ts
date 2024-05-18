@@ -3,6 +3,8 @@ import swal from 'sweetalert2';
 import { ReportService } from '../_services/report.service';
 import { SharedService } from '../_services/shared.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-report-rubber-area-by-clone',
@@ -127,6 +129,21 @@ export class ReportRubberAreaByCloneComponent {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  exportToExcel(data:any[], fileName:String){
+    let bilCounter = 1
+    const filteredData = data.map(row =>({
+      No:bilCounter++,
+      CloneName:row.cloneName,
+      TotalRubberArea: row.totalArea
+    }))
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, this.year );
+    XLSX.writeFile(wb, `${fileName}.xlsx`);
+
   }
 
   ngOnDestroy(): void {

@@ -19,6 +19,8 @@ import { CompanyContactService } from '../_services/company-contact.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { CompanyDetail } from '../_interface/company-detail';
 import { SubscriptionService } from '../_services/subscription.service';
+import { MembershipService } from '../_services/membership.service';
+import { CompanyDetailService } from '../_services/company-detail.service';
 
 @Component({
   selector: 'app-company-detail',
@@ -43,6 +45,8 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+
+  membership = {} as any
 
   selectedEstate: any
 
@@ -71,7 +75,8 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private companyContactService: CompanyContactService,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private companyDetailService:CompanyDetailService
 
   ) { }
 
@@ -89,6 +94,7 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
               Response => {
                 this.company = Response
                 this.getContact()
+                this.getMembership()
                 this.isLoading = false
               }
             )
@@ -96,6 +102,19 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
         }
       });
     }, 2000)
+  }
+
+  getMembership(){
+    const getMembership = this.companyDetailService.getCompanyDetailByCompanyId(this.sharedService.companyId)
+    .subscribe(
+      Response =>{
+        if(Response){
+          this.companyDetail = Response
+        }
+      }
+    )
+    this.subscriptionService.add(getMembership);
+
   }
 
   getContact() {

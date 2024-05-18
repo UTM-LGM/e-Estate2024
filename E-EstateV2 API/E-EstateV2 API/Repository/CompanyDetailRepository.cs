@@ -3,7 +3,7 @@ using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Repository
 {
@@ -21,8 +21,8 @@ namespace E_EstateV2_API.Repository
             {
                 id = x.Id,
                 companyId = x.companyId,
-                membershipId = x.membershipId,
-                membershipType = _context.membershipTypes.Where(y=>y.Id == x.membershipId).Select(y=>y.membershipType).FirstOrDefault()
+                membershipTypeId = x.membershipTypeId,
+                membershipType = _context.membershipTypes.Where(y=>y.Id == x.membershipTypeId).Select(y=>y.membershipType).FirstOrDefault()
             }).FirstOrDefaultAsync();
             return company;
         }
@@ -42,7 +42,7 @@ namespace E_EstateV2_API.Repository
             {
                 existingCompanyDetail.updatedBy = company.updatedBy;
                 existingCompanyDetail.updatedDate = DateTime.Now;
-                existingCompanyDetail.membershipId = company.membershipId;
+                existingCompanyDetail.membershipTypeId = company.membershipTypeId;
                 await _context.SaveChangesAsync();
                 return existingCompanyDetail;
             }

@@ -4,7 +4,14 @@
   <label>Please choose year : </label>
   <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
 
-  <br /><br />
+  <br />
+
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(cloneProductionData, 'Clone Productivity Report ' + year)">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>    
+  </div><br/><br/>
+
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">

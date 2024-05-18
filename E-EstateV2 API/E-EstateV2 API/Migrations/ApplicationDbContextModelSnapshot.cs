@@ -281,9 +281,6 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("MembershipTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("companyId")
                         .HasColumnType("int");
 
@@ -293,7 +290,7 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("membershipId")
+                    b.Property<int>("membershipTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("updatedBy")
@@ -303,8 +300,6 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MembershipTypeId");
 
                     b.ToTable("companyDetails");
                 });
@@ -886,9 +881,6 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("conversionCropName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -896,6 +888,9 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int>("fieldId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("otherCropId")
                         .HasColumnType("int");
 
                     b.Property<int>("sinceYear")
@@ -2279,15 +2274,6 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Ownership");
 
                     b.Navigation("Town");
-                });
-
-            modelBuilder.Entity("E_EstateV2_API.Models.CompanyDetail", b =>
-                {
-                    b.HasOne("E_EstateV2_API.Models.MembershipType", "MembershipType")
-                        .WithMany()
-                        .HasForeignKey("MembershipTypeId");
-
-                    b.Navigation("MembershipType");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>

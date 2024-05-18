@@ -4,6 +4,7 @@ import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
 import { ReportService } from '../_services/report.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-report-cost-information',
@@ -18,6 +19,8 @@ export class ReportCostInformationComponent implements OnInit {
   currentSortedColumn = ''
   pageNumber = 1
   term = ''
+  selectedEstateName= ''
+
   totalAmount = 0
   isLoading = true
 
@@ -95,6 +98,7 @@ export class ReportCostInformationComponent implements OnInit {
 
   estateSelected() {
     this.costInformations = []
+    this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
   }
 
 
@@ -196,6 +200,48 @@ export class ReportCostInformationComponent implements OnInit {
         this.year = ''
         this.costInformations = [];
       }
+  }
+
+  exportToExcelYear(data:any[], fileName:String){
+    if(this.estate.id != undefined ){
+      if(this.role == 'EstateClerk'){
+        this.selectedEstateName = this.estate.name
+      }
+      let bilCounter = 1
+      const filteredData = data.map(row =>({
+        No:bilCounter++,
+        CostType:row.costType,
+        Maturity: row.isMature ? "Mature" : "Immature",
+        CostCategory: row.costCategory,
+        CostSubCategory1:row.costSubcategories1,
+        CostSubCategory2:row.costSubcategories2,
+        Amout: row.amount,
+      }))
+  
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws,this.selectedEstateName);
+      XLSX.writeFile(wb, `${this.selectedEstateName} Cost Information Report ${this.year}.xlsx`);
+    }
+
+    else{
+      let bilCounter = 1
+      const filteredData = data.map(row =>({
+        No:bilCounter++,
+        CostType:row.costType,
+        Maturity: row.isMature ? "Mature" : "Immature",
+        CostCategory: row.costCategory,
+        CostSubCategory1:row.costSubcategories1,
+        CostSubCategory2:row.costSubcategories2,
+        Amout: row.totalAmount,
+      }))
+  
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, this.year.toString() );
+      XLSX.writeFile(wb, `${fileName}.xlsx`);
+    }
+    
   }
 
   ngOnDestroy(): void {

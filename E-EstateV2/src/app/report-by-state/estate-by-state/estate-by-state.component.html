@@ -3,6 +3,15 @@
 
   <label>Please choose year : </label>
   <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+ <br/>
+
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(stateTotalAreasArray, 'Rubber Area By State Report '+year)">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div>
+
+  <br/>
   
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
@@ -26,11 +35,11 @@
 
       <ng-container *ngIf="!isLoading">
       <tr
-        *ngFor="let town of stateTotalAreas | keyvalue | filter: term; let i = index">
+        *ngFor="let town of stateTotalAreasArray | filter: term; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ town.key }}</td>
-        <td>{{ town.value.count }}</td>
-        <td>{{ town.value.totalArea }}</td>
+        <td>{{ town.state }}</td>
+        <td>{{ town.estateNo }}</td>
+        <td>{{ town.totalArea }}</td>
       </tr>
     </ng-container>
 

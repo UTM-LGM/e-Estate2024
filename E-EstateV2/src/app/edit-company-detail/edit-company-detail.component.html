@@ -66,7 +66,7 @@
 
   <div style="columns: 1" class="column">
     <label>Membership :</label>
-    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipId">
+    <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipTypeId">
       <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
         {{ membership.membershipType }}
       </mat-option>

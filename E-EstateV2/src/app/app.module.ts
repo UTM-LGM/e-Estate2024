@@ -318,21 +318,21 @@ register()
   providers: [
     DatePipe,
     MatDialog,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: UserActivityLogInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: UserActivityLogInterceptor,
+    //   multi: true
+    // },
     {
       provide:HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi:true
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HistoryLogInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: HistoryLogInterceptor,
+    //   multi: true
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass : UpperCaseInterceptor,

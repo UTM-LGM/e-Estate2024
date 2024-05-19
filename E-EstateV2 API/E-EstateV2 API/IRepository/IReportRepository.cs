@@ -10,15 +10,15 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetProductionYearlyByClone(int year);
         Task<object> GetProductivityYearlyByClone(int year);
 
-        Task<Object> GetLaborInformationCategory();
+        Task<Object> GetLaborInformationCategory(int year);
 
         Task<Object> GetProductivity();
         Task<Object> GetCurrentProduction();
 
         Task<object> GetFieldArea(int year);
         Task<object> GetLatestMonthWorker();
-        Task<object> GetTapperAndFieldWorker();
-        Task<object> GetWorkerShortageEstate();
+        Task<object> GetTapperAndFieldWorker(int year);
+        Task<object> GetWorkerShortageEstate(int year);
 
         Task<object> GetCostInformation(int year);
         Task<object> GetAreaByClone(int year);

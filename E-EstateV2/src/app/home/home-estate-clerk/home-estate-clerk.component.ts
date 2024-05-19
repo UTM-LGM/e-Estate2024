@@ -139,7 +139,7 @@ export class HomeEstateClerkComponent implements OnInit {
   }
 
   getWorkerShortage() {
-    const getWorkerShortage = this.reportService.getWorkerShortageEstate()
+    const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString())
     .subscribe(
       response => {
         this.workerShortages = response.filter(x=>x.estateId == this.sharedService.estateId);

@@ -1,28 +1,48 @@
 <div class="box-container">
   <h1>Labor Shortage in estate</h1>
 
-  <div style="columns:2"
+  <div style="columns:3"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
     <div>
       <label>Company</label>
       <input type="text" [value]="company.name" disabled />
     </div>
     <label>Estate : </label>
-    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
+    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" >
       <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
         {{estate.name}}
       </mat-option>
     </mat-select>
+
+    <label>Please choose year: </label>
+      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+
   </div>
 
-  <div style="columns: 1;"
+  <div style="columns: 2;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
+    <label>Please choose year: </label>
+      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
   
-  <br/>
+  <div *ngIf="role=='Admin'">
+    <label>Please choose year: </label>
+    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  </div>
 
+  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role != 'Admin'">
+    <button class="btn-add" (click)="exportToExcel(workerShortages, 'Worker Shortage Report ' + year)">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div>
+
+  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role== 'Admin'">
+    <button class="btn-add" (click)="exportToExcelAdmin(workerShortages, workerTapperAndField, 'Worker Shortage Report ' + year)">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div>
 
   <input type="text" [(ngModel)]="term" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
 
@@ -59,19 +79,35 @@
         <td colspan="9" style="color: red; text-align: center;">No data found.</td>
       </tr>
 
-      <ng-container *ngIf="!isLoading">
+      <ng-container *ngIf="!isLoading && role != 'Admin'">
         <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
           <td>{{i + 1}}</td>
           <td>{{ worker.estateName }}</td>
-          <ng-container *ngFor="let labor of worker.filterLabors">
-            <td>{{ labor.tapperCheckrole + labor.tapperContractor }}</td>
-            <td>{{ labor.fieldCheckrole + labor.fieldContractor }}</td>
+          <td>{{ totalTapperWorker }}</td>
+          <td>{{ totalFieldWorker }}</td>
+          <td>{{ worker.tapperShortage }}</td>
+          <td>{{ worker.fieldShortage }}</td>
+          <td>{{ totalTapperWorker + worker.tapperShortage }}</td>
+          <td>{{ totalFieldWorker +   worker.fieldShortage }}</td>
+          <td>{{ (totalTapperWorker + worker.tapperShortage) + (totalFieldWorker +   worker.fieldShortage)  }} </td>
+        </tr>
+      </ng-container>
+
+      <ng-container *ngIf="!isLoading && role == 'Admin'">
+        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{ worker.estateName }}</td>
+          <ng-container *ngFor="let labor of workerTapperAndField">
+            <ng-container *ngIf="labor.estateId === worker.estateId">
+              <td>{{ labor.tapperWorker }}</td>
+              <td>{{ labor.fieldWorker }}</td>
+            </ng-container>
           </ng-container>
           <td>{{ worker.tapperShortage }}</td>
           <td>{{ worker.fieldShortage }}</td>
-          <td>{{ calculateTapperSum(worker) }}</td>
-          <td>{{ calculateFieldSum(worker) }}</td>
-          <td>{{ calculateTapperSum(worker) + calculateFieldSum(worker)  }} </td>
+          <td>{{ calculateTapperNeeded(workerShortages, workerTapperAndField, worker.estateId) }}</td>
+          <td>{{ calculateFieldNeeded(workerShortages, workerTapperAndField, worker.estateId) }}</td>
+          <td>{{ (calculateTapperNeeded(workerShortages, workerTapperAndField, worker.estateId)) + (calculateFieldNeeded(workerShortages, workerTapperAndField, worker.estateId))  }} </td>
         </tr>
       </ng-container>
 

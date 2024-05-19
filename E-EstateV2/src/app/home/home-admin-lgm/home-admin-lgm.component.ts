@@ -113,7 +113,7 @@ export class HomeAdminLGMComponent implements OnInit {
   }
 
   getWorkerShortage() {
-    const getWorkerShortage = this.reportService.getWorkerShortageEstate().subscribe(
+    const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString()).subscribe(
       response => {
         this.workerShortages = response;
         if(this.workerShortages.length === 0)

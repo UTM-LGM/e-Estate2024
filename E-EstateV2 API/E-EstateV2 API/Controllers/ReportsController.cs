@@ -106,23 +106,27 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLaborInformationCategory()
+        [Route("{year:int}")]
+        public async Task<IActionResult> GetLaborInformationCategory(int year)
         {
-            var labor = await _reportRepository.GetLaborInformationCategory();
+            var labor = await _reportRepository.GetLaborInformationCategory(year);
             return Ok(labor);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTapperAndFieldWorker()
+        [Route("{year:int}")]
+        public async Task<IActionResult> GetTapperAndFieldWorker(int year)
         {
-            var labor = await _reportRepository.GetTapperAndFieldWorker();
+            var labor = await _reportRepository.GetTapperAndFieldWorker(year);
             return Ok(labor);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetWorkerShortageEstate()
+        [Route("{year:int}")]
+
+        public async Task<IActionResult> GetWorkerShortageEstate(int year)
         {
-            var worker = await _reportRepository.GetWorkerShortageEstate();
+            var worker = await _reportRepository.GetWorkerShortageEstate(year);
             return Ok(worker);
         }
 

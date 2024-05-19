@@ -336,11 +336,20 @@ namespace E_EstateV2_API.Repository
         }
 
         //LGMAdmin
-        public async Task<object> GetLaborInformationCategory()
+        public async Task<object> GetLaborInformationCategory(int year)
         {
             var allLaborInfos = await _context.laborInfos.ToListAsync();
 
-            var latestMonthYearsForEachEstate = allLaborInfos
+            // Helper method to check if monthYear contains the specified year
+            bool IsMatchingYear(string monthYear, int year)
+            {
+                return monthYear.Contains(year.ToString());
+            }
+
+            // Filter allLaborInfos to only include entries that match the specified year
+            var filteredLaborInfos = allLaborInfos.Where(x => IsMatchingYear(x.monthYear, year)).ToList();
+
+            var latestMonthYearsForEachEstate = filteredLaborInfos
                 .GroupBy(x => x.estateId) // Group by estateId
                 .Select(group => new
                 {
@@ -396,20 +405,29 @@ namespace E_EstateV2_API.Repository
             })
             .ToList();
 
-
             return groupedResult;
         }
 
+
         //LGMAdmin
-        public async Task<object> GetTapperAndFieldWorker()
+        public async Task<object> GetTapperAndFieldWorker(int year)
         {
             // Fetch all laborInfos records into memory
             var allLaborInfos = await _context.laborInfos.ToListAsync();
 
+            // Helper method to check if monthYear contains the specified year
+            bool IsMatchingYear(string monthYear, int year)
+            {
+                return monthYear.Contains(year.ToString());
+            }
+
+            // Filter allLaborInfos to only include entries that match the specified year
+            var filteredLaborInfos = allLaborInfos.Where(x => IsMatchingYear(x.monthYear, year)).ToList();
+
             // Fetch the necessary data for isLocal before the LINQ query
             var countryIsLocalMap = _context.countries.ToDictionary(y => y.Id, y => y.isLocal);
 
-            var latestMonthYearsForEachEstate = allLaborInfos
+            var latestMonthYearsForEachEstate = filteredLaborInfos
                 .GroupBy(x => new { x.estateId, IsLocal = countryIsLocalMap.ContainsKey(x.countryId) ? countryIsLocalMap[x.countryId] : false }) // Group by estateId and isLocal
                 .Select(group => new
                 {
@@ -423,14 +441,14 @@ namespace E_EstateV2_API.Repository
 
             foreach (var latestMonthYearForEstate in latestMonthYearsForEachEstate)
             {
-                var worker = allLaborInfos
+                var worker = filteredLaborInfos
                     .Where(x => x.estateId == latestMonthYearForEstate.estateId
                              && x.monthYear == latestMonthYearForEstate.LatestMonthYear
-                             && _context.countries.Where(y => y.Id == x.countryId).Select(y => y.isLocal).FirstOrDefault() == latestMonthYearForEstate.IsLocal)
+                             && countryIsLocalMap.ContainsKey(x.countryId) && countryIsLocalMap[x.countryId] == latestMonthYearForEstate.IsLocal)
                     .Select(x => new
                     {
                         estateId = x.estateId,
-                        isLocal = _context.countries.Where(y => y.Id == x.countryId).Select(y => y.isLocal).FirstOrDefault(),
+                        isLocal = countryIsLocalMap[x.countryId],
                         tapperWorker = x.tapperCheckrole + x.tapperContractor,
                         fieldWorker = x.fieldCheckrole + x.fieldContractor,
                     })
@@ -441,6 +459,7 @@ namespace E_EstateV2_API.Repository
 
             // Group by isLocal and calculate totals
             var groupedData = workerForEachEstate
+            .Where(x => x != null)
             .GroupBy(x => new { EstateId = x.GetType().GetProperty("estateId").GetValue(x, null), IsLocal = x.GetType().GetProperty("isLocal").GetValue(x, null) })
             .Select(group => new
             {
@@ -456,12 +475,21 @@ namespace E_EstateV2_API.Repository
 
 
         //LGMAdmin
-        public async Task<object> GetWorkerShortageEstate()
+        public async Task<object> GetWorkerShortageEstate(int year)
         {
             // Fetch all worker shortage records into memory
             var allWorkerShortage = await _context.workerShortages.ToListAsync();
 
-            var latestWorkerShortageForEachEstate = allWorkerShortage
+            // Helper method to check if monthYear contains the specified year
+            bool IsMatchingYear(string monthYear, int year)
+            {
+                return monthYear.Contains(year.ToString());
+            }
+
+            // Filter allWorkerShortage to only include entries that match the specified year
+            var filteredWorkerShortage = allWorkerShortage.Where(x => IsMatchingYear(x.monthYear, year)).ToList();
+
+            var latestWorkerShortageForEachEstate = filteredWorkerShortage
                 .GroupBy(x => x.estateId) // Group by estateId
                 .Select(group => new
                 {
@@ -474,6 +502,7 @@ namespace E_EstateV2_API.Repository
 
             return latestWorkerShortageForEachEstate;
         }
+
 
         public async Task<object> GetCostInformation(int year)
         {

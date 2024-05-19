@@ -52,16 +52,16 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductivityYearlyByClone/' + year) 
   }
 
-  getLaborInformationCategory():Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetLaborInformationCategory' )
+  getLaborInformationCategory(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetLaborInformationCategory/' + year )
   }
 
-  getTapperAndFieldWorker():Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetTapperAndFieldWorker')
+  getTapperAndFieldWorker(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetTapperAndFieldWorker/'+ year)
   }
 
-  getWorkerShortageEstate():Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetWorkerShortageEstate')
+  getWorkerShortageEstate(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetWorkerShortageEstate/' + year)
   }
 
   getCostInformation(year: string):Observable<any[]>{

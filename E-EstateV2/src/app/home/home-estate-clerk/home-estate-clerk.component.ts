@@ -70,20 +70,12 @@ export class HomeEstateClerkComponent implements OnInit {
   isLoadingTapperShortage = true
   isLoadingFieldShortage = true
 
-  warningProductionDrafted = false
-  warningCostDrafted = false
-
   productivityByYear:any
-
 
   constructor(
     private reportService: ReportService,
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
-    private productionService:FieldProductionService,
-    private datePipe: DatePipe,
-    private costInformationService:CostAmountService,
-    private fieldService:FieldService,
     private subscriptionService:SubscriptionService
   ) { }
 
@@ -96,8 +88,6 @@ export class HomeEstateClerkComponent implements OnInit {
       this.getProductionReport()
       this.getWorker()
       this.getFieldArea()
-      this.getProduction()
-      this.getCost()
       this.getWorkerShortage()
       this.getField()
     }
@@ -117,24 +107,6 @@ export class HomeEstateClerkComponent implements OnInit {
       }
     )
     this.subscriptionService.add(getCurrentField);
-
-  }
-
-  getProduction(){
-    const previousMonth = new Date()
-    previousMonth.setMonth(previousMonth.getMonth() - 1)
-    const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
-    const getProduction = this.productionService.getProduction()
-    .subscribe(
-      Response =>{
-        const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "Draft" && x.monthYear == date)
-        if(production.length > 0)
-          {
-            this.warningProductionDrafted = true
-          }
-      }
-    )
-    this.subscriptionService.add(getProduction);
 
   }
 
@@ -159,20 +131,6 @@ export class HomeEstateClerkComponent implements OnInit {
       }
     );
     this.subscriptionService.add(getWorkerShortage);
-
-  }
-
-  getCost(){
-    const getCostAmount = this.costInformationService.getCostAmount()
-    .subscribe(
-      Response =>{
-        const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.year == new Date().getFullYear())
-        if(cost.length > 0){
-          this.warningCostDrafted = true
-        }
-      }
-    )
-    this.subscriptionService.add(getCostAmount);
 
   }
 

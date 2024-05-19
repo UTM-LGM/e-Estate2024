@@ -9,6 +9,9 @@ import { FieldInfoYearlyService } from '../_services/field-info-yearly.service';
 import { FieldInfoYearly } from '../_interface/fieldInfoYearly';
 import { SharedService } from '../_services/shared.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { DatePipe } from '@angular/common';
+import { FieldProductionService } from '../_services/field-production.service';
+import { CostAmountService } from '../_services/cost-amount.service';
 
 @Component({
   selector: 'app-notification',
@@ -32,6 +35,9 @@ export class NotificationComponent implements OnInit {
   filterProduction: ProductionComparison[] = []
   fieldInfo: FieldInfoYearly[] = []
 
+  warningProductionDrafted = false
+  warningCostDrafted = false
+
   constructor(
     private reportService: ReportService,
     private badgeService: BadgeService,
@@ -39,7 +45,10 @@ export class NotificationComponent implements OnInit {
     private productionComparisonService: ProductionComparisonService,
     private fieldInfoYearlyService: FieldInfoYearlyService,
     private sharedService: SharedService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private datePipe: DatePipe,
+    private productionService:FieldProductionService,
+    private costInformationService:CostAmountService,
 
   ) { }
 
@@ -48,6 +57,42 @@ export class NotificationComponent implements OnInit {
     this.estateId = this.sharedService.estateId
     this.checkProduction()
     this.getFieldInfoYearly()
+    this.getProductionDrafted()
+    this.getCostDrafted()
+  }
+
+  getProductionDrafted(){
+    const previousMonth = new Date()
+    previousMonth.setMonth(previousMonth.getMonth() - 1)
+    const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
+    const getProduction = this.productionService.getProduction()
+    .subscribe(
+      Response =>{
+        const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "Draft" && x.monthYear == date)
+        if(production.length > 0)
+          {
+            
+            this.warningProductionDrafted = true
+            this.updateBadge()
+          }
+      }
+    )
+    this.subscriptionService.add(getProduction);
+  }
+
+  getCostDrafted(){
+    const getCostAmount = this.costInformationService.getCostAmount()
+    .subscribe(
+      Response =>{
+        const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.year == new Date().getFullYear())
+        if(cost.length > 0){
+          this.warningCostDrafted = true
+          this.updateBadge()
+        }
+      }
+    )
+    this.subscriptionService.add(getCostAmount);
+
   }
 
   checkProduction() {
@@ -77,9 +122,11 @@ export class NotificationComponent implements OnInit {
                     Response => {
                       const production = Response
                       this.filterProduction = production.filter(x => x.estateId == this.estateId)
-
+                      const today = new Date()
+                      const isNovember = today.getMonth() === 1
                       if (this.responsePreviousMonthYear.some((item) => item.monthYear.includes('Dec')) &&
-                        this.responseCurrentMonthYear.some((item) => item.monthYear.includes('Dec')) && this.filterProduction.length == 0) {
+                        this.responseCurrentMonthYear.some((item) => item.monthYear.includes('Dec')) && this.filterProduction.length == 0 
+                        && isNovember) {
                         if (this.sumTotalDryCurrentMonthYear < this.sumTotalDryPreviousMonthYear) {
                           this.message = 'lower'
                         }
@@ -105,7 +152,7 @@ export class NotificationComponent implements OnInit {
   }
 
   updateBadge() {
-    const badgeCount = (this.showAlertField ? 1 : 0) + (this.showAlertProduction ? 1 : 0)
+    const badgeCount = (this.showAlertField ? 1 : 0) + (this.showAlertProduction ? 1 : 0) + (this.warningProductionDrafted ? 1 : 0) + (this.warningCostDrafted ? 1:0)
     this.badgeService.updateBadgeCount(badgeCount)
     if (badgeCount == 0) {
       this.showEmptyMessage = true

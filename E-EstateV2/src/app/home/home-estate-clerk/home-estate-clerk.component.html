@@ -6,21 +6,6 @@
 
 <hr />
 
-<div class="box" style="padding-bottom: 15px;" *ngIf="warningProductionDrafted">
-  <div class="column box-container" style="background-color: yellow; text-align: left;">
-    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have rubber production in drafted, please submit
-      <a routerLink="/e-estate/field-production/{{estateId}}"
-        style="text-decoration: underline; cursor: pointer;">here</a></span><br />
-  </div>
-</div>
-
-<div class="box" style="padding-bottom: 15px;" *ngIf="warningCostDrafted">
-  <div class="column box-container" style="background-color: yellow; text-align: left;">
-    <span><i class="fa fa-exclamation" style="padding: 7px;"></i> You have cost information in drafted, please submit <a
-        routerLink="/e-estate/cost-info/{{estateId}}"
-        style="text-decoration: underline; cursor: pointer;">here</a></span><br />
-  </div>
-</div>
 
 <div style="columns:2">
   <div class="box-container-outer">

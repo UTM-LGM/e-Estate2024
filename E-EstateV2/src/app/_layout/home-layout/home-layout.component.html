@@ -13,6 +13,10 @@
     <span class="flexExpand"></span>
     <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-2xl fa-address-card"></i></span> &nbsp;
     &nbsp;
+
+    <span style="cursor: pointer;" [matMenuTriggerFor]="info"><i class="fa fa-2xl fa-info"></i></span> &nbsp;
+    &nbsp;
+
     <div *ngIf="role == 'EstateClerk'">
       <span style="cursor: pointer;" routerLink="/e-estate/notification">
         <i class="fa fa-envelope"></i>
@@ -21,9 +25,6 @@
         </div>
       </span>&nbsp; &nbsp;
     </div>
-
-    <span style="cursor: pointer;" [matMenuTriggerFor]="info"><i class="fa fa-2xl fa-info"></i></span> &nbsp;
-    &nbsp;
 
     <mat-menu #profile="matMenu">
       <div style="padding: 10px;overflow: hidden; font-size: 14px;">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FinancialYear } from 'src/app/_interface/financialYear';
 import { FinancialYearService } from 'src/app/_services/financial-year.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './financial-year.component.html',
   styleUrls: ['./financial-year.component.css'],
 })
-export class FinancialYearComponent implements OnInit {
+export class FinancialYearComponent implements OnInit, OnDestroy {
   financialYear: FinancialYear = {} as FinancialYear
 
   financialYears: FinancialYear[] = []

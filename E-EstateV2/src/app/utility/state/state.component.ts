@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { State } from 'src/app/_interface/state';
 import { SharedService } from 'src/app/_services/shared.service';
 import { StateService } from 'src/app/_services/state.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './state.component.html',
   styleUrls: ['./state.component.css'],
 })
-export class StateComponent implements OnInit {
+export class StateComponent implements OnInit, OnDestroy {
   state: State = {} as State
 
   states: State[] = []

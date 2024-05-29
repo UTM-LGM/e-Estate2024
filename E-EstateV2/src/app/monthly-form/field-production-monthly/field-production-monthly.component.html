@@ -1,7 +1,9 @@
 <div class="box-container">
   <div class="monthYear">
     <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-    <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled />
+    <!-- <input type="month"  value="{{ previousMonth | date : 'YYY-MM' }}" /> -->
+    <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
+
   </div>
 
   <div style="overflow-x: auto" *ngIf="filterProductions.length == 0 ">
@@ -66,9 +68,14 @@
 
   <div *ngIf="filterProductions.length == 0">
     <div *ngIf="products.length > 0 ">
-      <button style="float: right; background-color:  #CAE00D;" class="btn-add" (click)="add()">
-        Save &nbsp; <i class="fa fa-plus"></i>
+      <button style="float: right" class="btn-add" (click)="nextTab()">
+        Next &nbsp; <i class="fa fa-arrow-right"></i>
       </button>
+
+      <button style="float: right; background-color:  #CAE00D;margin-right: 10px;" class="btn-add" (click)="add()">
+        Save &nbsp; <i class="fa fa-plus"></i>
+      </button> 
+      
     </div>
     <br />
     <br />
@@ -134,7 +141,11 @@
 
         <div>
           <div *ngIf="draftFilterProductions.length != 0">
-            <button (click)="submitProduction()" style="float: right" class="btn-add" type="submit">
+            <button style="float: right" class="btn-add" (click)="nextTab()">
+              Next &nbsp; <i class="fa fa-arrow-right"></i>
+            </button>
+
+            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit">
               Submit &nbsp; <i class="fa fa-plus"></i>
             </button>
           </div>
@@ -144,6 +155,7 @@
               (click)="save()">
               Save &nbsp; <i class="fa fa-check"></i>
             </button>
+            
           </div>
         </div>
 
@@ -228,12 +240,15 @@
 
         </table><br />
       </div><br />
-      <div *ngIf="filterProductions.length >= 0">
-        <div *ngIf="products.length > 0 ">
+      <button style="float: right" class="btn-add" (click)="nextTab()">
+        Next &nbsp; <i class="fa fa-arrow-right"></i>
+      </button>
+      <!-- <div *ngIf="filterProductions.length >= 0">
+        <div *ngIf="products.length > 0 "> 
           <button style="float: right" class="btn-add" (click)="nextTab()">
             Next &nbsp; <i class="fa fa-arrow-right"></i>
           </button>
         </div>
         <br />
-      </div>
+      </div>-->
     </div>

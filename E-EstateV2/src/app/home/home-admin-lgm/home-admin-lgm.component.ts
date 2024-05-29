@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { forkJoin, map } from 'rxjs';
 import { Company } from 'src/app/_interface/company';
@@ -14,7 +14,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './home-admin-lgm.component.html',
   styleUrls: ['./home-admin-lgm.component.css']
 })
-export class HomeAdminLGMComponent implements OnInit {
+export class HomeAdminLGMComponent implements OnInit, OnDestroy {
 
   totalEstate = 0
   totalCompany = 0
@@ -359,8 +359,12 @@ groupByYear(data: any) {
   }
 
   getCalculatedCop(){
-    const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
-    return isNaN(value) ? 0 : value;
+    if(this.totalCuplumpDry == 0 || this.totalLatexDry == 0 || this.costAmount == 0){
+      return  0 
+    }else{
+      const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
+      return isNaN(value) ? 0 : value;
+    }
   }
 
   ngOnDestroy(): void {

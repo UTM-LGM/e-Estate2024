@@ -342,6 +342,19 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
 
   }
 
+  yearSelected() {
+    const yearAsString = this.field.yearPlanted.toString()
+    if (yearAsString.length !== 4) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert correct year',
+      });
+      this.field.yearPlanted = ''
+    }
+
+  }
+
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }

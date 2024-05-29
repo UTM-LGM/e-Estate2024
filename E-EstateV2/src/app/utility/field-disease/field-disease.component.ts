@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DiseaseCategory } from 'src/app/_interface/diseaseCategory';
 import { FieldDisease } from 'src/app/_interface/fieldDisease';
+import { DiseaseCategoryService } from 'src/app/_services/disease-category.service';
 import { FieldDiseaseService } from 'src/app/_services/field-disease.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
@@ -10,10 +12,12 @@ import swal from 'sweetalert2';
   templateUrl: './field-disease.component.html',
   styleUrls: ['./field-disease.component.css']
 })
-export class FieldDiseaseComponent implements OnInit {
+export class FieldDiseaseComponent implements OnInit, OnDestroy {
 
   fieldDisease: FieldDisease = {} as FieldDisease
   fieldDiseases: FieldDisease[] = []
+
+  diseaseCategory : DiseaseCategory []=[]
 
   term = ''
   order = ''
@@ -22,19 +26,22 @@ export class FieldDiseaseComponent implements OnInit {
   isLoading = true
 
   sortableColumns = [
-    { columnName: 'diseaseName', displayText: 'Field Disease Name' },
+    { columnName: 'diseaseCategory', displayText: 'Category'},
+    { columnName: 'diseaseName', displayText: 'Disease Name' },
   ];
 
 
   constructor(
     private sharedService: SharedService,
     private fieldDiseaseService: FieldDiseaseService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private diseaseCategoryService:DiseaseCategoryService
   ) { }
 
   ngOnInit(): void {
     this.fieldDisease.diseaseName = ''
     this.getFieldDisease()
+    this.getDiseaseCategory()
   }
 
   getFieldDisease() {
@@ -48,6 +55,15 @@ export class FieldDiseaseComponent implements OnInit {
         )
       this.subscriptionService.add(getFieldDisease);
     })
+  }
+
+  getDiseaseCategory(){
+    this.diseaseCategoryService.getDiseaseCategory()
+    .subscribe(
+      Response =>{
+        this.diseaseCategory = Response
+      }
+    )
   }
 
   submit() {

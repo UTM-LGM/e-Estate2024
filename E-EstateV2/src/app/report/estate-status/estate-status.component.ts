@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Estate } from 'src/app/_interface/estate';
 import { EstateService } from 'src/app/_services/estate.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -9,7 +9,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './estate-status.component.html',
   styleUrls: ['./estate-status.component.css']
 })
-export class EstateStatusComponent implements OnInit {
+export class EstateStatusComponent implements OnInit, OnDestroy {
 
   pageNumber = 1
   status = '0'

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Seller } from 'src/app/_interface/seller';
 import { SellerService } from 'src/app/_services/seller.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -9,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './register-seller.component.html',
   styleUrls: ['./register-seller.component.css']
 })
-export class RegisterSellerComponent implements OnInit {
+export class RegisterSellerComponent implements OnInit, OnDestroy {
   seller: Seller = {} as Seller
   sellers: Seller[] = []
 
@@ -26,7 +27,8 @@ export class RegisterSellerComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private sellerService: SellerService
+    private sellerService: SellerService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -75,12 +77,13 @@ export class RegisterSellerComponent implements OnInit {
 
   getSeller() {
     setTimeout(() => {
-      this.sellerService.getSeller()
+      const getSeller = this.sellerService.getSeller()
         .subscribe(
           Response => {
             this.sellers = Response
             this.isLoading = false
           })
+      this.subscriptionService.add(getSeller);
     }, 2000)
   }
 
@@ -110,6 +113,10 @@ export class RegisterSellerComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

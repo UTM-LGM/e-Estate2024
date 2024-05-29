@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Country } from 'src/app/_interface/country';
@@ -20,7 +20,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './labor-info-monthly.component.html',
   styleUrls: ['./labor-info-monthly.component.css']
 })
-export class LaborInfoMonthlyComponent implements OnInit {
+export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
 
   @Output() backTabEvent = new EventEmitter<void>();
   @Output() nextTabEvent = new EventEmitter<void>();
@@ -51,9 +51,21 @@ export class LaborInfoMonthlyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+    // this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+    this.getDate()
     this.getCountry()
     this.getLaborType()
+    this.getLabor()
+  }
+
+  getDate() {
+    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+  }
+
+  monthSelected(month: string) {
+    let monthDate = new Date(month)
+    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
     this.getLabor()
   }
 
@@ -100,7 +112,8 @@ export class LaborInfoMonthlyComponent implements OnInit {
   }
 
   onSubmit() {
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    this.labor.monthYear = this.date
     this.labor.estateId = this.sharedService.estateId
     this.labor.createdBy = this.sharedService.userId.toString()
     this.labor.createdDate = new Date()
@@ -142,7 +155,7 @@ export class LaborInfoMonthlyComponent implements OnInit {
   }
 
   getLabor() {
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     setTimeout(() => {
       const getLabor = this.laborInfoService.getLabor()
         .subscribe(

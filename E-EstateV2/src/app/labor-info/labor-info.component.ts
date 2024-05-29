@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
@@ -8,7 +8,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './labor-info.component.html',
   styleUrls: ['./labor-info.component.css'],
 })
-export class LaborInfoComponent implements OnInit {
+export class LaborInfoComponent implements OnInit, OnDestroy {
   previousMonth = new Date()
 
   estate: any = {} as any

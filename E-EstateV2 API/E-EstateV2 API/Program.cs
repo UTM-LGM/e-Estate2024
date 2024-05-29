@@ -65,6 +65,7 @@ builder.Services.AddScoped<ICompanyDetailRepository, CompanyDetailRepository>();
 builder.Services.AddScoped<ILaborInformationRepository, LaborInformationRepository>();
 builder.Services.AddScoped<ILaborByCategoryRepository, LaborByCategoryRepository>();
 builder.Services.AddScoped<IRubberSaleIntegrationRepository, RubberSaleIntegrationRepository>();
+builder.Services.AddScoped<IFieldDiseaseRepository, FieldDiseaseRepository>();
 
 //configure password
 builder.Services.Configure<IdentityOptions>(options =>

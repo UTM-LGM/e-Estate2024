@@ -37,13 +37,24 @@
 
 
     <div style="columns: 2" class="column">
+      <label>Disease Category : </label>
+      <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldInfected.diseaseCategoryId" (selectionChange)="getDiseaseName()">
+        <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
+          {{ category.category }}
+        </mat-option>
+      </mat-select>
+
       <label>Disease Name :</label>
       <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName"
         [(ngModel)]="fieldInfected.fieldDiseaseId">
-        <mat-option *ngFor="let diseaseName of filterFieldDisease" [value]="diseaseName.id">
+        <mat-option *ngFor="let diseaseName of diseaseName" [value]="diseaseName.id">
           {{ diseaseName.diseaseName }}
         </mat-option>
       </mat-select>
+
+    </div>
+
+    <div style="columns: 2" class="column">
       <label>Area Infected (Ha) : </label>
       <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" />
     </div>

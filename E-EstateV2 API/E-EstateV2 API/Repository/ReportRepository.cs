@@ -27,8 +27,6 @@ namespace E_EstateV2_API.Repository
                 estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                 latexDry = x.latex * (x.latexDRC / 100),
-                ussDry = x.USS * (x.USSDRC / 100),
-                othersDry = x.others * (x.othersDRC / 100),
             }).ToListAsync();
 
             var groupdFieldProduction = fieldProduction
@@ -38,8 +36,6 @@ namespace E_EstateV2_API.Repository
                      estateId = group.First().estateId,
                      cuplumpDry = group.Sum(x => x.cuplumpDry),
                      latexDry = group.Sum(x => x.latexDry),
-                     ussDry = group.Sum(x => x.ussDry),
-                     othersDry = group.Sum(x => x.othersDry)
                  })
                  .ToList();
             return groupdFieldProduction;
@@ -164,9 +160,6 @@ namespace E_EstateV2_API.Repository
                 //totalCrop = x.cuplump + x.latex,
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                 latexDry = x.latex * (x.latexDRC / 100),
-                ussDry = x.USS * (x.USSDRC / 100),
-                othersDry = x.others * (x.othersDRC / 100),
-
                 estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).ToList()
             }).ToListAsync();
 
@@ -179,8 +172,6 @@ namespace E_EstateV2_API.Repository
                      //totalCrop = group.Sum(x => x.totalCrop),
                      cuplumpDry = group.Sum(x => x.cuplumpDry),
                      latexDry = group.Sum(x => x.latexDry),
-                     ussDry = group.Sum(x => x.ussDry),
-                     othersDry = group.Sum(x => x.othersDry),
                      fieldArea = group.First().fieldArea,
                      totalTask = group.First().totalTask,
                      noTaskTap = group.First().noTaskTap,
@@ -218,8 +209,6 @@ namespace E_EstateV2_API.Repository
                     prod.monthYear,
                     cuplumpDry = prod.cuplump * (prod.cuplumpDRC / 100),
                     latexDry = prod.latex * (prod.latexDRC / 100),
-                    ussDry = prod.USS * (prod.USSDRC / 100),
-                    otherDry = prod.others * (prod.othersDRC / 100),
                     field.estateId
                 }).GroupBy(x => new { x.monthYear, x.estateId })
                 .Select(x => new DTO_FieldProduction
@@ -227,8 +216,6 @@ namespace E_EstateV2_API.Repository
                     monthYear = x.Key.monthYear,
                     cuplumpDry = x.Sum(x => x.cuplumpDry),
                     latexDry = x.Sum(x => x.latexDry),
-                    ussDry = x.Sum(x => x.ussDry),
-                    othersDry = x.Sum(x => x.otherDry),
                     estateId = x.Key.estateId
                 })
                 //CultureInfo to ensures that the parsing is done using a culture-independent format
@@ -324,8 +311,6 @@ namespace E_EstateV2_API.Repository
                 area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                 latexDry = x.latex * (x.latexDRC / 100),
-                ussDry = x.USS * (x.USSDRC / 100),
-                othersDry = x.others * (x.othersDRC / 100),
                 fieldClone = _context.fieldClones.Where(y => y.fieldId == x.fieldId).Select(y => new
                 {
                     cloneId = y.cloneId,

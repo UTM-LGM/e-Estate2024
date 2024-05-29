@@ -19,7 +19,7 @@
 
   </div>
 
-  <div style="columns: 2;"
+  <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
@@ -27,7 +27,7 @@
       <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
   
-  <div *ngIf="role=='Admin'">
+  <div *ngIf="role=='Admin'" style="columns: 3;">
     <label>Please choose year: </label>
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>

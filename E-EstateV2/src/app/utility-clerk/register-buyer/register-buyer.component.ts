@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Buyer } from 'src/app/_interface/buyer';
 import { BuyerService } from 'src/app/_services/buyer.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SpinnerService } from 'src/app/_services/spinner.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
 @Component({
@@ -11,7 +12,7 @@ import swal from 'sweetalert2';
   templateUrl: './register-buyer.component.html',
   styleUrls: ['./register-buyer.component.css']
 })
-export class RegisterBuyerComponent implements OnInit {
+export class RegisterBuyerComponent implements OnInit, OnDestroy {
 
   buyer: Buyer = {} as Buyer
 
@@ -33,7 +34,8 @@ export class RegisterBuyerComponent implements OnInit {
   constructor(
     private buyerService: BuyerService,
     private sharedService: SharedService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService:MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -83,13 +85,14 @@ export class RegisterBuyerComponent implements OnInit {
 
   getBuyer() {
     setTimeout(() => {
-      this.buyerService.getBuyer()
+      const getBuyer = this.buyerService.getBuyer()
         .subscribe(
           Response => {
             const buyers = Response
             this.buyers = buyers.filter(x=>x.estateId == this.sharedService.estateId)
             this.isLoading = false
           });
+      this.subscriptionService.add(getBuyer);
     }, 2000)
   }
 
@@ -123,7 +126,7 @@ export class RegisterBuyerComponent implements OnInit {
 
   checkLicenseNo(event: any) {
     setTimeout(() => {
-    this.myLesenService.getLicenseNo(event.target.value.toString())
+    const getLicenseNo = this.myLesenService.getLicenseNo(event.target.value.toString())
       .subscribe(
         {
           next: (Response) => {
@@ -135,6 +138,7 @@ export class RegisterBuyerComponent implements OnInit {
               showConfirmButton: false,
               timer: 1000
             });
+          this.subscriptionService.add(getLicenseNo);
           },
           error: (Error) => {
             swal.fire({
@@ -146,6 +150,10 @@ export class RegisterBuyerComponent implements OnInit {
           }
         })
       },1000)
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
   

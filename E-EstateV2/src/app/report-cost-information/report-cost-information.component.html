@@ -2,7 +2,7 @@
   <h1>Cost Information Yearly</h1>
   <hr />
 
-  <span *ngIf="role == 'Admin'" style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span>
+  <!-- <span *ngIf="role == 'Admin'" style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span> -->
 
   <div style="columns:3"
     [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
@@ -25,8 +25,8 @@
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
  
-  <button [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}"
-   class="btn-reset" (click)="reset()">Reset Filter</button>
+  <!-- <button [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}"
+   class="btn-reset" (click)="reset()">Reset Filter</button> -->
 
   <div style="columns:3"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
@@ -44,7 +44,7 @@
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
 
-  <div style="columns: 2;"
+  <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
@@ -92,8 +92,8 @@
 
       <ng-container *ngIf="!isLoading && !showAll">
         <tr
-          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: 20, currentPage: pageNumber }; let i = index ">
-          <td>{{ i+1 }}</td>
+          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
+          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
           <td>{{ cost.costCategory }}</td>
@@ -110,8 +110,8 @@
 
       <ng-container *ngIf="!isLoading && showAll">
         <tr
-          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: 20, currentPage: pageNumber }; let i = index ">
-          <td>{{ i+1 }}</td>
+          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
+          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
           <td>{{ cost.costCategory }}</td>

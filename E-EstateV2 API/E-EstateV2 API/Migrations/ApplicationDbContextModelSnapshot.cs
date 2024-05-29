@@ -586,6 +586,37 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("cropTypes");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.DiseaseCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("diseaseCategories");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.Establishment", b =>
                 {
                     b.Property<int>("Id")
@@ -923,6 +954,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("diseaseCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("diseaseName")
                         .HasColumnType("nvarchar(max)");
 
@@ -936,6 +970,8 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("diseaseCategoryId");
 
                     b.ToTable("fieldDiseases");
                 });
@@ -1042,12 +1078,6 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<float>("USS")
-                        .HasColumnType("real");
-
-                    b.Property<float>("USSDRC")
-                        .HasColumnType("real");
-
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1077,12 +1107,6 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<int>("noTaskUntap")
                         .HasColumnType("int");
-
-                    b.Property<float>("others")
-                        .HasColumnType("real");
-
-                    b.Property<float>("othersDRC")
-                        .HasColumnType("real");
 
                     b.Property<string>("remarkUntap")
                         .HasColumnType("nvarchar(max)");
@@ -1748,7 +1772,7 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("updatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("waterLoss")
+                    b.Property<float>("weightLoss")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
@@ -2397,6 +2421,17 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Field");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldDisease", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.DiseaseCategory", "DiseaseCategory")
+                        .WithMany()
+                        .HasForeignKey("diseaseCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DiseaseCategory");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>

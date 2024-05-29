@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
@@ -15,7 +15,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './yield-production-yearly-report.component.html',
   styleUrls: ['./yield-production-yearly-report.component.css']
 })
-export class YieldProductionYearlyReportComponent implements OnInit {
+export class YieldProductionYearlyReportComponent implements OnInit, OnDestroy {
 
   productionYearly: FieldProduction[] = []
   filterProductionYearly: FieldProduction[] = []

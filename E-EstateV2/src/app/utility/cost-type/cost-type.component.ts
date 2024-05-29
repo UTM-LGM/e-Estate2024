@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CostType } from 'src/app/_interface/costType';
 import { CostTypeService } from 'src/app/_services/cost-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './cost-type.component.html',
   styleUrls: ['./cost-type.component.css']
 })
-export class CostTypeComponent implements OnInit {
+export class CostTypeComponent implements OnInit, OnDestroy {
   term = ''
   isLoading = true
   pageNumber = 1

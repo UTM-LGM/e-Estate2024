@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Clone } from 'src/app/_interface/clone';
 import { CloneService } from 'src/app/_services/clone.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,13 +10,14 @@ import swal from 'sweetalert2';
   templateUrl: './clone.component.html',
   styleUrls: ['./clone.component.css'],
 })
-export class CloneComponent implements OnInit {
+export class CloneComponent implements OnInit, OnDestroy {
   clone: Clone = {} as Clone
 
   clones: Clone[] = []
 
   isLoading = true
   pageNumber = 1
+  itemsPerPage: number = 10
   term = ''
   order = ''
   currentSortedColumn = ''

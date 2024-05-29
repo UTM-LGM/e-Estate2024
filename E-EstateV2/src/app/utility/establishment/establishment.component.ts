@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Establishment } from 'src/app/_interface/establishment';
 import { EstablishmentService } from 'src/app/_services/establishment.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './establishment.component.html',
   styleUrls: ['./establishment.component.css'],
 })
-export class EstablishmentComponent implements OnInit {
+export class EstablishmentComponent implements OnInit, OnDestroy {
   establishment: Establishment = {} as Establishment
 
   establishments: Establishment[] = []

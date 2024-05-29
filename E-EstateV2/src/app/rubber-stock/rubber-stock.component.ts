@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { Estate } from '../_interface/estate';
@@ -17,7 +17,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './rubber-stock.component.html',
   styleUrls: ['./rubber-stock.component.css']
 })
-export class RubberStockComponent implements OnInit {
+export class RubberStockComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +52,7 @@ export class RubberStockComponent implements OnInit {
     { columnName: 'production', displayText: 'Total Production 100% Dry (Kg)' },
     { columnName: 'rubberSale', displayText: 'Total Rubber Sale 100% Dry (Kg)' },
     { columnName: 'endStock', displayText: 'Month End Stock 100% Dry (Kg)' },
-    { columnName: 'waterLoss', displayText: 'Water Loss (%)' },
+    { columnName: 'weightLoss', displayText: 'Weight Loss (%)' },
   ];
 
   ngOnInit(): void {
@@ -86,26 +86,35 @@ export class RubberStockComponent implements OnInit {
   }
 
   openDialog(estate: Estate, stock: RubberStock[]) {
-    this.date = this.datePipe.transform(this.previousDate, 'MMM-yyyy')?.toUpperCase()
-    const date = this.rubberStocks.filter(x => x.monthYear == this.date && x.isActive == true)
-    if (date.length === 0) {
-      const dialog = this.dialog.open(AddRubberStockComponent, {
-        data: { estate: estate, stock: stock }
-      });
-      dialog.afterClosed()
+    const dialog = this.dialog.open(AddRubberStockComponent, {
+      data: { estate: estate, stock: stock }})
+    dialog.afterClosed()
         .subscribe(
           Response => {
             this.ngOnInit()
           });
-    }
-    else {
-      swal.fire({
-        text: 'Month already exists!',
-        icon: 'error'
-      });
-    }
+        }
 
-  }
+    // this.date = this.datePipe.transform(this.previousDate, 'MMM-yyyy')?.toUpperCase()
+    // const date = this.rubberStocks.filter(x => x.monthYear == this.date && x.isActive == true)
+    // if (date.length === 0) {
+    //   const dialog = this.dialog.open(AddRubberStockComponent, {
+    //     data: { estate: estate, stock: stock }
+    //   });
+    //   dialog.afterClosed()
+    //     .subscribe(
+    //       Response => {
+    //         this.ngOnInit()
+    //       });
+    // }
+    // else {
+    //   swal.fire({
+    //     text: 'Month already exists!',
+    //     icon: 'error'
+    //   });
+  //   }
+
+  // }
 
   getStock() {
     setTimeout(() => {

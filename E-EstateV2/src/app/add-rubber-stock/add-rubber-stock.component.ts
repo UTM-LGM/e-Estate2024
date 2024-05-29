@@ -62,6 +62,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   filterSales: RubberSale[] = []
 
   rubberStocks: RubberStock[] = []
+  allRubberStock: RubberStock[] = []
+
 
 
   isLoadingProduction = true
@@ -90,15 +92,17 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.getDate()
     this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
     this.previousDate = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')?.toUpperCase()
-    this.getField()
+    this.getAllProduction()
     this.getSales()
     this.getStock()
+    
   }
 
   getStock() {
     const getStock = this.rubberStockService.getRubberStock()
       .subscribe(
         Response => {
+          this.allRubberStock = Response
           this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true)
           if (this.rubberStocks.length != 0) {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
@@ -119,91 +123,61 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.dialogRef.close()
   }
 
+  monthSelected(month: string) {
+    let monthDate = new Date(month)
+    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+    this.getAllProduction()
+    this.getSales()
+
+    monthDate.setMonth(monthDate.getMonth() - 1);
+    this.previousDate = this.datePipe.transform(monthDate, 'MMM-yyyy')?.toUpperCase();
+
+    this.getStock()  
+  }
+
   addStock() {
-    this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
-    this.stock.estateId = this.estate.id
-    this.stock.monthYear = this.date
-    this.stock.createdBy = this.sharedService.userId
-    this.stock.isActive = true
-    this.rubberStockService.addRubberStock(this.stock)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Stock successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialogRef.close()
-        }
-      )
+    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase())
+    if(existingMonth.length != 0 ){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Month already exist',
+      });
+    }else{
+      this.stock.estateId = this.estate.id
+      this.stock.monthYear = this.date
+      this.stock.createdBy = this.sharedService.userId
+      this.stock.isActive = true
+      this.stock.weightLoss = parseInt(this.stock.weightLoss.toFixed(2))
+      this.rubberStockService.addRubberStock(this.stock)
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Stock successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialogRef.close()
+          }
+        )
+    }
+    // 
   }
 
-  getField() {
-    const getField = this.fieldService.getField()
-      .subscribe(
-        Response => {
-          const filterFields = Response.filter(x => x.estateId == this.estate.id)
-          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
-          this.getAllProduction(this.filterFields)
-        }
-      )
-    this.subscriptionService.add(getField);
-  }
-
-  getAllProduction(Fields: Field[]) {
+  getAllProduction() {
     const getAllProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {
           const productions = Response
-          this.filterProductions = productions.filter(e => e.monthYear?.includes(this.date) && Fields.some(field => field.id === e.fieldId) && e.status == "Submitted")
-          this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
-          this.calculateLatexDry(this.filterProductions, this.latexDry)
-          this.calculateUSSDry(this.filterProductions, this.USSDry)
-          this.calculateOthersDry(this.filterProductions, this.OthersDry)
+          this.filterProductions = productions.filter(e =>e.status == "Submitted" && e.estateId == this.sharedService.estateId && e.monthYear == this.date)
           this.TotalCuplump()
           this.TotalLatex()
-          this.TotalUSS()
-          this.TotalOthers()
-          if (this.stock.totalProduction == null) {
-            this.calculateTotal()
-          }
+          this.calculateTotal()
           this.isLoadingProduction = false
         });
     this.subscriptionService.add(getAllProduction);
-  }
-
-  calculateCuplumpDry(data: FieldProduction[], cuplump: FieldProduction[]) {
-    this.value = data
-    this.cuplump = cuplump
-    for (let j = 0; j < data.length; j++) {
-      this.cuplump[j] = this.value[j].cuplump * (this.value[j].cuplumpDRC / 100)
-    }
-  }
-
-  calculateLatexDry(data: FieldProduction[], latex: FieldProduction[]) {
-    this.value = data
-    this.latex = latex
-    for (let j = 0; j < data.length; j++) {
-      this.latex[j] = this.value[j].latex * (this.value[j].latexDRC / 100)
-    }
-  }
-
-  calculateUSSDry(data: FieldProduction[], USS: FieldProduction[]) {
-    this.value = data
-    this.USS = USS
-    for (let j = 0; j < data.length; j++) {
-      this.USS[j] = this.value[j].uss * (this.value[j].ussDRC / 100)
-    }
-  }
-
-  calculateOthersDry(data: FieldProduction[], others: FieldProduction[]) {
-    this.value = data
-    this.others = others
-    for (let j = 0; j < data.length; j++) {
-      this.others[j] = this.value[j].others * (this.value[j].othersDRC / 100)
-    }
   }
 
   TotalCuplump() {
@@ -222,21 +196,6 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.totalLatexDry = this.totalLatex.reduce((total, item) => total + item.latexDry, 0)
   }
 
-  TotalUSS() {
-    this.totalUSS = this.filterProductions.map((item: any) => {
-      const USSDry = item.uss * (item.ussDRC / 100)
-      return { USSDry }
-    })
-    this.totalUSSDry = this.totalUSS.reduce((total, item) => total + item.USSDry, 0)
-  }
-
-  TotalOthers() {
-    this.totalOthers = this.filterProductions.map((item: any) => {
-      const OthersDry = item.others * (item.othersDRC / 100)
-      return { OthersDry }
-    })
-    this.totalOthersDry = this.totalOthers.reduce((total, item) => total + item.OthersDry, 0)
-  }
 
   calculateTotal() {
     this.stock.totalProduction = this.totalCuplumpDry + this.totalLatexDry + this.totalUSSDry + this.totalOthersDry
@@ -245,7 +204,16 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   calculateWaterDepletion() {
     const production = this.stock.totalProduction + this.stock.previousStock
     const stock = this.stock.totalSale + this.stock.currentStock
-    this.stock.waterLoss = ((production - stock) / production) * 100
+    this.stock.weightLoss = ((production - stock) / production) * 100
+    if(this.stock.weightLoss <= 0){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Weight Loss cannot below than 0',
+      });
+      this.stock.weightLoss = 0
+      this.stock.currentStock = 0
+    }
   }
 
   getSales() {
@@ -253,10 +221,18 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const rubberSales = Response
-          this.filterSales = rubberSales.filter(e => {
-            const saleDate = new Date(e.saleDateTime);
-            return e.estateId == this.sharedService.estateId && saleDate.getMonth() + 1 == this.monthYear.getMonth() + 1 && saleDate.getFullYear() == this.monthYear.getFullYear();
-          })
+
+          const date = new Date(this.date)
+          this.filterSales = rubberSales.filter(sale => {
+            const saleDate = new Date(sale.saleDateTime);
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1);
+          });
+
+          // // this.filterFields = rubberSales.filter(e=>e.saleDateTime.)
+          // this.filterSales = rubberSales.filter(e => {
+          //   const saleDate = new Date(e.saleDateTime);
+          //   // return e.estateId == this.sharedService.estateId && saleDate.getMonth() + 1 == this.monthYear.getMonth() + 1 && saleDate.getFullYear() == this.monthYear.getFullYear();
+          // })
           this.calculateSale()
           this.isLoadingSale = false
         })

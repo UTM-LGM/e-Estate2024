@@ -10,15 +10,19 @@ namespace E_EstateV2_API.Controllers
     public class FieldDiseasesController : ControllerBase
     {
         private readonly IGenericRepository<FieldDisease> _genericRepository;
-        public FieldDiseasesController(IGenericRepository<FieldDisease> genericRepository)
+        private readonly IFieldDiseaseRepository _fieldDiseaseRepository;
+
+        public FieldDiseasesController(IGenericRepository<FieldDisease> genericRepository, IFieldDiseaseRepository fieldDiseaseRepository)
         {
             _genericRepository = genericRepository;
+            _fieldDiseaseRepository = fieldDiseaseRepository;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetFieldDisease()
         {
-            var fieldDisease = await _genericRepository.GetAll();
+            var fieldDisease = await _fieldDiseaseRepository.GetFieldDisease();
             return Ok(fieldDisease);
         }
 

@@ -10,7 +10,7 @@ namespace E_EstateV2_API.Models
         public float totalProduction { get; set; }
         public float totalSale { get; set; }
         public float currentStock { get; set; }
-        public float waterLoss { get; set; }
+        public float weightLoss { get; set; }
         public float previousStock { get; set; }
         public int estateId { get; set; }
         public bool isActive { get; set; }

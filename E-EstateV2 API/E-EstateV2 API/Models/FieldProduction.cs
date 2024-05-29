@@ -12,10 +12,6 @@ namespace E_EstateV2_API.Models
         public float cuplumpDRC { get; set; }
         public float latex { get; set; }
         public float latexDRC { get; set; }
-        public float USS { get; set; }
-        public float USSDRC { get; set; }
-        public float others { get; set; }
-        public float othersDRC { get; set; }
         public int noTaskTap { get; set; }
         public int noTaskUntap { get; set; }
         public string remarkUntap { get; set; }

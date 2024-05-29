@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TappingSystem } from 'src/app/_interface/tappingSystem';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './tapping-system.component.html',
   styleUrls: ['./tapping-system.component.css']
 })
-export class TappingSystemComponent implements OnInit {
+export class TappingSystemComponent implements OnInit, OnDestroy {
 
   tappingSystem: TappingSystem = {} as TappingSystem
   tappingSystems: TappingSystem[] = []

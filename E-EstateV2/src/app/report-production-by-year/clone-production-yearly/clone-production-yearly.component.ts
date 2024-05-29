@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
@@ -11,7 +11,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './clone-production-yearly.component.html',
   styleUrls: ['./clone-production-yearly.component.css']
 })
-export class CloneProductionYearlyComponent implements OnInit {
+export class CloneProductionYearlyComponent implements OnInit, OnDestroy {
 
   role = ''
   year = ''

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { Field } from '../_interface/field';
@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './report-field-information.component.html',
   styleUrls: ['./report-field-information.component.css']
 })
-export class ReportFieldInformationComponent implements OnInit {
+export class ReportFieldInformationComponent implements OnInit, OnDestroy {
 
   role = ''
   term = ''

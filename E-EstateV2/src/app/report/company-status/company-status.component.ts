@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Company } from 'src/app/_interface/company';
 import { CompanyService } from 'src/app/_services/company.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
@@ -8,7 +8,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './company-status.component.html',
   styleUrls: ['./company-status.component.css']
 })
-export class CompanyStatusComponent {
+export class CompanyStatusComponent implements OnInit, OnDestroy{
 
   status = '0'
   term = ''

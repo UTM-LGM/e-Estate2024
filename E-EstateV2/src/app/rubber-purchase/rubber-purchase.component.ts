@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RubberPurchase } from '../_interface/rubberPurchase';
 import { SharedService } from '../_services/shared.service';
 import swal from 'sweetalert2';
@@ -15,7 +15,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './rubber-purchase.component.html',
   styleUrls: ['./rubber-purchase.component.css']
 })
-export class RubberPurchaseComponent implements OnInit {
+export class RubberPurchaseComponent implements OnInit, OnDestroy {
   
   term = ''
   pageNumber = 1

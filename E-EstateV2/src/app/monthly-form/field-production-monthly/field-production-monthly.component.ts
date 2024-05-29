@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Field } from 'src/app/_interface/field';
@@ -17,7 +17,7 @@ import swal from 'sweetalert2';
   templateUrl: './field-production-monthly.component.html',
   styleUrls: ['./field-production-monthly.component.css']
 })
-export class FieldProductionMonthlyComponent implements OnInit {
+export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   @Output() nextTabEvent = new EventEmitter<void>();
   isLoading = true
@@ -71,8 +71,22 @@ export class FieldProductionMonthlyComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+    this.getDate()
+    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.getEstate()
+  }
+
+  getDate() {
     this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  }
+
+  monthSelected(month: string) {
+    this.getEstate()
+    this.getProducts(this.filterFields)
+    let monthDate = new Date(month)
+    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+    this.products.forEach(y => y.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy'))
   }
 
   getEstate() {
@@ -87,8 +101,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
                 this.isLoading = false
               }
             )
-      this.subscriptionService.add(getOneEstate);
-
+          this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
@@ -109,7 +122,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
   }
 
   getProducts(Fields: Field[]) {
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.products = []
     Fields.forEach(x => {
       let product = {} as FieldProduction;
@@ -260,7 +273,7 @@ export class FieldProductionMonthlyComponent implements OnInit {
   }
 
   getAllProduction(Fields: Field[]) {
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     const getProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {

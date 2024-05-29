@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
@@ -9,7 +9,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './monthly-form.component.html',
   styleUrls: ['./monthly-form.component.css']
 })
-export class MonthlyFormComponent implements OnInit {
+export class MonthlyFormComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
 

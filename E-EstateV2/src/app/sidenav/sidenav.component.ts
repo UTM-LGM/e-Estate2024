@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../_interface/user';
 import { SharedService } from '../_services/shared.service';
 import { UserService } from '../_services/user.service';
@@ -11,7 +11,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css'],
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit , OnDestroy{
   user: User = {} as User
   estate: any = {} as any
   company: any = {} as any

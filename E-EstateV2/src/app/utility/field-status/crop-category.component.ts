@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldStatus } from 'src/app/_interface/fieldStatus';
 import { FieldStatusService } from 'src/app/_services/field-status.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './crop-category.component.html',
   styleUrls: ['./crop-category.component.css'],
 })
-export class CropCategoryComponent implements OnInit {
+export class CropCategoryComponent implements OnInit, OnDestroy {
   crop = {} as FieldStatus
 
   cropCategories: FieldStatus[] = []

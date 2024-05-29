@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/_interface/user';
 import { UserService } from 'src/app/_services/user.service';
 import { PendingRoleDetailComponent } from '../pending-role-detail/pending-role-detail.component';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-manage-user',
   templateUrl: './manage-user.component.html',
   styleUrls: ['./manage-user.component.css']
 })
-export class ManageUserComponent {
+export class ManageUserComponent implements OnInit, OnDestroy {
 
   term = ''
   pageNumber = 1
@@ -34,7 +35,8 @@ export class ManageUserComponent {
 
   constructor(private userService:UserService,
     private dialog: MatDialog,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService:MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
     )
   {}
 
@@ -44,24 +46,26 @@ export class ManageUserComponent {
 
   getUsers(){
    setTimeout(() => {
-   this.userService.getAllUser()
+   const getAllUser = this.userService.getAllUser()
    .subscribe(
      Response=>{
        const users = Response
        this.users = users.filter(x=>x.roleId != null)
        this.users.forEach((user: any) => {
-        this.myLesenService.getLicenseNo(user.licenseNo)
+        const getLicenseNo = this.myLesenService.getLicenseNo(user.licenseNo)
         .subscribe(
           {
             next: (Response) => {
               this.result[user.licenseNo] = Response;
               this.isLoading = false
+              this.subscriptionService.add(getLicenseNo);
             },
             error: (error: any) => {
               console.error("Error fetching license number:", error);
             }
           })})  
     })
+    this.subscriptionService.add(getAllUser);
   }, 1000)
   }
 
@@ -95,6 +99,10 @@ export class ManageUserComponent {
           this.ngOnInit()
         }
       )
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 

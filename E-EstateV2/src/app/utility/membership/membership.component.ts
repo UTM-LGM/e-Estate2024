@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MembershipType } from 'src/app/_interface/membership';
 import { MembershipService } from 'src/app/_services/membership.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './membership.component.html',
   styleUrls: ['./membership.component.css'],
 })
-export class MembershipComponent implements OnInit {
+export class MembershipComponent implements OnInit, OnDestroy {
   membershipType: MembershipType = {} as MembershipType
 
   membershipTypes: MembershipType[] = []

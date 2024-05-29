@@ -71,6 +71,7 @@ namespace E_EstateV2_API.Data
         public DbSet<LaborByCategory> laborByCategories { get; set; }
         public DbSet<RubberStock> rubberStocks { get; set; }
         public DbSet<OtherCrop> otherCrops { get; set; }
+        public DbSet<DiseaseCategory> diseaseCategories { get; set; }
     }
 
 }

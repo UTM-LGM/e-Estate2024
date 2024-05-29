@@ -6,4 +6,5 @@ export interface FieldDisease{
     createdDate: Date
     updatedBy: string
     updatedDate: Date
+    diseaseCategoryId:number
 }

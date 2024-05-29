@@ -1,9 +1,11 @@
 <div class="box-container">
   <h1>Rubber Area by Clone</h1>
-  <hr/>
-  
-  <label>Please choose year: </label>
-  <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  <hr />
+
+  <div style="columns: 3;">
+    <label>Please choose year: </label>
+    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  </div>
 
   <div style="margin-top: 3px; margin-bottom: 3px;">
     <button class="btn-add" (click)="exportToExcel(cloneArea, 'Rubber Area By Clone Report ' + year)">
@@ -17,8 +19,7 @@
         <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="cloneArea"
           [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
           {{ column.displayText }}
-          <i class="fa"
-            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+          <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                         'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
         </th>
       </tr>

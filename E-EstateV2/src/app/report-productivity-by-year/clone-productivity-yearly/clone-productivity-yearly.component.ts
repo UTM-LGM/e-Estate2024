@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
@@ -13,7 +13,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './clone-productivity-yearly.component.html',
   styleUrls: ['./clone-productivity-yearly.component.css']
 })
-export class CloneProductivityYearlyComponent implements OnInit {
+export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
 
   role = ''
   year = ''

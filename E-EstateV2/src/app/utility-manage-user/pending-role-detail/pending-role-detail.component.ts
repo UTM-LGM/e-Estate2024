@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Role } from 'src/app/_interface/role';
 import { User } from 'src/app/_interface/user';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { RoleService } from 'src/app/_services/role.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { UserService } from 'src/app/_services/user.service';
 import swal from 'sweetalert2';
 
@@ -13,7 +14,7 @@ import swal from 'sweetalert2';
   templateUrl: './pending-role-detail.component.html',
   styleUrls: ['./pending-role-detail.component.css']
 })
-export class PendingRoleDetailComponent implements OnInit {
+export class PendingRoleDetailComponent implements OnInit, OnDestroy{
 
   user:User = {} as User
   result:any = {} as any
@@ -24,7 +25,8 @@ export class PendingRoleDetailComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data : {data :User},
     private roleService:RoleService,
     private userService:UserService,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService:MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
   ){}
 
   ngOnInit(): void {
@@ -38,22 +40,24 @@ export class PendingRoleDetailComponent implements OnInit {
   }
 
   getRole(){
-    this.roleService.getRole()
+    const getRole = this.roleService.getRole()
     .subscribe(
       Response =>{
         this.roles = Response.filter(x => x.name.toLowerCase() != 'admin');
       }
     )
+    this.subscriptionService.add(getRole);
 
   }
 
   getCompanyAndPremise(){
-    this.myLesenService.getLicenseNo(this.user.licenseNo)
+    const getLicenseNo = this.myLesenService.getLicenseNo(this.user.licenseNo)
     .subscribe(
       Response =>{
         this.result = Response
       }
     )
+    this.subscriptionService.add(getLicenseNo);
   }
 
   update(){
@@ -86,5 +90,9 @@ export class PendingRoleDetailComponent implements OnInit {
         this.dialog.close()
       }
   })
+}
+
+ngOnDestroy(): void {
+  this.subscriptionService.unsubscribeAll();
 }
 }

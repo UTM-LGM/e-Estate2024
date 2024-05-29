@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LaborInformation } from 'src/app/_interface/laborInformation';
 import { LaborTypeService } from 'src/app/_services/labor-type.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './local-labor-type.component.html',
   styleUrls: ['./local-labor-type.component.css']
 })
-export class LaborInformationComponent implements OnInit {
+export class LaborInformationComponent implements OnInit, OnDestroy {
   labor: LaborInformation = {} as LaborInformation
 
   labors: LaborInformation[] = []

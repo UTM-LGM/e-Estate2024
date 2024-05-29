@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Role } from 'src/app/_interface/role';
 import { User } from 'src/app/_interface/user';
 import { RoleService } from 'src/app/_services/role.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { UserService } from 'src/app/_services/user.service';
 import swal from 'sweetalert2';
 
@@ -12,7 +13,7 @@ import swal from 'sweetalert2';
   templateUrl: './add-user.component.html',
   styleUrls: ['./add-user.component.css']
 })
-export class AddUserComponent implements OnInit {
+export class AddUserComponent implements OnInit, OnDestroy {
 
   register = {} as User
   roles:Role [] = []
@@ -24,6 +25,7 @@ export class AddUserComponent implements OnInit {
     public dialog: MatDialogRef<User>,
     private userService: UserService,
     private roleService:RoleService,
+    private subscriptionService:SubscriptionService
   ){}
 
   ngOnInit(): void {
@@ -31,13 +33,15 @@ export class AddUserComponent implements OnInit {
   }
 
   getRole(){
-    this.roleService.getRole()
+    const getRole = this.roleService.getRole()
     .subscribe(
       Response =>{
         const roles = Response
         this.roles = roles.filter(x=>x.name == "Admin")
       }
     )
+    this.subscriptionService.add(getRole);
+
   }
 
   togglePasswordVisibility() {
@@ -79,6 +83,10 @@ export class AddUserComponent implements OnInit {
 
   back(){
     this.dialog.close()
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 

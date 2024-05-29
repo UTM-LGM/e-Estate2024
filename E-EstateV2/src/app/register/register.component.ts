@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { Role } from '../_interface/role';
@@ -17,7 +17,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   roles: Role[] = []
 

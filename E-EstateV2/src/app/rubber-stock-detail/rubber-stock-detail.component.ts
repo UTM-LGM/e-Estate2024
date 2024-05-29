@@ -43,7 +43,7 @@ export class RubberStockDetailComponent implements OnInit {
   calculateWaterDepletion() {
     const production = this.stock.totalProduction + this.stock.previousStock
     const stock = this.stock.totalSale + this.stock.currentStock
-    this.stock.waterLoss = ((production - stock) / production) * 100
+    this.stock.weightLoss = ((production - stock) / production) * 100
   }
 
   update() {

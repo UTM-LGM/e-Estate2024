@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Field } from 'src/app/_interface/field';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
@@ -11,7 +11,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './rubber-crops-by-state.component.html',
   styleUrls: ['./rubber-crops-by-state.component.css']
 })
-export class RubberCropsByStateComponent implements OnInit {
+export class RubberCropsByStateComponent implements OnInit, OnDestroy {
 
   term = ''
   order = ''

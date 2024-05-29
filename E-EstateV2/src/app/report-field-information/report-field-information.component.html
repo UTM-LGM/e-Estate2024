@@ -2,7 +2,7 @@
   <h1>Field Information</h1>
   <hr />
 
-  <div style="columns:2"
+  <div style="columns:3"
     [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
     <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
@@ -31,7 +31,7 @@
   </div>
   </div> -->
 
-  <div style="columns:2"
+  <div style="columns:3"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
     <div>
       <label>Company</label>
@@ -46,7 +46,7 @@
   </div>
 
   <div
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}" style="columns: 3;">
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
   </div>

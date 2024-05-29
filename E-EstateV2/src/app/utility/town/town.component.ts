@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { State } from 'src/app/_interface/state';
 import { Town } from 'src/app/_interface/town';
 import { SharedService } from 'src/app/_services/shared.service';
 import { StateService } from 'src/app/_services/state.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { TownService } from 'src/app/_services/town.service';
 import swal from 'sweetalert2';
 
@@ -11,7 +12,7 @@ import swal from 'sweetalert2';
   templateUrl: './town.component.html',
   styleUrls: ['./town.component.css'],
 })
-export class TownComponent implements OnInit {
+export class TownComponent implements OnInit, OnDestroy {
   
   town: Town = {} as Town
   fileteredTown: any = {}
@@ -34,7 +35,8 @@ export class TownComponent implements OnInit {
   constructor(
     private townService: TownService,
     private stateService: StateService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private subscriptionService:SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -84,22 +86,25 @@ export class TownComponent implements OnInit {
   }
 
   getState() {
-    this.stateService.getState()
+    const getState = this.stateService.getState()
       .subscribe(
         Response => {
           const states = Response
           this.states = states.filter(x => x.isActive == true)
         });
+      this.subscriptionService.add(getState);
   }
 
   getTown() {
     setTimeout(() => {
-      this.townService.getTown()
+      const getTown = this.townService.getTown()
         .subscribe(
           Response => {
             this.towns = Response
             this.isLoading = false
           });
+      this.subscriptionService.add(getTown);
+
     }, 2000)
   }
 
@@ -131,6 +136,10 @@ export class TownComponent implements OnInit {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 }

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalLabor } from 'src/app/_interface/localLabor';
 import { LaborInformation } from 'src/app/_interface/laborInformation';
@@ -15,7 +15,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './labor-local.component.html',
   styleUrls: ['./labor-local.component.css']
 })
-export class LaborLocalComponent implements OnInit {
+export class LaborLocalComponent implements OnInit, OnDestroy {
 
   labors: LocalLabor[] = []
 

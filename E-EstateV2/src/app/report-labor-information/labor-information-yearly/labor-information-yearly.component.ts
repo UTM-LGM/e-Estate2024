@@ -22,6 +22,11 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   filterTypes: LaborInformation[] = [];
   labors: any[] = [];
 
+  companies: any[] = []
+  filterLGMAdmin: any[] = []
+
+
+
   localTapperFieldWorker: any[] = [];
   foreignTapperFieldWorker: any[] = [];
 
@@ -52,8 +57,9 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
       this.estate.id = this.sharedService.estateId;
       this.getEstate();
     }else{
-      this.year = new Date().getFullYear().toString();
-      this.getLaborInformation();
+      // this.getLaborInformation();
+      this.getAllCompanies()
+
     }
   }
 
@@ -82,9 +88,18 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
     this.showAll = false;
   }
 
+  companySelected() {
+    this.estate.id = 0
+    this.getAllEstate()
+    this.labors = []
+    this.year = ''
+    this.showAll = false
+  }
+
   getAllEstate() {
     const getAllEstate = this.myLesenService.getAllEstate()
       .subscribe(Response => {
+        this.filterLGMAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId);
       });
     this.subscriptionService.add(getAllEstate);
@@ -108,6 +123,17 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
     this.subscriptionService.add(getCompany);
   }
 
+  getAllCompanies() {
+    const getAllCompany = this.myLesenService.getAllCompany()
+      .subscribe(
+        Response => {
+          this.companies = Response
+          this.isLoading = false
+        }
+      )
+      this.subscriptionService.add(getAllCompany);
+  }
+
   getLaborType() {
     const getLaborType = this.laborTypeService.getType()
       .subscribe(Response => {
@@ -118,12 +144,12 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   }
 
   getLaborInformation() {
-    const getLabor = this.reportService.getLaborInformationCategory(this.year)
-      .subscribe(Response => {
+    const subscription = this.reportService.getLaborInformationCategory(this.year).subscribe({
+      next: (Response) => {
         this.labors = Response;
         if (this.estate.id == undefined && this.estate.companyId == undefined) {
           const groupedResponse = Response.reduce((acc, obj) => {
-            const existingItem = acc.find((item:any) => item.laborTypeId === obj.laborTypeId);
+            const existingItem = acc.find((item: any) => item.laborTypeId === obj.laborTypeId);
             if (existingItem) {
               existingItem.totalAmountLocal += obj.localNoOfWorkers;
               existingItem.totalAmountForeign += obj.foreignNoOfWorkers;
@@ -145,15 +171,14 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
           this.getTapperAndFieldWorker();
         }
       },
-      error => {
-        console.error('Error fetching labor information:', error);
+      error: () => {
         this.isLoading = false;
-      },
-      () => {
-        this.isLoading = false;
-      });
-    this.subscriptionService.add(getLabor);
+      }
+    });
+  
+    this.subscriptionService.add(subscription);
   }
+  
 
   getTapperAndFieldWorker() {
     const getWorker = this.reportService.getTapperAndFieldWorker(this.year)

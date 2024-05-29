@@ -50,7 +50,7 @@
             <td>{{stock.totalProduction | number:'1.2-2' }}</td>
             <td>{{stock.totalSale | number:'1.2-2'}}</td>
             <td>{{stock.currentStock | number:'1.2-2'}}</td>
-            <td>{{stock.waterLoss | number:'1.2-2' }}</td>
+            <td [style.color]="stock.weightLoss > 2.5 ? 'red' : 'inherit'" >{{stock.weightLoss | number:'1.2-2' }}</td>
             <td>
               <button class="btn-update" (click)="openDialogEdit(stock,estate)"
               [disabled]="!isLastMonth(stock.monthYear)">

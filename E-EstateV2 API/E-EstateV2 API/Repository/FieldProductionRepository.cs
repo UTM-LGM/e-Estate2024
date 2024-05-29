@@ -25,10 +25,6 @@ namespace E_EstateV2_API.Repository
                 cuplumpDRC = x.cuplumpDRC,
                 latex = x.latex,
                 latexDRC = x.latexDRC,
-                uss = x.USS,
-                ussDRC = x.USSDRC,
-                others = x.others,
-                othersDRC = x.othersDRC,
                 noTaskTap = x.noTaskTap,
                 noTaskUntap = x.noTaskUntap,
                 fieldId = x.fieldId,
@@ -64,10 +60,6 @@ namespace E_EstateV2_API.Repository
                     existingProduction.cuplumpDRC = item.cuplumpDRC;
                     existingProduction.latex = item.latex;
                     existingProduction.latexDRC = item.latexDRC;
-                    existingProduction.USS = item.USS;
-                    existingProduction.USSDRC = item.USSDRC;
-                    existingProduction.others = item.others;
-                    existingProduction.othersDRC = item.othersDRC;
                     existingProduction.noTaskTap = item.noTaskTap;
                     existingProduction.noTaskUntap = item.noTaskUntap;
                     existingProduction.remarkUntap = item.remarkUntap;
@@ -89,10 +81,6 @@ namespace E_EstateV2_API.Repository
                 existingProduction.cuplumpDRC = fieldProduction.cuplumpDRC;
                 existingProduction.latex = fieldProduction.latex;
                 existingProduction.latexDRC = fieldProduction.latexDRC;
-                existingProduction.USS = fieldProduction.USS;
-                existingProduction.USSDRC = fieldProduction.USSDRC;
-                existingProduction.others = fieldProduction.others;
-                existingProduction.othersDRC = fieldProduction.othersDRC;
                 existingProduction.noTaskTap = fieldProduction.noTaskTap;
                 existingProduction.noTaskUntap = fieldProduction.noTaskUntap;
                 existingProduction.remarkUntap = fieldProduction.remarkUntap;

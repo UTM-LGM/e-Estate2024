@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { LocalLabor } from 'src/app/_interface/localLabor';
@@ -16,7 +16,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './home-estate-clerk.component.html',
   styleUrls: ['./home-estate-clerk.component.css']
 })
-export class HomeEstateClerkComponent implements OnInit {
+export class HomeEstateClerkComponent implements OnInit, OnDestroy {
 
   productions: FieldProduction[] = []
   filterProductions: FieldProduction[] = []

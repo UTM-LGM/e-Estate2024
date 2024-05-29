@@ -37,8 +37,8 @@
     </tr>
 
     <tr
-      *ngFor="let announcement of announcements | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let announcement of announcements | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
       <td>{{ announcement.tittle }}</td>
       <td><img style="width: 30%; height: 30%;" [src]="baseUrl + '/Images/' + announcement.filePath" /></td>
       <td>

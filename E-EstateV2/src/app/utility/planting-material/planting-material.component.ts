@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlantingMaterial } from 'src/app/_interface/planting-material';
 import { PlantingMaterialService } from 'src/app/_services/planting-material.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './planting-material.component.html',
   styleUrls: ['./planting-material.component.css']
 })
-export class PlantingMaterialComponent implements OnInit {
+export class PlantingMaterialComponent implements OnInit ,OnDestroy {
 
   term = ''
   pageNumber = 1

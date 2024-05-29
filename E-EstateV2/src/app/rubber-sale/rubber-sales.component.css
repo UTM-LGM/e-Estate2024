@@ -22,3 +22,7 @@ th {
   color: #d5d525;
 }
 
+button:disabled{
+  cursor: not-allowed;
+}
+

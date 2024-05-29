@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from 'src/app/_interface/user';
 import { UserService } from 'src/app/_services/user.service';
 import { PendingRoleDetailComponent } from '../pending-role-detail/pending-role-detail.component';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 @Component({
   selector: 'app-pending-role',
   templateUrl: './pending-role.component.html',
   styleUrls: ['./pending-role.component.css']
 })
-export class PendingRoleComponent implements OnInit {
+export class PendingRoleComponent implements OnInit, OnDestroy {
 
   term = ''
   pageNumber = 1
@@ -32,7 +33,8 @@ export class PendingRoleComponent implements OnInit {
 
   constructor(private userService:UserService,
     private dialog: MatDialog,
-    private myLesenService:MyLesenIntegrationService
+    private myLesenService:MyLesenIntegrationService,
+    private subscriptionService:SubscriptionService
     )
   {}
 
@@ -42,18 +44,19 @@ export class PendingRoleComponent implements OnInit {
 
    getUsers(){
     setTimeout(() => {
-    this.userService.getAllUser()
+    const getAllUser = this.userService.getAllUser()
     .subscribe(
       Response=>{
         const users = Response
         this.users = users.filter((x:any)=>x.roleId == null && x.isEmailVerified == true)
         this.users.forEach((user: any) => {
-          this.myLesenService.getLicenseNo(user.licenseNo)
+          const getLicenseNo = this.myLesenService.getLicenseNo(user.licenseNo)
           .subscribe(
             {
               next: (Response) => {
                 this.result[user.licenseNo] = Response;
                 this.isLoading = false
+                this.subscriptionService.add(getLicenseNo);
               },
               error: (error: any) => {
                 console.error("Error fetching license number:", error);
@@ -61,6 +64,8 @@ export class PendingRoleComponent implements OnInit {
             })})  
         this.isLoading = false
       })
+      this.subscriptionService.add(getAllUser);
+
     }, 1000)
    }
 
@@ -83,6 +88,10 @@ export class PendingRoleComponent implements OnInit {
         Response => {
           this.ngOnInit()
         });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
   }
 
 

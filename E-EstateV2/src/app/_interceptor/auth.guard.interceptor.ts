@@ -110,6 +110,9 @@ export class AuthGuard implements CanActivate {
     if (token != null) {
       const decodedToken: any = jwt_decode(token);
 
+      this.sharedService.roles = decodedToken.roles;
+      this.sharedService.role = decodedToken.roles[0];
+
       //check jwt expired time
       const currentTime = new Date().getTime()
       //*1000 to convert milisecond
@@ -133,12 +136,12 @@ export class AuthGuard implements CanActivate {
     if (token != null) {
       const decodedToken: any = jwt_decode(token)
       if (decodedToken != null) {
-        this.sharedService.roles = decodedToken.roles;
-        this.sharedService.role = decodedToken.roles[0];
+        // this.sharedService.roles = decodedToken.roles;
+        // this.sharedService.role = decodedToken.roles[0];
         this.sharedService.email = decodedToken.email
         this.sharedService.fullName = decodedToken.name
         this.sharedService.userId = decodedToken.oid
-        this.sharedService.userName = decodedToken.roles[0]
+        this.sharedService.userName = decodedToken.preferred_username
       }
       else {
       }

@@ -4,7 +4,7 @@ export interface RubberStock{
     totalProduction:number
     totalSale:number
     currentStock:number
-    waterLoss:number
+    weightLoss:number
     estateId:number
     createdBy: string
     createdDate: Date

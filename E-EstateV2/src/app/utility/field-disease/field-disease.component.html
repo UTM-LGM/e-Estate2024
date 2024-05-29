@@ -1,8 +1,15 @@
 <br />
 <h1>Field Disease Utility</h1>
 <form>
+   <label>Disease Category : </label>
+  <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldDisease.diseaseCategoryId">
+    <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
+      {{ category.category }}
+    </mat-option>
+  </mat-select>
   <label>Disease Name : </label>
   <input type="text" name="diseaseName" [(ngModel)]="fieldDisease.diseaseName" />
+
 </form>
 
 <button style="float: right" class="btn-add" (click)="submit()">
@@ -37,6 +44,7 @@
     <tr
       *ngFor="let fieldDisease of fieldDiseases | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
       <td>{{ i + 1 }}</td>
+      <td>{{ fieldDisease.category }}</td>
       <td>{{ fieldDisease.diseaseName }}</td>
       <td>
         <button (click)="status(fieldDisease)" [ngClass]="{

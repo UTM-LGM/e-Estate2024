@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
@@ -11,13 +11,14 @@ import * as XLSX from 'xlsx';
   templateUrl: './report-cost-information.component.html',
   styleUrls: ['./report-cost-information.component.css']
 })
-export class ReportCostInformationComponent implements OnInit {
+export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   role = ''
   year = ''
   order = ''
   currentSortedColumn = ''
   pageNumber = 1
+  itemsPerPage = 20
   term = ''
   selectedEstateName= ''
 

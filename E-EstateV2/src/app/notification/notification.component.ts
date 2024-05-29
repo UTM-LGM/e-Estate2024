@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReportService } from '../_services/report.service';
 import { BadgeService } from '../_services/badge.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,7 +18,7 @@ import { CostAmountService } from '../_services/cost-amount.service';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.css']
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
 
   showAlertField = false
   showAlertProduction = false

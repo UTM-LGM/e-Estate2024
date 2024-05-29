@@ -13,6 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FieldInfectedDetailComponent } from '../field-infected-detail/field-infected-detail.component';
 import { FieldInfectedStatusComponent } from '../field-infected-status/field-infected-status.component';
 import { SubscriptionService } from '../_services/subscription.service';
+import { DiseaseCategoryService } from '../_services/disease-category.service';
+import { DiseaseCategory } from '../_interface/diseaseCategory';
 
 @Component({
   selector: 'app-field-infected',
@@ -38,6 +40,10 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   filteredFields: Field[] = []
   filterFieldDisease: FieldDisease[] = []
 
+  diseaseCategory : DiseaseCategory []=[]
+  diseaseName: FieldDisease []=[]
+
+
   sortableColumn = [
     { columnName: 'dateInfected', displayText: 'Date Infected' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
@@ -57,7 +63,8 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
     private dialog: MatDialog,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private diseaseCategoryService:DiseaseCategoryService
   ) { }
 
 
@@ -66,6 +73,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     this.getField()
     this.getFieldDisease()
     this.fieldInfected.fieldId = 0
+    this.getDiseaseCategory()
   }
 
   getEstate() {
@@ -118,6 +126,24 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
       )
       this.subscriptionService.add(getFieldDisease);
 
+  }
+
+  getDiseaseCategory(){
+    this.diseaseCategoryService.getDiseaseCategory()
+    .subscribe(
+      Response =>{
+        this.diseaseCategory = Response
+      }
+    )
+  }
+
+  getDiseaseName(){
+    this.fieldDiseaseService.getFieldDisease()
+    .subscribe(
+      Response =>{
+        this.diseaseName = Response.filter(y=>y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
+      }
+    )
   }
 
   toggleField(event: any) {

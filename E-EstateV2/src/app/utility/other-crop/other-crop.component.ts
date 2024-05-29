@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OtherCrop } from 'src/app/_interface/otherCrop';
 import { OtherCropService } from 'src/app/_services/other-crop.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './other-crop.component.html',
   styleUrls: ['./other-crop.component.css']
 })
-export class OtherCropComponent implements OnInit {
+export class OtherCropComponent implements OnInit, OnDestroy {
 
   term = ''
   pageNumber = 1

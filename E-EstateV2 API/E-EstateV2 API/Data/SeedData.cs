@@ -30,6 +30,8 @@ namespace E_EstateV2_API.Data
             await AddCostCategory2(context);
             await AddCost(context);
             await AddRoles(roleManager);
+            await AddFieldDisease(context);
+            await AddClone(context);
         }
 
         private static async Task AddPaymentStatus(ApplicationDbContext context)
@@ -89,25 +91,25 @@ namespace E_EstateV2_API.Data
         private static async Task AddRubberDisease(ApplicationDbContext context)
         {
             // seed field disease
-            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "ROOT DISEASE"))
+            if (!context.diseaseCategories.Any(ps => ps.category == "ROOT DISEASE"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "ROOT DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
+                context.diseaseCategories.Add(new DiseaseCategory { category = "ROOT DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
 
-            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "STEM DISEASE"))
+            if (!context.diseaseCategories.Any(ps => ps.category == "STEM DISEASE"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "STEM DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
+                context.diseaseCategories.Add(new DiseaseCategory { category = "STEM DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
 
 
-            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "BROWN DISEASE"))
+            if (!context.diseaseCategories.Any(ps => ps.category == "BROWN DISEASE"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BROWN DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
+                context.diseaseCategories.Add(new DiseaseCategory { category = "BROWN DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
 
-            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "LEAF DISEASE"))
+            if (!context.diseaseCategories.Any(ps => ps.category == "LEAF DISEASE"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "LEAF DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
+                context.diseaseCategories.Add(new DiseaseCategory { category = "LEAF DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
             await context.SaveChangesAsync(); // Save changes to the database
         }
@@ -211,10 +213,10 @@ namespace E_EstateV2_API.Data
                 context.laborTypes.Add(new LaborType { laborType = "GENERAL WORKER", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
 
-            if (!context.laborTypes.Any(ps => ps.laborType == "FACTORY WORKER"))
+            /*if (!context.laborTypes.Any(ps => ps.laborType == "FACTORY WORKER"))
             {
                 context.laborTypes.Add(new LaborType { laborType = "FACTORY WORKER", isActive = true, createdBy = "SYSTEM GENERATED" });
-            }
+            }*/
 
             if (!context.laborTypes.Any(ps => ps.laborType == "OTHERS"))
             {
@@ -468,88 +470,362 @@ namespace E_EstateV2_API.Data
             // Seed costs
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 1))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 1, costSubcategory2Id = 1 });
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 1, costSubcategory2Id = 2 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 1, costSubcategory2Id = 1, createdBy = "SYSTEM GENERATED" });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 1, costSubcategory2Id = 2, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 2))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 2, costSubcategory2Id = 1 });
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 2, costSubcategory2Id = 2 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 2, costSubcategory2Id = 1, createdBy = "SYSTEM GENERATED" });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 2, costSubcategory2Id = 2, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 3))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 3, costSubcategory2Id = 1 });
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 3, costSubcategory2Id = 2 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 3, costSubcategory2Id = 1, createdBy = "SYSTEM GENERATED" });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 1, costSubcategory1Id = 3, costSubcategory2Id = 2, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 4))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 2, costSubcategory1Id = 4, costSubcategory2Id = 1 });
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 2, costSubcategory1Id = 4, costSubcategory2Id = 2 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 2, costSubcategory1Id = 4, costSubcategory2Id = 1, createdBy = "SYSTEM GENERATED" });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 2, costSubcategory1Id = 4, costSubcategory2Id = 2, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 5))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 3, costSubcategory1Id = 5, costSubcategory2Id = 1 });
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 3, costSubcategory1Id = 5, costSubcategory2Id = 2 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 3, costSubcategory1Id = 5, costSubcategory2Id = 1, createdBy = "SYSTEM GENERATED" });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 3, costSubcategory1Id = 5, costSubcategory2Id = 2, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory1Id == 6))
             {
-                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 4, costSubcategory1Id = 6, costSubcategory2Id = 3 });
+                context.costs.Add(new Cost { isMature = true, isActive = true, costTypeId = 1, costCategoryId = 4, costSubcategory1Id = 6, costSubcategory2Id = 3, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 4))
             {
-                context.costs.Add(new Cost { isMature = false, isActive = true, costTypeId = 1, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 4 });
+                context.costs.Add(new Cost { isMature = false, isActive = true, costTypeId = 1, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 4, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 5))
             {
-                context.costs.Add(new Cost { isMature = false, isActive = true, costTypeId = 1, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 5 });
+                context.costs.Add(new Cost { isMature = false, isActive = true, costTypeId = 1, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 5, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 6))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 6 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 6, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 7))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 7 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 7, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 8))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 8 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 8, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 9))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 9 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 9, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 10))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 10 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 10, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 11))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 11 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 11, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.costs.Any(ps => ps.costSubcategory2Id == 12))
             {
-                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 12 });
+                context.costs.Add(new Cost { isMature = null, isActive = true, costTypeId = 2, costCategoryId = 5, costSubcategory1Id = 7, costSubcategory2Id = 12, createdBy = "SYSTEM GENERATED" });
             }
 
             await context.SaveChangesAsync(); // Save changes to the database
         }
 
+        private static async Task AddFieldDisease(ApplicationDbContext context)
+        {
+            // Seed payment status table
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "WHITE ROOT DISEASE"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "WHITE ROOT DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" , diseaseCategoryId = 1});
+            }
 
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "RED ROOT DISEASE"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "RED ROOT DISEASE", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 1 });
+            }
+
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "BROWN ROOT DISEASE"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BROWN ROOT DISEASE", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 1 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PESTALOTIOPSIS LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PESTALOTIOPSIS LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "OIDIUM SECONDARY LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "OIDIUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "COLLETOTRICHUM SECONDARY LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "COLLETOTRICHUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "CORYNESPORA  SECONDARY LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "CORYNESPORA  SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "FUSICOCUM LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "FUSICOCUM LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PHYTHOPTORA ABNORMAL LEAF FALL"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PHYTHOPTORA ABNORMAL LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "BIRD’S EYE SPOT"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BIRD’S EYE SPOT", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PINK DISEASE"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PINK DISEASE", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 2 });
+            }
+
+            if (!context.fieldDiseases.Any(ps => ps.diseaseName == "BLACK STRIPE"))
+            {
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BLACK STRIPE", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 2 });
+            }
+            await context.SaveChangesAsync(); // Save changes to the database
+        }
+
+        private static async Task AddClone(ApplicationDbContext context)
+        {
+            // seed planting material
+            if (!context.clones.Any(ps => ps.cloneName == "GT 1"))
+            {
+                context.clones.Add(new Clone { cloneName = "GT 1", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 217"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 217", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 230"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 230", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 235"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 235", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 255"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 255", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 260"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 260", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 280"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 280", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 347"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 347", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 350"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 350", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 355"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 355", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 360"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 360", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 366"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 366", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 373"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 373", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "PB 374"))
+            {
+                context.clones.Add(new Clone { cloneName = "PB 374", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 527"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 527", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 600"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 600", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 623"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 623", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 628"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 628", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 701"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 701", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 703"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 703", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 712"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 712", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 728"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 728", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 729"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 729", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 901"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 901", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 928"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 928", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 929"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 929", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2001"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2001", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2002"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2002", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2007"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2007", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2008"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2008", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2009"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2009", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2014"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2014", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2015"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2015", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2016"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2016", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2020"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2020", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2023"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2023", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2024"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2024", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2025"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2025", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2026"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2026", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 2027"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 2027", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+
+            if (!context.clones.Any(ps => ps.cloneName == "RRIM 3001"))
+            {
+                context.clones.Add(new Clone { cloneName = "RRIM 3001", isActive = true, createdBy = "SYSTEM GENERATED" });
+            }
+            await context.SaveChangesAsync(); // Save changes to the database
+        }
 
 
     }

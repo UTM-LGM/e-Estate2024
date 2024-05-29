@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
 import { LaborInfo } from 'src/app/_interface/laborInfo';
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
@@ -14,7 +14,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './worker-shortage-estate.component.html',
   styleUrls: ['./worker-shortage-estate.component.css']
 })
-export class WorkerShortageEstateComponent implements OnInit {
+export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
 
   year = ''
   term = ''

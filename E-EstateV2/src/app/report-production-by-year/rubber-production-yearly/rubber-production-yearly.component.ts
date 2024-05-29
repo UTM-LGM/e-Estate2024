@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
@@ -13,7 +13,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './rubber-production-yearly.component.html',
   styleUrls: ['./rubber-production-yearly.component.css']
 })
-export class RubberProductionYearlyComponent implements OnInit {
+export class RubberProductionYearlyComponent implements OnInit, OnDestroy {
 
   term = ''
   order = ''

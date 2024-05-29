@@ -71,7 +71,7 @@
             </td>-->
             <td>
               <div style="display: flex;">
-                <button class="btn-update" (click)="openDialog(sale)">
+                <button [disabled]="sale.paymentStatusId === 3 || sale.weightSlipNo !== null" class="btn-update" (click)="openDialog(sale)">
                   <i class="fa fa-pencil"></i>
                 </button> &nbsp;
                 <button class="btn-update" (click)="printForm1(sale)"  title="Print Form 1">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Announcement } from 'src/app/_interface/annoucement';
 import { AnnoucementService } from 'src/app/_services/annoucement.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -12,7 +12,7 @@ import swal from 'sweetalert2';
   templateUrl: './announcement.component.html',
   styleUrls: ['./announcement.component.css']
 })
-export class AnnouncementComponent implements OnInit {
+export class AnnouncementComponent implements OnInit, OnDestroy {
 
   announcement = {} as Announcement
   announcements: Announcement[] = []
@@ -22,6 +22,7 @@ export class AnnouncementComponent implements OnInit {
   currentSortedColumn = ''
   isLoading = true
   pageNumber = 1
+  itemsPerPage = 10
 
   baseUrl = environment.apiUrl
 

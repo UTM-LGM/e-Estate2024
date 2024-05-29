@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Cost } from 'src/app/_interface/cost';
 import { CostCategory } from 'src/app/_interface/costCategory';
 import { CostSubcategory1 } from 'src/app/_interface/costSubcategory1';
@@ -18,7 +18,7 @@ import swal from 'sweetalert2';
   templateUrl: './cost-item.component.html',
   styleUrls: ['./cost-item.component.css'],
 })
-export class CostItemComponent implements OnInit {
+export class CostItemComponent implements OnInit, OnDestroy {
   cost: Cost = {} as Cost
   filteredCost: any = {}
 

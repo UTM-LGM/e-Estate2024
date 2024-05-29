@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RubberSale } from '../_interface/rubberSale';
 import swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './rubber-sales.component.html',
   styleUrls: ['./rubber-sales.component.css']
 })
-export class RubberSalesComponent implements OnInit {
+export class RubberSalesComponent implements OnInit, OnDestroy {
   term = ''
   pageNumber = 1
   isLoading = true
@@ -36,13 +36,13 @@ export class RubberSalesComponent implements OnInit {
     { columnName: 'driverName', displayText: 'Driver Name' },
     { columnName: 'rubberType', displayText: 'Rubber Type' },
     { columnName: 'letterOfConsentNo', displayText: 'Letter of Consent No (Form 1)' },
-    { columnName: 'weightSlipNo', displayText: 'Weight Slip No'},
-    { columnName: 'receiptNo', displayText: 'Receipt No'},
+    { columnName: 'weightSlipNo', displayText: 'Weight Slip No' },
+    { columnName: 'receiptNo', displayText: 'Receipt No' },
     { columnName: 'wetWeight', displayText: 'Wet Weight (Kg)' },
-    { columnName: 'drc', displayText: 'DRC (%)'},
+    { columnName: 'drc', displayText: 'DRC (%)' },
     { columnName: 'buyerWetWeight', displayText: 'Buyer Wet Weight (Kg)' },
     { columnName: 'buyerDRC', displayText: 'Buyer DRC (%)' },
-    { columnName: 'buyerWeightDry', displayText: 'Buyer Weight Dry (Kg)'},
+    { columnName: 'buyerWeightDry', displayText: 'Buyer Weight Dry (Kg)' },
     { columnName: 'unitPrice', displayText: 'Unit Price (RM/kg)' },
     { columnName: 'total', displayText: 'Total Price (RM)' },
     { columnName: 'remark', displayText: 'Remark' }
@@ -55,7 +55,7 @@ export class RubberSalesComponent implements OnInit {
     private sharedService: SharedService,
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -73,7 +73,7 @@ export class RubberSalesComponent implements OnInit {
                 this.estate = Response
                 this.isLoading = false
               })
-      this.subscriptionService.add(getOneEstate);
+          this.subscriptionService.add(getOneEstate);
 
         }
       });
@@ -82,7 +82,7 @@ export class RubberSalesComponent implements OnInit {
 
   getSales() {
     setTimeout(() => {
-     const getSale =  this.rubberSaleService.getSale()
+      const getSale = this.rubberSaleService.getSale()
         .subscribe(
           Response => {
             const rubberSales = Response
@@ -138,11 +138,11 @@ export class RubberSalesComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  print(sale:RubberSale){
+  print(sale: RubberSale) {
 
   }
 
-  getPaymentStatus(sale:RubberSale): { status: string, color: string } {
+  getPaymentStatus(sale: RubberSale): { status: string, color: string } {
     if (sale.paymentStatusId === 3) {
       return { status: 'Complete', color: 'green' };
     } else {

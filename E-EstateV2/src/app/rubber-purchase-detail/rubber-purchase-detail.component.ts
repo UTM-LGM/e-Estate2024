@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { RubberPurchase } from '../_interface/rubberPurchase';
 import { RubberPurchaseComponent } from '../rubber-purchase/rubber-purchase.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './rubber-purchase-detail.component.html',
   styleUrls: ['./rubber-purchase-detail.component.css']
 })
-export class RubberPurchaseDetailComponent implements OnInit {
+export class RubberPurchaseDetailComponent implements OnInit, OnDestroy {
   rubberPurchase: RubberPurchase = {} as RubberPurchase
 
   sellers: Seller[] = []

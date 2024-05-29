@@ -1,7 +1,9 @@
 <br />
 <div class="monthYear">
   <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-  <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled />
+  <!-- <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled /> -->
+  <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
+
 </div>
 
 <div style="padding-left: 30px;padding-right: 30px;">
@@ -71,14 +73,14 @@
         </tr>
 
         <tr *ngIf="isLoading">
-          <td colspan="14">
+          <td colspan="11">
             <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
             </ngx-skeleton-loader>
           </td>
         </tr>
 
         <tr *ngIf="filterLabors.length == 0 && !isLoading">
-          <td colspan="14" style="color: red;"><b>No Labor information</b></td>
+          <td colspan="11" style="color: red;"><b>No Labor information</b></td>
         </tr>
 
         <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
@@ -107,7 +109,7 @@
         </tr>
 
         <tr>
-          <th colspan="12">Total Worker : </th>
+          <th colspan="11">Total Worker : </th>
           <th>{{ totalForeignWorker }}</th>
           <th></th>
         </tr>
@@ -123,7 +125,8 @@
       <i class="fa fa-arrow-left"></i> &nbsp; Back
     </button>
 
-    <button style="float: right" class="btn-add" (click)="nextTab()" *ngIf="filterLabors.length>0">
+    <!-- *ngIf="filterLabors.length>0" -->
+    <button style="float: right" class="btn-add" (click)="nextTab()" >
       Next &nbsp; <i class="fa fa-arrow-right"></i>
     </button>
   </div>

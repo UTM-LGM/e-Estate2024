@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
@@ -11,7 +11,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './estate-by-state.component.html',
   styleUrls: ['./estate-by-state.component.css']
 })
-export class EstateByStateComponent implements OnInit {
+export class EstateByStateComponent implements OnInit, OnDestroy {
 
   term = ''
   order = ''

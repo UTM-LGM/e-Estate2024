@@ -1,9 +1,10 @@
 <div class="box-container">
   <h1>Rubber Area by State</h1>
 
-  <label>Please choose year : </label>
-  <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
- <br/>
+  <div style="columns: 3;">
+    <label>Please choose year : </label>
+    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  </div>
 
   <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
     <button class="btn-add" (click)="exportToExcel(stateTotalAreasArray, 'Rubber Area By State Report '+year)">
@@ -11,8 +12,8 @@
     </button>
   </div>
 
-  <br/>
-  
+  <br />
+
   <input type="text" [(ngModel)]="term" placeholder="Filter State" />
   <div style="overflow-x: auto;">
     <table style="width: 100%">
@@ -34,14 +35,13 @@
       </tr>
 
       <ng-container *ngIf="!isLoading">
-      <tr
-        *ngFor="let town of stateTotalAreasArray | filter: term; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ town.state }}</td>
-        <td>{{ town.estateNo }}</td>
-        <td>{{ town.totalArea }}</td>
-      </tr>
-    </ng-container>
+        <tr *ngFor="let town of stateTotalAreasArray | filter: term; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ town.state }}</td>
+          <td>{{ town.estateNo }}</td>
+          <td>{{ town.totalArea }}</td>
+        </tr>
+      </ng-container>
 
     </table>
   </div>

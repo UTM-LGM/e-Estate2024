@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin } from 'rxjs';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Estate } from 'src/app/_interface/estate';
@@ -17,7 +17,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './home-company-admin.component.html',
   styleUrls: ['./home-company-admin.component.css']
 })
-export class HomeCompanyAdminComponent implements OnInit {
+export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
 
   totalEstate = 0
   totalCrop = 0

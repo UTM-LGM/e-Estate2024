@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkerShortage } from 'src/app/_interface/workerShortage';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -16,7 +16,7 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './worker-shortage.component.html',
   styleUrls: ['./worker-shortage.component.css']
 })
-export class WorkerShortageComponent implements OnInit {
+export class WorkerShortageComponent implements OnInit, OnDestroy {
 
   @Output() backTabEvent = new EventEmitter<void>();
 
@@ -58,6 +58,9 @@ export class WorkerShortageComponent implements OnInit {
   }
 
   monthSelected(month: string) {
+    // this.worker.workerShortage = 0
+    this.totalSumTapper = 0
+    this.totalSumField = 0
     let monthDate = new Date(month)
     this.worker.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy')
     this.getWorkerShortage()

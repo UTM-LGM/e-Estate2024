@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Country } from 'src/app/_interface/country';
 import { CountryService } from 'src/app/_services/country.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './country.component.html',
   styleUrls: ['./country.component.css'],
 })
-export class CountryComponent implements OnInit {
+export class CountryComponent implements OnInit, OnDestroy {
   country: Country = {} as Country
 
   countries: Country[] = []

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Ownership } from 'src/app/_interface/ownership';
 import { OwnershipService } from 'src/app/_services/ownership.service';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   templateUrl: './ownership.component.html',
   styleUrls: ['./ownership.component.css']
 })
-export class OwnershipComponent implements OnInit {
+export class OwnershipComponent implements OnInit, OnDestroy {
 
   ownership: Ownership = {} as Ownership
   ownerships: Ownership[] = []

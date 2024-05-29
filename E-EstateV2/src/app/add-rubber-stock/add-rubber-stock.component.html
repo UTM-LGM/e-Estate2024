@@ -2,16 +2,16 @@
   <h1>{{estate.name}}</h1>
   <hr>
 
-  <div class="monthYear" *ngIf="stock.id == undefined">
+  <!-- <div class="monthYear" *ngIf="stock.id == undefined">
     <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
     <input type="month" value="{{ monthYear | date : 'YYY-MM' }}" disabled />
+  </div> -->
+
+  <div style="columns: 2">
+    <label>Month and Year:</label>
+    <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
   </div>
 
-
-  <div class="monthYear" *ngIf="stock.id != undefined">
-    <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-    <input type="month" value="{{ stock.monthYear | date : 'YYY-MM' }}" disabled />
-  </div>
 
   <div class="card">
     <div class="box">
@@ -36,6 +36,9 @@
     </div>
   </div>
 
+
+
+
   <div style="columns: 2">
     <label>Previous Month End Stock :</label>
     <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
@@ -43,8 +46,11 @@
     <input type="number" name="currentStock" (input)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
   </div>
   <div>
-    <label>Water Loss (%) :</label>
-    <input type="number" name="waterLoss" disabled [value]="stock.waterLoss | number: '1.2-2'" />
+    <div style="columns: 2;">
+      <label>Weight Loss (%) :</label>
+    <input type="number" name="weightLoss" disabled [value]="stock.weightLoss | number: '1.2-2'" />
+    </div>
+    
   </div>
   <br />
 

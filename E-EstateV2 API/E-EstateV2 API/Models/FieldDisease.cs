@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace E_EstateV2_API.Models
 {
@@ -12,6 +13,9 @@ namespace E_EstateV2_API.Models
         public DateTime createdDate { get; set; }
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
+        [ForeignKey("diseaseCategory")]
+        public int diseaseCategoryId { get; set; }
+        public DiseaseCategory DiseaseCategory { get; set; }
 
     }
 }

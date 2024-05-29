@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import swal from 'sweetalert2';
 import { ReportService } from '../_services/report.service';
 import { SharedService } from '../_services/shared.service';
@@ -11,7 +11,7 @@ import * as XLSX from 'xlsx';
   templateUrl: './report-rubber-area-by-clone.component.html',
   styleUrls: ['./report-rubber-area-by-clone.component.css']
 })
-export class ReportRubberAreaByCloneComponent {
+export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
 
   role = ''
   year = ''

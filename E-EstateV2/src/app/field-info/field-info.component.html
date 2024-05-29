@@ -35,7 +35,7 @@
 
         <div style="columns: 2" *ngIf="!conversion">
           <label>Year Planted :</label>
-          <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
+          <b><input type="number" name="year" placeholder="yyyy" [(ngModel)]="field.yearPlanted" (change)="yearSelected()" /></b>
 
           <label>Initial Tree Stand :</label>
           <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>

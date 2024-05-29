@@ -1,7 +1,9 @@
 <br />
 <div class="monthYear">
   <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-  <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled />
+  <!-- <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled /> -->
+  <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
+
 </div>
 
 <div class="center-div" *ngIf="filterWorkerShortage.length == 0">
@@ -23,18 +25,21 @@
         <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" />
         </td>
       </tr>
+
+      <tr >
+        <td style="border-bottom: none;"></td>
+        <td style="border-bottom: none;">
+          <div style="float: right;">
+            <button (click)="add()" class="btn-add" type="submit" style="margin-top: 10px;">
+              Add &nbsp; <i class="fa fa-plus"></i>
+            </button>
+            <br />
+          </div>
+        </td>
+      </tr>
+
     </table>
-    <br />
-
-    <div style="float: right;">
-      <button (click)="add()" class="btn-add" type="submit">
-        Add &nbsp; <i class="fa fa-plus"></i>
-      </button>
-      <br /><br />
-    </div>
-
   </div>
-  <br />
 </div>
 
 <div class="center-div">
@@ -61,7 +66,6 @@
           <td class="td">{{ worker.fieldWorkerShortage }}</td>
           <td class="td">{{ neededField }}</td>
         </tr>
-        <br />
 
         <tr>
           <td style="border-bottom: none;"></td>
@@ -69,7 +73,7 @@
           <td style="border-bottom: none;"></td>
           <td style="border-bottom: none;">
             <div style="float: right;">
-              <button (click)="update(worker)" class="btn-update" type="submit">
+              <button (click)="update(worker)" class="btn-update" type="submit" style="margin-top: 10px;">
                 Update &nbsp; <i class="fa fa-pencil"></i>
               </button>
             </div>

@@ -589,7 +589,6 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024(with ss
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024(with sso)\E-EstateV2 API\E-EstateV2 API\obj\Debug\net6.0\E-EstateV2 API.genruntimeconfig.cache
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024(with sso)\E-EstateV2 API\E-EstateV2 API\obj\Debug\net6.0\ref\E-EstateV2 API.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\appsettings.Development.json
-C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\appsettings.json
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\E-EstateV2 API.staticwebassets.runtime.json
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\E-EstateV2 API.exe
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\E-EstateV2 API.deps.json

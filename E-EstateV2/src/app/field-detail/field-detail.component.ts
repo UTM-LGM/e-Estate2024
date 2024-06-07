@@ -64,14 +64,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   isLoading = true
   onInit = true
   fieldInfecteds = false
+  fieldInfectedStatus = false
   order = ''
   currentSortedColumn = ''
   pageNumber = 1
   term = ''
 
   otherCrops: OtherCrop[] = []
-
-
 
   sortableColumn = [
     { columnName: 'dateInfected', displayText: 'Date Infected' },
@@ -146,7 +145,10 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
       .subscribe(
         Response => {
           this.filterFieldInfected = Response
-          if (this.filterFieldInfected.length > 0) {
+          const inActiveInfection = this.filterFieldInfected.filter(x=>x.isActive == false)
+          if (this.filterFieldInfected.length > 0 && inActiveInfection.length == 0) {
+            this.fieldInfectedStatus = true
+          }else if(this.filterFieldInfected.length > 0){
             this.fieldInfecteds = true
           }
         }

@@ -1,10 +1,10 @@
 <div class="box-container">
-  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{ estate.name }}</h1>
+  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader> -->
+  <h1>Field Information</h1>
   <hr />
 
-  <h1>Field Information</h1>
+  <!-- <h1>Field Information</h1> -->
 
 
   <div class="box">
@@ -37,7 +37,7 @@
           <label>Year Planted :</label>
           <b><input type="number" name="year" placeholder="yyyy" [(ngModel)]="field.yearPlanted" (change)="yearSelected()" /></b>
 
-          <label>Initial Tree Stand :</label>
+          <label>Initial Tree Stand per Ha :</label>
           <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
 
         </div>
@@ -141,7 +141,7 @@
           <tr class="list" style="cursor:default;">
             <td style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{field.fieldName}}</a>
             </td>
-            <td>{{ field.area }}</td>
+            <td>{{ field.area | number:'1.2-2' }}</td>
             <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
             <td>{{field.fieldStatus}}</td>
             <td>{{ field.yearPlanted !== 0 ? field.yearPlanted : '' }}</td>

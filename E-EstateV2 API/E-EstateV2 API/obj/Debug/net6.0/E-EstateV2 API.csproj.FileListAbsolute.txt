@@ -813,3 +813,4 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-(Latest)\E-EstateV2 API\E-EstateV2 API\obj\Debug\net6.0\E-EstateV2 API.pdb
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-(Latest)\E-EstateV2 API\E-EstateV2 API\obj\Debug\net6.0\E-EstateV2 API.genruntimeconfig.cache
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-(Latest)\E-EstateV2 API\E-EstateV2 API\obj\Debug\net6.0\ref\E-EstateV2 API.dll
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Debug\net6.0\appsettings.json

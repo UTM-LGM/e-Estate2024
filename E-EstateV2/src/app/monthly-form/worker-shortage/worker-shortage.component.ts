@@ -59,8 +59,8 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
 
   monthSelected(month: string) {
     // this.worker.workerShortage = 0
-    this.totalSumTapper = 0
-    this.totalSumField = 0
+    this.worker.tapperWorkerShortage = 0
+    this.worker.fieldWorkerShortage = 0
     let monthDate = new Date(month)
     this.worker.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy')
     this.getWorkerShortage()
@@ -81,11 +81,11 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
   }
 
   add() {
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.worker.estateId = this.sharedService.estateId
     this.worker.createdBy = this.sharedService.userId.toString()
     this.worker.createdDate = new Date()
-    this.worker.monthYear = this.date
+    this.worker.monthYear = this.worker.monthYear
     this.workerShortageService.addWorkerShortage(this.worker)
       .subscribe(
         {
@@ -119,7 +119,6 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
         }
       )
       this.subscriptionService.add(getWorkerShortage);
-
   }
 
   update(worker: WorkerShortage) {
@@ -141,6 +140,8 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
   }
 
   getLabor() {
+    this.totalSumTapper = 0
+    this.totalSumField = 0
     const getLabor = this.laborInfoService.getLabor()
       .subscribe(
         Response => {

@@ -64,8 +64,6 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   rubberStocks: RubberStock[] = []
   allRubberStock: RubberStock[] = []
 
-
-
   isLoadingProduction = true
   isLoadingSale = true
 
@@ -225,14 +223,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           const date = new Date(this.date)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1);
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId;
           });
-
-          // // this.filterFields = rubberSales.filter(e=>e.saleDateTime.)
-          // this.filterSales = rubberSales.filter(e => {
-          //   const saleDate = new Date(e.saleDateTime);
-          //   // return e.estateId == this.sharedService.estateId && saleDate.getMonth() + 1 == this.monthYear.getMonth() + 1 && saleDate.getFullYear() == this.monthYear.getFullYear();
-          // })
           this.calculateSale()
           this.isLoadingSale = false
         })

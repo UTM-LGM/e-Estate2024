@@ -4,7 +4,7 @@ mat-toolbar {
   color: white !important;
   display: flex !important;
   align-items: center !important;
-  height: 70px;
+  height: 0px;
 }
 
 body {
@@ -44,7 +44,7 @@ mat-sidenav-container {
 }
 
 .mat-sidenav-content {
-  height: 86% !important;
+  height: 90% !important;
 }
 
 html,
@@ -61,7 +61,7 @@ body {
 .active-btn {
   border: none;
   background-color: #2196f3;
-  padding: 5px 15px;
+  padding: 3px 15px;
   cursor: pointer;
   border-radius: 15px;
   color: white;
@@ -70,7 +70,7 @@ body {
 .inactive-btn {
   border: none;
   background-color: #DC4C64;
-  padding: 5px 15px;
+  padding: 3px 15px;
   cursor: pointer;
   border-radius: 15px;
   color: white;
@@ -83,13 +83,13 @@ body {
   cursor: pointer;
   color: white;
   width: 100%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .btn-back {
   border: none;
   background-color: grey;
-  padding: 10px 13px;
+  padding: 7px 13px;
   cursor: pointer;
   border-radius: 15px;
   color: white;
@@ -98,10 +98,11 @@ body {
 .btn-update {
   border: none;
   background-color: blue;
-  padding: 10px 13px;
+  padding: 7px 13px;
   cursor: pointer;
   border-radius: 15px;
   color: white;
+  font-size: 11px;
 }
 
 .btn-del {
@@ -128,10 +129,11 @@ body {
 .btn-add {
   border: none;
   background-color: #0b810f;
-  padding: 10px 13px;
+  padding: 7px 13px;
   cursor: pointer;
   border-radius: 15px;
   color: white;
+  font-size: 11px;
 }
 
 .btn-reset {
@@ -176,7 +178,7 @@ h1 {
 
 a {
   color: #002b5c;
-  font-size: 12px !important;
+  font-size: 11px !important;
   margin-bottom: 0px !important;
 }
 
@@ -207,8 +209,12 @@ textarea {
   border: 2px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size: 12px;
 }
 
+.mat-toolbar-multiple-rows {
+  min-height: 50px !important;
+}
 
 
 table {
@@ -219,7 +225,7 @@ td {
   text-align: center;
   padding: 5px;
   border-bottom: 1px solid rgb(233, 228, 228);
-  font-size: 12px;
+  font-size: 11px;
 }
 
 th {
@@ -227,6 +233,7 @@ th {
   background-color: #002b5c;
   color: white;
   padding: 10px;
+  font-size: 11px;
 }
 
 .list {
@@ -260,7 +267,7 @@ label {
 }
 
 button {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .table {
@@ -365,3 +372,9 @@ input:checked + .slider:before {
 .span-word {
   margin-top: 10px;
 }
+
+.ngx-pagination {
+  font-size: 11px;
+}
+
+

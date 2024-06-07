@@ -1,7 +1,7 @@
 <div class="cont">
   <div class="container">
     <div class="form-container">
-      <h1 style="font-size: 25px !important;">Welcome to e-Estate</h1>
+      <h1 style="font-size: 20px !important;">Welcome to e-Estate</h1>
       <input style="width: 90%;" name="username" [(ngModel)]="loginUser.userName" type="text" placeholder="Username"
         required />
       <div class="password-toggle">
@@ -12,9 +12,9 @@
         </span>
         <br />
       </div>
-      <span style="cursor: pointer;" [routerLink]="['/forgotpassword', '', '']"><u>Forgot Password</u></span><br />
-      <button (click)="login()">LOGIN</button><br />
-      <span> Dont have account ? <a routerLink="/register">Sign Up</a></span><br />
+      <span style="cursor: pointer; padding-bottom: 5px; font-size: 11px;" [routerLink]="['/forgotpassword', '', '']"><u>Forgot Password</u></span>
+      <div style="padding-bottom: 5px;"><button (click)="login()"><span>LOGIN<i class="fa fa-right-to-bracket"></i></span></button></div>
+      <span style="font-size: 11px;"> Dont have account ? <a routerLink="/register">Sign Up</a></span><br />
 
       <button (click)="loginStaff()">LOGIN AS STAFF LGM</button>
 

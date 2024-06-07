@@ -57,14 +57,14 @@
           <td class="td">Tapper worker</td>
           <td class="td">{{ totalSumTapper }}</td>
           <td class="td">{{ worker.tapperWorkerShortage }}</td>
-          <td class="td">{{ neededTapper }}</td>
+          <td class="td">{{ totalSumTapper + worker.tapperWorkerShortage }}</td>
         </tr>
 
         <tr>
           <td class="td">Field Worker</td>
           <td class="td">{{ totalSumField }}</td>
           <td class="td">{{ worker.fieldWorkerShortage }}</td>
-          <td class="td">{{ neededField }}</td>
+          <td class="td">{{ totalSumField + worker.fieldWorkerShortage }}</td>
         </tr>
 
         <tr>

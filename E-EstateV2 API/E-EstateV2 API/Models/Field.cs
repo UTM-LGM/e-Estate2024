@@ -8,7 +8,7 @@ namespace E_EstateV2_API.Models
         [Key]
         public int Id { get; set; }
         public string fieldName { get; set; }
-        public int area { get; set; }
+        public float area { get; set; }
         public bool isMature { get; set; }
         public bool isActive { get; set; }
         public DateTime? dateOpenTapping { get; set; }

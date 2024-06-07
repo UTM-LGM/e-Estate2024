@@ -12,6 +12,7 @@ import { MyLesenIntegrationService } from '../_services/my-lesen-integration.ser
 import { SpinnerService } from '../_services/spinner.service';
 import { SubscriptionService } from '../_services/subscription.service';
 
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -118,6 +119,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           {
             next: (Response) => {
               this.result = Response
+              console.log(this.result)
               this.spinnerService.requestEnded();
               swal.fire({
                 title: 'Done!',

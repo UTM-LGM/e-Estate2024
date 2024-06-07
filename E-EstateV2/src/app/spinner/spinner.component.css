@@ -24,6 +24,7 @@
   top: 0;
   z-index: 1009;
   background: rgba(128, 128, 128, 0.552);
+  left: -1px;
 }
 .logo-spinner {
   width: 20%;

@@ -1,5 +1,5 @@
 <h1 class="tittle">Dashboard Estate Clerk:
-  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.name}}</span>
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.name + ", " + estate.add1.slice(0,-1)}}</span>
   <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
       [theme]="{'height':'20px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
 </h1>
@@ -9,9 +9,9 @@
 
 <div style="columns:2">
   <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current Field Area (Ha)</span>
+    <span style="font-size: 14px;font-weight: bold;">Current Rubber Area (Ha)</span>
     <div class="box">
-      <div class="column box-container color3">
+      <!-- <div class="column box-container color3">
         <div class="span-word">
           <span>Mature</span><br />
           <span style="font-weight: bold;" *ngIf="!isLoadingMatureArea">{{matureArea}}</span>
@@ -20,12 +20,23 @@
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
         </div>
+      </div> -->
+
+      <div class="column box-container color4">
+        <div class="span-word">
+          <span style="font-weight: bold;">Tapped</span><br />
+          <span  *ngIf="!isLoadingTappedArea">{{tappedArea | number:'1.2-2'}}</span>
+        </div>
+        <div *ngIf="isLoadingTappedArea">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
       </div>
 
       <div class="column box-container color4">
         <div class="span-word">
-          <span>Immature</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingImmatureArea">{{immatureArea}}</span>
+          <span style="font-weight: bold;">Immature</span><br />
+          <span  *ngIf="!isLoadingImmatureArea">{{immatureArea | number:'1.2-2'}}</span>
         </div>
         <div *ngIf="isLoadingImmatureArea">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -33,28 +44,19 @@
         </div>
       </div>
 
-      <div class="column box-container color4">
-        <div class="span-word">
-          <span>Tapped</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingTappedArea">{{tappedArea}}</span>
-        </div>
-        <div *ngIf="isLoadingTappedArea">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
-        </div>
-      </div>
+      
     </div>
   </div>
   <br />
 
   <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
+    <span style="font-size: 14px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
     <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
-          <span>Cuplump</span><br />
+          <span style="font-weight: bold;">Cuplump</span><br />
           <div *ngIf="!isLoadingProduction">
-            <b><span>{{totalCuplumpDry | number: '1.2-2'}}</span></b>
+            <span>{{totalCuplumpDry | number: '1.2-2'}}</span>
           </div>
         </div>
         <div *ngIf="isLoadingProduction">
@@ -65,9 +67,9 @@
 
       <div class="column box-container color2">
         <div class="span-word">
-          <span>Latex</span><br />
+          <span  style="font-weight: bold;">Latex</span><br />
           <div *ngIf="!isLoadingProduction">
-            <b><span>{{totalLatexDry | number: '1.2-2'}}</span></b>
+            <span>{{totalLatexDry | number: '1.2-2'}}</span>
           </div>
         </div>
         <div *ngIf="isLoadingProduction">
@@ -78,8 +80,8 @@
 
       <div class="column box-container color2">
         <div class="span-word">
-          <span>Total</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number: '1.2-2' }}</span>
+          <span style="font-weight: bold;">Total</span><br />
+          <span *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number: '1.2-2' }}</span>
         </div>
         <div *ngIf="isLoadingProduction">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -93,54 +95,61 @@
 
 <div style="columns:2">
   <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current Worker</span>
+    <span style="font-size: 14px;font-weight: bold;">Tapper Worker</span>
     <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
-          <span>Tapper</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
+          <span style="font-weight: bold;" >Current</span><br />
+          <span  *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
         </div>
         <div *ngIf="isLoadingTapper">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
         </div>
       </div>
-      <div class="column box-container color2">
-        <div class="span-word">
-          <span>Field</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingField">{{currentTotalField}}</span>
-        </div>
-        <div *ngIf="isLoadingField">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current Worker Shortage</span>
-    <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
-          <span>Tapper</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingTapperShortage">{{tapperShortage}}</span>
+          <span style="font-weight: bold;" >Shortage</span><br />
+          <span  *ngIf="!isLoadingTapperShortage">{{tapperShortage}}</span>
         </div>
         <div *ngIf="isLoadingTapperShortage">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
         </div>
       </div>
+      
+    </div>
+  </div>
+
+  <div class="box-container-outer">
+    <span style="font-size: 14px;font-weight: bold;">Field Worker</span>
+    <div class="box">
+      
+
       <div class="column box-container color2">
         <div class="span-word">
-          <span>Field</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingFieldShortage">{{fieldShortage}}</span>
+          <span style="font-weight: bold;" >Current</span><br />
+          <span  *ngIf="!isLoadingField">{{currentTotalField}}</span>
+        </div>
+        <div *ngIf="isLoadingField">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span style="font-weight: bold;">Shortage</span><br />
+          <span  *ngIf="!isLoadingFieldShortage">{{fieldShortage}}</span>
         </div>
         <div *ngIf="isLoadingFieldShortage">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
         </div>
       </div>
+
+      
     </div>
   </div>
 

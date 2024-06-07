@@ -7,7 +7,6 @@ using E_EstateV2_API.IRepository;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
 using E_EstateV2_API.ViewModel;
 
 namespace E_EstateV2_API.Repository
@@ -30,8 +29,8 @@ namespace E_EstateV2_API.Repository
             {
                 //system email
                 email.From.Add(MailboxAddress.Parse("e-estate@lgm.gov.my"));
-                //admin email
-                email.To.Add(MailboxAddress.Parse("sabariah@lgm.gov.my"));
+                //user email
+                email.To.Add(MailboxAddress.Parse(request.to));
                 email.Subject = "Account Verification for e-Estate LGM";
                 string htmlMessageRegister = GenerateHtmlRegister(request);
                 email.Body = new TextPart(TextFormat.Html) { Text = htmlMessageRegister };
@@ -41,7 +40,9 @@ namespace E_EstateV2_API.Repository
                 //user email
                 email.From.Add(MailboxAddress.Parse(request.from));
                 //admin email
-                email.To.Add(MailboxAddress.Parse("sabariah@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("Embong@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("fattah@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("azimah@lgm.gov.my"));
                 email.Subject = "Notice to add country for e-Estate LGM";
                 string htmlMessage = GenerateHtmlCountry(request);
                 email.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };
@@ -84,6 +85,9 @@ namespace E_EstateV2_API.Repository
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse("e-estate@lgm.gov.my"));
                 //Admin email
+                email.To.Add(MailboxAddress.Parse("Embong@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("fattah@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("azimah@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("sabariah@lgm.gov.my"));
                 email.Subject = "Notice to verify new e-Estate user";
                 string htmlMessage = GenerateHtmlUserVerified(user.UserName);
@@ -150,7 +154,7 @@ namespace E_EstateV2_API.Repository
             string urlEncodedToken = UrlEncodeToken(token);
             byte[] plainBytes = System.Text.Encoding.UTF8.GetBytes(userId);
             string userIdCoded = Convert.ToBase64String(plainBytes);
-            string resetLink = $"https://lgm20.lgm.gov.my/e-Estate/forgotpassword/{userIdCoded}/{urlEncodedToken}";
+            string resetLink = $"https://www5.lgm.gov.my/e-Estate/forgotpassword/{userIdCoded}/{urlEncodedToken}";
             string htmlMessage = "<html>" +
                 "<body>" +
                 "<h2>Assalamualaikum wbt & Greetings,</h2>" +
@@ -190,7 +194,7 @@ namespace E_EstateV2_API.Repository
                  "<p>To whom it may concern,  <br/>" +
                  "<br>" +
                  "Thank you for registering with e-Estate. For security purposes, please click the link provided " +
-                 "to verify your email address : <br/><br/> <a href='https://lgm20.lgm.gov.my/e-EstateApi/api/emails/verifyEmail/" + plainEncoded + "'>Verify Email</a><br>" +
+                 "to verify your email address : <br/><br/> <a href='https://api02.lgm.gov.my/e-EstateApi/api/emails/verifyEmail/" + plainEncoded + "'>Verify Email</a><br>" +
                  "<br>" +
                  "Thank you," +
                  "<br>" +

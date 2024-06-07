@@ -13,6 +13,6 @@
         public DateTime dateScreening { get; set; }
         public DateTime? dateRecovered { get; set; }
         public string severityLevel { get; set; }
-        public int area { get; set; }
+        public float area { get; set; }
     }
 }

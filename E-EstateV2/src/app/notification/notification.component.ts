@@ -181,7 +181,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.fieldInfo = Response
-          if (isNovember && this.fieldInfo.length == 0) {
+          //December every year can see
+          if (this.fieldInfo.length == 0) {
             this.showAlertField = true
           }
         }

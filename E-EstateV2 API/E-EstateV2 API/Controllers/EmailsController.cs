@@ -56,7 +56,7 @@ namespace E_EstateV2_API.Controllers
         {
             await _emailRepository.VerifyEmailVerifiedUser(encodedData);
             await _emailRepository.VerifyEmail(encodedData);
-            return Redirect("https://lgm20.lgm.gov.my/e-Estate/verifyemail");
+            return Redirect("https://www5.lgm.gov.my/e-Estate/verifyemail");
         }
 
         [HttpPost]

@@ -1,12 +1,14 @@
 <div class="box-container">
 
-  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{ estate.name }}</h1>
+  <h1>{{ estate.name }}</h1> -->
+  <h1>Field Disease Information </h1>
+
   <hr />
 
   <div>
-    <h1>Field Disease Information </h1>
+    <!-- <h1>Field Disease Information </h1> -->
 
     <div style="columns: 2" class="column">
       <div>
@@ -56,7 +58,7 @@
 
     <div style="columns: 2" class="column">
       <label>Area Infected (Ha) : </label>
-      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" />
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" (change)="validateArea()" />
     </div>
 
     <div>

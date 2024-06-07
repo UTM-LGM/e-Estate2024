@@ -15,7 +15,7 @@
           <label>Company Name :</label>
           <input type="text" name="companyName" [(ngModel)]="result.companyName" disabled>
           <label>Estate Name :</label>
-          <input type="text" name="estateName" [(ngModel)]="result.premiseName" disabled />
+          <input type="text" name="estateName" [(ngModel)]="result.premiseAdd1" disabled />
         </div>
 
         <div class="column">
@@ -39,7 +39,7 @@
       </form>
       <br />
 
-      <button (click)="submitRegister()">Sign Up</button><br /><br />
+      <button (click)="submitRegister()">Sign Up</button><br />
       <span>Already have account ? <a routerLink="/login">Log in</a></span>
     </div>
   </div>

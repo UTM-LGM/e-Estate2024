@@ -99,7 +99,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
 
   logOutStaff() {
     this.msalService.logoutRedirect({
-      postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/e-Estate'
+      postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
     });
     localStorage.clear();
   }

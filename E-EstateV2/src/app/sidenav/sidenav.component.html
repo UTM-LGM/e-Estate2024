@@ -3,7 +3,7 @@
   <i class="fa fa-user"></i> &nbsp;
   <span>Log in as: </span>
   <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'Admin' || role == 'CompanyAdmin'}">
-    <span style="text-align: left;">{{ estate.name }}</span>
+    <span style="text-align: left;">{{ estate.name + ", " + estate.add1}}</span>
   </div>
 
   <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'Admin' || role == 'EstateClerk'}">

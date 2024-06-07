@@ -6,22 +6,22 @@
         <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
       </button>
     </div>
-    <span class="span"><img width="50px" style="padding: 5px; margin-top: 15px;"
+    <span class="span"><img width="40px" style="padding: 5px;"
         src="assets/Images/LGM-logo.png" /></span> &nbsp;
     <span class="homelink" routerLink="/e-estate/home">Malaysian Rubber Board</span>
 
     <span class="flexExpand"></span>
-    <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-2xl fa-address-card"></i></span> &nbsp;
+    <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-address-card"></i></span> &nbsp;
     &nbsp;
 
-    <span style="cursor: pointer;" [matMenuTriggerFor]="info"><i class="fa fa-2xl fa-info"></i></span> &nbsp;
+    <span style="cursor: pointer;" [matMenuTriggerFor]="info"><i class="fa fa-info"></i></span> &nbsp;
     &nbsp;
 
     <div *ngIf="role == 'EstateClerk'">
       <span style="cursor: pointer;" routerLink="/e-estate/notification">
         <i class="fa fa-envelope"></i>
         <div class="badge" *ngIf="badgeCount > 0">
-          <span>{{ badgeCount }}</span>
+          <div style="margin-top: -6px;"><span>{{ badgeCount }}</span></div>
         </div>
       </span>&nbsp; &nbsp;
     </div>

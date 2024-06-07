@@ -11,6 +11,8 @@ import { Location } from '@angular/common';
 import { TappingSystem } from '../_interface/tappingSystem';
 import { TappingSystemService } from '../_services/tapping-system.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { FieldService } from '../_services/field.service';
 
 @Component({
   selector: 'app-field-info-yearly',
@@ -36,7 +38,9 @@ export class FieldInfoYearlyComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private tappingSystemService: TappingSystemService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private myLesenService: MyLesenIntegrationService,
+    private fieldService: FieldService
   ) { }
 
   ngOnInit() {
@@ -49,18 +53,30 @@ export class FieldInfoYearlyComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.route.params.subscribe((routerParams) => {
         if (routerParams['id'] != null) {
-          const getOneEstate = this.estateService.getOneEstate(routerParams['id'])
+          const getOneEstate = this.myLesenService.getOneEstate(routerParams['id'])
             .subscribe(
               Response => {
-                this.estate = Response
-                this.filterFields = this.estate.fields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatuses.some(y => y.fieldStatus.toLowerCase().includes("conversion")))
-                this.getExtraFieldInfo(this.filterFields)
-              });
+                this.estate = Response;
+                this.getField()
+              }
+            )
         this.subscriptionService.add(getOneEstate);
-
         }
       });
     }, 2000)
+  }
+
+
+  getField() {
+    const getField = this.fieldService.getField()
+      .subscribe(
+        Response => {
+          const filterFields = Response.filter(x => x.estateId == this.estate.id)
+          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+          this.getExtraFieldInfo(this.filterFields)
+        }
+      )
+      this.subscriptionService.add(getField);
   }
 
   getTappingSystem() {

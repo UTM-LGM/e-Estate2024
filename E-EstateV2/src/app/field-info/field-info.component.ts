@@ -71,7 +71,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     { columnName: 'fieldStatus', displayText: 'Field Status' },
     { columnName: 'yearPlanted', displayText: 'Year Planted' },
     { columnName: 'dateOpenTapping', displayText: 'Date Open Tapping' },
-    { columnName: 'initialTreeStand', displayText: 'Initial Tree Stand' },
+    { columnName: 'initialTreeStand', displayText: 'Initial Tree Stand per Ha' },
     { columnName: 'totalTask', displayText: 'Total Task' }
   ];
 

@@ -227,5 +227,17 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  validateArea(){
+    if(this.fieldInfected.areaInfected > this.fieldInfected.area)
+      {
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please insert infected area less than field area',
+        });
+        this.fieldInfected.areaInfected = null
+      }
+  }
   
 }

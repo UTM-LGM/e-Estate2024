@@ -3,10 +3,10 @@
 </div>
 
 <div class="box-container" *ngIf="!isLoading">
-  <h1>{{ estate.name }}</h1>
+  <h1>Estate Profile</h1>
   <hr />
 
-  <h1>Estate Profile</h1>
+  <!-- <h1>Estate Profile</h1> -->
 
   <div style="float:right;">
     <button class="btn-update" (click)="openDialog(estate,estateDetail)">
@@ -139,18 +139,13 @@
 
         <td></td>
 
-
-        <td>Land tittle (Grant No)</td>
-        <td><span>:</span></td>
-        <td>{{estateDetail.grantNo}}</td>
-
-      </tr>
-
-      <tr>
-
         <td>Planting Material</td>
         <td><span>:</span></td>
         <td>{{estateDetail.plantingMaterial}}</td>
+
+        <!-- <td>Land tittle (Grant No)</td>
+        <td><span>:</span></td>
+        <td>{{estateDetail.grantNo}}</td> -->
 
       </tr>
 

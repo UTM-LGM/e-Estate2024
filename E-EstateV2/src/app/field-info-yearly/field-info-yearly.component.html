@@ -3,11 +3,12 @@
   <hr>
 
   <div class="center-div">
-    <div class="box-container center-div" style="width: 50%;">
+    <div class="box-container center-div" style="width: 80%;">
       <table class="table">
         <tr>
           <td><b>No</b> </td>
           <td><b>Fields/Blocks</b> </td>
+          <td><b>Initial Tree Stand per Ha</b></td>
           <td><b>Current Tree Stand</b></td>
           <td><b>Tapping system used</b></td>
 
@@ -16,6 +17,7 @@
         <tr *ngFor="let field of filterFields; let i = index">
           <td>{{i+1}}</td>
           <td>{{field.fieldName}}</td>
+          <td>{{field.initialTreeStand}}</td>
           <td class="td"><input class="total" type="number" placeholder="0"
               [(ngModel)]="fieldInfo[i].currentTreeStand" /></td>
           <td class="td">

@@ -131,6 +131,8 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
         {
           next: (Response) => {
             this.result = Response
+            this.result.premiseName = this.result.premiseName + "," + this.result.premiseAdd1.slice(0,-1)
+            console.log(this.result)
             swal.fire({
               title: 'Done!',
               text: 'Data found!',

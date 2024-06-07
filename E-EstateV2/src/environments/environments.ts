@@ -8,12 +8,12 @@ export const MyLesenEnv = {
   apiUrl: 'https://api02.lgm.gov.my/ApiMyLesenAdmin/api'
 }
 
-export const environment = {
-  production: false,
-  apiUrl: 'https://lgm20.lgm.gov.my/e-EstateApi/api'
-};
-
 // export const environment = {
-//   production:false,
-//   apiUrl: 'https://api02.lgm.gov.my/e-EstateApi/api'
-// }
+//   production: false,
+//   apiUrl: 'https://lgm20.lgm.gov.my/e-EstateApi/api'
+// };
+
+export const environment = {
+  production:false,
+  apiUrl: 'https://api02.lgm.gov.my/e-EstateApi/api'
+}

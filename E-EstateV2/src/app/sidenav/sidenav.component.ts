@@ -54,6 +54,7 @@ export class SidenavComponent implements OnInit , OnDestroy{
     .subscribe(
       Response => {
         this.estate = Response
+        this.estate.add1 = this.estate.add1.slice(0, -1) 
       })
     this.subscriptionService.add(getOneEstate);
   }

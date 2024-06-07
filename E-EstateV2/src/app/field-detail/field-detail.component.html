@@ -3,14 +3,14 @@
     [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
   <h1>
     {{ field.fieldName }}
-    <button *ngIf="!fieldInfecteds" style="float: right; border-radius: 10px;" (click)="status(field)" [ngClass]="{
+    <button *ngIf="!fieldInfectedStatus" style="float: right; border-radius: 10px;" (click)="status(field)" [ngClass]="{
         'active-btn': field.isActive == true,
         'inactive-btn': field.isActive == false
       }">
       {{ field.isActive == true ? "Active" : "Inactive" }}
     </button>
 
-    <div *ngIf="fieldInfecteds">
+    <div *ngIf="fieldInfectedStatus">
       <button style="float: right;margin-top: -30px; cursor: not-allowed;" class="inactive-btn">Infected</button>
     </div>
 

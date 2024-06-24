@@ -4,15 +4,15 @@
 
   <div *ngIf="estateId == 0">
     <div style="columns: 2" class="column">
-      <label>Name :</label>
+      <label>Name <span style="color: red;">*</span> :</label>
       <input type="text" name="nbsp" [(ngModel)]="companyContact.name" />
-      <label>Position :</label>
+      <label>Position <span style="color: red;">*</span> :</label>
       <input type="text" name="position" [(ngModel)]="companyContact.position" />
     </div>
     <div style="columns: 2">
-      <label>Phone No :</label>
+      <label>Phone No <span style="color: red;">*</span> :</label>
       <input type="text" name="phoneNo" [(ngModel)]="companyContact.phoneNo" />
-      <label>Email :</label>
+      <label>Email <span style="color: red;">*</span> :</label>
       <input type="email" name="email" [(ngModel)]="companyContact.email" />
     </div>
 
@@ -36,15 +36,15 @@
 
   <div *ngIf="companyId == 0">
     <div style="columns: 2" class="column">
-      <label>Name :</label>
+      <label>Name <span style="color: red;">*</span> :</label>
       <input type="text" name="nbsp" [(ngModel)]="estateContact.name" />
-      <label>Position :</label>
+      <label>Position <span style="color: red;">*</span> :</label>
       <input type="text" name="position" [(ngModel)]="estateContact.position" />
     </div>
     <div style="columns: 2">
-      <label>Phone No :</label>
+      <label>Phone No <span style="color: red;">*</span> :</label>
       <input type="text" name="phoneNo" [(ngModel)]="estateContact.phoneNo" />
-      <label>Email :</label>
+      <label>Email <span style="color: red;">*</span>:</label>
       <input type="email" name="email" [(ngModel)]="estateContact.email" />
     </div>
 

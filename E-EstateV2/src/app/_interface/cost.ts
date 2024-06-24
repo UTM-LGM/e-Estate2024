@@ -20,7 +20,7 @@ export interface Cost {
     costSubcategory2: string
     costSubcategories2: CostSubcategory2[]
     amount: number | null
-    year: number
+    monthYear: string
     estateId: number
     name: string
     status: string

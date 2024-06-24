@@ -290,8 +290,14 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("endFinancialYear")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("membershipTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("startFinancialYear")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("updatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -378,6 +384,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("estateId")
                         .HasColumnType("int");
 
+                    b.Property<string>("monthYear")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("status")
                         .HasColumnType("nvarchar(max)");
 
@@ -386,9 +395,6 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<DateTime>("updatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("year")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -826,6 +832,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("currentTreeStand")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("dateOpenTapping")
                         .HasColumnType("datetime2");
 
@@ -846,6 +855,12 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<bool>("isMature")
                         .HasColumnType("bit");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("rubberArea")
+                        .HasColumnType("real");
 
                     b.Property<int>("totalTask")
                         .HasColumnType("int");
@@ -976,6 +991,46 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("fieldDiseases");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldGrant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("fieldId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("grantArea")
+                        .HasColumnType("real");
+
+                    b.Property<float>("grantRubberArea")
+                        .HasColumnType("real");
+
+                    b.Property<string>("grantTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("fieldGrants");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>
                 {
                     b.Property<int>("Id")
@@ -984,7 +1039,10 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("areaInfected")
+                    b.Property<float>("areaInfected")
+                        .HasColumnType("real");
+
+                    b.Property<int>("areaInfectedPercentage")
                         .HasColumnType("int");
 
                     b.Property<string>("createdBy")
@@ -1668,6 +1726,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("deliveryAgent")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("driverIc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("driverName")
                         .HasColumnType("nvarchar(max)");
 
@@ -1759,6 +1820,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<float>("previousStock")
                         .HasColumnType("real");
+
+                    b.Property<string>("rubberType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("totalProduction")
                         .HasColumnType("real");

@@ -32,8 +32,6 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     { columnName: 'date', displayText: 'Date' },
     // { columnName: 'status', displayText: 'Status' },
     { columnName: 'buyerName', displayText: 'Buyer Name' },
-    { columnName: 'transportPlateNo', displayText: 'Transport Plate No' },
-    { columnName: 'driverName', displayText: 'Driver Name' },
     { columnName: 'rubberType', displayText: 'Rubber Type' },
     { columnName: 'letterOfConsentNo', displayText: 'Letter of Consent No (Form 1)' },
     { columnName: 'weightSlipNo', displayText: 'Weight Slip No' },
@@ -86,7 +84,7 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId)
+            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true)
             this.isLoading = false
           })
       this.subscriptionService.add(getSale);
@@ -152,6 +150,40 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  changeStatus(sale:RubberSale){
+    {
+      swal.fire({
+        title: "Are you sure to delete ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        denyButtonText: 'Cancel'
+      })
+      .then((result)=>{
+        if(result.isConfirmed){
+          sale.isActive = false
+          const { paymentStatus, ...obj } = sale
+          const rubberSale:any = obj
+          this.rubberSaleService.updateSale(rubberSale)
+            .subscribe(
+              Response =>{
+                swal.fire({
+                  title: 'Deleted!',
+                  text: 'Rubber sale has been deleted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.ngOnInit()
+              }
+            )
+        }else if (result.isDenied) {
+        }
+      })
+    }
+    
   }
 
 }

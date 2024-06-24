@@ -16,7 +16,6 @@
 
 
 
-
   <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
     <button class="side-btn fixed" (click)="toggleGeneral()">
       General
@@ -115,6 +114,13 @@
     <hr />
   </div>
 
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showMonthly}">
+    <button class="side-btn" routerLink="/e-estate/cost-info/{{estateId}}" routerLinkActive="active">
+      Cost Information
+    </button>
+    <hr />
+  </div>
+
   <div
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showMonthly }">
     <button class="side-btn" routerLink="/e-estate/rubber-stock/{{estateId}}" routerLinkActive="active">
@@ -123,7 +129,7 @@
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+  <!-- <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <button class="side-btn fixed" (click)="toggleYearly()">
       Yearly
       <div style="float: right;">
@@ -132,15 +138,9 @@
       </div>
     </button>
     <hr />
-  </div>
+  </div> -->
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showYearly}">
-    <button class="side-btn" routerLink="/e-estate/cost-info/{{estateId}}" routerLinkActive="active">
-      Cost Information
-    </button>
-    <hr />
-  </div>
-
+  
 
   <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
     <button class="side-btn fixed" (click)="toggleReport()">
@@ -184,6 +184,13 @@
   <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
     <button class="side-btn" routerLink="/e-estate/report-cost-information" routerLinkActive="active">
       Cost Information
+    </button>
+    <hr />
+  </div>
+
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showReport}">
+    <button class="side-btn" routerLink="/e-estate/report-rubber-sale" routerLinkActive="active">
+      Rubber Sale
     </button>
     <hr />
   </div>

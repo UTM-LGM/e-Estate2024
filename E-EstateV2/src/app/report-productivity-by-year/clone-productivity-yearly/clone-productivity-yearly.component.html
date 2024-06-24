@@ -1,13 +1,15 @@
 <div class="box-container">
   <h1>Clone Productivity</h1>
 
-  <div style="columns: 3;">
-    <label>Please choose year : </label>
-    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  <div style="columns: 4;">
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
 
   <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
-    <button class="btn-add" (click)="exportToExcel(cloneProductionData, 'Clone Productivity Report ' + year)">
+    <button class="btn-add" (click)="exportToExcel(cloneProductionData, 'Clone Productivity Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div><br /><br />
@@ -33,7 +35,7 @@
       </tr>
 
       <tr *ngIf="!isLoading && cloneProduction.length == 0 && role == 'Admin'">
-        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose year</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
       <ng-container *ngIf="!isLoading">

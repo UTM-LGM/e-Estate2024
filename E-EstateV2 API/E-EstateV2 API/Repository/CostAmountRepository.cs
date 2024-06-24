@@ -32,7 +32,7 @@ namespace E_EstateV2_API.Repository
             {
                 id = x.Id,
                 amount = Math.Round(x.amount, 2),
-                year = x.year,
+                monthYear = x.monthYear,
                 status = x.status,
                 estateId = x.estateId,
                 costId = x.costId,

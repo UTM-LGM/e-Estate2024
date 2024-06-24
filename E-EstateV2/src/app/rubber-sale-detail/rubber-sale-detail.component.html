@@ -1,23 +1,23 @@
 <br />
-<div style="padding: 20px;">
+<div style="padding: 20px; margin-top: -41px;">
   <h1>Rubber Sale Information</h1>
   <hr />
   <div style="columns: 2" class="column">
-    <label>Letter Of Consent No (Form 1) :</label>
+    <label>Letter Of Consent No (Form 1) <span style="color: red;">*</span> :</label>
     <input type="text" name="letter" [(ngModel)]="rubberSale.letterOfConsentNo" disabled />
-    <label>Date :</label>
+    <label>Date <span style="color: red;">*</span> :</label>
     <input type="date" #date name="date" value="{{formattedDate}}" (change)="selectedDate(date.value)" />
   </div>
 
   <div style="columns: 2">
-    <label>Buyer :</label>
+    <label>Buyer <span style="color: red;">*</span> :</label>
     <select name="buyer" [(ngModel)]="rubberSale.buyerId" disabled>
       <option value="0" disabled selected>Please Choose</option>
       <option *ngFor="let buyer of buyers" value="{{buyer.id}}">
         {{buyer.buyerName}}
       </option>
     </select>
-    <label>Rubber Type :</label>
+    <label>Rubber Type <span style="color: red;">*</span> :</label>
     <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType">
       <mat-option value="CUPLUMP">CUPLUMP</mat-option>
       <mat-option value="LATEX">LATEX</mat-option>
@@ -25,17 +25,22 @@
   </div>
 
   <div style="columns: 2">
-    <label>Transport Plate No :</label>
+    <label>Buyer Weight (Kg) <span style="color: red;">*</span> :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" (input)="calculateTotalPrice()" />
+    <label>DRC (%) <span style="color: red;">*</span> :</label>
+    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" />
+  </div>
+
+  <div style="columns: 2">
+    <label>Transport Plate No <span style="color: red;">*</span> :</label>
     <input type="text" name="letter" [(ngModel)]="rubberSale.transportPlateNo" />
-    <label>Driver Name :</label>
+    <label>Driver Name <span style="color: red;">*</span> :</label>
     <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" />
   </div>
 
   <div style="columns: 2">
-    <label>Buyer Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" (input)="calculateTotalPrice()" />
-    <label>DRC (%) :</label>
-    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" />
+    <label>Driver Ic Number <span style="color: red;">*</span> :</label>
+    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverIc" />
   </div>
 
   <!-- <div style="columns: 2">
@@ -48,7 +53,7 @@
 
   <div>
     <label>Remark :</label><br/>
-    <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span>
+    <!-- <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span> -->
     <textarea name="remark" [(ngModel)]="rubberSale.remark"></textarea>
   </div>
 

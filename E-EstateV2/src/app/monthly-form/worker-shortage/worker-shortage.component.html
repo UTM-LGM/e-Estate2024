@@ -11,7 +11,7 @@
     <table class="table">
       <tr>
         <td><b>Item</b> </td>
-        <td><b>No of Worker Shortage</b></td>
+        <td><b>No of Worker Shortage <span style="color: red;">*</span></b></td>
       </tr>
 
       <tr>
@@ -30,9 +30,15 @@
         <td style="border-bottom: none;"></td>
         <td style="border-bottom: none;">
           <div style="float: right;">
-            <button (click)="add()" class="btn-add" type="submit" style="margin-top: 10px;">
-              Add &nbsp; <i class="fa fa-plus"></i>
+            <button (click)="add()" class="btn-add" type="submit" style="margin-top: 10px;" [disabled]="isSubmit">
+              <ng-container *ngIf="isSubmit; else notLoading">
+                Loading...
+              </ng-container>
+              <ng-template #notLoading>
+                Add &nbsp; <i class="fa fa-plus"></i>
+              </ng-template>
             </button>
+            
             <br />
           </div>
         </td>

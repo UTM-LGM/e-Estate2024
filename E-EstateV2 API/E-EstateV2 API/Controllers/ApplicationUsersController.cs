@@ -48,6 +48,13 @@ namespace E_EstateV2_API.Controllers
             }
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser (User user)
+        {
+            var updatedUser = await _userRepository.UpdateUser(user);
+            return Ok(updatedUser);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddUser(User user)
         {

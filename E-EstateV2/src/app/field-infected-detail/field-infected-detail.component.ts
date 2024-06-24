@@ -9,6 +9,8 @@ import { FieldInfectedService } from '../_services/field-infected.service';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { DiseaseCategoryService } from '../_services/disease-category.service';
+import { DiseaseCategory } from '../_interface/diseaseCategory';
 
 
 @Component({
@@ -18,12 +20,12 @@ import { SubscriptionService } from '../_services/subscription.service';
 })
 export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
 
-  fieldInfected: FieldInfected = {} as FieldInfected
+  fieldInfected: any = {} as any
   filterFieldDisease: FieldDisease[] = []
   formattedDate = ''
   dateRecovered = ''
-
-
+  diseaseCategory : DiseaseCategory []=[]
+  diseaseName: FieldDisease []=[]
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: FieldInfected },
@@ -32,7 +34,9 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
     private fieldInfectedService: FieldInfectedService,
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private diseaseCategoryService:DiseaseCategoryService
+
 
   ) { }
 
@@ -46,6 +50,7 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
       }, 0);
     }
     this.getFieldDisease()
+    this.getDiseaseCategory()
   }
 
   getFieldDisease() {
@@ -57,6 +62,15 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
         }
       )
       this.subscriptionService.add(getFieldDisease);
+  }
+
+  getDiseaseCategory(){
+    this.diseaseCategoryService.getDiseaseCategory()
+    .subscribe(
+      Response =>{
+        this.diseaseCategory = Response
+      }
+    )
   }
 
   back() {
@@ -96,4 +110,21 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  getDiseaseName(){
+    this.fieldInfected.fieldDiseaseId = null
+    this.fieldDiseaseService.getFieldDisease()
+    .subscribe(
+      Response =>{
+        this.filterFieldDisease = Response.filter(y=>y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
+      }
+    )
+  }
+
+
+  calculateArea(){
+    const areaInfected = this.fieldInfected.area * (this.fieldInfected.areaInfectedPercentage / 100)
+    return this.fieldInfected.areaInfected = areaInfected.toFixed(2)
+  }
+
 }

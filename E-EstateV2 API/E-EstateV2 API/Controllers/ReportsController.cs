@@ -39,10 +39,24 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllProductivityYearlyByClone(string start, string end)
+        {
+            var productionYearly = await _reportRepository.GetAllProductivityYearlyByClone(start,end);
+            return Ok(productionYearly);
+        }
+
+        [HttpGet]
         [Route("{year:int}")]
         public async Task<IActionResult> GetAreaByClone(int year)
         {
             var clone = await _reportRepository.GetAreaByClone(year);
+            return Ok(clone);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAreaByAllClone(string start, string end)
+        {
+            var clone = await _reportRepository.GetAreaByAllClone(start, end);
             return Ok(clone);
         }
 
@@ -73,8 +87,15 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        [Route("{year:int}")]
 
+        public async Task<IActionResult> GetStateFieldArea(string start, string end)
+        {
+            var fieldArea = await _reportRepository.GetStateFieldArea(start,end);
+            return Ok(fieldArea);
+        }
+
+        [HttpGet]
+        [Route("{year:int}")]
         public async Task<IActionResult> GetFieldArea(int year)
         {
             var fieldArea = await _reportRepository.GetFieldArea(year);
@@ -114,6 +135,13 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetAllLaborInformationCategory(string start, string end)
+        {
+            var labor = await _reportRepository.GetAllLaborInformationCategory(start, end);
+            return Ok(labor);
+        }
+
+        [HttpGet]
         [Route("{year:int}")]
         public async Task<IActionResult> GetTapperAndFieldWorker(int year)
         {
@@ -122,11 +150,27 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        [Route("{year:int}")]
+        public async Task<IActionResult> GetAllTapperAndFieldWorker(string start, string end)
+        {
+            var labor = await _reportRepository.GetAllTapperAndFieldWorker(start, end);
+            return Ok(labor);
+        }
 
+
+
+
+        [HttpGet]
+        [Route("{year:int}")]
         public async Task<IActionResult> GetWorkerShortageEstate(int year)
         {
             var worker = await _reportRepository.GetWorkerShortageEstate(year);
+            return Ok(worker);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllWorkerShortageEstate(string start, string end)
+        {
+            var worker = await _reportRepository.GetAllWorkerShortageEstate(start,end);
             return Ok(worker);
         }
 
@@ -137,6 +181,20 @@ namespace E_EstateV2_API.Controllers
         {
             var cost = await _reportRepository.GetCostInformation(year);
             return Ok(cost);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllCostInformation(string start, string end)
+        {
+            var cost = await _reportRepository.GetAllCostInformation(start, end);
+            return Ok(cost);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllRubberSale(string start, string end)
+        {
+            var rubberSale = await _reportRepository.GetAllRubberSale(start, end);
+            return Ok(rubberSale);
         }
     }
 }

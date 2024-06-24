@@ -7,7 +7,8 @@ namespace E_EstateV2_API.Models
     {
         [Key]
         public int Id { get; set; }
-        public int areaInfected { get; set; }
+        public float areaInfected { get; set; }
+        public int areaInfectedPercentage { get; set; }
         public DateTime dateScreening { get; set; }
         public DateTime? dateRecovered { get; set; }
         public string severityLevel { get; set; }

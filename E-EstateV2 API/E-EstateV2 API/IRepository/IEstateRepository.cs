@@ -9,6 +9,6 @@ namespace E_EstateV2_API.IRepository
         Task<DTO_Estate> GetEstateById(int id);
         Task<Estate> AddEstate(Estate estate);
         Task<Estate> UpdateEstate(Estate estate);
-        Task<Object> CheckEstateName(string estateName);
+        Task<object> CheckEstateName(string estateName);
     }
 }

@@ -8,7 +8,7 @@ namespace E_EstateV2_API.Models
         [Key]
         public int Id { get; set; }
         public decimal amount { get; set; }
-        public int year { get; set; }
+        public string monthYear { get; set; }
 
         public string status { get; set; }
         public string createdBy { get; set; }

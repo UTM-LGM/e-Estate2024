@@ -23,6 +23,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   letterOfConsentNo = ''
 
   deliveryAgent: string = '';
+  isSubmit = false
 
   constructor(
     private buyerService: BuyerService,
@@ -74,6 +75,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     this.rubberSale.estateId = this.sharedService.estateId
     this.rubberSale.paymentStatusId = 1
     this.rubberSale.letterOfConsentNo = this.letterOfConsentNo
+    this.isSubmit = true
     this.rubberSaleService.addSale(this.rubberSale)
       .subscribe(
         {
@@ -87,6 +89,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
             });
             this.ngOnInit()
             this.print(Response)
+            this.location.back()
           },
           error: (err) => {
             swal.fire({
@@ -94,6 +97,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
               title: 'Error',
               text: 'Please fill up the form',
             });
+            this.isSubmit = false
           }
         })
   }

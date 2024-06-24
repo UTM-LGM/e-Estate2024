@@ -30,15 +30,15 @@
             </tr>
 
             <tr *ngIf="users.length == 0 && !isLoading">
-                <td colspan="8" style="color: red;"><b>No new user</b></td>
+                <td colspan="8" style="color: red;">No new user</td>
             </tr>
 
             <ng-container *ngIf="!isLoading">
             <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
                 <td>{{user.fullName}}</td>
                 <td>{{user.email}}</td>
-                <td>{{result[user.licenseNo]?.premiseName}}</td>
                 <td>{{result[user.licenseNo]?.companyName}}</td>
+                <td>{{result[user.licenseNo]?.premiseName + ", " + result[user.licenseNo]?.premiseAdd1.slice(0,-1) }}</td>
                 <td>{{result[user.licenseNo]?.companyPhoneNo}}</td>
                 <td>{{user.position}}</td>
                 <td style="color: red;">{{user.roleName ? user.roleName : 'Please update role'}}</td>

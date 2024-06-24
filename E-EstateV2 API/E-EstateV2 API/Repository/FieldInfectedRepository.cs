@@ -53,13 +53,16 @@ namespace E_EstateV2_API.Repository
                     dateScreening = fi.dateScreening,
                     fieldDiseaseId = fi.fieldDiseaseId,
                     areaInfected = fi.areaInfected,
+                    areaInfectedPercentage = fi.areaInfectedPercentage,
                     isActive = fi.isActive,
                     fieldName = _context.fields.Where(x=>x.Id == fi.fieldId).Select(x=>x.fieldName).FirstOrDefault(),
                     diseaseName = _context.fieldDiseases.Where(x=>x.Id == fi.fieldDiseaseId).Select(x=>x.diseaseName).FirstOrDefault(),
+                    diseaseCategory = _context.diseaseCategories.Where(x=>x.Id == (_context.fieldDiseases.Where(y=>y.Id == fi.fieldDiseaseId).Select(y=>y.diseaseCategoryId).FirstOrDefault())).Select(x=>x.category).FirstOrDefault(),
                     area = _context.fields.Where(x=>x.Id == fi.fieldId).Select(x=>x.area).FirstOrDefault(),
                     remark = fi.remark,
                     severityLevel = fi.severityLevel,
-                    dateRecovered = fi.dateRecovered
+                    dateRecovered = fi.dateRecovered,
+                    diseaseCategoryId = _context.fieldDiseases.Where(x => x.Id == fi.fieldDiseaseId).Select(x => x.diseaseCategoryId).FirstOrDefault(),
                 })
                 .ToListAsync(); // Retrieve all matching fieldInfecteds
 
@@ -91,6 +94,7 @@ namespace E_EstateV2_API.Repository
                 dateScreening = x.dateScreening,
                 fieldDiseaseId = x.fieldDiseaseId,
                 areaInfected = x.areaInfected,
+                areaInfectedPercentage = x.areaInfectedPercentage,
                 isActive = x.isActive,
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
                 diseaseName = _context.fieldDiseases.Where(y => y.Id == x.fieldDiseaseId).Select(y => y.diseaseName).FirstOrDefault(),

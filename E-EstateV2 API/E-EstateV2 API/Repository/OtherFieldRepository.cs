@@ -67,7 +67,7 @@ namespace E_EstateV2_API.Repository
                 return null;
         }
 
-        public async Task<Object> CheckOtherFieldName (string fieldName)
+        public async Task<object> CheckOtherFieldName (string fieldName)
         {
             var field = await _context.otherFields.Where(x => x.fieldName == fieldName).FirstOrDefaultAsync();
             if(field == null)

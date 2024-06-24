@@ -20,6 +20,8 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
   term = ''
   pageNumber = 1
   role = ''
+  startMonth = ''
+  endMonth = ''
 
   workerShortages: any[] = []
   labors: any[] = [];
@@ -52,12 +54,8 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.role = this.sharedService.role
-    if (this.role == "Admin") {
-      this.year = new Date().getFullYear().toString();
-      this.getTapperAndFieldWorker()
-      this.getWorkerShortage()
-    }
-    else if (this.role == "CompanyAdmin") {
+    this.isLoading = false
+   if (this.role == "CompanyAdmin") {
       this.estate.companyId = this.sharedService.companyId
       this.getAllEstate()
       this.getCompany()
@@ -66,6 +64,18 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
       this.estate.id = this.sharedService.estateId
       this.getEstate()
     }
+  }
+
+  monthChange() {
+    this.isLoading = true
+    this.getTapperAndFieldWorker()
+    this.getWorkerShortage()
+    
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.workerShortages =[]
   }
 
   yearSelected() {
@@ -120,10 +130,11 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
   }
 
   getWorkerShortage() {
-    const getShortage = this.reportService.getWorkerShortageEstate(this.year)
+    const getShortage = this.reportService.getAllWorkerShortageEstate(this.startMonth, this.endMonth)
     .subscribe(
       response => {
         this.workerShortages = response;
+
         if(this.workerShortages.length === 0)
           {
             this.isLoading = false
@@ -169,7 +180,7 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
   }
   
   getTapperAndFieldWorker() {
-    const getWorker = this.reportService.getTapperAndFieldWorker(this.year)
+    const getWorker = this.reportService.getAllTapperAndFieldWorker(this.startMonth, this.endMonth)
       .subscribe(Response => {
         if(this.role =='Admin'){
           this.localTapperFieldWorker = Response
@@ -236,7 +247,7 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
 
   exportToExcel(workerShortages: any[], fileName: string) {
     let bilCounter = 1;
-    const filteredData = workerShortages.map(worker => ({
+    const filteredData:any = workerShortages.map(worker => ({
       No: bilCounter++,
       EstateName: worker.estateName,
       CurrentTapperWorker: this.totalTapperWorker,
@@ -248,15 +259,30 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
       TotalWorkerNeeded: (this.totalTapperWorker + worker.tapperShortage) + (this.totalFieldWorker +   worker.fieldShortage)
     }));
   
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const headerRow = [
+      { No: 'Start Month Year:', EstateName: this.startMonth},
+      { No: 'End Month Year:', EstateName: this.endMonth},
+      {}, // Empty row for separation
+      { No: 'No', EstateName: 'EstateName', CurrentTapperWorker: 'CurrentTapperWorker', CurrentFieldWorker: 'CurrentFieldWorker', 
+        TapperWorkerShortage: 'TapperWorkerShortage', FieldWorkerShortage: 'FieldWorkerShortage', TapperWorkerNeeded: 'TapperWorkerNeeded',
+        FieldWorkerNeeded: 'FieldWorkerNeeded', TotalWorkerNeeded: 'TotalWorkerNeeded'
+      }
+    ];
+
+    const exportData = headerRow.concat(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year.toString());
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
 
   exportToExcelAdmin(workerShortages: any[], workerTapperAndField: any[], fileName: string) {
     let bilCounter = 1;
-    const filteredData = workerShortages.map(worker => {
+    const filteredData:any = workerShortages.map(worker => {
       // Find the corresponding labor data for the current estate
       const laborData = workerTapperAndField.find(labor => labor.estateId === worker.estateId);
       // Calculate the total tapper and field workers needed
@@ -275,10 +301,24 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
       };
     });
   
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const headerRow = [
+      { No: 'Start Month Year:', EstateName: this.startMonth},
+      { No: 'End Month Year:', EstateName: this.endMonth},
+      {}, // Empty row for separation
+      { No: 'No', EstateName: 'EstateName', CurrentTapperWorker: 'CurrentTapperWorker', CurrentFieldWorker: 'CurrentFieldWorker', 
+        TapperWorkerShortage: 'TapperWorkerShortage', FieldWorkerShortage: 'FieldWorkerShortage', TapperWorkerNeeded: 'TapperWorkerNeeded',
+        FieldWorkerNeeded: 'FieldWorkerNeeded', TotalWorkerNeeded: 'TotalWorkerNeeded'
+      }
+    ];
+
+    const exportData = headerRow.concat(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'WorkerShortages'); // Set sheet name as needed
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1'); // Set sheet name as needed
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
   
 

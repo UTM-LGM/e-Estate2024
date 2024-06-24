@@ -12,4 +12,5 @@ export interface RubberStock{
     updatedDate: Date
     previousStock:number
     isActive:Boolean
+    rubberType:string
 }

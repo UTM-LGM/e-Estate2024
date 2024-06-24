@@ -15,7 +15,7 @@ import swal from 'sweetalert2';
 export class IndirectCostComponent implements OnInit,OnDestroy {
 
   @Input() costTypeId = 0
-  @Input() selectedYear = ''
+  @Input() selectedMonthYear = ''
 
   term = ''
 
@@ -46,7 +46,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
   ) { }
 
   ngOnInit() {
-    if (this.selectedYear != '') {
+    if (this.selectedMonthYear != '') {
       this.isDisable = false
     }
     this.getIndirectCost()
@@ -55,7 +55,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['selectedYear']) {
+    if (changes['selectedMonthYear']) {
       this.ngOnInit()
     }
   }
@@ -95,7 +95,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
       .subscribe(
         Response => {
           this.indirectCostAmount = Response;
-          this.filterIndirectCostAmount = this.indirectCostAmount.filter(x => x.year === parseInt(this.selectedYear) && x.costTypeId == this.costTypeId)
+          this.filterIndirectCostAmount = this.indirectCostAmount.filter(x => x.monthYear === this.selectedMonthYear && x.costTypeId == this.costTypeId)
           this.draftFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
           this.submitFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
@@ -110,7 +110,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
     let newArray = this.indirectCosts.map((obj) => {
       return {
         ...obj,
-        year: parseInt(this.selectedYear),
+        monthYear: this.selectedMonthYear,
         estateId: this.sharedService.estateId,
         status: 'Draft',
         createdBy: this.sharedService.userId.toString(),
@@ -118,7 +118,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
       };
     });
     this.indirectCosts = newArray
-    this.costAmount = this.indirectCosts.map(({ amount, id, year, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, year, estateId, status, createdBy, createdDate })) as unknown as CostAmount[]
+    this.costAmount = this.indirectCosts.map(({ amount, id, monthYear, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, monthYear, estateId, status, createdBy, createdDate })) as unknown as CostAmount[]
     this.costAmountService.addCostAmount(this.costAmount)
       .subscribe(
         {

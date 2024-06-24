@@ -19,7 +19,8 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetClones()
         {
             var clones = await _genericRepository.GetAll();
-            return Ok(clones);
+            var sortedClones = clones.OrderBy(clone => clone.cloneName).ToList();
+            return Ok(sortedClones);
         }
 
         [HttpPost]

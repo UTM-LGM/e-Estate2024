@@ -29,7 +29,8 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetFields()
         {
             var fields = await _fieldRepository.GetFields();
-            return Ok(fields);
+            var sortedField = fields.OrderByDescending(field => field.isActive).ToList();
+            return Ok(sortedField);
         }
 
         [HttpGet]

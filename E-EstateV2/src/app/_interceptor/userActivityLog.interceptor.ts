@@ -55,7 +55,6 @@ export class UserActivityLogInterceptor implements HttpInterceptor {
       this.userActivity.userName = this.sharedService.userName
       this.userActivity.role = this.sharedService.role
       this.userActivity.userId = this.sharedService.userId.toString()
-
       this.userActivityLogService.logActivity(this.userActivity)
         .subscribe(
           Response => {

@@ -1,118 +1,18 @@
 <div class="box-container">
-  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader> -->
   <h1>Field Information</h1>
   <hr />
 
-  <!-- <h1>Field Information</h1> -->
-
-
-  <div class="box">
-    <div class="column">
-      <form>
-        <div style="columns: 2">
-          <label>Field / Block :</label>
-          <b><input type="text" name="fieldname" [(ngModel)]="field.fieldName" (change)="checkFieldName()" /></b>
-          <label>Maturity :</label>
-          <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature"
-            (selectionChange)="getcategory()">
-            <mat-option [value]="true">MATURE</mat-option>
-            <mat-option [value]="false">IMMATURE</mat-option>
-          </mat-select>
-        </div>
-        <div style="columns: 2">
-          <label>Field Status :</label>
-          <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId"
-            (selectionChange)="diseaseName($event)">
-            <mat-option *ngFor="let category of filterCropCategories" [value]="category.id">
-              {{ category.fieldStatus }}
-            </mat-option>
-          </mat-select>
-
-          <label>Field Area (Ha) :</label>
-          <b><input type="number" name="fieldarea" [(ngModel)]="field.area" /></b>
-        </div>
-
-        <div style="columns: 2" *ngIf="!conversion">
-          <label>Year Planted :</label>
-          <b><input type="number" name="year" placeholder="yyyy" [(ngModel)]="field.yearPlanted" (change)="yearSelected()" /></b>
-
-          <label>Initial Tree Stand per Ha :</label>
-          <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
-
-        </div>
-
-        <div style="columns: 2" *ngIf="field.isMature == true">
-          <label>Date Open Tapping :</label>
-          <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTapping" />
-
-          <label>Total task :</label>
-          <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
-
-        </div>
-
-        <div>
-          <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()">
-            Add &nbsp; <i class="fa fa-plus"></i>
-          </button>
-        </div>
-
-      </form>
-    </div>
-
-    <div>
-      <div style="columns: 2">
-        <label>Clone :</label>
-        <mat-select name="clone" class="clone" placeholder="Please Choose" [(ngModel)]="field.cloneId">
-          <mat-option *ngFor="let clone of availableClones" [value]="clone.id">
-            {{ clone.cloneName }}
-          </mat-option>
-        </mat-select>
-        <div>
-          <button style="margin-top: 28px; margin-left: 60px" class="btn-add" (click)="selectedClone(field)">
-            Add Clone &nbsp; <i class="fa fa-plus"></i>
-          </button>
-        </div>
-      </div>
-
-      <div class="box-container">
-        <h1>Clones planted</h1>
-        <hr />
-        <div style="overflow-x: auto; overflow-y: auto">
-          <table style="width: 100%">
-            <tr>
-              <th width="30px">No</th>
-              <th>Clone Name</th>
-              <th width="90px">Action</th>
-            </tr>
-
-            <tr *ngIf="selectedValues.length == 0">
-              <td colspan="3" style="color: red;"><b>No Clone</b></td>
-            </tr>
-
-            <tr *ngFor="let value of selectedValues; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ value.cloneName }}</td>
-              <td>
-                <button class="btn-del" (click)="delete(i)">
-                  <i class="fa fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </div>
-  <br />
 
   <div class="box-container" *ngIf="role === 'EstateClerk'">
-    <h1>List of fields</h1>
-    <hr />
+    <div style="margin-top: -10px">
+      <button class="btn-add" routerLink="/e-estate/add-field/{{estate.id}}">
+        Add Field &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div>
+
     <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
 
-    <label><b>Total Area : {{ total }} Ha</b></label>
+    <label><b>Total Area : {{ total | number:'1.2-2' }} Ha</b></label>
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <tr>
@@ -141,7 +41,7 @@
           <tr class="list" style="cursor:default;">
             <td style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{field.fieldName}}</a>
             </td>
-            <td>{{ field.area | number:'1.2-2' }}</td>
+            <td>{{ field.rubberArea | number:'1.2-2' }}</td>
             <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
             <td>{{field.fieldStatus}}</td>
             <td>{{ field.yearPlanted !== 0 ? field.yearPlanted : '' }}</td>

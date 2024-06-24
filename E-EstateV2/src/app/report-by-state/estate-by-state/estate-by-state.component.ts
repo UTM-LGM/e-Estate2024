@@ -17,12 +17,14 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   order = ''
   currentSortedColumn = ''
   year = ''
+  startMonth = ''
+  endMonth = ''
 
   pageNumber = 1
   isLoading = true
   estates: any[] = []
   stateTotalAreas = {} as any;
-  stateTotalAreasArray:any[]=[]
+  stateTotalAreasArray: any[] = []
 
   sortableColumns = [
     { columnName: 'state', displayText: 'State' },
@@ -32,13 +34,24 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   constructor(
     private myLesenService: MyLesenIntegrationService,
-    private reportService:ReportService,
-    private subscriptionService:SubscriptionService
+    private reportService: ReportService,
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit(): void {
-    this.year = new Date().getFullYear().toString()
+    // this.year = new Date().getFullYear().toString()
+    this.isLoading = false
+  }
+
+  monthChange() {
+    this.isLoading = true
     this.getEstate()
+    
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.stateTotalAreasArray =[]
   }
 
   toggleSort(columnName: string) {
@@ -53,35 +66,35 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   getEstate() {
     setTimeout(() => {
       const getAllEstate = this.myLesenService.getAllEstate()
-      .subscribe(
-        estates => {
-        this.estates = estates;
-        this.calculateTotalAllArea();
-      });
+        .subscribe(
+          estates => {
+            this.estates = estates;
+            this.calculateTotalAllArea();
+          });
       this.subscriptionService.add(getAllEstate);
     }, 2000);
   }
 
   calculateTotalAllArea() {
-    const observables = this.estates.map(estate => 
-      this.reportService.getFieldArea(this.year).pipe(
+    const observables = this.estates.map(estate =>
+      this.reportService.getStateFieldArea(this.startMonth, this.endMonth).pipe(
         map(response => ({
           estateId: estate.id,
           state: estate.state,
-          fields: response.filter(x => x.estateId === estate.id && x.isActive === true && 
-            !x.fieldStatus.toLowerCase().includes('abandoned') && 
-            !x.fieldStatus.toLowerCase().includes('government') && 
+          fields: response.filter(x => x.estateId === estate.id && x.isActive === true &&
+            !x.fieldStatus.toLowerCase().includes('abandoned') &&
+            !x.fieldStatus.toLowerCase().includes('government') &&
             !x.fieldStatus.toLowerCase().includes('conversion to other crop'))
         }))
       )
     );
-  
+
     forkJoin(observables).subscribe(results => {
       this.stateTotalAreas = {};
-  
+
       results.forEach(result => {
         const totalArea = result.fields.reduce((acc, curr) => acc + curr.area, 0);
-  
+
         if (!this.stateTotalAreas[result.state]) {
           this.stateTotalAreas[result.state] = { count: 1, totalArea: totalArea };
         } else {
@@ -89,14 +102,14 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
           this.stateTotalAreas[result.state].totalArea += totalArea;
         }
       });
-  
+
       // Convert object to array
       this.stateTotalAreasArray = Object.keys(this.stateTotalAreas).map(key => ({
         state: key,
         estateNo: this.stateTotalAreas[key].count,
         totalArea: this.stateTotalAreas[key].totalArea
       }));
- 
+
       this.isLoading = false;
     });
   }
@@ -118,24 +131,41 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
     }
   }
 
-  exportToExcel(data:any[], fileName:String){
-    let bilCounter = 1
-    const filteredData = data.map(row =>({
-      No:bilCounter++,
-      State:row.state,
+
+  exportToExcel(data: any[], fileName: string) {
+    let bilCounter = 1;
+    const filteredData: any = data.map(row => ({
+      No: bilCounter++,
+      State: row.state,
       EstateNo: row.estateNo,
       TotalRubberArea: row.totalArea
-    }))
+    }));
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    // Add a header row with the start and end month-year values
+    const headerRow = [
+      { No: 'Start Month Year:', State: this.startMonth},
+      { No: 'End Month Year:', State: this.endMonth},
+      {}, // Empty row for separation
+      { No: 'No', State: 'State', EstateNo: 'EstateNo', TotalRubberArea: 'TotalRubberArea' }
+    ];
+
+    // Combine the header row with the filtered data
+    const exportData = headerRow.concat(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year);
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
+    // Format the filename to include start and end month-year
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+ 
 
 }

@@ -36,6 +36,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
 
   neededTapper = 0
   neededField = 0
+  isSubmit = false
 
   constructor(
     private datePipe: DatePipe,
@@ -86,6 +87,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
     this.worker.createdBy = this.sharedService.userId.toString()
     this.worker.createdDate = new Date()
     this.worker.monthYear = this.worker.monthYear
+    this.isSubmit = true
     this.workerShortageService.addWorkerShortage(this.worker)
       .subscribe(
         {
@@ -98,6 +100,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
               timer: 1000
             });
             this.getWorkerShortage()
+            this.isSubmit = false
           },
           error: (err) => {
             swal.fire({

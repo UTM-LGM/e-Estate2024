@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DirectCostComponent implements OnInit {
 
   @Input() costTypeId: number = 0
-  @Input() selectedYear = ''
+  @Input() selectedMonthYear = ''
 
   clickedCostTypeId = 0
   activeButton = ''

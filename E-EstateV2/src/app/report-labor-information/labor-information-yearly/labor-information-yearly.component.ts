@@ -18,13 +18,14 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   role = '';
   year = '';
   isLoading = true;
+  startMonth = ''
+  endMonth = ''
 
   filterTypes: LaborInformation[] = [];
   labors: any[] = [];
 
   companies: any[] = []
   filterLGMAdmin: any[] = []
-
 
 
   localTapperFieldWorker: any[] = [];
@@ -48,7 +49,7 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.role = this.sharedService.role;
-    this.getLaborType();
+    this.isLoading=false
     if (this.role == 'CompanyAdmin') {
       this.estate.companyId = this.sharedService.companyId;
       this.getAllEstate();
@@ -63,12 +64,22 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
     }
   }
 
+  monthChange() {
+    this.isLoading = true
+    this.getLaborType();
+    this.getLaborInformation();
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.labors =[]
+  }
+
   yearSelected() {
     this.resetData();
     const yearAsString = this.year.toString();
     if (yearAsString.length === 4) {
       this.isLoading = true;
-      this.getLaborInformation();
     } else {
       swal.fire({
         icon: 'error',
@@ -92,7 +103,8 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
     this.estate.id = 0
     this.getAllEstate()
     this.labors = []
-    this.year = ''
+    this.startMonth = ''
+    this.endMonth = ''
     this.showAll = false
   }
 
@@ -144,7 +156,7 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   }
 
   getLaborInformation() {
-    const subscription = this.reportService.getLaborInformationCategory(this.year).subscribe({
+    const subscription = this.reportService.getAllLaborInformationCategory(this.startMonth, this.endMonth).subscribe({
       next: (Response) => {
         this.labors = Response;
         if (this.estate.id == undefined && this.estate.companyId == undefined) {
@@ -181,7 +193,7 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   
 
   getTapperAndFieldWorker() {
-    const getWorker = this.reportService.getTapperAndFieldWorker(this.year)
+    const getWorker = this.reportService.getAllTapperAndFieldWorker(this.startMonth, this.endMonth)
       .subscribe(Response => {
         this.localTapperFieldWorker = Response.filter(x => x.isLocal == true && x.estateId == this.estate.id);
         if(this.localTapperFieldWorker.length == 0){
@@ -276,6 +288,8 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
 
   estateSelected() {
     this.resetData();
+    this.startMonth = ''
+    this.endMonth = ''
   }
 
   exportToExcelAdmin(labors: any[], localTapperFieldWorker: any[], foreignTapperFieldWorker: any[], fileName: string) {
@@ -303,8 +317,10 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year.toString());
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
   
   calculateTotalTapperWorker(localTapperFieldWorker: any[], foreignTapperFieldWorker: any[]) {
@@ -397,8 +413,10 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
       
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year.toString() ); // Use 'Sheet1' as the sheet name
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1' ); // Use 'Sheet1' as the sheet name
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
 
   ngOnDestroy(): void {

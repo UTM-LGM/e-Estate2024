@@ -13,6 +13,7 @@ import { MsalService } from '@azure/msal-angular';
 import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home-layout',
@@ -43,6 +44,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     private msalService: MsalService,
     private sharedService: SharedService,
     private subscriptionService: SubscriptionService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -118,5 +120,22 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  downloadFile() {
+    const fileName = 'assets/User Manual e-Estate.pdf' // Path to the file in the assets folder
+
+    // Load the file using Angular's DomSanitizer
+    this.sanitizer.bypassSecurityTrustResourceUrl(fileName)
+
+    // Create an anchor element to trigger the download
+    const a = document.createElement('a')
+    a.href = fileName;
+    a.target = '_blank'; // Opens the link in a new tab
+    a.download = 'User Manual e-Estate.pdf' // Set the desired filename
+
+    // Trigger a click event on the anchor element
+    a.click()
+  }
+
 
 }

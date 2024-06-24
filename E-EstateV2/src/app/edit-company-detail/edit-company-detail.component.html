@@ -64,13 +64,47 @@
 
   <hr />
 
-  <div style="columns: 1" class="column">
+  <div style="columns: 2" class="column">
     <label>Membership :</label>
     <mat-select name="membership" placeholder="Please Choose" [(ngModel)]="companyDetail.membershipTypeId">
       <mat-option *ngFor="let membership of filterMemberships" [value]="membership.id">
         {{ membership.membershipType }}
       </mat-option>
     </mat-select>
+  </div>
+
+  <div style="columns: 2" class="column">
+    <label>Start Financial Year :</label>
+    <mat-select id="month" name="month" placeholder="Please Choose" [(ngModel)]="companyDetail.startFinancialYear" >
+      <mat-option value="JANUARY">January</mat-option>
+      <mat-option value="FEBRUARY">February</mat-option>
+      <mat-option value="MARCH">March</mat-option>
+      <mat-option value="APRIL">April</mat-option>
+      <mat-option value="MAY">May</mat-option>
+      <mat-option value="JUNE">June</mat-option>
+      <mat-option value="JULY">July</mat-option>
+      <mat-option value="AUGUST">August</mat-option>
+      <mat-option value="SEPTEMBER">September</mat-option>
+      <mat-option value="OCTOBER">October</mat-option>
+      <mat-option value="NOVEMBER">November</mat-option>
+      <mat-option value="DECEMBER">December</mat-option>
+  </mat-select>
+    <label>End Financial Year :</label>
+    <mat-select id="month" name="month" placeholder="Please Choose" [(ngModel)]="companyDetail.endFinancialYear"  >
+      <mat-option value="JANUARY">January</mat-option>
+      <mat-option value="FEBRUARY">February</mat-option>
+      <mat-option value="MARCH">March</mat-option>
+      <mat-option value="APRIL">April</mat-option>
+      <mat-option value="MAY">May</mat-option>
+      <mat-option value="JUNE">June</mat-option>
+      <mat-option value="JULY">July</mat-option>
+      <mat-option value="AUGUST">August</mat-option>
+      <mat-option value="SEPTEMBER">September</mat-option>
+      <mat-option value="OCTOBER">October</mat-option>
+      <mat-option value="NOVEMBER">November</mat-option>
+      <mat-option value="DECEMBER">December</mat-option>
+    </mat-select>
+    
   </div>
 
   <div style="padding-right: 10px">

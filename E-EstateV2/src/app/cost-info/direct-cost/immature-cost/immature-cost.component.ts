@@ -15,7 +15,7 @@ import swal from 'sweetalert2';
 export class ImmatureCostComponent implements OnInit, OnDestroy {
 
   @Input() costTypeId: number = 0
-  @Input() selectedYear = ''
+  @Input() selectedMonthYear = ''
 
   subCategories2IM: Cost[] = []
 
@@ -27,7 +27,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   value: CostAmount[] = []
 
   yearSelectedImmature = false
-  immatureYear = ''
+  immatureMonthYear = ''
   totalImmatureCostAmount = 0
   totalImmatureAmount = 0
   isLoading = true
@@ -43,8 +43,8 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.immatureYear = this.selectedYear
-    if (this.immatureYear != '') {
+    this.immatureMonthYear = this.selectedMonthYear
+    if (this.immatureMonthYear != '') {
       this.isDisable = false
     }
     this.getImmatureCostSub()
@@ -53,7 +53,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['selectedYear']) {
+    if (changes['selectedMonthYear']) {
       this.ngOnInit()
     }
   }
@@ -76,7 +76,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.immatureDirectCostAmount = Response
-          this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.year === parseInt(this.immatureYear)
+          this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.monthYear === this.immatureMonthYear
             && x.costTypeId == this.costTypeId && x.isMature === false && x.isMature !== null)
           this.draftFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
@@ -104,7 +104,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
     let newArray = this.subCategories2IM.map(obj => {
       return {
         ...obj,
-        year: parseInt(this.selectedYear),
+        monthYear: this.immatureMonthYear,
         estateId: this.sharedService.estateId,
         status: 'Draft',
         createdBy: this.sharedService.userId.toString(),
@@ -112,7 +112,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
       };
     });
     this.subCategories2IM = newArray
-    this.costImmatureAmount = this.subCategories2IM.map(({ amount, id, year, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, year, estateId: estateId, status, createdBy, createdDate })) as unknown as CostAmount[];
+    this.costImmatureAmount = this.subCategories2IM.map(({ amount, id, monthYear, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, monthYear, estateId: estateId, status, createdBy, createdDate })) as unknown as CostAmount[];
     this.costAmountService.addCostAmount(this.costImmatureAmount)
       .subscribe(
         {

@@ -53,8 +53,8 @@
             The estate is responsible for filling in daily sales, monthly production, total workforce, stock
             and annually rubber plantation area, production costs information.
           </span>
-          <br /><br />
-
+          <br />
+          <hr style="border-top: 2px dotted navy">
         </div>
 
         <span style="font-weight: bold;">e-Estate Info</span><br />
@@ -63,6 +63,11 @@
           production data,
           rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate
           sector.</span>
+        <hr/>
+
+        <div (click)="downloadFile()">
+          <button class="btn-update" >User Manual <i class="fa fa-download"></i>&nbsp; &nbsp;</button>
+        </div>
 
       </div>
     </mat-menu>

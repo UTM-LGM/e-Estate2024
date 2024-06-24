@@ -95,4 +95,5 @@ export class PendingRoleDetailComponent implements OnInit, OnDestroy{
 ngOnDestroy(): void {
   this.subscriptionService.unsubscribeAll();
 }
+
 }

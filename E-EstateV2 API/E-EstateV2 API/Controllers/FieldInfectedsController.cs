@@ -20,7 +20,8 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetFieldInfected()
         {
             var fieldInfected = await _fieldInfectedRepository.GetAll();
-            return Ok(fieldInfected);
+            var sortedFieldInfected = fieldInfected.OrderByDescending(field => field.isActive).ToList();
+            return Ok(sortedFieldInfected);
         }
 
         [HttpPost]
@@ -44,7 +45,8 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetFieldInfectedByEstateId([FromRoute] int estateId)
         {
             var field = await _fieldInfectedRepository.GetFieldInfectedByEstateId(estateId);
-            return Ok(field);
+            var sortedFieldInfected = field.OrderByDescending(field => field.isActive).ToList();
+            return Ok(sortedFieldInfected);
         }
 
         [HttpPut]

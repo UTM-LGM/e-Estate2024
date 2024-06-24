@@ -6,19 +6,14 @@
 
   <hr />
 
-  <!-- <h1>Cost Information</h1> -->
-
-
-  <!-- <span style="color: #DC4C64;font-weight: bold;">**All information is from January to December of the selected year &
-    specific for RUBBER only</span> -->
-
-
   <form style="margin-top: 10px;">
     <div style="display: flex; width: 60%; align-items: center; justify-content: space-between;">
       <div style="width: 40%; margin-right: 10px;">
         <label>Year :</label>
-        <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear"
-          [(ngModel)]="selectedYear" (change)="yearSelected()" />
+        <!-- <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear"
+          [(ngModel)]="selectedYear" (change)="yearSelected()" /> -->
+        <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
+
       </div>
 
       <div style="width: 60%; display: flex; flex-wrap: wrap; align-items: center;">
@@ -32,10 +27,10 @@
   </form>
 
   <div *ngIf="activeButton =='DIRECT' || activeButton == 'DIRECT COST' ">
-    <app-direct-cost [costTypeId]="clickedCostTypeId" [selectedYear]="selectedYear"></app-direct-cost>
+    <app-direct-cost [costTypeId]="clickedCostTypeId" [selectedMonthYear]="date"></app-direct-cost>
   </div>
 
   <div *ngIf="activeButton == 'INDIRECT' || activeButton == 'INDIRECT COST'">
-    <app-indirect-cost [costTypeId]="clickedCostTypeId" [selectedYear]="selectedYear"></app-indirect-cost>
+    <app-indirect-cost [costTypeId]="clickedCostTypeId" [selectedMonthYear]="date"></app-indirect-cost>
   </div>
 </div>

@@ -40,6 +40,9 @@ namespace E_EstateV2_API.Repository
                 totalTask = x.totalTask,
                 estateId = x.estateId,
                 createdDate = x.createdDate,
+                rubberArea = x.rubberArea,
+                currentTreeStand = x.currentTreeStand,
+                remark = x.remark
             }).ToListAsync();
             return field;
         }
@@ -75,7 +78,7 @@ namespace E_EstateV2_API.Repository
                 isMature = x.isMature,
                 isActive = x.isActive,
                 dateOpenTapping = x.dateOpenTapping,
-                dateOpenTappingFormatted = (x.dateOpenTapping != null) ? x.dateOpenTapping.Value.ToString("yyyy-MM-dd") : null,
+                dateOpenTappingFormatted = (x.dateOpenTapping != null) ? x.dateOpenTapping.Value.ToString("yyyy-MM") : null,
                 yearPlanted = x.yearPlanted,
                 //fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
                 fieldStatusId = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.Id).FirstOrDefault(),
@@ -95,7 +98,10 @@ namespace E_EstateV2_API.Repository
                 conversionCropName = _context.otherCrops.Where(y => y.Id == (_context.fieldConversions.Where(z=>z.fieldId == x.Id).Select(z=>z.otherCropId).FirstOrDefault())).Select(y => y.otherCrop).FirstOrDefault(),
                 sinceYear = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.sinceYear).FirstOrDefault(),
                 conversionId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.Id).FirstOrDefault(),
-                otherCropId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.otherCropId).FirstOrDefault()
+                otherCropId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.otherCropId).FirstOrDefault(),
+                rubberArea = x.rubberArea,
+                currentTreeStand = x.currentTreeStand,
+                remark = x.remark
             }).FirstOrDefaultAsync();
             return field;
         }
@@ -109,6 +115,9 @@ namespace E_EstateV2_API.Repository
                 existingField.area = field.area;
                 existingField.isMature = field.isMature;
                 existingField.fieldStatusId = field.fieldStatusId;
+                existingField.rubberArea = field.rubberArea;
+                existingField.currentTreeStand = field.currentTreeStand;
+                existingField.remark = field.remark;
                 existingField.yearPlanted = field.yearPlanted;
                 existingField.dateOpenTapping = field.dateOpenTapping;
                 existingField.initialTreeStand = field.initialTreeStand;

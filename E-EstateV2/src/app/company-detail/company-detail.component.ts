@@ -50,6 +50,8 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
 
   selectedEstate: any
 
+  companyId = 0
+
   sortableColumns = [
     { columnName: 'name', displayText: 'Estate Name' },
     { columnName: 'state', displayText: 'State' },
@@ -89,12 +91,13 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.route.params.subscribe((routeParams) => {
         if (routeParams['id'] != null) {
+          this.companyId = routeParams['id']
           const getOneCompany = this.myLesenService.getOneCompany(routeParams['id'])
             .subscribe(
               Response => {
                 this.company = Response
                 this.getContact()
-                this.getMembership()
+                this.getCompanyDetail()
                 this.isLoading = false
               }
             )
@@ -104,8 +107,8 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
     }, 2000)
   }
 
-  getMembership(){
-    const getMembership = this.companyDetailService.getCompanyDetailByCompanyId(this.sharedService.companyId)
+  getCompanyDetail(){
+    const getCompanyDetail = this.companyDetailService.getCompanyDetailByCompanyId(this.companyId)
     .subscribe(
       Response =>{
         if(Response){
@@ -113,7 +116,7 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.subscriptionService.add(getMembership);
+    this.subscriptionService.add(getCompanyDetail);
 
   }
 

@@ -13,6 +13,9 @@ namespace E_EstateV2_API.Models
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
 
+        public string startFinancialYear { get; set; }
+        public string endFinancialYear { get; set; }
+
         [ForeignKey("MembershipTypeId")]
         public int membershipTypeId { get; set; }
 

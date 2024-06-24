@@ -37,7 +37,9 @@ export class UserService {
     return this.http.get<User[]>(this.baseUrl + '/applicationusers/GetAllUser')
   }
 
-
+  updateUser(user:User):Observable<User>{
+    return this.http.put<User>(this.baseUrl + '/applicationusers/updateUser', user)
+  }
 
   checkLicenseNo(licenseNo: string): Observable<any> {
     return this.http.get<any>(this.baseUrl + '/applicationusers/CheckLicenseNo/' + licenseNo)

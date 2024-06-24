@@ -24,8 +24,8 @@ export class PendingRoleComponent implements OnInit, OnDestroy {
   sortableColumns = [
     { columnName: 'fullName', displayText: 'User Fullname' },
     { columnName: 'email', displayText: 'Email' },
-    { columnName: 'estateName', displayText: 'Estate Name' },
     { columnName: 'companyName', displayText: 'Company Name' },
+    { columnName: 'estateName', displayText: 'Estate Name' },
     { columnName: 'companyPhoneNo', displayText: 'Company Phone No'},
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'roleName', displayText: 'Role Name' },

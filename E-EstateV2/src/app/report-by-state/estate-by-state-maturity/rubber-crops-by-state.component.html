@@ -1,13 +1,15 @@
 <div class="box-container">
   <h1>Rubber Area by State and Maturity </h1>
 
-  <div style="columns:3">
-    <label>Please choose year : </label>
-    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  <div style="columns:4">
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
 
   <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
-    <button class="btn-add" (click)="exportToExcel(stateTotalsArray, 'Rubber Area By Maturity Report '+year)">
+    <button class="btn-add" (click)="exportToExcel(stateTotalsArray, 'Rubber Area By Maturity Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
@@ -41,7 +43,7 @@
       </tr>
 
       <tr *ngIf="!isLoading && stateTotalsArray.length == 0">
-        <td colspan="10" style="color: red;"><b>No Field Information</b></td>
+        <td colspan="10" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
       <ng-container *ngFor="let state of stateTotalsArray; let i = index">

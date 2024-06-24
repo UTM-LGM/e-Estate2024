@@ -3,10 +3,10 @@
 </div>
 
 <div class="box-container" *ngIf="!isLoading">
-  <h1>{{ company.name }}</h1>
+  <h1>Company Profile</h1>
   <hr />
 
-  <h1>Company Profile</h1>
+  <!-- <span style="font-size: 12px !important; font-weight: bold; text-decoration: underline;">Company Profile</span> -->
 
   <div style="float:right;">
     <button class="btn-update" (click)="openDialog(company,companyDetail)">
@@ -37,7 +37,15 @@
       <tr>
         <td class="detail">Membership</td>
         <td class="detail"><span>:</span></td>
-        <td class="detail">{{companyDetail.membershipType}} </td>
+        <td *ngIf="companyDetail.membershipType == null " class="detail" style="color: red;">Please update profile</td>
+        <td *ngIf="companyDetail.membershipType != null " class="detail">{{companyDetail.membershipType}} </td>
+      </tr>
+
+      <tr>
+        <td class="detail">Financial Year</td>
+        <td class="detail"><span>:</span></td>
+        <td *ngIf="companyDetail.startFinancialYear == null " class="detail" style="color: red;">Please update profile</td>
+        <td *ngIf="companyDetail.startFinancialYear != null " class="detail">{{companyDetail.startFinancialYear + ' - ' + companyDetail.endFinancialYear}} </td>
       </tr>
 
       <tr>
@@ -86,9 +94,12 @@
 
   <div>
     <h1>List of Additional Contact</h1>
-    <button style="margin-bottom: 10px" class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
+
+    <div style="float: left;">
+    <button class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
       Add New Contact &nbsp; <i class="fa fa-plus"></i>
     </button>
+  </div>
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Contact" />
     <div style="overflow-x: auto">
@@ -131,7 +142,7 @@
               </button>
             </td>
             <td>
-              <button class="btn-update" (click)="openDialogCompanyContact(contact, company)">
+              <button class="btn-update" (click)="openDialogCompanyContact(contact, company)" style="padding: 3px 15px;">
                 <i class="fa fa fa-pencil"></i>
               </button>
             </td>
@@ -149,8 +160,8 @@
   <br />
 
   <div class="box-container" *ngIf="userRole == 'Admin'">
-    <h1>List of Estates</h1>
-    <hr />
+    <!-- <span style="font-size: 12px; font-weight: bold; text-decoration: underline;">List of Estates</span> -->
+     <h1>List of Estates</h1>
 
     <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
     <div style="overflow-x: auto">
@@ -182,7 +193,7 @@
           *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
           <tr class="list" style="cursor: default;">
             <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
-              <a>{{estate.name}}</a>
+              <a>{{estate.name + ', ' + estate.add1.slice(0, -1) }}</a>
             </td>
             <td>{{ estate.state }}</td>
             <td>{{ estate.town }}</td>

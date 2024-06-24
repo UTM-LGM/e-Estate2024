@@ -21,6 +21,8 @@ import { FieldInfectedService } from '../_services/field-infected.service';
 import { OtherCrop } from '../_interface/otherCrop';
 import { OtherCropService } from '../_services/other-crop.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { FieldGrantService } from '../_services/field-grant.service';
+import { FieldGrant } from '../_interface/fieldGrant';
 
 @Component({
   selector: 'app-field-detail',
@@ -69,8 +71,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   currentSortedColumn = ''
   pageNumber = 1
   term = ''
+  rubberArea = ''
+
 
   otherCrops: OtherCrop[] = []
+
+  fieldGrants:FieldGrant []=[]
+  fieldGrant = {} as FieldGrant
 
   sortableColumn = [
     { columnName: 'dateInfected', displayText: 'Date Infected' },
@@ -96,7 +103,8 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
     private otherCropService: OtherCropService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private fieldGrantService:FieldGrantService
   ) { }
 
   ngOnInit() {
@@ -125,6 +133,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
           .subscribe(
             Response => {
               this.field = Response
+              this.getGrant()
+              if(this.field.rubberArea == this.field.area){
+                this.rubberArea = 'yes'
+              }
+              else{
+                this.rubberArea = 'no'
+              }
               this.isLoading = false
               this.getcategory(this.field)
               this.field.cloneId = 0;
@@ -134,7 +149,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
               this.getDate(Response.dateOpenTapping)
               this.getFieldInfected()
             });
-      this.subscriptionService.add(getOneField);
+        this.subscriptionService.add(getOneField);
 
       }
     })
@@ -207,9 +222,15 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   updateField(field: Field) {
     field.updatedBy = this.sharedService.userId.toString()
     field.updatedDate = new Date()
-    field.dateOpenTapping = field.dateOpenTappingFormatted
+    if(field.dateOpenTappingFormatted){
+      field.dateOpenTapping = this.convertToDateTime(field.dateOpenTappingFormatted);
+    }
+    else{
+      // this.field.dateOpenTappingFormatted = null
+    }
     const { fieldStatus, ...newFields } = this.field
     this.filteredFields = newFields
+    // console.log(this.filteredFields)
     this.fieldService.updateField(this.filteredFields)
       .subscribe(
         Response => {
@@ -220,9 +241,19 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
             showConfirmButton: false,
             timer: 1000
           });
+          this.ngOnInit()
         });
 
   }
+
+  convertToDateTime(monthYear: string): string {
+    // monthYear is in the format YYYY-MM
+    const [year, month] = monthYear.split('-').map(Number);
+    // Set the date to the first day of the selected month, time to midnight
+    const date = new Date(year, month, 1, 0, 0, 0); // Adjust month without -1
+    return date.toISOString(); // Convert to ISO string or any other desired format
+}
+
 
   updateConversion(field: Field) {
     this.fieldConversion.id = field.conversionId
@@ -260,6 +291,17 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
           this.filterClones = this.clones.filter((e) => e.isActive == true)
         });
       this.subscriptionService.add(getClone);
+
+  }
+
+  getGrant(){
+    const getGrant = this.fieldGrantService.getFieldGrantByFieldId(this.field.id)
+    .subscribe(
+      Response =>{
+        this.fieldGrants = Response
+      }
+    )
+    this.subscriptionService.add(getGrant);
 
   }
 
@@ -380,6 +422,35 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     }
   }
 
+  deleteGrant(grantId:number){
+    {
+      swal.fire({
+        title: "Are you sure to delete ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        denyButtonText: 'Cancel'
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.fieldGrantService.deleteGrant(grantId)
+            .subscribe(
+              Response =>{
+                swal.fire({
+                  title: 'Deleted!',
+                  text: 'Grant has been deleted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.ngOnInit()
+              })
+          } else if (result.isDenied) {
+          }
+        });
+    }
+  }
+
   back() {
     this.location.back()
   }
@@ -464,6 +535,53 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  areaRemark(){
+    if(this.field.rubberArea != null && this.field.rubberArea > this.field.area ){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Rubber area cannot be more than field area',
+      });
+      this.field.rubberArea = null
+    }
+  }
+
+  onRadioChange() {
+    if (this.rubberArea === 'yes') {
+      this.field.rubberArea = this.field.area;
+    }
+    else{
+      this.field.rubberArea = null
+    }
+  }
+
+  addGrant(fieldGrant:FieldGrant){
+    if (fieldGrant.grantTitle == '') {
+      swal.fire({
+        text: 'Please insert grant',
+        icon: 'error'
+      });
+    } else {
+      fieldGrant.fieldId = this.field.id
+      fieldGrant.createdBy = this.sharedService.userId.toString()
+      fieldGrant.createdDate = new Date()
+      this.fieldGrantService.addFieldGrant(fieldGrant)
+      .subscribe(
+        Response =>{
+          swal.fire({
+            title: 'Done!',
+            text: 'Grant successfully added!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.ngOnInit()
+        }
+      )
+    }
+  }
+
 
 }
 

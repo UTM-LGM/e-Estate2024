@@ -7,4 +7,6 @@ export interface CompanyDetail {
     createdDate: Date
     updatedBy: string
     updatedDate: Date
+    startFinancialYear:string
+    endFinancialYear:string
 }

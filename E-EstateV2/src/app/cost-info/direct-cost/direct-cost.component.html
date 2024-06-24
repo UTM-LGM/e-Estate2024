@@ -2,10 +2,10 @@
 
 <mat-tab-group mat-align-tabs="center">
   <mat-tab label="Mature">
-    <app-mature-cost [selectedYear]="selectedYear" [costTypeId]="clickedCostTypeId"></app-mature-cost>
+    <app-mature-cost [selectedMonthYear]="selectedMonthYear" [costTypeId]="clickedCostTypeId"></app-mature-cost>
   </mat-tab>
 
   <mat-tab label="Immature">
-    <app-immature-cost [selectedYear]="selectedYear" [costTypeId]="clickedCostTypeId"></app-immature-cost>
+    <app-immature-cost [selectedMonthYear]="selectedMonthYear" [costTypeId]="clickedCostTypeId"></app-immature-cost>
   </mat-tab>
 </mat-tab-group>

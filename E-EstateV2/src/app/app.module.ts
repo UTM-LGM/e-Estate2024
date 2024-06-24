@@ -127,7 +127,7 @@ import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
 import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
 import { RubberStockDetailComponent } from './rubber-stock-detail/rubber-stock-detail.component';
 import { EstateByStateComponent } from './report-by-state/estate-by-state/estate-by-state.component';
-import { RubberCropsByStateComponent } from './report-by-state/rubber-crops-by-state/rubber-crops-by-state.component';
+import { RubberCropsByStateComponent } from './report-by-state/estate-by-state-maturity/rubber-crops-by-state.component';
 import { ReportByStateComponent } from './report-by-state/report-by-state.component';
 import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
 import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
@@ -141,9 +141,15 @@ import { LaborInformationYearlyComponent } from './report-labor-information/labo
 import { WorkerShortageEstateComponent } from './report-labor-information/worker-shortage-estate/worker-shortage-estate.component';
 import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
 import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
-import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import { BrowserCacheLocation, InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { AuthInterceptor } from './_interceptor/token.interceptor';
 import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
+import { UserListComponent } from './utility-manage-user/user-list/user-list.component';
+import { UserListUpdateComponent } from './utility-manage-user/user-list-update/user-list-update.component';
+import { AddFieldComponent } from './add-field/add-field.component';
+import { CuplumpRubberStockComponent } from './rubber-stock/cuplump-rubber-stock/cuplump-rubber-stock.component';
+import { LatexRubberStockComponent } from './rubber-stock/latex-rubber-stock/latex-rubber-stock.component';
+import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sale.component';
 
 register()
 
@@ -257,6 +263,12 @@ register()
     WorkerShortageEstateComponent,
     ReportCostInformationComponent,
     ReportRubberAreaByCloneComponent,
+    UserListComponent,
+    UserListUpdateComponent,
+    AddFieldComponent,
+    CuplumpRubberStockComponent,
+    LatexRubberStockComponent,
+    ReportRubberSaleComponent,
   ],
   imports: [
     BrowserModule,
@@ -285,19 +297,36 @@ register()
     QRCodeModule,
     MsalModule.forRoot(
       new PublicClientApplication({
+
+        //Production
+        // auth: {
+        //   clientId: "4c278748-3ef9-49f9-94ec-9591a665a4b7", // Application (client) ID from the app registration
+        //   authority:
+        //     "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
+        //   redirectUri: "https://www5.lgm.gov.my/e-Estate", // This is your redirect URI
+        //   //redirectUri: "http://localhost:4300", // This is your redirect URI
+
+        // },
+        // cache: {
+        //   cacheLocation: BrowserCacheLocation.LocalStorage,
+	      //   //Can be set true or false
+        //   storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
+        // },
+
+        //Staging
         auth: {
-          clientId: "4c278748-3ef9-49f9-94ec-9591a665a4b7", // Application (client) ID from the app registration
+          clientId: "91409c1e-06ba-4c11-89b6-6002d296a769", // Application (client) ID from the app registration
           authority:
             "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
-          redirectUri: "https://www5.lgm.gov.my/e-Estate", // This is your redirect URI
-          //redirectUri: "http://localhost:4300", // This is your redirect URI
+          redirectUri: "https://lgm20.lgm.gov.my/e-Estate", // This is your redirect URI
 
         },
         cache: {
-          cacheLocation: "localStorage",
+          cacheLocation: BrowserCacheLocation.LocalStorage,
 	        //Can be set true or false
           storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
         },
+
       }),
       {
         interactionType: InteractionType.Redirect, // MSAL Guard Configuration

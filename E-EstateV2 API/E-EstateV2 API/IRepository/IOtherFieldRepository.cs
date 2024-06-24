@@ -9,6 +9,6 @@ namespace E_EstateV2_API.IRepository
         Task<DTO_OtherField> GetOtherFieldById(int id);
         Task<OtherField> AddOtherField(OtherField otherField);
         Task<OtherField> UpdateOtherField(OtherField otherField);
-        Task<Object> CheckOtherFieldName(string fieldName);
+        Task<object> CheckOtherFieldName(string fieldName);
     }
 }

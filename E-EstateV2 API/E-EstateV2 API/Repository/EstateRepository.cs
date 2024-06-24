@@ -142,7 +142,7 @@ namespace E_EstateV2_API.Repository
             return null;
         }
 
-        public async Task<Object> CheckEstateName(string estateName)
+        public async Task<object> CheckEstateName(string estateName)
         {
             var estate = await _context.estates.Where(x=>x.estateName == estateName).Select(x => x.estateName).FirstOrDefaultAsync();
             if(estate == null)

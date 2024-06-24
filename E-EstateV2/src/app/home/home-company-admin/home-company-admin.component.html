@@ -1,5 +1,5 @@
-<h1 class="tittle">Dashboard Company Admin :
-  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{company.name}}</span>
+<h1 class="tittle">Dashboard Company :
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;font-size: 20px;">{{company.name}}</span>
   <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
       [theme]="{'height':'30px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
 </h1>
@@ -7,13 +7,11 @@
 <hr />
 
 <div style="columns:2">
-  <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current total</span>
     <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
-          <span>Estate</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingEstate">{{totalEstate}}</span>
+          <span style="font-weight: bold;" > Total Estate</span><br />
+          <span *ngIf="!isLoadingEstate">{{totalEstate}}</span>
         </div>
         <div *ngIf="isLoadingEstate">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -21,16 +19,13 @@
         </div>
       </div>
     </div>
-  </div>
   <br />
 
-  <div class="box-container-outer">
-    <span style="font-size: 11px;font-weight: bold;">Current Field Area (Ha)</span>
     <div class="box">
       <div class="column box-container color2">
         <div class="span-word">
-          <span>Tapped</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingTapped">{{tappedArea}}</span>
+          <span style="font-weight: bold;">Tapped Rubber Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{tappedArea  | number:'1.2-2' }}</span>
         </div>
         <div *ngIf="isLoadingTapped">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -38,17 +33,17 @@
         </div>
       </div>
     </div>
-  </div>
+
 </div>
 
 <div class="box-container-outer">
-  <span style="font-size: 11px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
+  <span style="font-size: 14px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
-        <span>Cuplump</span><br />
+        <span style="font-weight: bold;">Cuplump</span><br />
         <div *ngIf="!isLoadingProduction">
-          <b><span>{{totalCuplumpDry | number: '1.2-2'}}</span></b>
+          <span>{{totalCuplumpDry | number: '1.2-2'}}</span>
         </div>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -59,9 +54,9 @@
 
     <div class="column box-container color4">
       <div class="span-word">
-        <span>Latex</span><br />
+        <span style="font-weight: bold;">Latex</span><br />
         <div *ngIf="!isLoadingProduction">
-          <b><span>{{totalLatexDry | number: '1.2-2'}}</span></b>
+          <span>{{totalLatexDry | number: '1.2-2'}}</span> 
         </div>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -72,8 +67,8 @@
 
     <div class="column box-container color1">
       <div class="span-word">
-        <span>Total</span><br />
-        <span style="font-weight: bold;" *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number:
+        <span style="font-weight: bold;">Total</span><br />
+        <span *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number:
           '1.2-2' }}</span>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -86,14 +81,13 @@
 <br />
 
 <div class="box-container-outer">
-  <span style="font-size: 11px;font-weight: bold;">Productivity (Kg/Ha) </span>
+  <span style="font-size: 14px;font-weight: bold;">Productivity (Kg/Ha) </span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
-        <span>Malaysia</span><br />
+        <span style="font-weight: bold;">Malaysia</span><br />
         <div *ngIf="!isLoadingMalaysia">
-          <b><span>{{ (totalCuplumpDryMalaysia + totalLatexDryMalaysia)/tappedAreaMalaysia || 0 | number:
-              '1.2-2'}}</span></b>
+          <span>{{ (tappedAreaMalaysia > 0 ? (totalCuplumpDryMalaysia + totalLatexDryMalaysia) / tappedAreaMalaysia : 0) | number: '1.2-2' }}</span>
         </div>
       </div>
       <div *ngIf="isLoadingMalaysia">
@@ -104,9 +98,9 @@
 
     <div class="column box-container color4">
       <div class="span-word">
-        <span>Company</span><br />
+        <span style="font-weight: bold;">Company</span><br />
         <div *ngIf="!isLoadingCompany">
-          <b><span>{{ (totalCuplumpDry + totalLatexDry)/tappedArea || 0 | number: '1.2-2'}}</span></b>
+          <span>{{ tappedArea > 0 ? (totalCuplumpDry + totalLatexDry) / tappedArea : 0 | number: '1.2-2' }}</span>
         </div>
       </div>
       <div *ngIf="isLoadingCompany">

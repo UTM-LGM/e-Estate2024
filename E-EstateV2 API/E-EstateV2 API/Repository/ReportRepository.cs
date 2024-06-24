@@ -4,6 +4,7 @@ using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Globalization;
 
 namespace E_EstateV2_API.Repository
@@ -51,7 +52,7 @@ namespace E_EstateV2_API.Repository
                     EstateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
                     CuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                     LatexDry = x.latex * (x.latexDRC / 100),
-                    Area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+                    Area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
                     MonthYear = x.monthYear,
                     Year = x.monthYear.Substring(x.monthYear.Length - 4), // Extracting year from MonthYear
                     fieldId = x.fieldId,
@@ -155,7 +156,7 @@ namespace E_EstateV2_API.Repository
                 fieldId = x.fieldId,
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
                 noTaskTap = x.noTaskTap,
-                fieldArea = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+                fieldArea = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
                 totalTask = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.totalTask).FirstOrDefault(),
                 //totalCrop = x.cuplump + x.latex,
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
@@ -226,6 +227,34 @@ namespace E_EstateV2_API.Repository
         }
 
         //EstateClerk
+        public async Task<object> GetStateFieldArea(string start, string end)
+        {
+            // Parse the start and end dates
+            DateTime startDate = DateTime.ParseExact(start, "yyyy-MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                          .AddMonths(1).AddDays(-1);
+
+            // Create the range filters
+            var excludedStatuses = new[] { "abandoned", "government" };
+
+            // Filter fields based on isActive, date range, and other criteria
+            var field = await _context.fields
+                .Where(x => x.isActive && x.createdDate >= startDate && x.createdDate <= endDate)
+                .Select(x => new
+                {
+                    fieldId = x.Id,
+                    area = x.rubberArea,
+                    isMature = x.isMature,
+                    estateId = x.estateId,
+                    isActive = x.isActive,
+                    fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
+                    createdDate = x.createdDate
+                })
+                .ToListAsync();
+
+            return field;
+        }
+
         public async Task<object> GetFieldArea(int year)
         {
             var excludedStatuses = new[] { "abandoned", "government" };
@@ -237,10 +266,11 @@ namespace E_EstateV2_API.Repository
                 estateId = x.estateId,
                 isActive = x.isActive,
                 fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault()
-            }). ToListAsync();
+            }).ToListAsync();
 
             return field;
         }
+
 
 
         public async Task<object> GetProductionYearlyByClone(int year)
@@ -248,7 +278,7 @@ namespace E_EstateV2_API.Repository
             var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
-                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
                 fieldClone = _context.fieldClones.Where(y => y.fieldId == x.fieldId).Select(y => new
                 {
                     cloneId = y.cloneId,
@@ -266,7 +296,35 @@ namespace E_EstateV2_API.Repository
                 fieldId = x.fieldId,
                 cloneId = x.cloneId,
                 cloneName = _context.clones.Where(y=>y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
-                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).FirstOrDefault(),
+            }).ToListAsync();
+
+            // Group by fieldId and create a list of cloneId for each fieldId
+            var groupedResult = fieldClone
+                .GroupBy(x => new { x.fieldId, x.area })
+                .Select(g => new
+                {
+                    fieldId = g.Key.fieldId,
+                    area = g.Key.area,
+                    cloneNames = g.Select(x => x.cloneName).ToList()
+                }).ToList();
+
+            return groupedResult;
+        }
+
+        public async Task<object> GetAreaByAllClone(string start, string end)
+        {
+            DateTime startDate = DateTime.ParseExact(start, "yyyy-MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                          .AddMonths(1).AddDays(-1);
+
+            // Fetch the raw data
+            var fieldClone = await _context.fieldClones.Where(x => x.createdDate >= startDate && x.createdDate <= endDate).Select(x => new
+            {
+                fieldId = x.fieldId,
+                cloneId = x.cloneId,
+                cloneName = _context.clones.Where(y => y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).FirstOrDefault(),
             }).ToListAsync();
 
             // Group by fieldId and create a list of cloneId for each fieldId
@@ -288,7 +346,7 @@ namespace E_EstateV2_API.Repository
             {
                 id = x.Id,
                 fieldName = x.fieldName,
-                area = x.area,
+                area = x.rubberArea,
                 isMature = x.isMature,
                 isActive = x.isActive,
                 dateOpenTapping = x.dateOpenTapping,
@@ -308,7 +366,7 @@ namespace E_EstateV2_API.Repository
             var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
-                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.area).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
                 latexDry = x.latex * (x.latexDRC / 100),
                 fieldClone = _context.fieldClones.Where(y => y.fieldId == x.fieldId).Select(y => new
@@ -319,6 +377,48 @@ namespace E_EstateV2_API.Repository
             }).ToListAsync();
             return fieldProduction;
         }
+
+        public async Task<object> GetAllProductivityYearlyByClone(string start, string end)
+        {
+            // Convert start and end to DateTime objects for accurate comparison
+            if (!DateTime.TryParseExact($"{start}-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate) ||
+                !DateTime.TryParseExact($"{end}-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            {
+                throw new ArgumentException("Invalid date format for start or end.");
+            }
+
+
+            bool IsWithinRange(string monthYear)
+            {
+                if (!DateTime.TryParseExact(monthYear, "MMM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime monthDate))
+                {
+                    return false; // Invalid format
+                }
+
+                // Check if monthDate is within startDate and endDate
+                return startDate <= monthDate && monthDate <= endDate;
+            }
+
+
+            var allProduction = await _context.fieldProductions.ToListAsync();
+            var filteredProduction = allProduction.Where(x => IsWithinRange(x.monthYear) && x.status == "Submitted").ToList();
+
+            var fieldProduction = filteredProduction.Select(x => new
+            {
+                fieldId = x.fieldId,
+                area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
+                cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
+                latexDry = x.latex * (x.latexDRC / 100),
+                fieldClone = _context.fieldClones.Where(y => y.fieldId == x.fieldId).Select(y => new
+                {
+                    cloneId = y.cloneId,
+                    cloneName = _context.clones.Where(t => t.Id == y.cloneId).Select(y => y.cloneName).FirstOrDefault(),
+                }).ToList(),
+            }).ToList();
+
+            return fieldProduction;
+        }
+
 
         //LGMAdmin
         public async Task<object> GetLaborInformationCategory(int year)
@@ -393,6 +493,105 @@ namespace E_EstateV2_API.Repository
             return groupedResult;
         }
 
+        // LGMAdmin
+        public async Task<object> GetAllLaborInformationCategory(string start, string end)
+        {
+            var allLaborInfos = await _context.laborInfos.ToListAsync();
+
+            // Convert start and end to a comparable format (yyyy-mm-01)
+            string startDate = $"{start}-01";
+            string endDate = $"{end}-01";
+
+            string[] monthNames = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+
+            // Helper method to check if monthYear is within the specified range
+            bool IsWithinRange(string monthYear)
+            {
+                // Convert monthYear to comparable format (mmm-yyyy to yyyy-mm-01)
+                string[] parts = monthYear.Split('-');
+                if (parts.Length != 2)
+                    return false;
+
+                string year = parts[1].Trim();
+                string month = parts[0].Trim();
+
+                // Convert month to a numeric format (1-based index)
+                string numericMonth = (Array.IndexOf(monthNames, month) + 1).ToString();
+                if (numericMonth.Length == 1)
+                    numericMonth = "0" + numericMonth;
+
+                string comparableFormat = $"{year}-{numericMonth}-01";
+
+                // Perform comparison
+                return comparableFormat.CompareTo(startDate) >= 0 && comparableFormat.CompareTo(endDate) <= 0;
+            }
+
+            // Filter allLaborInfos to only include entries that match the specified year range
+            var filteredLaborInfos = allLaborInfos.Where(x => IsWithinRange(x.monthYear)).ToList();
+
+            // Get the latest monthYear for each estate
+            var latestMonthYearsForEachEstate = filteredLaborInfos
+                .GroupBy(x => x.estateId)
+                .Select(group => new
+                {
+                    EstateId = group.Key,
+                    LatestMonthYear = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.monthYear).FirstOrDefault()
+                })
+                .ToList();
+
+            var workerForEachLaborType = new List<object>();
+
+            // Iterate through each estate and get labor information for the latest monthYear
+            foreach (var latestMonthYearForEstate in latestMonthYearsForEachEstate)
+            {
+                var labor = await _context.laborByCategories
+                    .Where(x => x.LaborInfo.monthYear == latestMonthYearForEstate.LatestMonthYear && x.LaborInfo.estateId == latestMonthYearForEstate.EstateId)
+                    .GroupBy(x => x.laborTypeId)
+                    .Select(group => new
+                    {
+                        laborTypeId = group.Key,
+                        estateId = latestMonthYearForEstate.EstateId,
+                        latestMonthYear = latestMonthYearForEstate.LatestMonthYear,
+                        laborType = _context.laborTypes.Where(y => y.Id == group.Key).Select(y => y.laborType).FirstOrDefault(),
+                        localNoOfWorkers = group
+                            .Join(_context.laborInfos, x => x.laborInfoId, y => y.Id, (x, y) => new { x, y })
+                            .Join(_context.countries, xy => xy.y.countryId, z => z.Id, (xy, z) => new { xy.x, xy.y, z })
+                            .Where(xyz => xyz.z.isLocal)
+                            .Sum(xyz => xyz.x.noOfWorker),
+                        foreignNoOfWorkers = group
+                            .Join(_context.laborInfos, x => x.laborInfoId, y => y.Id, (x, y) => new { x, y })
+                            .Join(_context.countries, xy => xy.y.countryId, z => z.Id, (xy, z) => new { xy.x, xy.y, z })
+                            .Where(xyz => !xyz.z.isLocal)
+                            .Sum(xyz => xyz.x.noOfWorker)
+                    })
+                    .ToListAsync();
+
+                workerForEachLaborType.AddRange(labor);
+            }
+
+            // Group the result by estateId and laborTypeId and calculate sums
+            var groupedResult = workerForEachLaborType
+                        .GroupBy(x => new {
+                            laborTypeId = (int)x.GetType().GetProperty("laborTypeId").GetValue(x, null),
+                            estateId = (int)x.GetType().GetProperty("estateId").GetValue(x, null)
+                        })
+                        .Select(group => new
+                        {
+                            estateId = group.Key.estateId,
+                            laborTypeId = group.Key.laborTypeId,
+                            laborType = _context.laborTypes
+                                .Where(y => y.Id == group.Key.laborTypeId)
+                                .Select(y => y.laborType)
+                                .FirstOrDefault(),
+                            localNoOfWorkers = group.Sum(x => (int)x.GetType().GetProperty("localNoOfWorkers").GetValue(x, null)),
+                            foreignNoOfWorkers = group.Sum(x => (int)x.GetType().GetProperty("foreignNoOfWorkers").GetValue(x, null))
+                        })
+                        .ToList();
+
+            return groupedResult;
+        }
+
+
 
         //LGMAdmin
         public async Task<object> GetTapperAndFieldWorker(int year)
@@ -458,6 +657,91 @@ namespace E_EstateV2_API.Repository
             return groupedData;
         }
 
+        public async Task<object> GetAllTapperAndFieldWorker(string start, string end)
+        {
+            // Convert start and end to a comparable format (yyyy-mm-01)
+            string startDate = $"{start}-01";
+            string endDate = $"{end}-01";
+
+            // Fetch all laborInfos records into memory
+            var allLaborInfos = await _context.laborInfos.ToListAsync();
+
+            // Helper method to check if monthYear is within the specified range
+            bool IsWithinRange(string monthYear)
+            {
+                // Convert monthYear to comparable format (mmm-yyyy to yyyy-mm-01)
+                string[] parts = monthYear.Split('-');
+                if (parts.Length != 2)
+                    return false;
+
+                string year = parts[1].Trim();
+                string month = parts[0].Trim();
+
+                // Convert month to a numeric format (1-based index)
+                string[] monthNames = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+                string numericMonth = (Array.IndexOf(monthNames, month) + 1).ToString();
+                if (numericMonth.Length == 1)
+                    numericMonth = "0" + numericMonth;
+
+                string comparableFormat = $"{year}-{numericMonth}-01";
+
+                // Perform comparison
+                return comparableFormat.CompareTo(startDate) >= 0 && comparableFormat.CompareTo(endDate) <= 0;
+            }
+
+            // Filter allLaborInfos to only include entries that match the specified year range
+            var filteredLaborInfos = allLaborInfos.Where(x => IsWithinRange(x.monthYear)).ToList();
+
+            // Fetch the necessary data for isLocal before the LINQ query
+            var countryIsLocalMap = _context.countries.ToDictionary(y => y.Id, y => y.isLocal);
+
+            var latestMonthYearsForEachEstate = filteredLaborInfos
+                .GroupBy(x => new { x.estateId, IsLocal = countryIsLocalMap.ContainsKey(x.countryId) ? countryIsLocalMap[x.countryId] : false }) // Group by estateId and isLocal
+                .Select(group => new
+                {
+                    group.Key.estateId,
+                    group.Key.IsLocal,
+                    LatestMonthYear = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.monthYear).FirstOrDefault()
+                })
+                .ToList();
+
+            var workerForEachEstate = new List<object>();
+
+            foreach (var latestMonthYearForEstate in latestMonthYearsForEachEstate)
+            {
+                var worker = filteredLaborInfos
+                    .Where(x => x.estateId == latestMonthYearForEstate.estateId
+                             && x.monthYear == latestMonthYearForEstate.LatestMonthYear
+                             && countryIsLocalMap.ContainsKey(x.countryId) && countryIsLocalMap[x.countryId] == latestMonthYearForEstate.IsLocal)
+                    .Select(x => new
+                    {
+                        estateId = x.estateId,
+                        isLocal = countryIsLocalMap[x.countryId],
+                        tapperWorker = x.tapperCheckrole + x.tapperContractor,
+                        fieldWorker = x.fieldCheckrole + x.fieldContractor,
+                    })
+                    .FirstOrDefault();
+
+                workerForEachEstate.Add(worker);
+            }
+
+            // Group by isLocal and calculate totals
+            var groupedData = workerForEachEstate
+                .Where(x => x != null)
+                .GroupBy(x => new { EstateId = x.GetType().GetProperty("estateId").GetValue(x, null), IsLocal = x.GetType().GetProperty("isLocal").GetValue(x, null) })
+                .Select(group => new
+                {
+                    EstateId = group.Key.EstateId,
+                    IsLocal = group.Key.IsLocal,
+                    tapperWorker = group.Sum(x => (int)x.GetType().GetProperty("tapperWorker").GetValue(x, null)),
+                    fieldWorker = group.Sum(x => (int)x.GetType().GetProperty("fieldWorker").GetValue(x, null))
+                })
+                .ToList();
+
+            return groupedData;
+        }
+
+
 
         //LGMAdmin
         public async Task<object> GetWorkerShortageEstate(int year)
@@ -488,10 +772,66 @@ namespace E_EstateV2_API.Repository
             return latestWorkerShortageForEachEstate;
         }
 
+        public async Task<object> GetAllWorkerShortageEstate(string start, string end)
+        {
+            // Convert start and end to a comparable format (yyyy-mm-01)
+            string startDate = $"{start}-01";
+            string endDate = $"{end}-01";
+
+            // Fetch all worker shortage records into memory
+            var allWorkerShortage = await _context.workerShortages.ToListAsync();
+
+            // Helper method to check if monthYear is within the specified range
+            bool IsWithinRange(string monthYear)
+            {
+                // Convert monthYear to comparable format (mmm-yyyy to yyyy-mm-01)
+                string[] parts = monthYear.Split('-');
+                if (parts.Length != 2)
+                    return false;
+
+                string year = parts[1].Trim();
+                string month = parts[0].Trim();
+
+                // Convert month to a numeric format (1-based index)
+                string[] monthNames = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+                string numericMonth = (Array.IndexOf(monthNames, month) + 1).ToString();
+                if (numericMonth.Length == 1)
+                    numericMonth = "0" + numericMonth;
+
+                string comparableFormat = $"{year}-{numericMonth}-01";
+
+                // Perform comparison
+                return comparableFormat.CompareTo(startDate) >= 0 && comparableFormat.CompareTo(endDate) <= 0;
+            }
+
+            // Filter allWorkerShortage to only include entries that match the specified year range
+            var filteredWorkerShortage = allWorkerShortage.Where(x => IsWithinRange(x.monthYear)).ToList();
+
+            // Find the latest month within the specified range
+            var latestMonthShortage = filteredWorkerShortage
+                .OrderByDescending(x => GetMonthValue(x.monthYear)) // Order by month value descending to get the latest
+                .FirstOrDefault();
+
+            // Prepare the result object based on the latest worker shortage found
+            var workerShortageData = latestMonthShortage != null ? new List<object>
+                {
+                    new
+                    {
+                        EstateId = latestMonthShortage.estateId,
+                        MonthYear = latestMonthShortage.monthYear,
+                        TapperShortage = latestMonthShortage.tapperWorkerShortage,
+                        FieldShortage = latestMonthShortage.fieldWorkerShortage
+                    }
+                } : new List<object>();
+
+            return workerShortageData;
+        }
+
 
         public async Task<object> GetCostInformation(int year)
         {
-            var cost = await _context.costAmounts.Where(x =>x.status == "Submitted" && x.year == year).Select(x => new
+            string yearString = year.ToString();
+            var cost = await _context.costAmounts.Where(x =>x.status == "Submitted" && x.monthYear.Contains(yearString)).Select(x => new
             {
                 amount = x.amount,
                 costType = _context.costTypes.Where(y=>y.Id == (_context.costs.Where(z=>z.Id == x.costId).Select(z=>z.costTypeId).FirstOrDefault())).Select(y=>y.costType).FirstOrDefault(),
@@ -505,6 +845,106 @@ namespace E_EstateV2_API.Repository
             }).ToListAsync();
             return cost;
         }
+
+        public async Task<object> GetAllRubberSale(string start, string end)
+        {
+            // Parse the start and end dates
+            DateTime startDate = DateTime.ParseExact(start, "yyyy-MM", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
+                                          .AddMonths(1).AddDays(-1);
+
+            var sales = await _context.rubberSales.Where(x=>x.paymentStatusId == 3 && x.saleDateTime >= startDate && x.saleDateTime <= endDate).Select(x => new DTO_RubberSale
+            {
+                id = x.Id,
+                saleDateTime = x.saleDateTime,
+                buyerName = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.buyerName).FirstOrDefault(),
+                rubberType = x.rubberType,
+                letterOfConsentNo = x.letterOfConsentNo,
+                receiptNo = x.receiptNo,
+                wetWeight = x.wetWeight,
+                buyerWetWeight = x.buyerWetWeight,
+                DRC = x.DRC,
+                buyerDRC = x.buyerDRC,
+                unitPrice = x.unitPrice,
+                total = x.total,
+                weightSlipNo = x.weightSlipNo,
+                isActive = x.isActive,
+                buyerId = x.buyerId,
+                buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.licenseNo).FirstOrDefault(),
+                paymentStatusId = x.paymentStatusId,
+                paymentStatus = _context.paymentStatuses.Where(y => y.id == x.paymentStatusId).Select(y => y.status).FirstOrDefault(),
+                estateId = x.estateId,
+                transportPlateNo = x.transportPlateNo,
+                driverName = x.driverName,
+                driverIc = x.driverIc,
+                remark = x.remark,
+                deliveryAgent = x.deliveryAgent,
+            }).OrderBy(x => x.saleDateTime).ToListAsync();
+            return sales;
+        }
+
+        public async Task<object> GetAllCostInformation(string start, string end)
+        {
+            // Convert start and end to DateTime objects for accurate comparison
+            if (!DateTime.TryParseExact($"{start}-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startDate) ||
+                !DateTime.TryParseExact($"{end}-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime endDate))
+            {
+                throw new ArgumentException("Invalid date format for start or end.");
+            }
+
+            // Helper method to check if monthYear is within the specified range
+            bool IsWithinRange(string monthYear)
+            {
+                if (!DateTime.TryParseExact(monthYear, "MMM-yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime monthDate))
+                {
+                    return false; // Invalid format
+                }
+
+                // Check if monthDate is within startDate and endDate
+                return startDate <= monthDate && monthDate <= endDate;
+            }
+
+            var allCostAmount = await _context.costAmounts
+                .Where(x => x.status == "Submitted")
+                .ToListAsync();
+
+            var allCost = allCostAmount
+                .Where(x => IsWithinRange(x.monthYear))
+                .ToList();
+
+            var groupedCosts = allCost
+                .GroupBy(x => x.costId)
+                .Select(g => new
+                {
+                    costId = g.Key,
+                    amount = g.Sum(x => x.amount),
+                    costType = _context.costTypes
+                        .Where(y => y.Id == (_context.costs.Where(z => z.Id == g.Key).Select(z => z.costTypeId).FirstOrDefault()))
+                        .Select(y => y.costType)
+                        .FirstOrDefault(),
+                    isMature = _context.costs
+                        .Where(y => y.Id == g.Key)
+                        .Select(y => y.isMature)
+                        .FirstOrDefault(),
+                    costCategory = _context.costCategories
+                        .Where(y => y.Id == (_context.costs.Where(z => z.Id == g.Key).Select(z => z.costCategoryId).FirstOrDefault()))
+                        .Select(y => y.costCategory)
+                        .FirstOrDefault(),
+                    costSubcategories1 = _context.costSubcategories1
+                        .Where(y => y.Id == (_context.costs.Where(z => z.Id == g.Key).Select(z => z.costSubcategory1Id).FirstOrDefault()))
+                        .Select(y => y.costSubcategory1)
+                        .FirstOrDefault(),
+                    costSubcategories2 = _context.costSubcategories2
+                        .Where(y => y.Id == (_context.costs.Where(z => z.Id == g.Key).Select(z => z.costSubcategory2Id).FirstOrDefault()))
+                        .Select(y => y.costSubcategory2)
+                        .FirstOrDefault(),
+                    estateId = g.FirstOrDefault().estateId // Assuming estateId is the same for all entries with the same costId
+                })
+                .ToList();
+
+            return groupedCosts;
+        }
+
 
     }
 }

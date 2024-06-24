@@ -1,5 +1,6 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.IRepository;
+using E_EstateV2_API.Migrations;
 using E_EstateV2_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Web;
@@ -37,6 +38,7 @@ namespace E_EstateV2_API.Repository
                 totalPrice = x.total,
                 transportPlateNo = x.transportPlateNo,
                 driverName = x.driverName,
+                driverIC = x.driverIc,
                 estateId = x.estateId,
                 buyerId = x.buyerId,
                 buyerName = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.buyerName).FirstOrDefault(),

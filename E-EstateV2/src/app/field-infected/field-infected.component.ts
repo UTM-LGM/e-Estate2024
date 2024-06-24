@@ -36,6 +36,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   pageNumber = 1
   areaAffected = 0
+  isSubmit = false
 
   filteredFields: Field[] = []
   filterFieldDisease: FieldDisease[] = []
@@ -48,8 +49,10 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     { columnName: 'dateInfected', displayText: 'Date Infected' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'area', displayText: 'Field Area (Ha)' },
+    { columnName: 'areaInfectedPercentage', displayText: 'Area Infected Percentage (%)' },
     { columnName: 'areaInfected', displayText: 'Area Infected (Ha)' },
-    { columnName: 'fieldDiseaseName', displayText: 'Field Disease Name' },
+    { columnName: 'diseaseCategory', displayText: 'Disease Category' },
+    { columnName: 'fieldDiseaseName', displayText: 'Disease Name' },
     { columnName: 'severityLevel', displayText: 'Level Infected' },
     { columnName: 'dateRecovered', displayText: 'Date Recovered' },
     { columnName: 'remark', displayText: 'Remark' },
@@ -157,22 +160,39 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.fieldInfected.isActive = true
-    this.fieldInfected.createdBy = this.sharedService.userId
-    this.fieldInfectedService.addFieldInfected(this.fieldInfected)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Field Infected successfully submitted!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-        }
-      )
-    this.fieldInfected = {}
-    this.ngOnInit()
+    if (this.fieldInfected.fieldId == '') {
+      swal.fire({
+        text: 'Please fill up the form',
+        icon: 'error'
+      });
+    } else {
+      this.fieldInfected.isActive = true;
+      this.fieldInfected.createdBy = this.sharedService.userId;
+      this.isSubmit = true;
+      this.fieldInfectedService.addFieldInfected(this.fieldInfected)
+        .subscribe({
+          next: (response) => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Field Infected successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.fieldInfected = {};
+            this.ngOnInit();  // Reinitialize the component state if needed
+          },
+          error: (error) => {
+            swal.fire({
+              title: 'Error!',
+              text: 'Failed to submit Field Infected!',
+              icon: 'error',
+              showConfirmButton: true
+            });
+          }
+        });
+        this.isSubmit = false;
+      }
   }
 
   selectedFieldName(fieldId: any) {
@@ -238,6 +258,12 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         });
         this.fieldInfected.areaInfected = null
       }
+  }
+
+
+  calculateArea(){
+    const areaInfected = this.fieldInfected.area * (this.fieldInfected.areaInfectedPercentage / 100)
+    return this.fieldInfected.areaInfected = areaInfected.toFixed(2)
   }
   
 }

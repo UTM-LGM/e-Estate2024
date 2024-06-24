@@ -5,7 +5,7 @@
     <label>Field / Block : </label>
     <input type="text" name="fieldName" [(ngModel)]="fieldInfected.fieldName" disabled />
 
-    <label>Area : </label>
+    <label>Area (Ha) : </label>
     <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled />
   </div>
 
@@ -21,6 +21,14 @@
   </div>
 
   <div style="columns: 2">
+
+    <label>Disease Category : </label>
+      <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldInfected.diseaseCategoryId" (selectionChange)="getDiseaseName()">
+        <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
+          {{ category.category }}
+        </mat-option>
+      </mat-select>
+
     <label>Disease Name :</label>
     <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName"
       [(ngModel)]="fieldInfected.fieldDiseaseId">
@@ -28,8 +36,13 @@
         {{ diseaseName.diseaseName }}
       </mat-option>
     </mat-select>
+  </div>
+
+  <div style="columns: 2" class="column">
+    <label>Area Infected Percentage (%) : </label>
+    <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" />
     <label>Area Infected (Ha) : </label>
-    <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" />
+    <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled/>
   </div>
 
   <div style="columns: 2" *ngIf="fieldInfected.dateRecovered">

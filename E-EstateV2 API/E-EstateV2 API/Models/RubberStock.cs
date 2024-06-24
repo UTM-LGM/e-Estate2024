@@ -7,6 +7,7 @@ namespace E_EstateV2_API.Models
         [Key]
         public int Id { get; set; }
         public string monthYear { get; set; }
+        public string rubberType { get; set; }
         public float totalProduction { get; set; }
         public float totalSale { get; set; }
         public float currentStock { get; set; }

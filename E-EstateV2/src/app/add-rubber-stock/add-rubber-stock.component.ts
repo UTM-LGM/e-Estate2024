@@ -90,10 +90,15 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.getDate()
     this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
     this.previousDate = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')?.toUpperCase()
+  }
+
+  chooseRubberType(){
+    this.stock.previousStock = 0
+    this.stock.currentStock = 0
+    this.stock.weightLoss = 0
     this.getAllProduction()
     this.getSales()
     this.getStock()
-    
   }
 
   getStock() {
@@ -101,7 +106,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.allRubberStock = Response
-          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true)
+          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true && e.rubberType == this.stock.rubberType)
           if (this.rubberStocks.length != 0) {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
             this.stock.previousStock = latestItem.currentStock;
@@ -124,17 +129,13 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   monthSelected(month: string) {
     let monthDate = new Date(month)
     this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
-    this.getAllProduction()
-    this.getSales()
 
     monthDate.setMonth(monthDate.getMonth() - 1);
     this.previousDate = this.datePipe.transform(monthDate, 'MMM-yyyy')?.toUpperCase();
-
-    this.getStock()  
   }
 
   addStock() {
-    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase())
+    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase() && e.rubberType == this.stock.rubberType)
     if(existingMonth.length != 0 ){
       swal.fire({
         icon: 'error',
@@ -146,7 +147,13 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       this.stock.monthYear = this.date
       this.stock.createdBy = this.sharedService.userId
       this.stock.isActive = true
-      this.stock.weightLoss = parseInt(this.stock.weightLoss.toFixed(2))
+      this.stock.weightLoss = parseFloat(this.stock.weightLoss.toFixed(2))
+      if(this.stock.rubberType == 'CUPLUMP'){
+        this.stock.totalProduction = this.totalCuplumpDry
+      }
+      else if(this.stock.rubberType == 'LATEX'){
+        this.stock.totalProduction = this.totalLatexDry
+      }
       this.rubberStockService.addRubberStock(this.stock)
         .subscribe(
           Response => {
@@ -169,10 +176,15 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const productions = Response
+
           this.filterProductions = productions.filter(e =>e.status == "Submitted" && e.estateId == this.sharedService.estateId && e.monthYear == this.date)
-          this.TotalCuplump()
-          this.TotalLatex()
-          this.calculateTotal()
+          if(this.stock.rubberType == 'CUPLUMP'){
+            this.TotalCuplump()
+          }
+          else if(this.stock.rubberType == 'LATEX'){
+            this.TotalLatex()
+          }
+          // this.calculateTotal()
           this.isLoadingProduction = false
         });
     this.subscriptionService.add(getAllProduction);
@@ -200,9 +212,15 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   calculateWaterDepletion() {
-    const production = this.stock.totalProduction + this.stock.previousStock
-    const stock = this.stock.totalSale + this.stock.currentStock
-    this.stock.weightLoss = ((production - stock) / production) * 100
+    if(this.stock.rubberType == 'CUPLUMP'){
+      const production = this.totalCuplumpDry + this.stock.previousStock
+      const stock = this.stock.totalSale + this.stock.currentStock
+      this.stock.weightLoss = ((production - stock) / production) * 100 
+    }else if(this.stock.rubberType == 'LATEX'){
+      const production = this.totalCuplumpDry + this.stock.previousStock
+      const stock = this.stock.totalSale + this.stock.currentStock
+      this.stock.weightLoss = ((production - stock) / production) * 100
+    }
     if(this.stock.weightLoss <= 0){
       swal.fire({
         icon: 'error',
@@ -223,8 +241,9 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           const date = new Date(this.date)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType;
           });
+
           this.calculateSale()
           this.isLoadingSale = false
         })

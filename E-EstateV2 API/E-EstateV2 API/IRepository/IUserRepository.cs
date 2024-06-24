@@ -12,14 +12,15 @@ namespace E_EstateV2_API.IRepository
         Task<IdentityResult> RegisterUser(User user);
         //To return string example, token
         Task<String> LoginUser(Login login);
-        Task<Object> CheckLicenseNo(string licenseNo);
-        Task<Object> CheckUsername(string username);
-        Task<Object> ChangePassword(DTO_User user);
-        Task<Object> CheckOldPassword(string userId, string oldPassword);
+        Task<object> CheckLicenseNo(string licenseNo);
+        Task<object> CheckUsername(string username);
+        Task<object> ChangePassword(DTO_User user);
+        Task<object> CheckOldPassword(string userId, string oldPassword);
         Task<List<DTO_User>> GetAllUsers();
         Task<DTO_User> AddUserRole(DTO_User user);
         Task SendWelcomeEmail(string email);
         Task<IdentityResult> AddUser(User user);
+        Task<ApplicationUser> UpdateUser(User user);
 
     }
 }

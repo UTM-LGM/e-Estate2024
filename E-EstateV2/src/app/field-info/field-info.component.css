@@ -51,3 +51,7 @@ mat-option {
 .clone {
   width: 140%;
 }
+
+.box-container {
+  box-shadow: none;
+}

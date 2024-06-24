@@ -57,6 +57,7 @@ namespace E_EstateV2_API.Repository
                 estateId = x.estateId,
                 transportPlateNo = x.transportPlateNo,
                 driverName = x.driverName,
+                driverIc = x.driverIc,
                 remark = x.remark,
                 deliveryAgent = x.deliveryAgent,
             }).OrderBy(x => x.saleDateTime).ToListAsync();
@@ -87,6 +88,7 @@ namespace E_EstateV2_API.Repository
                 estateId = x.estateId,
                 transportPlateNo = x.transportPlateNo,
                 driverName = x.driverName,
+                driverIc = x.driverIc,
                 remark = x.remark,
                 deliveryAgent = x.deliveryAgent,
 
@@ -114,6 +116,7 @@ namespace E_EstateV2_API.Repository
                 //existingSale.paymentStatusId = rubberSales.paymentStatusId;
                 existingSale.transportPlateNo = rubberSales.transportPlateNo;
                 existingSale.driverName = rubberSales.driverName;
+                existingSale.driverIc = rubberSales.driverIc;
                 existingSale.remark = rubberSales.remark;
                 existingSale.updatedBy = rubberSales.updatedBy;
                 existingSale.updatedDate = DateTime.Now;

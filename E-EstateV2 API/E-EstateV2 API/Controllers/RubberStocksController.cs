@@ -20,8 +20,14 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetRubberStocks()
         {
             var rubberStock = await _genericRepository.GetAll();
-            return Ok(rubberStock);
+
+            var sortedRubberStock = rubberStock
+                .OrderByDescending(stock => DateTime.ParseExact(stock.monthYear, "MMM-yyyy", System.Globalization.CultureInfo.InvariantCulture))
+                .ToList();
+
+            return Ok(sortedRubberStock);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddRubberStock([FromBody] RubberStock rubberStock)

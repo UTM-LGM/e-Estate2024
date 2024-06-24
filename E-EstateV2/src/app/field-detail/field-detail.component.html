@@ -21,9 +21,9 @@
     <div class="column">
       <div>
         <div style="columns: 2">
-          <label>Field / Block :</label>
+          <label>Field / Block <span style="color: red;">*</span> :</label>
           <input type="text" name="fieldname" [(ngModel)]="field.fieldName" (change)="checkFieldName()" />
-          <label>Maturity :</label>
+          <label>Maturity <span style="color: red;">*</span> :</label>
           <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature"
             (selectionChange)="getcategory(field)">
             <mat-option [value]="true">MATURE</mat-option>
@@ -32,7 +32,7 @@
         </div>
 
         <div style="columns: 2">
-          <label>Field Status:</label>
+          <label>Field Status <span style="color: red;">*</span> :</label>
           <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId"
             (selectionChange)="changeFieldStatus($event)">
             <mat-option *ngFor="let category of filterFieldStatus" [value]="category.id">
@@ -40,40 +40,120 @@
             </mat-option>
           </mat-select>
 
-          <label>Field Area (Ha) :</label>
+          <label>Field Area (Ha) <span style="color: red;">*</span> :</label>
           <input type="number" name="area" [(ngModel)]="field.area" />
         </div>
 
+        <div style="columns: 2">
+          <label>Rubber area same as Field area ? <span style="color: red;">*</span> : </label><br />
+          <div class="radio-container">
+              <label>
+                  <input type="radio" name="choice" value="yes" [(ngModel)]="rubberArea"
+                      (change)="onRadioChange()"> Yes
+              </label>
+              <label>
+                  <input type="radio" name="choice" value="no" [(ngModel)]="rubberArea"
+                      (change)="onRadioChange()"> No
+              </label>
+          </div>
+
+          <div>
+              <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+              <input type="number" name="rubberArea" [(ngModel)]="field.rubberArea" (change)="areaRemark()"
+                  [disabled]="rubberArea === 'yes'" />
+          </div>
+      </div>
+
+      <div style="columns: 1">
+        <div *ngIf="rubberArea == 'no'">
+            <label>Remark extra area <span style="color: red;">*</span> :</label>
+            <textarea name="rubberArea" [(ngModel)]="field.remark"></textarea>
+        </div>
+      </div>
+
         <div *ngIf="conversion">
           <div style="columns: 2;">
-            <label>Conversion Crop Name :</label>
+            <label>Conversion Crop Name <span style="color: red;">*</span> :</label>
             <mat-select name="otherCrop" placeholder="Please Choose" name="otherCrop" [(ngModel)]="field.otherCropId">
               <mat-option *ngFor="let otherCrop of otherCrops" [value]="otherCrop.id">
                 {{ otherCrop.otherCrop }}
               </mat-option>
             </mat-select>
 
-            <label>Since year :</label>
+            <label>Since year <span style="color: red;">*</span> :</label>
             <input type="number" name="year" [(ngModel)]="field.sinceYear" />
           </div>
         </div>
 
-        <div *ngIf="!conversion && !fieldSick">
+        <div *ngIf="!conversion && !fieldSick && field.isMature == true">
           <div style="columns: 2">
-            <label>Year Planted :</label>
+            <label>Year Planted <span style="color: red;">*</span> :</label>
             <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
-            <label>Initial Tree Stand :</label>
+            <label>Initial Tree Stand per Ha <span style="color: red;">*</span> :</label>
             <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
           </div>
 
           <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick">
-            <label>Date Open Tapping :</label>
-            <input name="dateopentapping" type="date" [(ngModel)]="field.dateOpenTappingFormatted " />
+            <label>Current tree stand <span style="color: red;">*</span> :</label>
+            <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
 
-            <label>Total task :</label>
-            <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
+            <label>Date Open Tapping <span style="color: red;">*</span> :</label>
+            <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted " />
+
+            
           </div>
-          <br>
+
+          <div style="columns: 2" *ngIf="field.isMature == true">
+            <label>Total task <span style="color: red;">*</span> :</label>
+            <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
+        </div>
+          <hr/>
+
+          <div style="columns: 4;">
+            <label>Grant title <span style="color: red;">*</span> : </label>
+            <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle"/>
+            <label>Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea"/>
+            <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea"/>
+            <div>
+                <button style="margin-top: 28px;" class="btn-add" (click)="addGrant(fieldGrant)">
+                    Add Grant &nbsp; <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+
+          <div class="box-container">
+            <h1>Grant title</h1>
+            <hr />
+            <div style="overflow-x: auto; overflow-y: auto">
+                <table style="width: 100%">
+                    <tr>
+                        <th width="30px">No</th>
+                        <th>Grant title</th>
+                        <th>Area (Ha)</th>
+                        <th>Rubber Area (Ha)</th>
+                        <th width="90px">Action</th>
+                    </tr>
+
+                    <tr *ngIf="fieldGrants.length == 0">
+                        <td colspan="5" style="color: red;"><b>No Grant</b></td>
+                    </tr>
+
+                    <tr *ngFor="let value of fieldGrants; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ value.grantTitle }}</td>
+                        <td>{{ value.grantArea }}</td>
+                        <td>{{ value.grantRubberArea }}</td>
+                        <td>
+                            <button class="btn-del" (click)="deleteGrant(value.id)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div><br/>
 
         </div>
 
@@ -105,7 +185,7 @@
 
     <div>
       <div style="columns: 2">
-        <label>Clone :</label>
+        <label>Clone <span style="color: red;">*</span> :</label>
         <mat-select name="clone" class="clone" placeholder="Please Choose" [(ngModel)]="field.cloneId">
           <mat-option *ngFor="let clone of availableClones" [value]="clone.id">
             {{ clone.cloneName }}
@@ -130,7 +210,7 @@
               <th>Action</th>
             </tr>
 
-            <tr *ngIf="selectedValues.length == 0">
+            <tr *ngIf="fieldClones.length == 0">
               <td colspan="3" style="color: red;"><b>No Clone</b></td>
             </tr>
 

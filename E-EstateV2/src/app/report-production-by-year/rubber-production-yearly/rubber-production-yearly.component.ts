@@ -115,11 +115,13 @@ export class RubberProductionYearlyComponent implements OnInit, OnDestroy {
     this.estate.id = 0
     this.getAllEstate()
     this.filterProductionYearly = []
+    this.year = ''
   }
 
   estateSelected() {
     this.filterProductionYearly = []
     this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
+    this.year = ''
   }
 
   getAllEstate() {
@@ -188,7 +190,7 @@ export class RubberProductionYearlyComponent implements OnInit, OnDestroy {
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.selectedEstateName);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${fileName}.xlsx`);
   }
 

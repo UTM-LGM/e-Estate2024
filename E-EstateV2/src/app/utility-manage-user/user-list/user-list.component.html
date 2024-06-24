@@ -1,0 +1,52 @@
+<div class="box-container">
+    <h1>List of users</h1>
+
+    <!-- <button class="btn-add" (click)="addUser()">
+        Add New User &nbsp; <i class="fa fa-plus"></i>
+      </button> -->
+
+    <input type="text" [(ngModel)]="term" placeholder="Filter Username" />
+
+    <div style="overflow-x: auto">
+        <table style="width: 100%">
+            <thead>
+                <tr>
+                    <th *ngFor="let column of sortableColumns" scope="col" (click)="toggleSort(column.columnName)">
+                        {{ column.displayText }}
+                        <i class="fa"
+                            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                                      'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}">
+                        </i>
+                    </th>
+                    <th width="90px">Action</th>
+                </tr>
+            </thead>
+
+            <tr *ngIf="isLoading">
+                <td colspan="8">
+                    <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+                    </ngx-skeleton-loader>
+                </td>
+            </tr>
+
+            <tr *ngIf="users.length == 0 && !isLoading">
+                <td colspan="8" style="color: red;">No new user</td>
+            </tr>
+
+            <ng-container *ngIf="!isLoading">
+            <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+                <td>{{user.fullName}}</td>
+                <td>{{user.licenseNo}}</td>
+                <td>{{user.position}}</td>
+                <td>{{user.userName}}</td>
+                <td>{{user.email}}</td>
+                <td> <button class="btn-update" (click)="openDialog(user)">
+                        <i class="fa fa fa-pencil"></i>
+                    </button></td>
+            </tr>
+        </ng-container>
+        </table>
+
+        <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+    </div>
+</div>

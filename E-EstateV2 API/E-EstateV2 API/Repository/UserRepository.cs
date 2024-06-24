@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
+using System.ComponentModel.Design;
 
 
 namespace E_EstateV2_API.Repository
@@ -120,6 +121,42 @@ namespace E_EstateV2_API.Repository
                 usersWithRoles.Add(dtoUser);
             }
             return usersWithRoles;
+        }
+
+        public async Task<ApplicationUser>UpdateUser (User user)
+        {
+            var existingUser = await _usermanager.FindByIdAsync(user.Id);
+            if (existingUser != null)
+            {
+                // Check if the licenseNo has changed
+                bool licenseNoChanged = existingUser.licenseNo != user.licenseNo;
+
+                existingUser.fullName = user.fullName;
+                existingUser.licenseNo = user.licenseNo;
+                existingUser.position = user.position;
+                existingUser.UserName = user.userName;
+                existingUser.Email = user.email;
+                await _usermanager.UpdateAsync(existingUser);
+
+                if (licenseNoChanged)
+                {
+                    // Remove existing claims
+                    var claims = await _usermanager.GetClaimsAsync(existingUser);
+                    foreach (var claim in claims)
+                    {
+                        if (claim.Type == "CompanyId" || claim.Type == "EstateId")
+                        {
+                            await _usermanager.RemoveClaimAsync(existingUser, claim);
+                        }
+                    }
+
+                    // Add updated claims
+                    await _usermanager.AddClaimAsync(existingUser, new Claim("CompanyId", user.companyId.ToString()));
+                    await _usermanager.AddClaimAsync(existingUser, new Claim("EstateId", user.estateId.ToString()));
+                }
+                return existingUser;
+            }
+            return null;
         }
 
 
@@ -263,7 +300,7 @@ namespace E_EstateV2_API.Repository
             }
         }
 
-        public Task<Object> CheckLicenseNo(string licenseNo)
+        public Task<object> CheckLicenseNo(string licenseNo)
         {
             var estateId = _context.estates.Where(x => x.licenseNo == licenseNo).Select(x => x.Id).FirstOrDefault();
             var companyId = _context.estates.Where(x => x.Id == estateId).Select(x => x.companyId).FirstOrDefault();
@@ -283,7 +320,7 @@ namespace E_EstateV2_API.Repository
             }
         }
 
-        public async Task<Object> CheckUsername(string username)
+        public async Task<object> CheckUsername(string username)
         {
             var user = await _usermanager.FindByNameAsync(username);
             if (user == null)
@@ -296,7 +333,7 @@ namespace E_EstateV2_API.Repository
             }
         }
 
-        public async Task<Object> ChangePassword(DTO_User user)
+        public async Task<object> ChangePassword(DTO_User user)
         {
             var applicationUser = await _usermanager.FindByIdAsync(user.id);
             if (applicationUser != null)
@@ -402,7 +439,7 @@ namespace E_EstateV2_API.Repository
                 "<br>" +
                 "Thank you for registering with e-Estate. " +
                 "Your account have been verified ! " +
-                "Please click <a href = 'https://lgm20.lgm.gov.my/e-Estate/login" + "'>Login e-Estate</a><br>" +
+                "Please click <a href = 'https://www5.lgm.gov.my/e-Estate" + "'>Login e-Estate</a><br>" +
                 "<br>" +
                 "Thank you," +
                 "<br>" +

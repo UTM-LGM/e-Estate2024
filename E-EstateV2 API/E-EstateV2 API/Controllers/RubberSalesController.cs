@@ -28,7 +28,9 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetRubberSales()
         {
             var sales = await _rubberSalesRepository.GetRubberSales();
-            return Ok(sales);
+            var sortedSales = sales.OrderBy(sale => sale.saleDateTime).ToList();
+
+            return Ok(sortedSales);
         }
 
 

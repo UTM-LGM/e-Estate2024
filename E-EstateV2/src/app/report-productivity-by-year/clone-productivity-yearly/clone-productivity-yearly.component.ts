@@ -23,6 +23,9 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   term = ''
 
+  startMonth = ''
+  endMonth = ''
+
 
   estate: any = {} as any
   companies: any[] = []
@@ -54,7 +57,17 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.year = new Date().getFullYear().toString()
     this.role = this.sharedService.role
+    this.isLoading = false
+  }
+
+  monthChange() {
+    this.isLoading = true
     this.getProductionYearly()
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.cloneProductionData =[]
   }
 
   companySelected() {
@@ -83,7 +96,7 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.cloneProduction = [];
       } else {
-        const getProductivity = this.reportService.getProductivityByClone(this.year)
+        const getProductivity = this.reportService.getAllProductivityByClone(this.startMonth, this.endMonth)
           .subscribe(
             (response: any) => {
               this.cloneProduction = response;
@@ -91,8 +104,8 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
   
               const cloneProduction = new Map<string, { totalProduction: number }>();
               this.cloneProduction.forEach(field => {
-                const { fieldId, cuplumpDry, latexDry, ussDry, othersDry, fieldClone } = field;
-                const totalProduction = cuplumpDry + latexDry + ussDry + othersDry;
+                const { fieldId, cuplumpDry, latexDry, fieldClone } = field;
+                const totalProduction = cuplumpDry + latexDry;
   
                 if (fieldClone.length > 1) {
                   const mixedCloneName = 'MIXED CLONE';
@@ -205,7 +218,7 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
 
   exportToExcel(data:any[], fileName:String){
     let bilCounter = 1
-    const filteredData = data.map(row =>({
+    const filteredData:any = data.map(row =>({
       No:bilCounter++,
       CloneName:row.cloneName,
       TotalProduction: row.totalProduction.toFixed(2),
@@ -213,10 +226,23 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
       Productivity:(row.totalProduction / row.totalArea).toFixed(2)
     }))
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const headerRow = [
+      { No: 'Start Month Year:', CloneName: this.startMonth},
+      { No: 'End Month Year:', CloneName: this.endMonth},
+      {}, // Empty row for separation
+      { No: 'No', CloneName: 'CloneName', TotalProduction: 'TotalProduction', CloneArea: 'CloneArea',
+        Productivity:'Productivity'
+       }
+    ];
+
+    const exportData = headerRow.concat(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year);
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
   }
 
 

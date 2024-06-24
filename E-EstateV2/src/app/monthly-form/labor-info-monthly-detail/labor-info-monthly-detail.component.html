@@ -1,26 +1,26 @@
 <br />
-<div style="padding: 15px;">
+<div style="padding: 15px;margin-top: -20px;">
   <h1>Labor Information</h1>
   <hr />
 
   <div style="columns: 2">
-    <label>Month and Year :</label>
+    <label>Month and Year <span style="color: red;">*</span> :</label>
     <input type="text" name="tapperCheckrole" [(ngModel)]="labor.monthYear" disabled />
-    <label>Country :</label>
+    <label>Country <span style="color: red;">*</span> :</label>
     <input type="text" name="tapperCheckrole" [(ngModel)]="labor.countryName" disabled />
   </div>
 
   <div>
     <div style="columns: 2">
-      <label>No of Checkrole Tappers :</label>
+      <label>No of Checkrole Tappers <span style="color: red;">*</span> :</label>
       <input type="number" name="tapperCheckrole" [(ngModel)]="labor.tapperCheckrole" />
-      <label>No of Tappers Employed by Contractors :</label>
+      <label>No of Tappers Employed by Contractors <span style="color: red;">*</span> :</label>
       <input type="number" name="tapperContractor" [(ngModel)]="labor.tapperContractor" />
     </div>
     <div style="columns: 2">
-      <label>No of Checkrole Field Workers :</label>
+      <label>No of Checkrole Field Workers <span style="color: red;">*</span> :</label>
       <input type="number" name="fieldCheckrole" [(ngModel)]="labor.fieldCheckrole" />
-      <label>No of Field Workers Employed by Contractors :</label>
+      <label>No of Field Workers Employed by Contractors <span style="color: red;">*</span> :</label>
       <input type="number" name="fieldContractor" [(ngModel)]="labor.fieldContractor" />
     </div>
 
@@ -28,7 +28,7 @@
       <ng-container *ngFor="let laborType of laborCategory; let i = index;">
         <div style="flex: 1 1 calc(50% - 10px);">
           <div>
-            <label>No of {{ laborType.laborType | titlecase }}:</label>
+            <label>No of {{ laborType.laborType | titlecase }} <span style="color: red;">*</span> :</label>
             <input type="number" name="noOf{{ laborType.laborType }}" [(ngModel)]="laborType.noOfWorker">
           </div>
         </div>

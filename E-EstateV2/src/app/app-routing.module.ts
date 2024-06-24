@@ -55,7 +55,7 @@ import { MonthlyFormComponent } from './monthly-form/monthly-form.component';
 import { RubberStockComponent } from './rubber-stock/rubber-stock.component';
 import { AddRubberStockComponent } from './add-rubber-stock/add-rubber-stock.component';
 import { EstateByStateComponent } from './report-by-state/estate-by-state/estate-by-state.component';
-import { RubberCropsByStateComponent } from './report-by-state/rubber-crops-by-state/rubber-crops-by-state.component';
+import { RubberCropsByStateComponent } from './report-by-state/estate-by-state-maturity/rubber-crops-by-state.component';
 import { ReportByStateComponent } from './report-by-state/report-by-state.component';
 import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
 import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
@@ -70,6 +70,8 @@ import { WorkerShortageEstateComponent } from './report-labor-information/worker
 import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
+import { AddFieldComponent } from './add-field/add-field.component';
+import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sale.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
@@ -116,6 +118,7 @@ const routes: Routes = [
       { path: 'estate-list', component: EstateListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] } },
       { path: 'estate-detail/:id', component: EstateDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-info/:id', component: FieldInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'add-field/:id', component: AddFieldComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-disease/:id', component: FieldInfectedComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-detail/:id', component: FieldDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-production/:id', component: MonthlyFormComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
@@ -208,6 +211,10 @@ const routes: Routes = [
       {
         path:'report-cost-information',
         component:ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+      },
+      {
+        path:'report-rubber-sale',
+        component:ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
       }
     ],
   },

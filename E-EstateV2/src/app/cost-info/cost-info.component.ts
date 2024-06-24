@@ -5,6 +5,7 @@ import { CostTypeService } from '../_services/cost-type.service';
 import swal from 'sweetalert2';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-cost-info',
@@ -14,12 +15,17 @@ import { SubscriptionService } from '../_services/subscription.service';
 export class CostInfoComponent implements OnInit, OnDestroy {
   activeButton = ''
   clickedCostTypeId = 1
-  selectedYear = ''
+  selectedMonthYear = ''
 
   estate: any = {} as any
 
   costType: CostType[] = []
   isLoading = true;
+  previousMonth = new Date()
+
+  date: any
+
+
 
   @Output() yearChanged = new EventEmitter<string>()
 
@@ -27,29 +33,41 @@ export class CostInfoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private costTypeService: CostTypeService,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private datePipe: DatePipe,
 
   ) { }
 
   ngOnInit() {
+    this.getDate()
+    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.getEstate()
     this.getCostType()
   }
 
-  yearSelected() {
-    const yearAsString = this.selectedYear.toString()
-    if (yearAsString.length === 4) {
-      this.yearChanged.emit(this.selectedYear)
-    } else {
-      swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please insert correct year',
-      });
-      this.selectedYear = ''
-    }
-
+  getDate() {
+    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
   }
+
+  monthSelected(month: string) {
+    let monthDate = new Date(month)
+    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+  }
+
+  // yearSelected() {
+  //   const yearAsString = this.selectedYear.toString()
+  //   if (yearAsString.length === 4) {
+  //     this.yearChanged.emit(this.selectedYear)
+  //   } else {
+  //     swal.fire({
+  //       icon: 'error',
+  //       title: 'Error',
+  //       text: 'Please insert correct year',
+  //     });
+  //     this.selectedYear = ''
+  //   }
+
+  // }
 
   getEstate() {
     setTimeout(() => {

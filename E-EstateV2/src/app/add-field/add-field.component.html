@@ -1,0 +1,198 @@
+<div class="box-container">
+<h1>Field Information</h1>
+  <hr />
+    <div class="box">
+        <div class="column">
+            <form>
+                <div style="columns: 2">
+                    <label>Field / Block <span style="color: red;">*</span> :</label>
+                    <b><input type="text" name="fieldname" [(ngModel)]="field.fieldName"
+                            (change)="checkFieldName()" /></b>
+                    <label>Maturity <span style="color: red;">*</span> :</label>
+                    <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature"
+                        (selectionChange)="getcategory()">
+                        <mat-option [value]="true">MATURE</mat-option>
+                        <mat-option [value]="false">IMMATURE</mat-option>
+                    </mat-select>
+                </div>
+                <div style="columns: 2">
+                    <label>Field Status <span style="color: red;">*</span> :</label>
+                    <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat"
+                        [(ngModel)]="field.fieldStatusId">
+                        <mat-option *ngFor="let category of filterCropCategories" [value]="category.id">
+                            {{ category.fieldStatus }}
+                        </mat-option>
+                    </mat-select>
+
+                    <label>Field Area (Ha) <span style="color: red;">*</span> :</label>
+                    <b><input type="number" name="fieldarea" [(ngModel)]="field.area"
+                            (change)="rubberAreaInput()" /></b>
+                </div>
+
+                <div style="columns: 2">
+                    <label>Rubber area same as Field area ? <span style="color: red;">*</span> : </label><br />
+                    <div class="radio-container">
+                        <label>
+                            <input type="radio" name="choice" value="yes" [(ngModel)]="rubberArea"
+                                (change)="onRadioChange()"> Yes
+                        </label>
+                        <label>
+                            <input type="radio" name="choice" value="no" [(ngModel)]="rubberArea"
+                                (change)="onRadioChange()"> No
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+                        <input type="number" name="rubberArea" [(ngModel)]="field.rubberArea" (change)="areaRemark()"
+                            [disabled]="rubberArea === 'yes'" />
+                    </div>
+                </div>
+
+                <div style="columns: 1">
+                    <div *ngIf="rubberArea == 'no'">
+                        <label>Remark extra area <span style="color: red;">*</span> :</label>
+                        <textarea name="rubberArea" [(ngModel)]="field.remark"></textarea>
+                    </div>
+                </div>
+
+
+                <div style="columns: 2" *ngIf="!conversion && field.isMature == true">
+                    <label>Year Planted <span style="color: red;">*</span> :</label>
+                    <b><input type="number" name="year" placeholder="yyyy" [(ngModel)]="field.yearPlanted"
+                            (change)="yearSelected()" /></b>
+                    <label>Initial Tree Stand per Ha <span style="color: red;">*</span> :</label>
+                    <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
+                </div>
+
+                <div style="columns: 2" *ngIf="field.isMature == true">
+                    <label>Current tree stand <span style="color: red;">*</span> :</label>
+                    <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
+
+                    <label>Date Open Tapping <span style="color: red;">*</span> :</label>
+                    <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTapping"
+                        (change)="checkDOT()" />
+                </div>
+
+                <div style="columns: 2" *ngIf="field.isMature == true">
+                    <label>Total task <span style="color: red;">*</span> :</label>
+                    <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
+                </div>
+                <hr/>
+
+                <div style="columns: 4;">
+                    <label>Grant title <span style="color: red;">*</span> : </label>
+                    <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle"/>
+                    <label>Area (Ha) <span style="color: red;">*</span> :</label>
+                    <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea"/>
+                    <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+                    <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea"/>
+                    <div>
+                        <button style="margin-top: 28px;" class="btn-add" (click)="selectedGrant(fieldGrant)">
+                            Add Grant &nbsp; <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="box-container">
+                    <h1>Grant title</h1>
+                    <hr />
+                    <div style="overflow-x: auto; overflow-y: auto">
+                        <table style="width: 100%">
+                            <tr>
+                                <th width="30px">No</th>
+                                <th>Grant title</th>
+                                <th>Area (Ha)</th>
+                                <th>Rubber Area (Ha)</th>
+                                <th width="90px">Action</th>
+                            </tr>
+    
+                            <tr *ngIf="addedGrant.length == 0">
+                                <td colspan="5" style="color: red;"><b>No Grant</b></td>
+                            </tr>
+    
+                            <tr *ngFor="let value of addedGrant; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ value.grantTitle }}</td>
+                                <td>{{ value.grantArea }}</td>
+                                <td>{{ value.grantRubberArea }}</td>
+                                <td>
+                                    <button class="btn-del" (click)="deleteGrant(i)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div><br/>
+    
+
+                <div>
+                    <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()"
+                        [disabled]="isSubmit">
+                        <ng-container *ngIf="isSubmit; else notLoading">
+                            Loading...
+                        </ng-container>
+                        <ng-template #notLoading>
+                            Add &nbsp; <i class="fa fa-plus"></i>
+                        </ng-template>
+                    </button>
+                    <button class="btn-back" (click)="back()">
+                        <i class="fa fa-arrow-left"></i> &nbsp; Back
+                      </button>
+                </div>
+            </form>
+        </div>
+
+        <div>
+            <div style="columns: 2">
+                <label>Clone <span style="color: red;">*</span> :</label>
+                <mat-select name="clone" class="clone" placeholder="Please Choose" [(ngModel)]="field.cloneId">
+                    <mat-option *ngFor="let clone of availableClones" [value]="clone.id">
+                        {{ clone.cloneName }}
+                    </mat-option>
+                </mat-select>
+                <div>
+                    <button style="margin-top: 28px; margin-left: 60px" class="btn-add" (click)="selectedClone(field)">
+                        Add Clone &nbsp; <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="box-container">
+                <h1>Clones planted</h1>
+                <hr />
+                <div style="overflow-x: auto; overflow-y: auto">
+                    <table style="width: 100%">
+                        <tr>
+                            <th width="30px">No</th>
+                            <th>Clone Name</th>
+                            <th width="90px">Action</th>
+                        </tr>
+
+                        <tr *ngIf="selectedValues.length == 0">
+                            <td colspan="3" style="color: red;"><b>No Clone</b></td>
+                        </tr>
+
+                        <tr *ngFor="let value of selectedValues; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ value.cloneName }}</td>
+                            <td>
+                                <button class="btn-del" (click)="delete(i)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div><br/>
+
+
+        </div>
+
+        
+        
+
+    </div>
+    <br />
+</div>

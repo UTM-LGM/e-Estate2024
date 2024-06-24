@@ -16,7 +16,24 @@
       </button>
     </div>
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Rubber Stock" />
+    <mat-tab-group mat-align-tabs="center" #tabGroup>
+      <mat-tab label="Cuplump">
+        <ng-template matTabContent>
+          <app-cuplump-rubber-stock #cuplumpStock></app-cuplump-rubber-stock>
+        </ng-template>
+      </mat-tab>
+
+      <mat-tab label="Latex">
+        <ng-template matTabContent>
+          <app-latex-rubber-stock #latexStock></app-latex-rubber-stock>
+        </ng-template>
+      </mat-tab>
+
+    </mat-tab-group>
+
+
+
+    <!-- <input type="text" [(ngModel)]="term" placeholder="Filter Rubber Stock" />
 
     <div style="overflow-x: auto">
       <table style="width: 100%">
@@ -63,6 +80,7 @@
         </tbody>
       </table>
       <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-    </div>
+    </div> -->
+
   </div>
 </div>

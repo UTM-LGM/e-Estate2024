@@ -50,7 +50,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         }
       )
       this.subscriptionService.add(getRole);
-
   }
 
   openDialog(): void {
@@ -119,7 +118,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           {
             next: (Response) => {
               this.result = Response
-              console.log(this.result)
               this.spinnerService.requestEnded();
               swal.fire({
                 title: 'Done!',

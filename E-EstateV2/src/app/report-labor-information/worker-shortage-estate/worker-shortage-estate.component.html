@@ -1,7 +1,7 @@
 <div class="box-container">
   <h1>Labor Shortage in estate</h1>
 
-  <div style="columns:3"
+  <div style="columns:4"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
     <div>
       <label>Company</label>
@@ -14,32 +14,38 @@
       </mat-option>
     </mat-select>
 
-    <label>Please choose year: </label>
-      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
 
   </div>
 
-  <div style="columns: 3;"
+  <div style="columns: 4;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
-    <label>Please choose year: </label>
-      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
   
-  <div *ngIf="role=='Admin'" style="columns: 3;">
-    <label>Please choose year: </label>
-    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  <div *ngIf="role=='Admin'" style="columns: 4;">
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
 
   <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role != 'Admin'">
-    <button class="btn-add" (click)="exportToExcel(workerShortages, 'Worker Shortage Report ' + year)">
+    <button class="btn-add" (click)="exportToExcel(workerShortages, 'Worker Shortage Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
 
   <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role== 'Admin'">
-    <button class="btn-add" (click)="exportToExcelAdmin(workerShortages, workerTapperAndField, 'Worker Shortage Report ' + year)">
+    <button class="btn-add" (click)="exportToExcelAdmin(workerShortages, workerTapperAndField, 'Worker Shortage Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
@@ -72,7 +78,7 @@
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'Admin'">
-        <td colspan="9" style="color: red; text-align: center;">No data found.</td>
+        <td colspan="9" style="color: red; text-align: center;">No data found. Please choose start and end month year </td>
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'EstateClerk'">

@@ -20,7 +20,9 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   pageNumber = 1
   itemsPerPage = 20
   term = ''
-  selectedEstateName= ''
+  selectedEstateName = ''
+  startMonth = ''
+  endMonth = ''
 
   totalAmount = 0
   isLoading = true
@@ -32,7 +34,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   filterCompanyAdmin: any[] = []
   costInformations: any[] = []
 
-  showAll =false
+  showAll = false
 
   sortableColumns = [
     { columnName: 'no', displayText: 'No' },
@@ -48,13 +50,13 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
     private reportService: ReportService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit(): void {
     this.role = this.sharedService.role
+    this.isLoading = false
     this.getAllCompanies()
-    this.getCostInformation()
     if (this.role == "CompanyAdmin") {
       this.estate.companyId = this.sharedService.companyId
       this.getAllEstate()
@@ -66,6 +68,16 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
     }
   }
 
+  monthChange() {
+    this.isLoading = true
+    this.getCostInformation()
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.costInformations = []
+  }
+
   getAllCompanies() {
     const getAllCompany = this.myLesenService.getAllCompany()
       .subscribe(
@@ -73,8 +85,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
           this.companies = Response
         }
       )
-      this.subscriptionService.add(getAllCompany);
-
+    this.subscriptionService.add(getAllCompany);
   }
 
   getCompany() {
@@ -85,21 +96,24 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
           this.isLoading = false
         }
       )
-      this.subscriptionService.add(getOneCompany);
+    this.subscriptionService.add(getOneCompany);
 
   }
-  
+
   companySelected() {
     this.estate.id = 0
     this.getAllEstate()
     this.costInformations = []
-    this.year = ''
+    this.startMonth = ''
+    this.endMonth = ''
     this.showAll = false
   }
 
   estateSelected() {
     this.costInformations = []
     this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
+    this.startMonth = ''
+    this.endMonth = ''
   }
 
 
@@ -111,8 +125,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
           this.filterCompanyAdmin = Response.filter(x => x.companyId == this.estate.companyId)
         }
       )
-      this.subscriptionService.add(getAllEstate);
-    
+    this.subscriptionService.add(getAllEstate);
+
   }
 
   getEstate() {
@@ -122,8 +136,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
           this.estate = Response
         }
       )
-      this.subscriptionService.add(getOneEstate);
-      
+    this.subscriptionService.add(getOneEstate);
+
   }
 
   yearSelected() {
@@ -152,101 +166,123 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   getCostInformation() {
     setTimeout(() => {
-      if (this.year == '') {
-        this.isLoading = false;
-        this.costInformations = [];
-      } else {
-        const getCostInformation = this.reportService.getCostInformation(this.year)
-          .subscribe(
-            Response => {
-              if (this.estate.id == null) {
-                const groupedResponse = Response.reduce((acc, obj) => {
-                  const existingItem = acc.find((item: any) => item.costId === obj.costId);
-                  if (existingItem) {
-                    existingItem.totalAmount += obj.amount;
-                  } else {
-                    acc.push({
-                      costId: obj.costId,
-                      totalAmount: obj.amount,
-                      costCategory: obj.costCategory,
-                      costSubcategories1: obj.costSubcategories1,
-                      costSubcategories2: obj.costSubcategories2,
-                      costType: obj.costType,
-                      isMature: obj.isMature
-                    });
-                  }
-                  return acc;
-                }, []);
-                this.costInformations = groupedResponse;
-                this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.totalAmount, 0);
-                this.showAll = true 
-              } else {
-                this.costInformations = Response.filter(x => x.estateId == this.estate.id);
-                this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.amount, 0);
-              }
-              this.isLoading = false;
+      const getCostInformation = this.reportService.getAllCostInformation(this.startMonth, this.endMonth)
+        .subscribe(
+          Response => {
+            if (this.estate.id == null) {
+              const groupedResponse = Response.reduce((acc, obj) => {
+                const existingItem = acc.find((item: any) => item.costId === obj.costId);
+                if (existingItem) {
+                  existingItem.totalAmount += obj.amount;
+                } else {
+                  acc.push({
+                    costId: obj.costId,
+                    totalAmount: obj.amount,
+                    costCategory: obj.costCategory,
+                    costSubcategories1: obj.costSubcategories1,
+                    costSubcategories2: obj.costSubcategories2,
+                    costType: obj.costType,
+                    isMature: obj.isMature
+                  });
+                }
+                return acc;
+              }, []);
+              this.costInformations = groupedResponse;
+              this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.totalAmount, 0);
+              this.showAll = true
+            } else {
+              this.costInformations = Response.filter(x => x.estateId == this.estate.id);
+              console.log(this.costInformations)
+              this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.amount, 0);
             }
-          )
+            this.isLoading = false;
+          }
+        )
       this.subscriptionService.add(getCostInformation);
 
-      }
     }, 2000);
   }
 
-  reset(){
-    if(this.role == 'Admin')
-      {
-        this.estate.companyId = null
-        this.estate.id = null
-        this.year = ''
-        this.costInformations = [];
-      }
+  reset() {
+    if (this.role == 'Admin') {
+      this.estate.companyId = null
+      this.estate.id = null
+      this.year = ''
+      this.costInformations = [];
+    }
   }
 
-  exportToExcelYear(data:any[], fileName:String){
-    if(this.estate.id != undefined ){
-      if(this.role == 'EstateClerk'){
+  exportToExcelYear(data: any[], fileName: String) {
+    if (this.estate.id != undefined) {
+      if (this.role == 'EstateClerk') {
         this.selectedEstateName = this.estate.name
       }
       let bilCounter = 1
-      const filteredData = data.map(row =>({
-        No:bilCounter++,
-        CostType:row.costType,
+      const filteredData: any = data.map(row => ({
+        No: bilCounter++,
+        CostType: row.costType,
         Maturity: row.isMature ? "Mature" : "Immature",
         CostCategory: row.costCategory,
-        CostSubCategory1:row.costSubcategories1,
-        CostSubCategory2:row.costSubcategories2,
-        Amout: row.amount,
+        CostSubCategory1: row.costSubcategories1,
+        CostSubCategory2: row.costSubcategories2,
+        Amount: row.amount,
       }))
-  
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+      const headerRow = [
+        { No: 'Start Month Year:', CostType: this.startMonth },
+        { No: 'End Month Year:', CostType: this.endMonth },
+        {}, // Empty row for separation
+        {
+          No: 'No', CostType: 'CostType', Maturity: 'Maturity', CostCategory: 'CostCategory',
+          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'costSubcategories2', Amount: 'Amount'
+        }
+      ];
+
+      const exportData = headerRow.concat(filteredData);
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
+
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws,this.selectedEstateName);
-      XLSX.writeFile(wb, `${this.selectedEstateName} Cost Information Report ${this.year}.xlsx`);
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+      XLSX.writeFile(wb, formattedFileName);
     }
 
-    else{
+    else {
       let bilCounter = 1
-      const filteredData = data.map(row =>({
-        No:bilCounter++,
-        CostType:row.costType,
+      const filteredData: any = data.map(row => ({
+        No: bilCounter++,
+        CostType: row.costType,
         Maturity: row.isMature ? "Mature" : "Immature",
         CostCategory: row.costCategory,
-        CostSubCategory1:row.costSubcategories1,
-        CostSubCategory2:row.costSubcategories2,
-        Amout: row.totalAmount,
+        CostSubCategory1: row.costSubcategories1,
+        CostSubCategory2: row.costSubcategories2,
+        Amount: row.totalAmount,
       }))
-  
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+      const headerRow = [
+        { No: 'Start Month Year:', State: this.startMonth },
+        { No: 'End Month Year:', State: this.endMonth },
+        {}, // Empty row for separation
+        {
+          No: 'No', CostType: 'CostType', Maturity: 'Maturity', CostCategory: 'CostCategory',
+          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'costSubcategories2', Amount: 'Amount'
+        }
+      ];
+
+      const exportData = headerRow.concat(filteredData);
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, this.year.toString() );
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
       XLSX.writeFile(wb, `${fileName}.xlsx`);
     }
-    
+
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }

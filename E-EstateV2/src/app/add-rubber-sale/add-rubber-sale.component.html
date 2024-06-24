@@ -3,26 +3,34 @@
   <hr />
 
   <div style="columns: 2" class="column">
-    <label>Date :</label>
+    <label>Date <span style="color: red;">*</span> :</label>
     <input type="date" #date name="date" value="{{currentDate}}" (change)="selectedDate(date.value)" />
   </div>
 
   <div style="columns: 2">
-    <label>Buyer :</label>
+    <label>Buyer <span style="color: red;">*</span> :</label>
     <mat-select name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId">
       <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
         {{buyer.buyerName}}
       </mat-option>
     </mat-select>
-    <label>Rubber Type :</label>
+    <label>Rubber Type <span style="color: red;">*</span> :</label>
     <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType">
       <mat-option value="CUPLUMP">CUPLUMP</mat-option>
       <mat-option value="LATEX">LATEX</mat-option>
     </mat-select>
-  </div><br />
+  </div>
+
+  <div style="columns: 2">
+    <label>Wet Weight (Kg) <span style="color: red;">*</span> :</label>
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00"
+      (input)="calculateTotalPrice()" />
+    <label>Estimated DRC (%) <span style="color: red;">*</span> :</label>
+    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
+  </div><br/>
 
   <div [style.columns]="deliveryAgent === 'yes' ? '2' : '1'">
-    <label>Delivery agent : </label><br />
+    <label>Delivery agent <span style="color: red;">*</span> : </label><br />
     <div class="radio-container">
       <label>
         <input type="radio" name="choice" value="yes" [(ngModel)]="deliveryAgent" > Yes
@@ -33,26 +41,21 @@
     </div>
 
     <div *ngIf="deliveryAgent == 'yes'">
-      <label>Delivery agent name :</label>
+      <label>Delivery agent name <span style="color: red;">*</span> :</label>
       <input type="text" name="plateNo" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()"/>
     </div>
 
   </div>
 
   <div style="columns: 2">
-    <label>Transport Plate No :</label>
+    <label>Transport Plate No <span style="color: red;">*</span> :</label>
     <input type="text" name="plateNo" [(ngModel)]="rubberSale.transportPlateNo" />
-    <label>Driver Name :</label>
+    <label>Driver Name <span style="color: red;">*</span> :</label>
     <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" />
+    
   </div>
 
-  <div style="columns: 2">
-    <label>Wet Weight (Kg) :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00"
-      (input)="calculateTotalPrice()" />
-    <label>DRC (%) :</label>
-    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
-  </div>
+  
 
   <!-- <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
@@ -63,16 +66,27 @@
   </div> -->
 
 
+  <div style="columns:2">
+    <label>Driver Ic Number <span style="color: red;">*</span> :</label>
+    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverIc" />
+  </div>
+
   <div>
     <label>Remark :</label><br />
     <textarea name="remark" [(ngModel)]="rubberSale.remark"></textarea>
   </div>
 
   <div style="margin-top: 10px">
-    <button style="float: right" class="btn-add" (click)="addSale()">
-      Add &nbsp; <i class="fa fa-plus"></i>
+    <button style="float: right" class="btn-add" (click)="addSale()" [disabled]="isSubmit">
+      <ng-container *ngIf="isSubmit; else notLoading">
+        Loading...
+      </ng-container>
+      <ng-template #notLoading>
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </ng-template>
     </button>
   </div>
+  
 
   <div style="margin-top: 10px">
     <button class="btn-back" (click)="back()">

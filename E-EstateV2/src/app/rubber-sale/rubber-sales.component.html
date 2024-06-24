@@ -50,8 +50,6 @@
             <td>{{sale.saleDateTime | date : "dd/MM/YYYY"}}</td>
             <!-- <td>{{sale.paymentStatus}} -->
             <td>{{sale.buyerName}}</td>
-            <td>{{sale.transportPlateNo}}</td>
-            <td>{{sale.driverName}}</td>
             <td>{{sale.rubberType}}</td>
             <td>{{sale.letterOfConsentNo}}</td>
             <td>{{sale.weightSlipNo}}</td>
@@ -79,6 +77,9 @@
                 <button class="btn-update" (click)="printForm1(sale)"  title="Print Form 1">
                   <i class="fa fa-print"></i>
                 </button> &nbsp;
+                <button [disabled]="sale.paymentStatusId === 3 || sale.weightSlipNo !== null" class="btn-del" (click)="changeStatus(sale)">
+                  <i class="fa fa-trash"></i>
+                </button>
                 <!-- <button class="btn-update" (click)="print(sale)"  title="Print Receipt">
                   <i class="fa fa-print"></i>
                 </button> -->

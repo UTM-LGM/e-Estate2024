@@ -261,7 +261,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
             this.productivity.push(product);
           } else {
             this.productivityByYear = this.groupByYear(this.productivity);
-            this.createProductivityChart(); // Call chart creation after data is processed
+            // this.createProductivityChart(); // Call chart creation after data is processed
           }
           this.isLoadingProduction = false;
         },
@@ -272,7 +272,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
       });
     this.subscriptionService.add(getProductivity);
 
-  } 
+  }
 
   // Helper function to group data by year and calculate sums
 groupByYear(data: any) {
@@ -299,34 +299,34 @@ groupByYear(data: any) {
 }
 
   
-  createProductivityChart() {
-    if (this.chart) {
-      this.chart.destroy();
-    }
+  // createProductivityChart() {
+  //   if (this.chart) {
+  //     this.chart.destroy();
+  //   }
 
-    const years = this.productivityByYear.map((x: any) => x.year);
-    const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
+  //   const years = this.productivityByYear.map((x: any) => x.year);
+  //   const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
   
-    this.chart = new Chart("chartProductivityAdmin", {
-      type: 'line',
-      data: {
-        labels: years,
-        datasets: [
-          {
-            label: 'Rubber Dry (Kg/Ha)',
-            data: totalRubberProductivity,
-            backgroundColor: 'blue',
-            borderColor: 'blue',
-            fill: false
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    });
-  }
+  //   this.chart = new Chart("chartProductivityAdmin", {
+  //     type: 'line',
+  //     data: {
+  //       labels: years,
+  //       datasets: [
+  //         {
+  //           label: 'Rubber Dry (Kg/Ha)',
+  //           data: totalRubberProductivity,
+  //           backgroundColor: 'blue',
+  //           borderColor: 'blue',
+  //           fill: false
+  //         }
+  //       ]
+  //     },
+  //     options: {
+  //       responsive: true,
+  //       maintainAspectRatio: false
+  //     }
+  //   });
+  // }
   
   getWorker() {
    const getCurrent =  this.reportService.getCurrentTapperAndFieldWorker()

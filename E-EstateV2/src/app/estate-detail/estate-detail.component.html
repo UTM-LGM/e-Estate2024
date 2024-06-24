@@ -141,7 +141,8 @@
 
         <td>Planting Material</td>
         <td><span>:</span></td>
-        <td>{{estateDetail.plantingMaterial}}</td>
+        <td *ngIf="estateDetail.plantingMaterial == null " class="detail" style="color: red;">Please update profile</td>
+        <td *ngIf="estateDetail.plantingMaterial != null ">{{estateDetail.plantingMaterial}}</td>
 
         <!-- <td>Land tittle (Grant No)</td>
         <td><span>:</span></td>

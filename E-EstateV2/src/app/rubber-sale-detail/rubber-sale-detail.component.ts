@@ -18,7 +18,7 @@ import { SubscriptionService } from '../_services/subscription.service';
 })
 export class RubberSaleDetailComponent implements OnInit, OnDestroy {
   rubberSale: RubberSale = {} as RubberSale
-filterRubberSale: any = {} as any
+  filterRubberSale: any = {} as any
 
 
   buyers: Buyer[] = []
@@ -32,7 +32,7 @@ filterRubberSale: any = {} as any
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -59,7 +59,7 @@ filterRubberSale: any = {} as any
           this.buyers = Response
         }
       )
-      this.subscriptionService.add(getBuyer);
+    this.subscriptionService.add(getBuyer);
 
   }
 
@@ -70,7 +70,7 @@ filterRubberSale: any = {} as any
   update() {
     this.rubberSale.updatedBy = this.sharedService.userId.toString()
     this.rubberSale.updatedDate = new Date()
-    const {paymentStatus, ...filterSale} = this.rubberSale
+    const { paymentStatus, ...filterSale } = this.rubberSale
     this.filterRubberSale = filterSale
     this.rubberSaleService.updateSale(this.filterRubberSale)
       .subscribe(

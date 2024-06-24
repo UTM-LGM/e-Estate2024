@@ -28,14 +28,12 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
 
   filteredCompany: any = {} as any
 
-
   filterStates: State[] = []
   towns: Town[] = []
   filterTowns: Town[] = []
   filterTown: Town[] = []
 
   filterMemberships: MembershipType[] = []
-
 
   town = true;
 

@@ -145,4 +145,17 @@ export class ContactDetailComponent implements OnInit {
         }
       )
   }
+
+  // validatePhoneNo() {
+  //   const phonePattern = /^\d{2}-\d{7}$/;
+  //   console.log(phonePattern)
+  //   if (!phonePattern.test(this.companyContact.phoneNo)) {
+  //     swal.fire({
+  //       icon: 'error',
+  //       title: 'Error',
+  //       text: 'Phone number must be in xxx-xxxxxxx format.'
+  //     });
+  //     this.companyContact.phoneNo = ''
+  //   }
+  // }
 }

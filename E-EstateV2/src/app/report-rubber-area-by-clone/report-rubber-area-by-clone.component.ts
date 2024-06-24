@@ -20,6 +20,8 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
   order = ''
   currentSortedColumn = ''
   term = ''
+  startMonth = ''
+  endMonth = ''
 
   estate: any = {} as any
   companies: any[] = []
@@ -46,11 +48,21 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.year = new Date().getFullYear().toString()
     this.role = this.sharedService.role
-    this.getAreaClone()
+    this.isLoading = false
   }
 
   companySelected() {
     this.estate.id = 0
+  }
+
+  monthChange() {
+    this.isLoading = true
+    this.getAreaClone()
+  }
+
+  chageStartMonth() {
+    this.endMonth = ''
+    this.cloneArea =[]
   }
 
   yearSelected() {
@@ -71,21 +83,15 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
 
   getAreaClone() {
     setTimeout(() => {
-      if (this.year === '') {
-        this.isLoading = false;
-        this.cloneArea = [];
-      } else {
-        const getArea = this.reportService.getAreaByClone(this.year)
-          .subscribe(
-            Response=>{
-              this.cloneArea = this.processCloneArea(Response);
-              this.isLoading = false;
-            }
-          )
-      this.subscriptionService.add(getArea);
-
-      }
-    }, 0);
+      const getArea = this.reportService.getAreaByAllClone(this.startMonth, this.endMonth)
+      .subscribe(
+        Response => {
+          this.cloneArea = this.processCloneArea(Response);
+          this.isLoading = false;
+        }
+      )
+    this.subscriptionService.add(getArea);
+    }, 2000);
   }
   
   processCloneArea(data: any[]) {
@@ -133,16 +139,27 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
 
   exportToExcel(data:any[], fileName:String){
     let bilCounter = 1
-    const filteredData = data.map(row =>({
+    const filteredData:any = data.map(row =>({
       No:bilCounter++,
       CloneName:row.cloneName,
       TotalRubberArea: row.totalArea
     }))
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const headerRow = [
+      { No: 'Start Month Year:', CloneName: this.startMonth},
+      { No: 'End Month Year:', CloneName: this.endMonth},
+      {}, // Empty row for separation
+      { No: 'No', CloneName: 'CloneName', TotalRubberArea: 'TotalRubberArea'}
+    ];
+
+    const exportData = headerRow.concat(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, this.year );
-    XLSX.writeFile(wb, `${fileName}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1' );
+    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+
+    XLSX.writeFile(wb, formattedFileName);
 
   }
 

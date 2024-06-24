@@ -17,6 +17,7 @@ namespace E_EstateV2_API.Repository
             foreach (var item in fieldClone)
             {
                 item.createdDate = DateTime.Now;
+                item.isActive = true;
                 await _context.AddAsync(item);
                 await _context.SaveChangesAsync();
             }

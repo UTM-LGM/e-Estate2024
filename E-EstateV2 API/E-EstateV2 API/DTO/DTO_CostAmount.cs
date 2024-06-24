@@ -5,7 +5,7 @@
         public int id { get; set; }
 
         public decimal amount { get; set; }
-        public int year { get; set; }
+        public string monthYear { get; set; }
         public string status { get; set; }
         public int estateId { get; set; }
         public int costId { get; set; }

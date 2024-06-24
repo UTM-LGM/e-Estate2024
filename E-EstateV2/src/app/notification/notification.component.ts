@@ -56,9 +56,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.yearNow = new Date().getFullYear()
     this.estateId = this.sharedService.estateId
     this.checkProduction()
-    this.getFieldInfoYearly()
+    // this.getFieldInfoYearly()
     this.getProductionDrafted()
-    this.getCostDrafted()
+    // this.getCostDrafted()
   }
 
   getProductionDrafted(){
@@ -80,20 +80,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.subscriptionService.add(getProduction);
   }
 
-  getCostDrafted(){
-    const getCostAmount = this.costInformationService.getCostAmount()
-    .subscribe(
-      Response =>{
-        const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.year == new Date().getFullYear())
-        if(cost.length > 0){
-          this.warningCostDrafted = true
-          this.updateBadge()
-        }
-      }
-    )
-    this.subscriptionService.add(getCostAmount);
+  // getCostDrafted(){
+  //   const getCostAmount = this.costInformationService.getCostAmount()
+  //   .subscribe(
+  //     Response =>{
+  //       const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.monthYear == new Date().getFullYear())
+  //       if(cost.length > 0){
+  //         this.warningCostDrafted = true
+  //         this.updateBadge()
+  //       }
+  //     }
+  //   )
+  //   this.subscriptionService.add(getCostAmount);
 
-  }
+  // }
 
   checkProduction() {
     const currentDate = new Date().getFullYear()

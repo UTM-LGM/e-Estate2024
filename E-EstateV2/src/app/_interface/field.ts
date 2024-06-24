@@ -36,4 +36,8 @@ export interface Field {
     estate:any
     otherCropId:number
     companyId:number
+    rubberArea:number | null
+    remark:string
+    currentTreeStand:number
+    
 }

@@ -11,7 +11,7 @@ export class LoginLayoutComponent {
   constructor(private sanitizer: DomSanitizer) { }
 
   downloadFile() {
-    const fileName = 'assets/Manual Pengguna e-Estate.pdf' // Path to the file in the assets folder
+    const fileName = 'assets/User Manual e-Estate.pdf' // Path to the file in the assets folder
 
     // Load the file using Angular's DomSanitizer
     this.sanitizer.bypassSecurityTrustResourceUrl(fileName)
@@ -20,7 +20,7 @@ export class LoginLayoutComponent {
     const a = document.createElement('a')
     a.href = fileName;
     a.target = '_blank'; // Opens the link in a new tab
-    a.download = 'Manual Pengguna e-Estate.pdf' // Set the desired filename
+    a.download = 'User Manual e-Estate.pdf' // Set the desired filename
 
     // Trigger a click event on the anchor element
     a.click()

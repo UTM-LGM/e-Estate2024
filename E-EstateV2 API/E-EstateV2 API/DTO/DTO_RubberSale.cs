@@ -5,6 +5,7 @@
         public int id { get; set; }
         public DateTime saleDateTime { get; set; }
         public string buyerName { get; set; }
+        public string driverIc { get; set; }
         public string rubberType { get; set; }
         public string letterOfConsentNo { get; set; }
         public string receiptNo { get; set; }

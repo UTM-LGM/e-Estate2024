@@ -20,7 +20,8 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetCompanyContact()
         {
             var contacts = await _genericRepository.GetAll();
-            return Ok(contacts);
+            var sortedContacts = contacts.OrderByDescending(contact => contact.isActive).ToList();
+            return Ok(sortedContacts);
         }
 
         [HttpPost]

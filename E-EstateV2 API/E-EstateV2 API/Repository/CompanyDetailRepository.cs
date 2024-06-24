@@ -22,7 +22,9 @@ namespace E_EstateV2_API.Repository
                 id = x.Id,
                 companyId = x.companyId,
                 membershipTypeId = x.membershipTypeId,
-                membershipType = _context.membershipTypes.Where(y=>y.Id == x.membershipTypeId).Select(y=>y.membershipType).FirstOrDefault()
+                membershipType = _context.membershipTypes.Where(y=>y.Id == x.membershipTypeId).Select(y=>y.membershipType).FirstOrDefault(),
+                startFinancialYear = x.startFinancialYear,
+                endFinancialYear = x.endFinancialYear,
             }).FirstOrDefaultAsync();
             return company;
         }
@@ -43,6 +45,8 @@ namespace E_EstateV2_API.Repository
                 existingCompanyDetail.updatedBy = company.updatedBy;
                 existingCompanyDetail.updatedDate = DateTime.Now;
                 existingCompanyDetail.membershipTypeId = company.membershipTypeId;
+                existingCompanyDetail.startFinancialYear = company.startFinancialYear;
+                existingCompanyDetail.endFinancialYear = company.endFinancialYear;
                 await _context.SaveChangesAsync();
                 return existingCompanyDetail;
             }

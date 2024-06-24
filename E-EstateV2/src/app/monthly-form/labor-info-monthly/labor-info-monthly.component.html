@@ -9,7 +9,7 @@
 <div style="padding-left: 30px;padding-right: 30px;">
   <div style="width: 49%;">
     <div style="flex: 1;">
-      <label>Country:</label>
+      <label>Country <span style="color: red;">*</span> :</label>
       <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId">
         <mat-option *ngFor="let country of filterCountries" [value]="country.id">
           {{ country.country }}
@@ -23,15 +23,15 @@
   </div>
 
   <div style="columns: 2">
-    <label>No of Checkrole Tapper :</label>
+    <label>No of Checkrole Tapper <span style="color: red;">*</span> :</label>
     <input type="number" name="tapperCheckrole" [(ngModel)]="labor.tapperCheckrole" />
-    <label>No.of Tappers Employed by Contractors :</label>
+    <label>No.of Tappers Employed by Contractors <span style="color: red;">*</span> :</label>
     <input type="number" name="tapperContractor" [(ngModel)]="labor.tapperContractor" />
   </div>
   <div style="columns: 2">
-    <label>No of Checkrole Field Worker :</label>
+    <label>No of Checkrole Field Worker <span style="color: red;">*</span> :</label>
     <input type="number" name="fieldCheckrole" [(ngModel)]="labor.fieldCheckrole" />
-    <label>No.of Field Workers Employed by Contractors :</label>
+    <label>No.of Field Workers Employed by Contractors <span style="color: red;">*</span> :</label>
     <input type="number" name="fieldContractor" [(ngModel)]="labor.fieldContractor" />
   </div>
 
@@ -39,7 +39,7 @@
     <ng-container *ngFor="let laborType of filterTypes; let i = index;">
       <div style="flex: 1 1 calc(50% - 10px);">
         <div>
-          <label>No of {{ laborType.laborType | titlecase }}:</label>
+          <label>No of {{ laborType.laborType | titlecase }} <span style="color: red;">*</span> :</label>
           <input type="number" name="noOf{{ laborType.laborType }}"
             [(ngModel)]="laborCategory[laborType.id].noOfWorker">
         </div>
@@ -48,8 +48,13 @@
   </div>
 
   <div>
-    <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()">
-      Add &nbsp; <i class="fa fa-plus"></i>
+    <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()" [disabled]="isSubmit">
+      <ng-container *ngIf="isSubmit; else notLoading">
+        Loading...
+      </ng-container>
+      <ng-template #notLoading>
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </ng-template>
     </button>
   </div><br /><br />
 

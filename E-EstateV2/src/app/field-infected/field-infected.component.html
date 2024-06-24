@@ -21,7 +21,7 @@
         </mat-select>
       </div>
 
-      <label>Area : </label>
+      <label>Area (Ha) : </label>
       <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled />
     </div>
 
@@ -57,15 +57,24 @@
     </div>
 
     <div style="columns: 2" class="column">
+      <label>Area Infected Percentage (%) : </label>
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" />
       <label>Area Infected (Ha) : </label>
-      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" (change)="validateArea()" />
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled/>
     </div>
 
     <div>
-      <button style="float: right" class="btn-add" type="submit" (click)="submit()">
-        Add &nbsp; <i class="fa fa-plus"></i>
+      <button style="float: right" class="btn-add" type="submit" (click)="submit()" [disabled]="isSubmit">
+        <ng-container *ngIf="isSubmit; else notLoading">
+          Loading...
+        </ng-container>
+        <ng-template #notLoading>
+          Add &nbsp; <i class="fa fa-plus"></i>
+        </ng-template>
       </button>
-    </div><br /><br /><br />
+    </div>
+    <br /><br /><br />
+    
 
   </div>
 
@@ -88,14 +97,14 @@
       </thead>
 
       <tr *ngIf="isLoading">
-        <td colspan="11">
+        <td colspan="12">
           <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
           </ngx-skeleton-loader>
         </td>
       </tr>
 
       <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
-        <td colspan="11" style="color: red;"><b>No Field Infected</b></td>
+        <td colspan="12" style="color: red;"><b>No Field Infected</b></td>
       </tr>
 
       <tbody
@@ -104,7 +113,9 @@
           <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
           <td style="cursor: pointer;">{{field.fieldName}}</td>
           <td>{{ field.area }}</td>
+          <td>{{ field.areaInfectedPercentage }}</td>
           <td>{{ field.areaInfected }}</td>
+          <td>{{ field.diseaseCategory }}</td>
           <td>{{ field.diseaseName }}</td>
           <td>{{ field.severityLevel }}</td>
           <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>

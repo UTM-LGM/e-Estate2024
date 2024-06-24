@@ -33,30 +33,19 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
   selectClone: FieldClone = {} as FieldClone
 
   value: Field[] = []
-  fields: Field[] = []
-
-  clones: Clone[] = []
-  filterClones: Clone[] = []
-  filterArray: Clone[] = []
-  availableClones: Clone[] = []
 
   combineClone: FieldClone[] = []
-
-  selectedValues: any[] = []
-
-  cropCategories: FieldStatus[] = []
-  filterCropCategories: FieldStatus[] = []
 
   conversionField: FieldConversion[] = []
 
   filterFieldDisease: FieldDisease[] = []
-  result: any = {} as any
+  fields: Field[] = []
 
+  result: any = {} as any
 
   term = ''
   total = 0
   isLoading = true
-  conversion = false
   pageNumber = 1
   order = ''
   selectedField: any
@@ -66,7 +55,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
 
   sortableColumns = [
     { columnName: 'fieldName', displayText: 'Field / Block' },
-    { columnName: 'area', displayText: 'Field Area (Ha)' },
+    { columnName: 'rubberArea', displayText: 'Rubber Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },
     { columnName: 'fieldStatus', displayText: 'Field Status' },
     { columnName: 'yearPlanted', displayText: 'Year Planted' },
@@ -76,10 +65,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
   ];
 
   constructor(
-    private fieldStatusService: FieldStatusService,
-    private cloneService: CloneService,
     private fieldService: FieldService,
-    private fieldCloneService: FieldCloneService,
     private sharedService: SharedService,
     private route: ActivatedRoute,
     private fieldConversionService: FieldConversionService,
@@ -93,8 +79,6 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.initialForm()
-    this.getCrop()
-    this.getClone()
     this.getEstate()
     this.getFieldDisease()
     this.role = this.sharedService.role
@@ -179,79 +163,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     this.field.fieldName = ''
   }
 
-  checkFieldName() {
-    if (this.fields.some((s: any) => s.fieldName.toLowerCase() === this.field.fieldName.toLowerCase())) {
-      swal.fire({
-        text: 'Field/Block Name already exists!',
-        icon: 'error'
-      });
-      this.field.fieldName = ''
-    }
-  }
-
-  onSubmit() {
-    if (this.field.fieldName == '') {
-      swal.fire({
-        text: 'Please fil up the form',
-        icon: 'error'
-      });
-    }
-    else {
-      this.field.estateId = this.estate.id
-      this.field.isActive = true
-      this.field.createdBy = this.sharedService.userId.toString()
-      this.field.createdDate = new Date()
-      if(this.field.dateOpenTapping){
-        this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
-      }
-      else{
-        this.field.dateOpenTapping = null
-      }
-      this.fieldService.addField(this.field)
-        .subscribe(
-          {
-            next: (Response) => {
-              const combineClone: any[] = this.selectedValues.map(item => {
-                return { 'cloneId': item.id, 'isActive': true, 'fieldId': Response.id, 'createdBy': Response.createdBy, 'createdDate': Response.createdDate }
-              })
-              this.fieldCloneService.addFieldClone(combineClone)
-                .subscribe(
-                  Response => {
-                    swal.fire({
-                      title: 'Done!',
-                      text: 'Field successfully submitted!',
-                      icon: 'success',
-                      showConfirmButton: false,
-                      timer: 1000
-                    });
-                    this.selectedValues = []
-                    this.field = {} as Field
-                    this.ngOnInit()
-                  })
-            }, error: (err) => {
-              swal.fire({
-                text: 'Please fil up the form',
-                icon: 'error'
-              });
-            }
-          });
-    }
-  }
-
-  convertToDateTime(monthYear: string): string {
-    // monthYear is in the format YYYY-MM
-    const [year, month] = monthYear.split('-').map(Number);
-    // Set the date to the first day of the selected month, time to midnight
-    const date = new Date(year, month - 1, 1, 0, 0, 0);
-    return date.toISOString(); // Convert to ISO string or any other desired format
-  }
-
-  getcategory() {
-    this.filterCropCategories = this.cropCategories.filter(c => c.isMature == this.field.isMature
-      && c.isActive == true
-      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true))
-  }
-
+  
   getFieldDisease() {
     const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
@@ -264,52 +176,16 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     
   }
 
-  getCrop() {
-    const getCrop = this.fieldStatusService.getFieldStatus()
-      .subscribe(
-        Response => {
-          this.cropCategories = Response
-        });
-      this.subscriptionService.add(getCrop);
-
-  }
-
-  getClone() {
-    const getClone = this.cloneService.getClone()
-      .subscribe(Response => {
-        this.clones = Response
-        this.filterClones = this.clones.filter((e) => e.isActive == true)
-        this.availableClones = this.filterClones
-      });
-      this.subscriptionService.add(getClone);
-
-  }
-
-  selectedClone(value: Field) {
-    if (this.field.cloneId == 0) {
-      swal.fire({
-        text: 'Please choose clone',
-        icon: 'error'
-      })
-    }
-    else {
-      const item = this.filterClones.find((x) => x.id == value.cloneId)
-      this.selectedValues.push(item)
-      this.field.cloneId = 0
-      this.availableClones = this.filterClones.filter(x => !this.selectedValues.includes(x))
-    }
-  }
-
-  delete(index: number) {
-    this.selectedValues.splice(index, 1)
-    this.availableClones = this.filterClones.filter(x => !this.selectedValues.includes(x))
-  }
+  
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
     // Calculate sum excluding filtered fields
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government'));
-    this.total = this.value.reduce((acc, item) => acc + item.area, 0);
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') 
+    && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government')
+    && x.isMature == true
+  );
+    this.total = this.value.reduce((acc, item) => acc + (item.rubberArea ?? 0), 0);
   }
 
   back() {
@@ -320,43 +196,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     return clone1 && clone2 ? clone1.id === clone2 : clone1 === clone2;
   }
 
-  diseaseName(fieldStatusId: any) {
-    if (this.field.isMature == true) {
-      const fieldSick = this.cropCategories.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == true);
-      if (fieldStatusId.value == fieldSick?.id) {
-        this.fieldSick = true
-      }
-      else {
-        this.fieldSick = false
-      }
-    }
-    else if (this.field.isMature == false) {
-      const fieldSick = this.cropCategories.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == false);
-      if (fieldStatusId.value == fieldSick?.id) {
-        this.fieldSick = true
-      }
-      else {
-        this.fieldSick = false
-      }
-    }
-
-  }
-
-  yearSelected() {
-    const yearAsString = this.field.yearPlanted.toString()
-    if (yearAsString.length !== 4) {
-      swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please insert correct year',
-      });
-      this.field.yearPlanted = ''
-    }
-
-  }
-
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-
 }

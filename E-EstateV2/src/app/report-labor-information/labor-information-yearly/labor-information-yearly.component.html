@@ -2,7 +2,7 @@
   <h1>Labor Information</h1>
 
 
-  <div style="columns:3"
+  <div style="columns:4"
     [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
     <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
@@ -19,11 +19,13 @@
       </mat-option>
     </mat-select>
 
-    <label>Please choose year : </label>
-    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
 
-  <div style="columns:3"
+  <div style="columns:4"
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
     <div>
       <label>Company</label>
@@ -36,8 +38,10 @@
       </mat-option>
     </mat-select>
     
-      <label>Please choose year: </label>
-      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
 
   </div>
 
@@ -46,21 +50,23 @@
     <label>Estate : </label>
     <input type="text" [value]="estate.name" disabled />
 
-    <label>Please choose year: </label>
-    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
-
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
+    
   </div>
 
   <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role == 'Admin'">
     <button class="btn-add"
-      (click)="exportToExcelAdmin(labors,localTapperFieldWorker,foreignTapperFieldWorker, 'Labor Information By Category Report ' + year)">
+      (click)="exportToExcelAdmin(labors,localTapperFieldWorker,foreignTapperFieldWorker, 'Labor Information By Category Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
 
   <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role != 'Admin'">
     <button class="btn-add"
-      (click)="exportToExcelCompanyAdmin(labors,localTapperFieldWorker,foreignTapperFieldWorker, 'Labor Information By Category Report ' + year)">
+      (click)="exportToExcelCompanyAdmin(labors,localTapperFieldWorker,foreignTapperFieldWorker, 'Labor Information By Category Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>

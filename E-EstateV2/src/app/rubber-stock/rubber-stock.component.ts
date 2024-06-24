@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { Estate } from '../_interface/estate';
@@ -11,6 +11,8 @@ import swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
 import { RubberStockDetailComponent } from '../rubber-stock-detail/rubber-stock-detail.component';
 import { SubscriptionService } from '../_services/subscription.service';
+import { CuplumpRubberStockComponent } from './cuplump-rubber-stock/cuplump-rubber-stock.component';
+import { LatexRubberStockComponent } from './latex-rubber-stock/latex-rubber-stock.component';
 
 @Component({
   selector: 'app-rubber-stock',
@@ -32,7 +34,6 @@ export class RubberStockComponent implements OnInit, OnDestroy {
   }
 
   isLoading = true
-  estate: any = {} as any
 
   term = ''
   pageNumber = 1
@@ -44,20 +45,13 @@ export class RubberStockComponent implements OnInit, OnDestroy {
 
   date: any
   previousDate = new Date()
+  estate: any = {} as any
 
-
-  sortableColumns = [
-    { columnName: 'monthYear', displayText: 'Month and Year' },
-    { columnName: 'previousStock', displayText: 'Previous End Stock 100% Dry (Kg)' },
-    { columnName: 'production', displayText: 'Total Production 100% Dry (Kg)' },
-    { columnName: 'rubberSale', displayText: 'Total Rubber Sale 100% Dry (Kg)' },
-    { columnName: 'endStock', displayText: 'Month End Stock 100% Dry (Kg)' },
-    { columnName: 'weightLoss', displayText: 'Weight Loss (%)' },
-  ];
+  @ViewChild('cuplumpStock') cuplumpStock: CuplumpRubberStockComponent | undefined;
+  @ViewChild('latexStock') latexStock: LatexRubberStockComponent | undefined;
 
   ngOnInit(): void {
     this.getEstate()
-    this.getStock()
   }
 
   getEstate() {
@@ -70,51 +64,23 @@ export class RubberStockComponent implements OnInit, OnDestroy {
                 this.estate = Response
                 this.isLoading = false
               })
-      this.subscriptionService.add(getOneEstate);
+          this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
   }
 
-  toggleSort(columnName: string) {
-    if (this.currentSortedColumn === columnName) {
-      this.order = this.order === 'asc' ? 'desc' : 'asc'
-    } else {
-      this.currentSortedColumn = columnName;
-      this.order = this.order === 'desc' ? 'asc' : 'desc'
-    }
-  }
 
   openDialog(estate: Estate, stock: RubberStock[]) {
     const dialog = this.dialog.open(AddRubberStockComponent, {
       data: { estate: estate, stock: stock }})
-    dialog.afterClosed()
-        .subscribe(
-          Response => {
-            this.ngOnInit()
-          });
-        }
-
-    // this.date = this.datePipe.transform(this.previousDate, 'MMM-yyyy')?.toUpperCase()
-    // const date = this.rubberStocks.filter(x => x.monthYear == this.date && x.isActive == true)
-    // if (date.length === 0) {
-    //   const dialog = this.dialog.open(AddRubberStockComponent, {
-    //     data: { estate: estate, stock: stock }
-    //   });
-    //   dialog.afterClosed()
-    //     .subscribe(
-    //       Response => {
-    //         this.ngOnInit()
-    //       });
-    // }
-    // else {
-    //   swal.fire({
-    //     text: 'Month already exists!',
-    //     icon: 'error'
-    //   });
-  //   }
-
-  // }
+      dialog.afterClosed()
+          .subscribe(
+            Response => {
+              this.ngOnInit()
+              this.refreshTables();
+            });
+          }
 
   getStock() {
     setTimeout(() => {
@@ -149,23 +115,17 @@ export class RubberStockComponent implements OnInit, OnDestroy {
       )
   }
 
-  openDialogEdit(stock: RubberStock, estate: Estate) {
-    const dialogRef = this.dialog.open(RubberStockDetailComponent, {
-      data: { stock: stock, estate: estate }
-    });
-    dialogRef.afterClosed()
-      .subscribe(
-        Response => {
-          this.ngOnInit()
-        });
+  refreshTables() {
+    if (this.cuplumpStock) {
+      this.cuplumpStock.getStock();
+    }
+    if (this.latexStock) {
+      this.latexStock.getStock();
+    }
   }
 
-  isLastMonth(monthYear: string): boolean {
-    const previousMonth = new Date()
-    previousMonth.setMonth(previousMonth.getMonth() - 1)
-    const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
-    return monthYear === date?.toUpperCase()
-  }
+
+  
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();

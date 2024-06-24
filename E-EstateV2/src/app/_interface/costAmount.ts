@@ -4,7 +4,7 @@ export interface CostAmount {
     id: number
     costId: number
     amount: number
-    year: number
+    monthYear: string
     estates: Estate[]
     estateId: number
     costSubcategory1Id: number

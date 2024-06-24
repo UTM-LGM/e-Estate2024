@@ -13,16 +13,16 @@
         <tr>
           <th>Month and Year</th>
           <th>Field / Block</th>
-          <th>Cuplump (Kg)</th>
-          <th>Cuplump DRC (%)</th>
-          <th>Latex (Kg)</th>
-          <th>Latex DRC (%)</th>
+          <th>Cuplump (Kg) <span style="color: red;">*</span></th>
+          <th>Cuplump DRC (%) <span style="color: red;">*</span></th>
+          <th>Latex (Kg) <span style="color: red;">*</span></th>
+          <th>Latex DRC (%) <span style="color: red;">*</span></th>
           <!-- <th>USS (Kg)</th>
           <th>USS DRC (%)</th>
           <th>Others (Kg)</th>
           <th>Others DRC (%)</th> -->
-          <th>No of Task Tap</th>
-          <th>No of Task UnTap</th>
+          <th>No of Task Tap <span style="color: red;">*</span></th>
+          <th>No of Task UnTap <span style="color: red;">*</span></th>
           <th>Remark Task UnTap</th>
         </tr>
 
@@ -92,16 +92,16 @@
           <tr>
             <th>Month and Year</th>
             <th>Field / Block</th>
-            <th>Cuplump (Kg)</th>
-            <th>Cuplump DRC (%)</th>
-            <th>Latex (Kg)</th>
-            <th>Latex DRC (%)</th>
+            <th>Cuplump (Kg) <span style="color: red;">*</span></th>
+            <th>Cuplump DRC (%) <span style="color: red;">*</span></th>
+            <th>Latex (Kg) <span style="color: red;">*</span></th>
+            <th>Latex DRC (%) <span style="color: red;">*</span></th>
             <!-- <th>USS (Kg)</th>
             <th>USS DRC (%)</th>
             <th>Others (Kg)</th>
             <th>Others DRC (%)</th> -->
-            <th>No of Task Tap</th>
-            <th>No of Task UnTap</th>
+            <th>No of Task Tap <span style="color: red;">*</span></th>
+            <th>No of Task UnTap <span style="color: red;">*</span></th>
             <th>Remark Task UnTap</th>
           </tr>
 
@@ -145,9 +145,15 @@
               Next &nbsp; <i class="fa fa-arrow-right"></i>
             </button>
 
-            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit">
-              Submit &nbsp; <i class="fa fa-plus"></i>
+            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit" [disabled]="isSubmit">
+              <ng-container *ngIf="isSubmit; else notLoading">
+                Loading...
+              </ng-container>
+              <ng-template #notLoading>
+                Submit &nbsp; <i class="fa fa-plus"></i>
+              </ng-template>
             </button>
+            
           </div>
 
           <div *ngIf="draftFilterProductions.length != 0">

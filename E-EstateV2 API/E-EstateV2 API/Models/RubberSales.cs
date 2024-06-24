@@ -22,6 +22,7 @@ namespace E_EstateV2_API.Models
         public DateTime weightSlipNoDate { get; set; }
         public string transportPlateNo { get; set; }
         public string driverName { get; set; }
+        public string driverIc { get; set; }
         public string remark { get; set; }
         public string deliveryAgent { get; set; }
         public int estateId { get; set; }

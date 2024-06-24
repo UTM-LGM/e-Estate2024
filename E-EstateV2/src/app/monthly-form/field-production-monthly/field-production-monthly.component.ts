@@ -21,6 +21,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   @Output() nextTabEvent = new EventEmitter<void>();
   isLoading = true
+  isSubmit = false
   date: any
   cuplump: any
   latex: any
@@ -360,7 +361,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   openDialog(product: FieldProduction): void {
     const dialogRef = this.dialog.open(FieldProductionDetailComponent, {
-      height: '340px',
+      height: '276px',
       data: { data: product },
     });
 
@@ -377,18 +378,29 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     const updatedArray = this.draftFilterProductions.map(obj => {
       return { ...obj, status: 'Submitted', updatedBy: updatedBy, updatedDate: date }
     });
+    this.isSubmit = true
     this.fieldProductionService.updateProductionDraft(updatedArray)
-      .subscribe(
-        Response => {
+      .subscribe({
+        next: (response) => {
           swal.fire({
             title: 'Done!',
             text: 'Field Production information successfully submitted!',
             icon: 'success',
             showConfirmButton: false,
             timer: 1000
-          }); this.getEstate()
-        }
-      )
+          });
+          this.getEstate()
+      },
+      error: (error) => {
+        swal.fire({
+          title: 'Error!',
+          text: 'Failed to submit Field Production!',
+          icon: 'error',
+          showConfirmButton: true
+        });
+        this.isSubmit = false;
+      }
+    })
   }
 
   save() {

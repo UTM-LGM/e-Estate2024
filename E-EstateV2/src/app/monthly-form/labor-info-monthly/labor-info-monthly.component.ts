@@ -34,6 +34,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
 
   filterTypes: LaborInformation[] = []
   isLoading = true
+  isSubmit = false
   pageNumber = 1
   totalForeignWorker = 0
   date: any
@@ -118,6 +119,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
     this.labor.createdBy = this.sharedService.userId.toString()
     this.labor.createdDate = new Date()
     this.labor.monthYear = this.date
+    this.isSubmit = true
     this.laborInfoService.addLabor(this.labor)
       .subscribe(
         {
@@ -145,6 +147,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
             this.labor = {} as LaborInfo
             this.getLabor()
             this.getLaborType()
+            this.isSubmit = false
           }, error: (err) => {
             swal.fire({
               text: 'Please fil up the form',

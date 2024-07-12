@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Field } from 'src/app/_interface/field';
@@ -20,6 +20,8 @@ import swal from 'sweetalert2';
 export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   @Output() nextTabEvent = new EventEmitter<void>();
+  @Input() selectedMonthYear = ''
+
   isLoading = true
   isSubmit = false
   date: any
@@ -73,22 +75,34 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
-    this.getDate()
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    // this.getDate()
+    // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    this.date = this.selectedMonthYear
     this.getEstate()
   }
 
-  getDate() {
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedMonthYear']) {
+      // Handle changes here if needed
+      this.date = this.selectedMonthYear
+      this.getEstate()
+      this.getProducts(this.filterFields)
+      this.products.forEach(y => y.monthYear = this.datePipe.transform(this.date, 'MMM-yyyy'))
+    }
   }
 
-  monthSelected(month: string) {
-    this.getEstate()
-    this.getProducts(this.filterFields)
-    let monthDate = new Date(month)
-    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
-    this.products.forEach(y => y.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy'))
-  }
+  // getDate() {
+  //   this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  // }
+
+  // monthSelected(month: string) {
+  //   this.isSubmit = false
+  //   this.getEstate()
+  //   this.getProducts(this.filterFields)
+  //   let monthDate = new Date(month)
+  //   this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+  //   this.products.forEach(y => y.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy'))
+  // }
 
   getEstate() {
     setTimeout(() => {
@@ -113,7 +127,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const filterFields = Response.filter(x => x.estateId == this.estate.id)
-          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus?.toLowerCase().includes("conversion"))
           this.getProducts(this.filterFields)
           this.getAllProduction(this.filterFields)
         }
@@ -421,6 +435,39 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  validateCuplumpDRC(drc:any, i:any){
+    const drcValue = drc.target.value
+    if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
+      return drcValue
+    }
+    else{
+      swal.fire({
+        title: 'Error!',
+        text: 'CuplumpDRC must be between 45% to 80%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.products[i].cuplumpDRC = 0
+    }
+  }
+
+  validateLatexDRC(drc:any, i:any){
+    const drcValue = drc.target.value
+    if ((drcValue >= 20 && drcValue <= 55) || drc === 0) {
+      return drcValue
+    }
+    else{
+      swal.fire({
+        title: 'Error!',
+        text: 'LatexDRC must be between 20% to 55%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.products[i].latexDRC = 0
+    }
+
   }
   
 }

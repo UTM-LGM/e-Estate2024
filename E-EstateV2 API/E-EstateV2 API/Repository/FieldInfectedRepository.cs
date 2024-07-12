@@ -10,10 +10,13 @@ namespace E_EstateV2_API.Repository
     public class FieldInfectedRepository: IFieldInfectedRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFieldInfectedHistoryRepository _historyRepository;
 
-        public FieldInfectedRepository(ApplicationDbContext context)
+        public FieldInfectedRepository(ApplicationDbContext context, IFieldInfectedHistoryRepository historyRepository)
         {
             _context = context;
+            _historyRepository = historyRepository;
+
         }
 
         public async Task<FieldInfected> Add(FieldInfected entity)
@@ -58,7 +61,7 @@ namespace E_EstateV2_API.Repository
                     fieldName = _context.fields.Where(x=>x.Id == fi.fieldId).Select(x=>x.fieldName).FirstOrDefault(),
                     diseaseName = _context.fieldDiseases.Where(x=>x.Id == fi.fieldDiseaseId).Select(x=>x.diseaseName).FirstOrDefault(),
                     diseaseCategory = _context.diseaseCategories.Where(x=>x.Id == (_context.fieldDiseases.Where(y=>y.Id == fi.fieldDiseaseId).Select(y=>y.diseaseCategoryId).FirstOrDefault())).Select(x=>x.category).FirstOrDefault(),
-                    area = _context.fields.Where(x=>x.Id == fi.fieldId).Select(x=>x.area).FirstOrDefault(),
+                    area = _context.fields.Where(x=>x.Id == fi.fieldId).Select(x=>x.rubberArea).FirstOrDefault(),
                     remark = fi.remark,
                     severityLevel = fi.severityLevel,
                     dateRecovered = fi.dateRecovered,
@@ -85,7 +88,7 @@ namespace E_EstateV2_API.Repository
             return null;
         }
 
-        public async Task<List<DTO_FieldInfected>> GetFieldInfectedById(int id)
+        public async Task<List<DTO_FieldInfected>> GetFieldInfectedByFieldId(int id)
         {
             var fieldInfected = await _context.fieldInfecteds.Where(x => x.fieldId == id).Select(x => new DTO_FieldInfected
             {
@@ -103,6 +106,31 @@ namespace E_EstateV2_API.Repository
                 severityLevel = x.severityLevel,
                 dateRecovered = x.dateRecovered
             }).ToListAsync();
+            return fieldInfected;
+        }
+
+        public async Task<DTO_FieldInfected> GetFieldInfectedById(int id)
+        {
+            var fieldInfected = await _context.fieldInfecteds.Where(x => x.Id == id).Select(x => new DTO_FieldInfected
+            {
+                id = x.Id,
+                fieldId = x.fieldId,
+                dateScreening = x.dateScreening,
+                fieldDiseaseId = x.fieldDiseaseId,
+                areaInfected = x.areaInfected,
+                areaInfectedPercentage = x.areaInfectedPercentage,
+                isActive = x.isActive,
+                fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
+                diseaseName = _context.fieldDiseases.Where(y => y.Id == x.fieldDiseaseId).Select(y => y.diseaseName).FirstOrDefault(),
+                area = _context.fields.Where(y => y.Id == x.fieldId).Select(x => x.area).FirstOrDefault(),
+                remark = x.remark,
+                severityLevel = x.severityLevel,
+                dateRecovered = x.dateRecovered,
+                createdBy = x.createdBy,
+                createdDate = x.createdDate,
+                updatedDate = x.updatedDate,
+                updatedBy = x.updatedBy
+            }).FirstOrDefaultAsync();
             return fieldInfected;
         }
     }

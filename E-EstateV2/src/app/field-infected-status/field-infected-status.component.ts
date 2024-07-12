@@ -60,7 +60,7 @@ export class FieldInfectedStatusComponent implements OnInit {
   }
 
   update() {
-    if (this.fieldInfected.remark == null) {
+    if (this.fieldInfected.remark == "") {
       swal.fire({
         icon: 'error',
         title: 'Error',

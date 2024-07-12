@@ -37,9 +37,13 @@
       </td>
     </tr>
 
+    <tr *ngIf="buyers.length == 0 && !isLoading">
+      <td colspan="4" style="color: red;">No Buyer</td>
+    </tr>
+
     <tr
-      *ngFor="let buyer of buyers | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let buyer of buyers | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
       <td>{{ buyer.licenseNo }}</td>
       <td>{{ buyer.buyerName }}</td>
       <td>

@@ -26,6 +26,9 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   totalAmount = 0
   isLoading = true
+  radioButton = false
+
+  costType = 'all'
 
   companies: any[] = []
   estate: any = {} as any
@@ -33,6 +36,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   filterLGMAdmin: any[] = []
   filterCompanyAdmin: any[] = []
   costInformations: any[] = []
+  filteredCostInformation : any[]=[]
 
   showAll = false
 
@@ -103,17 +107,20 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   companySelected() {
     this.estate.id = 0
     this.getAllEstate()
-    this.costInformations = []
+    this.filteredCostInformation = []
     this.startMonth = ''
     this.endMonth = ''
     this.showAll = false
+    this.radioButton = false;
   }
 
   estateSelected() {
-    this.costInformations = []
+    this.filteredCostInformation = []
     this.selectedEstateName = this.filterLGMAdmin.find(e => e.id === this.estate.id)?.name || '';
     this.startMonth = ''
     this.endMonth = ''
+    this.radioButton = false;
+
   }
 
 
@@ -188,14 +195,16 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
                 return acc;
               }, []);
               this.costInformations = groupedResponse;
-              this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.totalAmount, 0);
+              this.filteredCostInformation = this.costInformations
+              this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
               this.showAll = true
             } else {
               this.costInformations = Response.filter(x => x.estateId == this.estate.id);
-              console.log(this.costInformations)
-              this.totalAmount = this.costInformations.reduce((total, cost) => total + cost.amount, 0);
+              this.filteredCostInformation = this.costInformations
+              this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
             }
             this.isLoading = false;
+            this.radioButton = true;
           }
         )
       this.subscriptionService.add(getCostInformation);
@@ -283,6 +292,26 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  OnRadioChange(){
+    if (this.costType === 'all') {
+      this.filteredCostInformation = this.costInformations;
+      this.totalAmount = 0
+      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+    } else if (this.costType === 'mature') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == true);
+      this.totalAmount = 0
+      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+    } else if (this.costType === 'immature') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == false);
+      this.totalAmount = 0
+      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+    } else if (this.costType === 'indirect') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costType == "INDIRECT COST");
+      this.totalAmount = 0
+      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+    }
   }
 
 }

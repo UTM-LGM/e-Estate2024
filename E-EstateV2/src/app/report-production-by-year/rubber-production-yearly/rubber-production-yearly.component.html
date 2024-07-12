@@ -14,7 +14,7 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
 
@@ -33,7 +33,7 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
     <label>Please choose year : </label>
@@ -43,7 +43,7 @@
   <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
-    <input type="text" [value]="estate.name" disabled />
+    <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
     <label>Please choose year : </label>
     <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
   </div>
@@ -75,12 +75,12 @@
       </tr>
 
       <tr *ngIf="!isLoading && filterProductionYearly.length == 0 && role == 'Admin'">
-        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose company, estate, and year
+        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose company, estate and year
         </td>
       </tr>
 
       <tr *ngIf="!isLoading && filterProductionYearly.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose estate, and year</td>
+        <td colspan="6" style="color: red; text-align: center;">No data found. Please choose estate and year</td>
       </tr>
 
       <tr *ngIf="!isLoading && filterProductionYearly.length == 0 && role == 'EstateClerk'">

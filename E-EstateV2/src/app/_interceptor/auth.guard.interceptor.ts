@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { UserService } from '../_services/user.service';
 import { User } from '../_interface/user';
@@ -75,10 +75,10 @@ export class AuthGuard implements CanActivate {
 
   setAccessToken() {
     // Entra Id-Production
-    //  const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
+    const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
 
     //STaging
-    const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
+    //const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
     const tokenInfoString = localStorage.getItem(`msal.token.keys.${clientId}`)
 
     if (tokenInfoString !== null) {
@@ -109,38 +109,49 @@ export class AuthGuard implements CanActivate {
   }
 
   decodeAccessToken() {
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem('accessToken');
     if (token != null) {
       const decodedToken: any = jwt_decode(token);
-
+  
       this.sharedService.roles = decodedToken.roles;
       this.sharedService.role = decodedToken.roles[0];
-
-      //check jwt expired time
-      const currentTime = new Date().getTime()
-      //*1000 to convert milisecond
+  
+      // Check JWT expiration time
+      const currentTime = new Date().getTime();
       if (decodedToken.exp * 1000 < currentTime) {
-        this.msalService.logoutRedirect({
-          postLogoutRedirectUri: 'http://localhost:4200/login'
-        });
-        localStorage.clear()
-        this.router.navigateByUrl('/login')
-        return of(false)
-      }
-      else {
-        return of(true)
+        // Token expired, try to acquire a new token silently
+        return this.msalService.acquireTokenSilent({
+          scopes: ["api://e-EstateAPI/.default"]
+        }).pipe(
+          switchMap((response) => {
+            // Save the new token
+            localStorage.setItem('accessToken', response.accessToken);
+            return of(true);
+          }),
+          catchError((error) => {
+            // Silent token acquisition failed, logout and redirect to login page
+            this.msalService.logoutRedirect({
+              postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
+            });
+            localStorage.clear();
+            this.router.navigateByUrl('/login');
+            return of(false);
+          })
+        );
+      } else {
+        return of(true);
       }
     }
-    return of(true)
+    return of(true);
   }
+  
+  
 
   decodeIdToken() {
     const token = localStorage.getItem('idToken')
     if (token != null) {
       const decodedToken: any = jwt_decode(token)
       if (decodedToken != null) {
-        // this.sharedService.roles = decodedToken.roles;
-        // this.sharedService.role = decodedToken.roles[0];
         this.sharedService.email = decodedToken.email
         this.sharedService.fullName = decodedToken.name
         this.sharedService.userId = decodedToken.oid

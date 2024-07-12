@@ -18,12 +18,16 @@ export class ManageUserComponent implements OnInit, OnDestroy {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+
+  itemsPerPage = 10
+
   isLoading = true
   users:User []=[]
   result:any = {} as any
 
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'fullName', displayText: 'User Fullname' },
     { columnName: 'email', displayText: 'Email' },
     { columnName: 'companyName', displayText: 'Company Name' },

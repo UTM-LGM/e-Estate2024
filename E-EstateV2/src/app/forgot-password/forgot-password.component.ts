@@ -31,10 +31,12 @@ export class ForgotPasswordComponent implements OnInit {
       this.register.token = routerParams['token']
       if (encodedUserId) {
         this.userId = this.decodeBase64(encodedUserId)
-
         if (this.userId && this.userId.length > 0) {
           this.isForgotPassword = true
         }
+      }
+      else{
+
       }
     });
   }
@@ -70,7 +72,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   submitForgotPassword() {
-    this.register.token = ''
     this.emailService.sendResetPasswordEmail(this.register)
       .subscribe(
         {

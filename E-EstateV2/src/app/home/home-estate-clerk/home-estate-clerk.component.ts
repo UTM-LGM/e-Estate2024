@@ -101,7 +101,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
     .subscribe(
       Response =>{
-        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus.toLowerCase().includes('tapped area'))
+        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area'))
         this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
         this.isLoadingTappedArea = false
       }
@@ -226,10 +226,11 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
                 totalRubberDry : 0
               };
               this.productivity.push(product);
+              this.productivityByYear = this.groupByYear(this.productivity);
             } else {
               // Call the groupByYear function to group data by year and calculate sums
               this.productivityByYear = this.groupByYear(this.productivity);
-              this.createProductivityChart(); // Call chart creation after data is processed
+              // this.createProductivityChart(); // Call chart creation after data is processed
             }
             this.isLoadingProduction = false;
           },

@@ -24,6 +24,8 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
   buyers: Buyer[] = []
 
   formattedDate = ''
+  deliveryAgent: string = ''
+
 
   constructor(
     public dialogRef: MatDialogRef<RubberSalesComponent>,
@@ -37,6 +39,12 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.rubberSale = this.data.data
+    if (this.rubberSale.deliveryAgent != null) {
+      this.deliveryAgent = 'yes'
+    }
+    else {
+      this.deliveryAgent = 'no'
+    }
     this.formattedDate = this.datePipe.transform(this.rubberSale.saleDateTime, 'yyyy-MM-dd') || ''
     if (this.formattedDate) {
       setTimeout(() => {
@@ -56,7 +64,8 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
     const getBuyer = this.buyerService.getBuyer()
       .subscribe(
         Response => {
-          this.buyers = Response
+          const buyers = Response
+          this.buyers = buyers.filter(x => x.isActive == true && x.estateId == this.sharedService.estateId)
         }
       )
     this.subscriptionService.add(getBuyer);
@@ -68,23 +77,33 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
   }
 
   update() {
-    this.rubberSale.updatedBy = this.sharedService.userId.toString()
-    this.rubberSale.updatedDate = new Date()
-    const { paymentStatus, ...filterSale } = this.rubberSale
-    this.filterRubberSale = filterSale
-    this.rubberSaleService.updateSale(this.filterRubberSale)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Rubber Sale successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialogRef.close()
-        }
-      )
+    if (this.rubberSale.drc == 0) {
+      swal.fire({
+        title: 'Error!',
+        text: 'DRC cannot be 0. Please enter a valid percentage.',
+        icon: 'error',
+        showConfirmButton: true
+      });
+    } else {
+      this.rubberSale.updatedBy = this.sharedService.userId.toString()
+      this.rubberSale.updatedDate = new Date()
+      this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
+      const { paymentStatus, ...filterSale } = this.rubberSale
+      this.filterRubberSale = filterSale
+      this.rubberSaleService.updateSale(this.filterRubberSale)
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Rubber Sale successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialogRef.close()
+          }
+        )
+    }
   }
 
   calculateTotalPrice() {
@@ -94,6 +113,43 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  deliveryAgentRemark() {
+    this.rubberSale.remark = 'Using delivery agent : ' + this.rubberSale.deliveryAgent
+  }
+
+  validateCuplumpDRC(drc: any) {
+    const drcValue = drc.target.value
+    if (drcValue >= 45 && drcValue <= 80) {
+      return drcValue
+    }
+    else {
+      swal.fire({
+        title: 'Error!',
+        text: 'CuplumpDRC must be between 45% to 80%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.rubberSale.drc = 0
+    }
+  }
+
+  validateLatexDRC(drc: any) {
+    const drcValue = drc.target.value
+    if (drcValue >= 20 && drcValue <= 55) {
+      return drcValue
+    }
+    else {
+      swal.fire({
+        title: 'Error!',
+        text: 'LatexDRC must be between 20% to 55%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.rubberSale.drc = 0
+    }
+
   }
 
 }

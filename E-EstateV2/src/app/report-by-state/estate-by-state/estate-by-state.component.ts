@@ -79,24 +79,24 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
     const observables = this.estates.map(estate =>
       this.reportService.getStateFieldArea(this.startMonth, this.endMonth).pipe(
         map(response => ({
+          stateId:estate.stateId,
           estateId: estate.id,
           state: estate.state,
           fields: response.filter(x => x.estateId === estate.id && x.isActive === true &&
-            !x.fieldStatus.toLowerCase().includes('abandoned') &&
-            !x.fieldStatus.toLowerCase().includes('government') &&
-            !x.fieldStatus.toLowerCase().includes('conversion to other crop'))
+            !x.fieldStatus?.toLowerCase().includes('abandoned') &&
+            !x.fieldStatus?.toLowerCase().includes('government') &&
+            !x.fieldStatus?.toLowerCase().includes('conversion to other crop'))
         }))
       )
     );
 
     forkJoin(observables).subscribe(results => {
       this.stateTotalAreas = {};
-
       results.forEach(result => {
         const totalArea = result.fields.reduce((acc, curr) => acc + curr.area, 0);
 
         if (!this.stateTotalAreas[result.state]) {
-          this.stateTotalAreas[result.state] = { count: 1, totalArea: totalArea };
+          this.stateTotalAreas[result.state] = { count: 1, totalArea: totalArea,stateId:result.stateId };
         } else {
           this.stateTotalAreas[result.state].count++;
           this.stateTotalAreas[result.state].totalArea += totalArea;
@@ -107,9 +107,9 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
       this.stateTotalAreasArray = Object.keys(this.stateTotalAreas).map(key => ({
         state: key,
         estateNo: this.stateTotalAreas[key].count,
-        totalArea: this.stateTotalAreas[key].totalArea
+        totalArea: this.stateTotalAreas[key].totalArea,
+        stateId:this.stateTotalAreas[key].stateId
       }));
-
       this.isLoading = false;
     });
   }
@@ -164,6 +164,11 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  calculateTotal(){
+    return this.stateTotalAreasArray.reduce((total, item) => total + item.totalArea, 0)
+
   }
 
  

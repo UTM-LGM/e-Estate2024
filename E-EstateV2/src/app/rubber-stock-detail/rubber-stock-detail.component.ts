@@ -78,7 +78,7 @@ export class RubberStockDetailComponent implements OnInit {
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100 
     }else if(this.stock.rubberType == 'LATEX'){
-      const production = this.totalCuplumpDry + this.stock.previousStock
+      const production = this.totalLatexDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
@@ -154,7 +154,7 @@ export class RubberStockDetailComponent implements OnInit {
           const date = new Date(this.stock.monthYear)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
           });
           this.calculateSale()
           // this.calculateWaterDepletion()

@@ -19,10 +19,6 @@
           <th>Cuplump DRC (%)</th>
           <th>Latex (Kg)</th>
           <th>Latex DRC (%)</th>
-          <!-- <th>USS (Kg)</th>
-          <th>USS DRC (%)</th>
-          <th>Others (Kg)</th>
-          <th>Others DRC (%)</th> -->
           <th>No of Task Tap</th>
           <th>No of Task UnTap</th>
           <th>Remark Task UnTap</th>
@@ -36,7 +32,7 @@
         </tr>
 
         <tr *ngIf="filterFields.length == 0 && !isLoading">
-          <td colspan="13" style="color: red;" ><b>No Field. Please insert field in Field Information</b></td>
+          <td colspan="13" style="color: red;" >No Field. Please insert field in Field Information</td>
         </tr>
 
         <tr *ngFor="let field of filterFields; let i = index">
@@ -49,13 +45,6 @@
           <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00"
               (input)="initialZeroLatex(products[i].latex, i)" /></td>
           <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0" /></td>
-          <!-- <td class="td"><input type="number" name="USS" [(ngModel)]="products[i].uss" placeholder="0.00"
-              (input)="initialZeroUSS(products[i].uss, i)" /></td>
-          <td class="td"><input type="number" name="USSDRC" [(ngModel)]="products[i].ussDRC" placeholder="0" /></td>
-          <td class="td"><input type="number" name="others" [(ngModel)]="products[i].others" placeholder="0.00"
-              (input)="initialZeroOthers(products[i].others, i)" /></td>
-          <td class="td"><input type="number" name="othersDRC" [(ngModel)]="products[i].othersDRC" placeholder="0" />
-          </td> -->
           <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="products[i].noTaskTap" placeholder="0"
               (change)="taskTap(products[i].noTaskTap, field.totalTask, i)" /></td>
           <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
@@ -89,17 +78,6 @@
         <span>Total Latex Dry Production (Kg)</span><br />
         <span><b>{{ totalLatexDry | number : "1.2-2" }}</b></span>
       </div>
-
-      <!-- <div class="column box-container color3">
-        <span>Total USS Dry Production (Kg)</span><br />
-        <span><b>{{ totalUSSDry | number : "1.2-2" }}</b></span>
-      </div>
-
-      <div class="column box-container color4">
-        <span>Total Other Dry Production (Kg)</span><br />
-        <span><b>{{ totalOthersDry | number : "1.2-2" }}</b></span>
-      </div> -->
-
     </div><br />
 
     <div style="padding-left: 10px;">
@@ -121,12 +99,6 @@
           <th>Latex (Kg)</th>
           <th>Latex DRC (%)</th>
           <th>Latex Dry (Kg)</th>
-          <!-- <th>USS (Kg)</th>
-          <th>USS DRC (%)</th>
-          <th>USS Dry (Kg)</th>
-          <th>Others (Kg)</th>
-          <th>Others DRC (%)</th>
-          <th>Others Dry (Kg)</th> -->
           <th>No of Task Tap</th>
           <th>No of Task Uptap</th>
           <th>Remark Untap</th>
@@ -142,12 +114,6 @@
           <td>{{ product.latex | number : "1.2-2" }}</td>
           <td>{{ product.latexDRC }}</td>
           <td>{{ latex[i] | number : "1.2-2" }}</td>
-          <!-- <td>{{ product.uss | number : "1.2-2"}}</td>
-          <td>{{ product.ussDRC }}</td>
-          <td>{{ USS[i] | number: "1.2-2"}}</td>
-          <td>{{ product.others | number: "1.2-2"}}</td>
-          <td>{{ product.othersDRC }}</td>
-          <td>{{ others[i] | number: "1.2-2"}}</td> -->
           <td>{{ product.noTaskTap }}</td>
           <td>{{ product.noTaskUntap }}</td>
           <td>{{product.remarkUntap}}</td>

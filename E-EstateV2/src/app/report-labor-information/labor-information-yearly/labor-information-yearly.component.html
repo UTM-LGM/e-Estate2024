@@ -15,7 +15,7 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
 
@@ -34,7 +34,7 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
     
@@ -48,7 +48,7 @@
   <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
-    <input type="text" [value]="estate.name" disabled />
+    <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
 
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
@@ -71,6 +71,8 @@
     </button>
   </div>
 
+  <span *ngIf="labors.length > 0" style="font-size: 12px;">Last updated: {{ getEarliestMonthYear() }}</span>
+
   <div style="overflow-x: auto;">
     <table style="width: 100%;">
       <tr>
@@ -89,15 +91,15 @@
       </tr>
 
       <tr *ngIf="!isLoading && labors.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose estate</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose estate, start and end month year</td>
       </tr>
 
       <tr *ngIf="!isLoading && labors.length == 0 && role == 'Admin'">
-        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose company and estate</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose company, estate, start and end month year</td>
       </tr>
 
       <tr *ngIf="!isLoading && labors.length == 0 && role == 'EstateClerk'">
-        <td colspan="5" style="color: red; text-align: center;">No data found.</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
       <tbody *ngIf="!isLoading && labors.length > 0">
@@ -135,6 +137,14 @@
             </ng-container>
             <td>{{ totalFieldWorker }}</td>
           </tr>
+
+          <tr>
+            <th colspan="2">Total worker :</th>
+            <th>{{calculateLocal()}}</th>
+            <th>{{calculateForeign()}}</th>
+            <th>{{calculateTotal()}}</th>
+          </tr>
+
         </ng-container>
 
         <ng-container *ngIf="!showAll">
@@ -171,6 +181,14 @@
             </ng-container>
             <td>{{ totalFieldWorker }}</td>
           </tr>
+
+          <tr>
+            <th colspan="2">Total worker :</th>
+            <th>{{calculateLocal()}}</th>
+            <th>{{calculateForeign()}}</th>
+            <th>{{calculateTotal()}}</th>
+          </tr>
+
         </ng-container>
       </tbody>
     </table>

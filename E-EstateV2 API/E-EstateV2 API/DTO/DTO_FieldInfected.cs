@@ -17,5 +17,9 @@
         public float area { get; set; }
         public string diseaseCategory { get; set; }
         public int diseaseCategoryId { get; set; }
+        public string createdBy { get; set; }
+        public DateTime createdDate { get; set; }
+        public string updatedBy { get; set; }
+        public DateTime updatedDate { get; set; }
     }
 }

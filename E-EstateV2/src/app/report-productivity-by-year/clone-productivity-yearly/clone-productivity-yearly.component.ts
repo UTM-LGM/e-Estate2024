@@ -22,6 +22,7 @@ export class CloneProductivityYearlyComponent implements OnInit, OnDestroy {
   order = ''
   currentSortedColumn = ''
   term = ''
+  itemsPerPageClone = 10
 
   startMonth = ''
   endMonth = ''

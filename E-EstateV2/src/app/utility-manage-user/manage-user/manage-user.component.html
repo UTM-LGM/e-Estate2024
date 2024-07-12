@@ -13,8 +13,7 @@
                 <tr>
                     <th *ngFor="let column of sortableColumns" scope="col" (click)="toggleSort(column.columnName)">
                         {{ column.displayText }}
-                        <i class="fa"
-                            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
+                        <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
                                       'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}">
                         </i>
                     </th>
@@ -23,30 +22,33 @@
             </thead>
 
             <tr *ngIf="isLoading">
-                <td colspan="8">
+                <td colspan="9">
                     <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
                     </ngx-skeleton-loader>
                 </td>
             </tr>
 
             <tr *ngIf="users.length == 0 && !isLoading">
-                <td colspan="8" style="color: red;">No new user</td>
+                <td colspan="9" style="color: red;">No new user</td>
             </tr>
 
             <ng-container *ngIf="!isLoading">
-            <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-                <td>{{user.fullName}}</td>
-                <td>{{user.email}}</td>
-                <td>{{result[user.licenseNo]?.companyName}}</td>
-                <td>{{result[user.licenseNo]?.premiseName + ", " + result[user.licenseNo]?.premiseAdd1.slice(0,-1) }}</td>
-                <td>{{result[user.licenseNo]?.companyPhoneNo}}</td>
-                <td>{{user.position}}</td>
-                <td style="color: red;">{{user.roleName ? user.roleName : 'Please update role'}}</td>
-                <td> <button class="btn-update" (click)="openDialog(user)">
-                        <i class="fa fa fa-pencil"></i>
-                    </button></td>
-            </tr>
-        </ng-container>
+                <tr class="list"
+                    *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                    <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+                    <td>{{user.fullName}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{result[user.licenseNo]?.companyName}}</td>
+                    <td>{{result[user.licenseNo]?.premiseName + ", " + result[user.licenseNo]?.premiseAdd1.slice(0,-1)
+                        }}</td>
+                    <td>{{result[user.licenseNo]?.companyPhoneNo}}</td>
+                    <td>{{user.position}}</td>
+                    <td style="color: red;">{{user.roleName ? user.roleName : 'Please update role'}}</td>
+                    <td> <button class="btn-update" (click)="openDialog(user)">
+                            <i class="fa fa fa-pencil"></i>
+                        </button></td>
+                </tr>
+            </ng-container>
         </table>
 
         <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>

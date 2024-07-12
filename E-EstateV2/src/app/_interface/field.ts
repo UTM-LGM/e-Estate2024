@@ -1,4 +1,6 @@
 import { Clone } from "./clone";
+import { FieldClone } from "./fieldClone";
+import { FieldGrant } from "./fieldGrant";
 import { FieldStatus } from "./fieldStatus";
 
 export interface Field {
@@ -12,7 +14,7 @@ export interface Field {
     dateOpenTappingFormatted: string
     totalTask: number
     estateId: number
-    cloneId: number
+    cloneId: number | null
     clone: string
     fieldStatusId: number
     fieldStatuses: FieldStatus[]
@@ -20,7 +22,7 @@ export interface Field {
     yearPlanted: string
     otherCrop: string
     cloneName: string
-    clones: Clone[]
+    fieldClones: FieldClone[]
     initialTreeStand: number
     tappingSystem: string
     createdBy: string
@@ -39,5 +41,6 @@ export interface Field {
     rubberArea:number | null
     remark:string
     currentTreeStand:number
+    fieldGrants:FieldGrant[]
     
 }

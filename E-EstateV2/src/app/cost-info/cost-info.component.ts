@@ -25,8 +25,6 @@ export class CostInfoComponent implements OnInit, OnDestroy {
 
   date: any
 
-
-
   @Output() yearChanged = new EventEmitter<string>()
 
   constructor(

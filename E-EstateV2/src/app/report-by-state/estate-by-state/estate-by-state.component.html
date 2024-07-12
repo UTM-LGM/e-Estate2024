@@ -43,9 +43,13 @@
       <ng-container *ngIf="!isLoading">
         <tr *ngFor="let town of stateTotalAreasArray | filter: term; let i = index">
           <td>{{ i + 1 }}</td>
-          <td>{{ town.state }}</td>
+          <td style="cursor: pointer;"  [routerLink]="['/e-estate/report-by-state/state-detail', town.stateId]"  [queryParams]="{startMonth:startMonth, endMonth:endMonth}" ><a>{{ town.state }}</a></td>
           <td>{{ town.estateNo }}</td>
           <td>{{ town.totalArea }}</td>
+        </tr>
+        <tr>
+          <th colspan="3">Total rubber area for all estate :</th>
+          <th>{{calculateTotal()}}</th>
         </tr>
       </ng-container>
 

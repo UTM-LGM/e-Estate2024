@@ -20,6 +20,7 @@ export class MembershipComponent implements OnInit, OnDestroy {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+  itemsPerPageMembership = 10
 
   sortableColumns = [
     { columnName: 'membershipType', displayText: 'Membership Type' },

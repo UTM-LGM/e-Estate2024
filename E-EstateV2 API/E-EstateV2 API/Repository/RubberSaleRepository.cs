@@ -9,10 +9,12 @@ namespace E_EstateV2_API.Repository
     public class RubberSaleRepository:IRubberSaleRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRubberSaleHistoryRepository _rubberSaleHistoryRepository;
 
-        public RubberSaleRepository(ApplicationDbContext context)
+        public RubberSaleRepository(ApplicationDbContext context, IRubberSaleHistoryRepository rubberSaleHistoryRepository )
         {
             _context = context;
+            _rubberSaleHistoryRepository = rubberSaleHistoryRepository;
         }
 
         public async Task<RubberSales> AddSale(RubberSales sales)
@@ -101,19 +103,48 @@ namespace E_EstateV2_API.Repository
             var existingSale = await _context.rubberSales.FirstOrDefaultAsync(x => x.Id == rubberSales.Id);
             if (existingSale != null)
             {
+
+                var rubberSaleHistory = new RubberSaleHistory
+                {
+                    rubberSalesId = existingSale.Id,
+                    saleDateTime = existingSale.saleDateTime,
+                    rubberType = existingSale.rubberType,
+                    letterOfConsentNo = existingSale.letterOfConsentNo,
+                    receiptNo = existingSale.receiptNo,
+                    receiptNoDate = existingSale.receiptNoDate,
+                    wetWeight = existingSale.wetWeight,
+                    buyerWetWeight = existingSale.buyerWetWeight,
+                    DRC = existingSale.DRC,
+                    buyerDRC = existingSale.buyerDRC,
+                    unitPrice = existingSale.unitPrice,
+                    total = existingSale.total,
+                    weightSlipNo = existingSale.weightSlipNo,
+                    weightSlipNoDate = existingSale.weightSlipNoDate,
+                    transportPlateNo = existingSale.transportPlateNo,
+                    driverName = existingSale.driverName,
+                    driverIc = existingSale.driverIc,
+                    remark = existingSale.remark,
+                    deliveryAgent = existingSale.deliveryAgent,
+                    estateId = existingSale.estateId,
+                    isActive = existingSale.isActive,
+                    createdBy = existingSale.createdBy,
+                    createdDate = existingSale.createdDate,
+                    updatedBy = existingSale.updatedBy,
+                    updatedDate = existingSale.updatedDate,
+                    buyerId = existingSale.buyerId,
+                    paymentStatusId = existingSale.paymentStatusId,
+                    MSNRStatus = existingSale.MSNRStatus
+                };
+
+                await _rubberSaleHistoryRepository.AddRubberSaleHistory(rubberSaleHistory);
+
                 existingSale.saleDateTime = rubberSales.saleDateTime;
-                //existingSale.buyerId = rubberSales.buyerId;
+                existingSale.buyerId = rubberSales.buyerId;
                 existingSale.rubberType = rubberSales.rubberType;
-                //existingSale.letterOfConsentNo = rubberSales.letterOfConsentNo;
-                //existingSale.receiptNo = rubberSales.receiptNo;
                 existingSale.wetWeight = rubberSales.wetWeight;
-                //existingSale.buyerWetWeight = rubberSales.buyerWetWeight;
                 existingSale.DRC = rubberSales.DRC;
-                //existingSale.buyerDRC = rubberSales.buyerDRC;
                 existingSale.unitPrice = rubberSales.unitPrice;
                 existingSale.total = rubberSales.total;
-                //existingSale.weightSlipNo = rubberSales.weightSlipNo;
-                //existingSale.paymentStatusId = rubberSales.paymentStatusId;
                 existingSale.transportPlateNo = rubberSales.transportPlateNo;
                 existingSale.driverName = rubberSales.driverName;
                 existingSale.driverIc = rubberSales.driverIc;
@@ -121,6 +152,7 @@ namespace E_EstateV2_API.Repository
                 existingSale.updatedBy = rubberSales.updatedBy;
                 existingSale.updatedDate = DateTime.Now;
                 existingSale.isActive = rubberSales.isActive;
+                existingSale.deliveryAgent = rubberSales.deliveryAgent;
                 await _context.SaveChangesAsync();
                 return existingSale;
             }

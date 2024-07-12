@@ -4,7 +4,6 @@
     {
         public int id { get; set; }
         public string cloneName { get; set; }
-        public string cloneCode { get; set; }
 
     }
 }

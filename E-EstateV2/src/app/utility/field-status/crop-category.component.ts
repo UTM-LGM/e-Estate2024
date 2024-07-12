@@ -20,6 +20,7 @@ export class CropCategoryComponent implements OnInit, OnDestroy {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+  itemsPerPageStatus = 10
 
   sortableColumns = [
     { columnName: 'isMature', displayText: 'Maturity' },
@@ -38,7 +39,7 @@ export class CropCategoryComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (this.cropCategories.some(s => s.fieldStatus.toLowerCase() === this.crop.fieldStatus.toLowerCase() && s.isMature == this.crop.isMature)) {
+    if (this.cropCategories.some(s => s.fieldStatus?.toLowerCase() === this.crop.fieldStatus?.toLowerCase() && s.isMature == this.crop.isMature)) {
       swal.fire({
         text: 'Field Status already exists!',
         icon: 'error'

@@ -102,10 +102,10 @@ namespace E_EstateV2_API.Data
             }
 
 
-            if (!context.diseaseCategories.Any(ps => ps.category == "BROWN DISEASE"))
+            /**if (!context.diseaseCategories.Any(ps => ps.category == "BROWN DISEASE"))
             {
                 context.diseaseCategories.Add(new DiseaseCategory { category = "BROWN DISEASE", isActive = true, createdBy = "SYSTEM GENERATED" });
-            }
+            }**/
 
             if (!context.diseaseCategories.Any(ps => ps.category == "LEAF DISEASE"))
             {

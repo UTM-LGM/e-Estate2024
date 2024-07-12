@@ -94,7 +94,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
   }
 
   logOut() {
-    localStorage.removeItem('token')
+    localStorage.clear();
     this.router.navigateByUrl('/login')
     this.toastr.success(this.username + ' Logout Successfully')
   }

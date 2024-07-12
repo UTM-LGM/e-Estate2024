@@ -77,7 +77,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
         Response => {
           this.immatureDirectCostAmount = Response
           this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.monthYear === this.immatureMonthYear
-            && x.costTypeId == this.costTypeId && x.isMature === false && x.isMature !== null)
+            && x.costTypeId == this.costTypeId && x.isMature === false && x.isMature !== null && x.estateId == this.sharedService.estateId)
           this.draftFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
           this.submitFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)

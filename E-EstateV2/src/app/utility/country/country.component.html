@@ -34,8 +34,8 @@
     </tr>
 
     <tr
-      *ngFor="let country of countries | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let country of countries | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
       <td>{{ country.isLocal ? "LOCAL" : "FOREIGNER" }}</td>
       <td>{{ country.country }}</td>
       <td>

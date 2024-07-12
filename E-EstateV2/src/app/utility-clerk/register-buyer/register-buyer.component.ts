@@ -25,6 +25,8 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   result = {} as any
 
+  itemsPerPage = 10
+
 
   sortableColumns = [
     { columnName: 'licenseNo', displayText: 'Lisence No' },
@@ -35,7 +37,8 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
     private buyerService: BuyerService,
     private sharedService: SharedService,
     private myLesenService:MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit() {
@@ -45,7 +48,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (this.buyer.licenseNo === '' && this.result.premiseName === '') {
+    if (this.buyer.licenseNo == '' && this.result.premiseName == '') {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -125,6 +128,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   }
 
   checkLicenseNo(event: any) {
+    this.spinnerService.requestStarted()
     setTimeout(() => {
     const getLicenseNo = this.myLesenService.getLicenseNo(event.target.value.toString())
       .subscribe(
@@ -140,6 +144,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
               timer: 1000
             });
           this.subscriptionService.add(getLicenseNo);
+          this.spinnerService.requestEnded()
           },
           error: (Error) => {
             swal.fire({

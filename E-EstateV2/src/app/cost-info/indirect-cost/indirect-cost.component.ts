@@ -95,7 +95,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
       .subscribe(
         Response => {
           this.indirectCostAmount = Response;
-          this.filterIndirectCostAmount = this.indirectCostAmount.filter(x => x.monthYear === this.selectedMonthYear && x.costTypeId == this.costTypeId)
+          this.filterIndirectCostAmount = this.indirectCostAmount.filter(x => x.monthYear === this.selectedMonthYear && x.costTypeId == this.costTypeId && x.estateId == this.sharedService.estateId)
           this.draftFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
           this.submitFilterIndirectCostAmount = this.filterIndirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)

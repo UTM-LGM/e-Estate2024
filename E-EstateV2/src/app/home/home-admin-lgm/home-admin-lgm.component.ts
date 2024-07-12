@@ -53,12 +53,12 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   isLoadingCop = true
 
   chart: any
-  productivityByYear:any
+  productivityByYear: any
 
   totalTapperNeeded = 0
   totalFieldNeeded = 0
   tapperShortage = 0
-  fieldShortage =0
+  fieldShortage = 0
   tappedArea = 0
   costAmount = 0
 
@@ -66,8 +66,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
-    private fieldService:FieldService,
-    private subscriptionService:SubscriptionService
+    private fieldService: FieldService,
+    private subscriptionService: SubscriptionService
 
   ) { }
 
@@ -87,62 +87,61 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
 
   }
 
-  getCostInformation(){
+  getCostInformation() {
     const getCostInformation = this.reportService.getCostInformation(this.yearNow.toString())
-    .subscribe(
-      Response =>{
-        this.costAmount = Response.reduce((sum, estate)=> sum + estate.amount, 0)
-        this.isLoadingCop = false
-      }
-    )
+      .subscribe(
+        Response => {
+          this.costAmount = Response.reduce((sum, estate) => sum + estate.amount, 0)
+          this.isLoadingCop = false
+        }
+      )
     this.subscriptionService.add(getCostInformation);
 
   }
 
-  getField(){
+  getField() {
     const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
-    .subscribe(
-      Response =>{
-        const field = Response.filter(x=>x.isActive == true && x.fieldStatus.toLowerCase().includes('tapped area'))
-        this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
-        this.isLoadingTapped = false
-      }
-    )
+      .subscribe(
+        Response => {
+          const field = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'))
+          this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
+          this.isLoadingTapped = false
+        }
+      )
     this.subscriptionService.add(getCurrentField);
-    
+
   }
 
   getWorkerShortage() {
     const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString()).subscribe(
       response => {
         this.workerShortages = response;
-        if(this.workerShortages.length === 0)
-          {
-            this.totalTapperNeeded = 0
-            this.totalFieldNeeded = 0
-            this.tapperShortage = 0
-            this.fieldShortage = 0
-            this.isLoadingTapperNeeded = false
-            this.isLoadingFieldNeeded = false
-            this.isLoadingTapperShortage = false
-            this.isLoadingFieldShortage = false
-          }
-          else{
-            this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
-            this.fieldShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.fieldShortage, 0);
-            this.isLoadingTapperShortage = false
-            this.isLoadingFieldShortage = false
-            const estateRequests = this.workerShortages.map(workerShortage => {
-              return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
-                map(estateResponse => {
-                  workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
-                })
-              );
-            });
-            forkJoin(estateRequests).subscribe(() => {
-              this.getLabor();
-            });
-          }
+        if (this.workerShortages.length === 0) {
+          this.totalTapperNeeded = 0
+          this.totalFieldNeeded = 0
+          this.tapperShortage = 0
+          this.fieldShortage = 0
+          this.isLoadingTapperNeeded = false
+          this.isLoadingFieldNeeded = false
+          this.isLoadingTapperShortage = false
+          this.isLoadingFieldShortage = false
+        }
+        else {
+          this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
+          this.fieldShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.fieldShortage, 0);
+          this.isLoadingTapperShortage = false
+          this.isLoadingFieldShortage = false
+          const estateRequests = this.workerShortages.map(workerShortage => {
+            return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
+              map(estateResponse => {
+                workerShortage.estateName = estateResponse.name; // Assuming estate name is in 'name' property
+              })
+            );
+          });
+          forkJoin(estateRequests).subscribe(() => {
+            this.getLabor();
+          });
+        }
       }
     );
     this.subscriptionService.add(getWorkerShortage);
@@ -168,16 +167,16 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
 
   calculateTapperSum(worker: any): number {
     if (worker && worker.filterLabors && worker.tapperShortage) {
-      return worker.filterLabors.reduce((sum:any, labor:any) => sum + labor.tapperCheckrole + labor.tapperContractor, 0) + worker.tapperShortage;
+      return worker.filterLabors.reduce((sum: any, labor: any) => sum + labor.tapperCheckrole + labor.tapperContractor, 0) + worker.tapperShortage;
     } else {
       return 0; // Return 0 if any of the properties are undefined or null
     }
   }
-  
-  
+
+
   calculateFieldSum(worker: any) {
     if (worker && worker.filterLabors && worker.tapperShortage) {
-      return worker.filterLabors.reduce((sum:any, labor:any) => sum + labor.fieldCheckrole + labor.fieldContractor, 0) + worker.fieldShortage;
+      return worker.filterLabors.reduce((sum: any, labor: any) => sum + labor.fieldCheckrole + labor.fieldContractor, 0) + worker.fieldShortage;
     } else {
       return 0; // Return 0 if any of the properties are undefined or null
     }
@@ -186,7 +185,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   calculateTotalTapperSum(workerShortages: any[]): number {
     return workerShortages.reduce((sum, workerShortage) => sum + this.calculateTapperSum(workerShortage), 0);
   }
-  
+
   calculateTotalFieldSum(workerShortages: any[]): number {
     return workerShortages.reduce((sum, workerShortage) => sum + this.calculateFieldSum(workerShortage), 0);
   }
@@ -214,8 +213,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           this.isLoadingEstate = false
         }
       )
-      this.subscriptionService.add(getAllEstate);
-    
+    this.subscriptionService.add(getAllEstate);
+
   }
 
   getProduction() {
@@ -231,7 +230,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
               othersDry: 0,
             };
             this.productions.push(product)
-            
+
           }
           else {
             for (const production of this.productions) {
@@ -256,7 +255,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
               totalCuplumpDry: 0,
               totalLatexDry: 0,
               totalArea: 0,
-              totalRubberDry : 0
+              totalRubberDry: 0
             };
             this.productivity.push(product);
           } else {
@@ -275,30 +274,30 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   // Helper function to group data by year and calculate sums
-groupByYear(data: any) {
-  const grouped = data.reduce((acc: any, curr: any) => {
-    const year = curr.year;
-    if (!acc[year]) {
-      acc[year] = {
-        year: year,
-        totalCuplumpDry: 0,
-        totalLatexDry: 0,
-        totalArea: 0,
-        totalRubberDry : 0
-      };
-    }
-    acc[year].totalCuplumpDry += curr.totalCuplumpDry || 0;
-    acc[year].totalLatexDry += curr.totalLatexDry || 0;
-    acc[year].totalRubberDry += (curr.totalCuplumpDry || 0) + (curr.totalLatexDry || 0);
-    acc[year].totalArea += curr.area || 0;
-    return acc;
-  }, {});
+  groupByYear(data: any) {
+    const grouped = data.reduce((acc: any, curr: any) => {
+      const year = curr.year;
+      if (!acc[year]) {
+        acc[year] = {
+          year: year,
+          totalCuplumpDry: 0,
+          totalLatexDry: 0,
+          totalArea: 0,
+          totalRubberDry: 0
+        };
+      }
+      acc[year].totalCuplumpDry += curr.totalCuplumpDry || 0;
+      acc[year].totalLatexDry += curr.totalLatexDry || 0;
+      acc[year].totalRubberDry += (curr.totalCuplumpDry || 0) + (curr.totalLatexDry || 0);
+      acc[year].totalArea += curr.area || 0;
+      return acc;
+    }, {});
 
-  // Convert the grouped object into an array
-  return Object.values(grouped);
-}
+    // Convert the grouped object into an array
+    return Object.values(grouped);
+  }
 
-  
+
   // createProductivityChart() {
   //   if (this.chart) {
   //     this.chart.destroy();
@@ -306,7 +305,7 @@ groupByYear(data: any) {
 
   //   const years = this.productivityByYear.map((x: any) => x.year);
   //   const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
-  
+
   //   this.chart = new Chart("chartProductivityAdmin", {
   //     type: 'line',
   //     data: {
@@ -327,9 +326,9 @@ groupByYear(data: any) {
   //     }
   //   });
   // }
-  
+
   getWorker() {
-   const getCurrent =  this.reportService.getCurrentTapperAndFieldWorker()
+    const getCurrent = this.reportService.getCurrentTapperAndFieldWorker()
       .subscribe(
         Response => {
           if (Response.length === 0) {
@@ -344,24 +343,24 @@ groupByYear(data: any) {
               // Add values with "tapper" in their keys to currentTotalTapper
               this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
               this.isLoadingTapper = false
-  
+
               // Add values with "field" in their keys to currentTotalField
               this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
               this.isLoadingField = false
             });
           }
-          
-          
+
+
         }
       )
     this.subscriptionService.add(getCurrent);
 
   }
 
-  getCalculatedCop(){
-    if(this.totalCuplumpDry == 0 || this.totalLatexDry == 0 || this.costAmount == 0){
-      return  0 
-    }else{
+  getCalculatedCop() {
+    if (this.totalCuplumpDry == 0 || this.totalLatexDry == 0 || this.costAmount == 0) {
+      return 0
+    } else {
       const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
       return isNaN(value) ? 0 : value;
     }
@@ -370,5 +369,5 @@ groupByYear(data: any) {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }

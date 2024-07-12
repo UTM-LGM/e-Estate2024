@@ -38,9 +38,13 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
 
   estateDetail: EstateDetail = {} as EstateDetail
 
-  term = ''
+  termContact = ''
+  termField = ''
+  itemsPerPageContact = 5
+  itemsPerPageField = 10
   userRole = ''
-  pageNumber = 1
+  contactsPageNumber = 1
+  fieldsPageNumber = 1
   isLoading = true
   order = ''
   currentSortedColumn = ''
@@ -49,6 +53,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
   result: any = {} as any
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'area', displayText: 'Field Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },
@@ -60,6 +65,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
   ];
 
   sortableColumnContacts = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'name', displayText: 'Name' },
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
@@ -215,7 +221,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus.toLowerCase().includes('conversion to other crop') && !x.fieldStatus.toLowerCase().includes('abandoned') && !x.fieldStatus.toLowerCase().includes('government'));
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus?.toLowerCase().includes('conversion to other crop') && !x.fieldStatus?.toLowerCase().includes('abandoned') && !x.fieldStatus?.toLowerCase().includes('government'));
     this.total = this.value.reduce((acc, item) => acc + item.area, 0);
   }
 

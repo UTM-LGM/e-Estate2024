@@ -1,9 +1,5 @@
-<br />
-<div class="monthYear">
-  <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-  <!-- <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled /> -->
-  <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
-
+<div style="text-align: center; margin-top: 10px; font-size: 12px;">
+  <span>Month and year : {{worker.monthYear| date: 'MMMM yyyy'}}</span>
 </div>
 
 <div class="center-div" *ngIf="filterWorkerShortage.length == 0">
@@ -50,6 +46,7 @@
 
 <div class="center-div">
   <div *ngIf="filterWorkerShortage.length != 0" class="box-container" style="margin: 10px;">
+
     <table class="table">
       <tr>
         <td><b>Item</b> </td>

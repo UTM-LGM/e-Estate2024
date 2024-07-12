@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { MyLesenEnv, environment } from 'src/environments/environments';
 
 @Injectable({
@@ -31,4 +32,9 @@ export class MyLesenIntegrationService {
   getOneEstate(id:number):Observable<any>{
     return this.http.get<any>(this.baseUrl + '/estate/GetPremiseById/' + id)
   }
+
+  getEstateByStateId(id:number):Observable<any>{
+    return this.http.get<any>(this.baseUrl + '/estate/getestatebystateid/' + id)
+  }
+  
 }

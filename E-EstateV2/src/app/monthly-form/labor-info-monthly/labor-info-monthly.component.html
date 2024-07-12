@@ -1,16 +1,12 @@
-<br />
-<div class="monthYear">
-  <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-  <!-- <input type="month" value="{{ previousMonth | date : 'YYY-MM' }}" disabled /> -->
-  <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
-
+<div style="text-align: center; margin-top: 10px; font-size: 12px;">
+  <span>Month and year : {{date | date: 'MMMM yyyy'}}</span>
 </div>
 
 <div style="padding-left: 30px;padding-right: 30px;">
-  <div style="width: 49%;">
-    <div style="flex: 1;">
+  <div style="display: flex; flex-direction: row; justify-content: space-between;">
+    <div style="flex: 1; display: flex; flex-direction: column;">
       <label>Country <span style="color: red;">*</span> :</label>
-      <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId">
+      <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId" (selectionChange)="countrySelected()">
         <mat-option *ngFor="let country of filterCountries" [value]="country.id">
           {{ country.country }}
         </mat-option>
@@ -18,6 +14,15 @@
       <div class="remark">
         **To add new country that is not in the list, please inform LGM admin by clicking <a
           (click)="openCountry()">here</a>
+      </div>
+    </div>
+
+    <div style="flex: 1;margin-top: 33px;margin-left: 12px;">
+      <div *ngIf="previousWorker">
+        <label>View previous month worker? : </label>
+        <label>
+          <input type="radio" name="choice" value="yes" (change)="onRadioChange()" [(ngModel)]="radioSelected"> Yes
+        </label>
       </div>
     </div>
   </div>
@@ -36,8 +41,8 @@
   </div>
 
   <div style="display: flex; flex-wrap: wrap;column-gap: 10px;">
-    <ng-container *ngFor="let laborType of filterTypes; let i = index;">
-      <div style="flex: 1 1 calc(50% - 10px);">
+    <ng-container>
+      <div style="flex: 1 1 calc(50% - 10px);" *ngFor="let laborType of filterTypes; let i = index;">
         <div>
           <label>No of {{ laborType.laborType | titlecase }} <span style="color: red;">*</span> :</label>
           <input type="number" name="noOf{{ laborType.laborType }}"
@@ -85,7 +90,7 @@
         </tr>
 
         <tr *ngIf="filterLabors.length == 0 && !isLoading">
-          <td colspan="11" style="color: red;"><b>No Labor information</b></td>
+          <td colspan="11" style="color: red;">No Labor information</td>
         </tr>
 
         <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
@@ -131,7 +136,7 @@
     </button>
 
     <!-- *ngIf="filterLabors.length>0" -->
-    <button style="float: right" class="btn-add" (click)="nextTab()" >
+    <button style="float: right" class="btn-add" (click)="nextTab()">
       Next &nbsp; <i class="fa fa-arrow-right"></i>
     </button>
   </div>

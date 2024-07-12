@@ -42,8 +42,8 @@
     </tr>
 
     <tr
-      *ngFor="let fieldDisease of fieldDiseases | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let fieldDisease of fieldDiseases | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
       <td>{{ fieldDisease.category }}</td>
       <td>{{ fieldDisease.diseaseName }}</td>
       <td>

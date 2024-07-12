@@ -131,7 +131,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   getcategory() {
     this.filterCropCategories = this.cropCategories.filter(c => c.isMature == this.field.isMature
       && c.isActive == true
-      && !(c.fieldStatus.toLowerCase().includes("conversion") && c.isMature == true))
+      && !(c.fieldStatus?.toLowerCase().includes("conversion") && c.isMature == true))
   }
 
   rubberAreaInput(){
@@ -189,13 +189,14 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     }
   }
 
+
   onSubmit() {
-    if (this.field.fieldName == '') {
+    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null ) {
       swal.fire({
-        text: 'Please fil up the form',
+        text: 'Please fill up the form',
         icon: 'error'
       });
-      this.isSubmit = false
+      this.isSubmit = false;
     }
     else {
       if(this.selectedValues.length == 0 && this.field.isMature == true){
@@ -205,68 +206,64 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         });
       }
       else{
-        this.field.estateId = this.estate.id
-        this.field.isActive = true
-        this.field.createdBy = this.sharedService.userId.toString()
-        this.field.createdDate = new Date()
+        this.field.estateId = this.estate.id;
+        this.field.isActive = true;
+        this.field.createdBy = this.sharedService.userId.toString();
+        this.field.createdDate = new Date();
         if(this.field.dateOpenTapping){
           this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
         }
         else{
-          this.field.dateOpenTapping = null
+          this.field.dateOpenTapping = null;
         }
-        this.isSubmit = true
-        this.fieldService.addField(this.field)
+  
+        const combineClone: any[] = this.selectedValues.map(item => {
+          return { 'cloneId': item.id, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
+        });
+  
+        const combineGrant : any [] = this.addedGrant.map((item:any) =>{
+          return {'grantTitle': item.grantTitle.toUpperCase(), 'grantArea': item.grantArea, 'grantRubberArea': item.grantRubberArea, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
+        });
+  
+        this.fieldService.addFieldWithDetails(this.field, combineClone, combineGrant)
           .subscribe(
             {
-              next: (Response) => {
-                const combineClone: any[] = this.selectedValues.map(item => {
-                  return { 'cloneId': item.id, 'isActive': true, 'fieldId': Response.id, 'createdBy': Response.createdBy, 'createdDate': Response.createdDate }
-                })
-                const combineGrant : any [] = this.addedGrant.map((item:any) =>{
-                  return {'grantTitle':item.grantTitle.toUpperCase(), 'grantArea':item.grantArea, 'grantRubberArea':item.grantRubberArea, 'isActive': true, 'fieldId': Response.id, 'createdBy': Response.createdBy, 'createdDate': Response.createdDate }
-                })
-                this.fieldCloneService.addFieldClone(combineClone)
-                  .subscribe(
-                    Response => {
-                      this.fieldGrantService.addFieldGrantArray(combineGrant).subscribe(
-                        Response =>{
-                          swal.fire({
-                            title: 'Done!',
-                            text: 'Field successfully submitted!',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 1000
-                          });
-                        }
-                      )
-                      this.selectedValues = []
-                      this.addedGrant = []
-                      this.field = {} as Field
-                      this.ngOnInit()
-                      this.rubberArea = ''
-                      this.isSubmit = false
-                    })
-              }, error: (err) => {
+              next: (response:any) => {
                 swal.fire({
-                  text: 'Please fil up the form',
+                  title: 'Done!',
+                  text: 'Field successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.selectedValues = [];
+                this.addedGrant = [];
+                this.field = {} as Field;
+                this.ngOnInit();
+                this.rubberArea = '';
+                this.isSubmit = false;
+              },
+              error: (err:any) => {
+                swal.fire({
+                  text: 'Please fill up the form',
                   icon: 'error'
                 });
-                this.isSubmit = false
+                this.isSubmit = false;
               }
             });
-        }
-      
+      }
     }
   }
+  
 
   convertToDateTime(monthYear: string): string {
     // monthYear is in the format YYYY-MM
     const [year, month] = monthYear.split('-').map(Number);
-    // Set the date to the first day of the selected month, time to midnight
-    const date = new Date(year, month - 1, 1, 0, 0, 0);
-    return date.toISOString(); // Convert to ISO string or any other desired format
-  }
+    // Set the date to the first day of the selected month, time to midnight UTC
+    const date = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+    return date.toISOString(); // Convert to ISO string
+}
+
 
   selectedClone(value: Field) {
     if (this.field.cloneId == 0) {
@@ -292,24 +289,35 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     this.location.back()
   }
 
-  selectedGrant(fieldGrant:FieldGrant){
-    if(this.fieldGrant.grantTitle == ''){
+  selectedGrant(fieldGrant: FieldGrant) {
+    if (fieldGrant.grantRubberArea == null) {
       swal.fire({
         text: 'Please fill up grant title',
         icon: 'error'
-      })
-    }
-    else{
-      let grantInfo = {} as any
-      grantInfo.grantTitle = fieldGrant.grantTitle
-      grantInfo.grantArea = fieldGrant.grantArea
-      grantInfo.grantRubberArea = fieldGrant.grantRubberArea
-      this.addedGrant.push(grantInfo)
-      this.fieldGrant.grantTitle = ''
-      this.fieldGrant.grantArea = null
-      this.fieldGrant.grantRubberArea = null
+      });
+    } else {
+      // Calculate the total grantRubberArea
+      const totalGrantRubberArea = this.addedGrant.reduce((sum, grant) => sum + grant.grantRubberArea, 0);
+      
+      // Check if the totalGrantRubberArea exceeds the rubberArea
+      if (this.field.rubberArea != null && totalGrantRubberArea + fieldGrant.grantRubberArea > this.field.rubberArea) {
+        swal.fire({
+          text: 'Total Rubber Area for grants exceeds the Rubber Area',
+          icon: 'error'
+        });
+      } else {
+        let grantInfo = {} as any;
+        grantInfo.grantTitle = fieldGrant.grantTitle;
+        grantInfo.grantArea = fieldGrant.grantArea;
+        grantInfo.grantRubberArea = fieldGrant.grantRubberArea;
+        this.addedGrant.push(grantInfo);
+        this.fieldGrant.grantTitle = '';
+        this.fieldGrant.grantArea = null;
+        this.fieldGrant.grantRubberArea = null;
+      }
     }
   }
+  
 
   deleteGrant(index: number) {
     this.addedGrant.splice(index, 1)

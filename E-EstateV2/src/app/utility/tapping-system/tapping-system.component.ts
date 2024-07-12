@@ -21,6 +21,8 @@ export class TappingSystemComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   pageNumber = 1
 
+  itemsPerPage = 10
+
   sortableColumns = [
     { columnName: 'tappingSystem', displayText: 'Tapping System' },
   ];

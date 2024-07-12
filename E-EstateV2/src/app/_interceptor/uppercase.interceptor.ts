@@ -11,10 +11,15 @@ import { Observable } from 'rxjs';
 export class UpperCaseInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (request.method === 'POST' && (request.url.includes('/Login') || request.url.includes('/Register') || request.url.includes('/SendEmailVerification')
-      || request.url.includes('/AddUserRole') || request.url.includes('/AddUser'))) {
-      return next.handle(request);
-    }
+    if (request.method === 'POST' &&
+      (request.url.includes('/Login') ||
+       request.url.includes('/Register') ||
+       request.url.includes('/SendEmailVerification') ||
+       request.url.includes('/AddUserRole') ||
+       request.url.includes('/AddUser') ||
+       request.url.includes('/ResetPassword'))) {
+    return next.handle(request);
+  }
 
     // Check if the request method is POST or PUT
     if (request.method === 'POST' || request.method === 'PUT') {
@@ -34,11 +39,16 @@ export class UpperCaseInterceptor implements HttpInterceptor {
   private convertBodyToUppercase(body: any): any {
     if (body && typeof body === 'object') {
       for (const key in body) {
-        if (key !== 'createdBy' && key !== 'updatedBy' && typeof body[key] === 'string') {
-          body[key] = body[key].toUpperCase();
+        if (body.hasOwnProperty(key)) {
+          if (key !== 'createdBy' && key !== 'updatedBy' && key !== 'token' && typeof body[key] === 'string') {
+            body[key] = body[key].toUpperCase();
+          } else if (typeof body[key] === 'object') {
+            body[key] = this.convertBodyToUppercase(body[key]); // Recursively process nested objects
+          }
         }
       }
     }
     return body;
   }
+  
 }

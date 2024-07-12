@@ -4,7 +4,8 @@
   justify-content: center;
 }
 
-input[type="month"] {
+input[type="month"],
+input[type="text"] {
   width: 20%;
   padding: 10px 7px;
   margin: 7px 0;

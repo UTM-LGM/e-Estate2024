@@ -1,4 +1,6 @@
-﻿using System.Security.Policy;
+﻿using E_EstateV2_API.DTO;
+using E_EstateV2_API.Models;
+using System.Security.Policy;
 
 namespace E_EstateV2_API.ViewModel
 {
@@ -30,7 +32,9 @@ namespace E_EstateV2_API.ViewModel
         public string remark { get; set; }
 
         public List<DTO_FieldStatus> fieldStatuses { get; set; }
-        public List<DTO_Clone> clones { get; set; }
+        public List<DTO_FieldClone> fieldClones { get; set; }
+        public List<FieldGrant> fieldGrants { get; set; }
+
 
 
     }

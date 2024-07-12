@@ -41,7 +41,7 @@
           </mat-select>
 
           <label>Field Area (Ha) <span style="color: red;">*</span> :</label>
-          <input type="number" name="area" [(ngModel)]="field.area" />
+          <input type="number" name="area" [(ngModel)]="field.area" (change)="rubberAreaInput()" />
         </div>
 
         <div style="columns: 2">
@@ -85,7 +85,7 @@
           </div>
         </div>
 
-        <div *ngIf="!conversion && !fieldSick && field.isMature == true">
+        <div *ngIf="!conversion && !fieldSick">
           <div style="columns: 2">
             <label>Year Planted <span style="color: red;">*</span> :</label>
             <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
@@ -98,8 +98,7 @@
             <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
 
             <label>Date Open Tapping <span style="color: red;">*</span> :</label>
-            <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted " />
-
+            <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted " (change)="checkDOT()" />
             
           </div>
 
@@ -109,35 +108,37 @@
         </div>
           <hr/>
 
+        <div class="box-container">
+          <h1>Land Title</h1><hr/>
           <div style="columns: 4;">
-            <label>Grant title <span style="color: red;">*</span> : </label>
+            <label>No <span style="color: red;">*</span> : </label>
             <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle"/>
-            <label>Area (Ha) <span style="color: red;">*</span> :</label>
+            <label>Total Area (Ha) <span style="color: red;">*</span> :</label>
             <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea"/>
             <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
             <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea"/>
             <div>
                 <button style="margin-top: 28px;" class="btn-add" (click)="addGrant(fieldGrant)">
-                    Add Grant &nbsp; <i class="fa fa-plus"></i>
+                    Add Land Title &nbsp; <i class="fa fa-plus"></i>
                 </button>
             </div>
         </div>
 
           <div class="box-container">
-            <h1>Grant title</h1>
+            <h1>List of Land title</h1>
             <hr />
             <div style="overflow-x: auto; overflow-y: auto">
                 <table style="width: 100%">
                     <tr>
                         <th width="30px">No</th>
-                        <th>Grant title</th>
-                        <th>Area (Ha)</th>
+                        <th>Land title</th>
+                        <th>Total Area (Ha)</th>
                         <th>Rubber Area (Ha)</th>
                         <th width="90px">Action</th>
                     </tr>
 
                     <tr *ngIf="fieldGrants.length == 0">
-                        <td colspan="5" style="color: red;"><b>No Grant</b></td>
+                        <td colspan="5" style="color: red;">No Land Title</td>
                     </tr>
 
                     <tr *ngFor="let value of fieldGrants; let i = index">
@@ -146,7 +147,7 @@
                         <td>{{ value.grantArea }}</td>
                         <td>{{ value.grantRubberArea }}</td>
                         <td>
-                            <button class="btn-del" (click)="deleteGrant(value.id)">
+                            <button class="btn-del" (click)="deleteGrant(i)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
@@ -156,30 +157,8 @@
         </div><br/>
 
         </div>
-
-        <div style="margin-top: 10px">
-          <button *ngIf="!conversion && !fieldSick" style="float: right;" class="btn-update" type="submit"
-            (click)="updateField(field)">
-            Update &nbsp; <i class="fa fa-pencil"></i>
-          </button>
-          <button *ngIf="conversionButton" style="float: right; margin-right:10px; background-color: rgb(220, 220, 63);"
-            class="btn-update" type="submit" (click)="convertField(field)">
-            Convert &nbsp; <i class="fa fa-rotate-left"></i>
-          </button>
-          <button *ngIf="fieldSick" style="float: right; margin-right:10px;padding: 10px 13px;" class="btn-del"
-            type="submit" (click)="fieldInfected(field)">
-            Infected &nbsp; <i class="fa fa-rotate-right"></i>
-          </button>
-          <button *ngIf="updateConversionBtn && conversion"
-            style="float: right; margin-right:10px; background-color: rgb(63, 220, 97);" class="btn-update"
-            type="submit" (click)="updateConversion(field)">
-            Update Conversion &nbsp; <i class="fa fa-pencil"></i>
-          </button>
-          <button class="btn-back" (click)="back()">
-            <i class="fa fa-arrow-left"></i> &nbsp; Back
-          </button>
         </div>
-        <br /><br />
+        <br />
       </div>
     </div>
 
@@ -211,14 +190,14 @@
             </tr>
 
             <tr *ngIf="fieldClones.length == 0">
-              <td colspan="3" style="color: red;"><b>No Clone</b></td>
+              <td colspan="3" style="color: red;">No Clone</td>
             </tr>
 
             <tr *ngFor="let clone of fieldClones, let i=index">
               <td>{{i+1}}</td>
               <td>{{clone.cloneName}}</td>
               <td><button class="btn-del" [disabled]="conversion || disableInput"
-                  (click)="delete(clone.id, field.id)"><i class="fa fa-trash"></i></button>
+                  (click)="delete(i)"><i class="fa fa-trash"></i></button>
               </td>
             </tr>
           </table>
@@ -227,6 +206,29 @@
 
     </div>
   </div>
+
+  <div style="margin-top: 10px">
+    <button *ngIf="!conversion && !fieldSick" style="float: right;" class="btn-update" type="submit"
+      (click)="updateField(field)">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+    <button *ngIf="conversionButton" style="float: right; margin-right:10px; background-color: rgb(220, 220, 63);"
+      class="btn-update" type="submit" (click)="convertField(field)">
+      Convert &nbsp; <i class="fa fa-rotate-left"></i>
+    </button>
+    <button *ngIf="fieldSick" style="float: right; margin-right:10px;padding: 10px 13px;" class="btn-del"
+      type="submit" (click)="fieldInfected(field)">
+      Infected &nbsp; <i class="fa fa-rotate-right"></i>
+    </button>
+    <button *ngIf="updateConversionBtn && conversion"
+      style="float: right; margin-right:10px; background-color: rgb(63, 220, 97);" class="btn-update"
+      type="submit" (click)="updateConversion(field)">
+      Update Conversion &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div><br/>
 
   <div class="box-container" *ngIf="conversion">
     <h1>Initial Field Information</h1>

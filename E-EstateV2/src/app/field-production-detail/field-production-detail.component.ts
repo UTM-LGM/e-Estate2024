@@ -56,26 +56,37 @@ export class FieldProductionDetailComponent implements OnInit {
     this.dialogRef.close()
   }
 
-  validateInputCuplump(product: any) {
-    if (product.cuplumpDRC < 39 || product.cuplumpDRC > 80) {
+  validateCuplumpDRC(drc:any){
+    const drcValue = drc.target.value
+    if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
+      return drcValue
+    }
+    else{
       swal.fire({
+        title: 'Error!',
+        text: 'CuplumpDRC must be between 45% to 80%',
         icon: 'error',
-        title: 'Error',
-        text: 'Please insert cuplump DRC between 39% - 80% only',
+        showConfirmButton: true
       });
-      product.cuplumpDRC = null
+      this.product.cuplumpDRC = 0
     }
   }
 
-  validateInputLatex(product: any) {
-    if (product.latexDRC < 20 || product.latexDRC > 55) {
-      swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please insert latex DRC between 20% - 55% only',
-      });
-      product.latexDRC = null
+  validateLatexDRC(drc:any){
+    const drcValue = drc.target.value
+    if ((drcValue >= 20 && drcValue <= 55) || drc === 0) {
+      return drcValue
     }
+    else{
+      swal.fire({
+        title: 'Error!',
+        text: 'LatexDRC must be between 20% to 55%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.product.latexDRC = 0
+    }
+
   }
 
   taskTap(taskTap: any, totalTask: number) {

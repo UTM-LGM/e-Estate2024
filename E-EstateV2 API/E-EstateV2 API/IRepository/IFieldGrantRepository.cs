@@ -10,5 +10,6 @@ namespace E_EstateV2_API.IRepository
         Task DeleteFieldGrant(FieldGrant fieldGrant);
         Task<FieldGrant> GetFieldGrantById(int grantId);
         Task<FieldGrant> AddGrant(FieldGrant grant);
+        Task UpdateFieldGrants(int fieldId, FieldGrant[] updatedFieldGrants);
     }
 }

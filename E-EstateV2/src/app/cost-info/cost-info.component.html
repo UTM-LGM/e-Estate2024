@@ -9,7 +9,7 @@
   <form style="margin-top: 10px;">
     <div style="display: flex; width: 60%; align-items: center; justify-content: space-between;">
       <div style="width: 40%; margin-right: 10px;">
-        <label>Year :</label>
+        <label>Month and Year :</label>
         <!-- <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear"
           [(ngModel)]="selectedYear" (change)="yearSelected()" /> -->
         <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />

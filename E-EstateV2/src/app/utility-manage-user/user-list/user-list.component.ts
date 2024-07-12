@@ -17,8 +17,10 @@ export class UserListComponent implements OnInit, OnDestroy {
   isLoading = true
   pageNumber = 1
   users:User[]=[]
+  itemsPerPage = 10
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'fullName', displayText: 'User Fullname' },
     { columnName: 'licenseNo', displayText: 'License No' },
     { columnName: 'position', displayText: 'Position' },

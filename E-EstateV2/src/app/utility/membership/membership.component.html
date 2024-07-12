@@ -35,8 +35,8 @@
     </tr>
 
     <tr
-      *ngFor="let membership of membershipTypes | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let membership of membershipTypes | filter : term | paginate: { itemsPerPage: itemsPerPageMembership, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPageMembership + i + 1 }}</td>
       <td>{{ membership.membershipType }}</td>
       <td>
         <button (click)="status(membership)" [ngClass]="{

@@ -73,6 +73,11 @@ namespace E_EstateV2_API.Data
         public DbSet<OtherCrop> otherCrops { get; set; }
         public DbSet<DiseaseCategory> diseaseCategories { get; set; }
         public DbSet<FieldGrant> fieldGrants { get; set; }
+        public DbSet<FieldHistory> fieldHistories { get; set; }
+        public DbSet<FieldInfectedHistory> fieldInfectedHistories { get; set; }
+        public DbSet<RubberSaleHistory> rubberSaleHistories { get; set; }
+        public DbSet<CompanyContactHistory> companyContactHistories { get; set; }
+        public DbSet<EstateContactHistory> estateContactHistories { get; set; }
     }
 
 }

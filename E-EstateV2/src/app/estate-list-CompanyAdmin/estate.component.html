@@ -31,13 +31,14 @@
         </tr>
 
         <tr *ngIf="company.premises?.length == 0 && !isLoading">
-          <td colspan="8" style="color: red;"><b>No Estate</b></td>
+          <td colspan="8" style="color: red;">No Estate</td>
         </tr>
 
         <tr class="list"
-          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
+          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index"
           routerLink="/e-estate/estate-detail/{{ estate.id }}">
-          <td><a>{{estate.name}}</a></td>
+           <td>{{ (pageNumber - 1) * itemsPerPage + i + 1}}</td>
+          <td><a>{{estate.name + ',' + estate.add1.slice(0, -1)}}</a></td>
           <td>{{estate.state}}</td>
           <td> {{estate.town }} </td>
           <td>{{ estate.email }}</td>

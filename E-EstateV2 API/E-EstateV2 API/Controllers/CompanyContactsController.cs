@@ -1,4 +1,5 @@
-﻿using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.Data;
+using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace E_EstateV2_API.Controllers
     public class CompanyContactsController : ControllerBase
     {
         private readonly IGenericRepository<CompanyContact> _genericRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly ICompanyContactHistoryRepository _companyContactHistoryRepository;
 
-        public CompanyContactsController(IGenericRepository<CompanyContact> genericRepository)
+        public CompanyContactsController(IGenericRepository<CompanyContact> genericRepository, ApplicationDbContext context, ICompanyContactHistoryRepository historyRepository)
         {
             _genericRepository = genericRepository;
+            _context = context;
+            _companyContactHistoryRepository = historyRepository;
         }
 
         [HttpGet]
@@ -36,9 +41,38 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> UpdateCompanyContact([FromBody] CompanyContact contact)
         {
             contact.updatedDate = DateTime.Now;
-            var updatedCompanyContact = await _genericRepository.Update(contact);
-            return Ok(updatedCompanyContact);
-        }
 
+            var existingContact = await _context.companyContacts.FindAsync(contact.Id);
+            if (existingContact != null)
+            {
+                var companyContactHistory = new CompanyContactHistory
+                {
+                    companyContactId = existingContact.Id,
+                    name = existingContact.name,
+                    position = existingContact.position,
+                    phoneNo = existingContact.phoneNo,
+                    email = existingContact.email,
+                    isActive = existingContact.isActive,
+                    createdBy = existingContact.createdBy,
+                    createdDate = existingContact.createdDate,
+                    updatedBy = existingContact.updatedBy,
+                    updatedDate = existingContact.updatedDate,
+                    companyId = existingContact.companyId
+                };
+
+                await _companyContactHistoryRepository.AddCompanyContactHistory(companyContactHistory);
+
+                _context.Entry(existingContact).CurrentValues.SetValues(contact);
+                existingContact.updatedDate = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(existingContact);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

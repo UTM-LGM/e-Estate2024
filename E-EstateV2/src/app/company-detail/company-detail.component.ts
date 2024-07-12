@@ -40,19 +40,26 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
 
   companyDetail: CompanyDetail = {} as CompanyDetail
 
-  term = ''
+  termContact = ''
+  termEstate = ''
+
   userRole = ''
-  pageNumber = 1
   order = ''
   currentSortedColumn = ''
+
+  itemsPerPageContact = 5
+  itemsPerPageEstate = 10
 
   membership = {} as any
 
   selectedEstate: any
 
   companyId = 0
+  contactsPageNumber = 1
+  estatesPageNumber=1
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'name', displayText: 'Estate Name' },
     { columnName: 'state', displayText: 'State' },
     { columnName: 'town', displayText: 'Town' },
@@ -60,6 +67,7 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
   ];
 
   sortableColumnContacts = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'name', displayText: 'Name' },
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },
@@ -255,5 +263,6 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
 
 }

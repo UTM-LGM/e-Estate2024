@@ -22,8 +22,10 @@ export class EstateComponent implements OnInit,OnDestroy {
   isLoading = true
   order = ''
   currentSortedColumn = ''
+  itemsPerPage = 10
 
   sortableColumns = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'name', displayText: 'Estate Name' },
     { columnName: 'state', displayText: 'State' },
     { columnName: 'town', displayText: 'Town' },

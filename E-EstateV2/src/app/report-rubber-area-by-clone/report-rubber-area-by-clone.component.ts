@@ -22,6 +22,7 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
   term = ''
   startMonth = ''
   endMonth = ''
+  itemsPerPageClone = 10
 
   estate: any = {} as any
   companies: any[] = []

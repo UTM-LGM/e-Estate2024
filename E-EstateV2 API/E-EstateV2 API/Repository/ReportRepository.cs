@@ -133,7 +133,7 @@ namespace E_EstateV2_API.Repository
         public async Task<object> GetProductionYearlyByField(int year)
         {
             var monthyearstrings = await _context.fieldProductions
-                .Where(x => x.monthYear.Contains(year.ToString()))
+                .Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString()))
                 .Select(x => new
                 {
                     monthYear = x.monthYear,
@@ -151,7 +151,7 @@ namespace E_EstateV2_API.Repository
                 }).ToList();
 
 
-            var fieldProduction = await _context.fieldProductions.Where(x => x.monthYear.Contains(year.ToString())).Select(x => new
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
@@ -261,7 +261,7 @@ namespace E_EstateV2_API.Repository
             var field = await _context.fields.Where(x => x.isActive == true && x.createdDate.Year == year).Select(x => new
             {
                 fieldId = x.Id,
-                area = x.area,
+                area = x.rubberArea,
                 isMature = x.isMature,
                 estateId = x.estateId,
                 isActive = x.isActive,
@@ -400,7 +400,7 @@ namespace E_EstateV2_API.Repository
             }
 
 
-            var allProduction = await _context.fieldProductions.ToListAsync();
+            var allProduction = await _context.fieldProductions.Where(x=>x.status == "Submitted").ToListAsync();
             var filteredProduction = allProduction.Where(x => IsWithinRange(x.monthYear) && x.status == "Submitted").ToList();
 
             var fieldProduction = filteredProduction.Select(x => new
@@ -584,7 +584,8 @@ namespace E_EstateV2_API.Repository
                                 .Select(y => y.laborType)
                                 .FirstOrDefault(),
                             localNoOfWorkers = group.Sum(x => (int)x.GetType().GetProperty("localNoOfWorkers").GetValue(x, null)),
-                            foreignNoOfWorkers = group.Sum(x => (int)x.GetType().GetProperty("foreignNoOfWorkers").GetValue(x, null))
+                            foreignNoOfWorkers = group.Sum(x => (int)x.GetType().GetProperty("foreignNoOfWorkers").GetValue(x, null)),
+                            latestMonthYear = latestMonthYearsForEachEstate.FirstOrDefault(x => x.EstateId == group.Key.estateId)?.LatestMonthYear
                         })
                         .ToList();
 

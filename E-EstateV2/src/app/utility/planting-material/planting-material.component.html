@@ -35,8 +35,8 @@
     </tr>
 
     <tr
-      *ngFor="let planting of plantingMaterials | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let planting of plantingMaterials | filter : term | paginate: { itemsPerPage: itemsPerPagePlanting, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPagePlanting + i + 1 }}</td>
       <td>{{ planting.plantingMaterial }}</td>
       <td>
         <button (click)="status(planting)" [ngClass]="{

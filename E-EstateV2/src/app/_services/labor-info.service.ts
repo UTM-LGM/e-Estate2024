@@ -18,7 +18,7 @@ export class LaborInfoService {
     return this.http.post<LaborInfo>(this.baseUrl + '/LaborInformations/AddLaborInfo', labor)
   }
 
-  addLaborCategory(labor:LaborByCategory[]):Observable<LaborByCategory[]>{
+  addLaborCategory(labor:any[]):Observable<LaborByCategory[]>{
     return this.http.post<LaborByCategory[]>(this.baseUrl + '/LaborInformations/AddLaborByCategory', labor)
   }
   
@@ -44,5 +44,9 @@ export class LaborInfoService {
 
   deleteLabor(laborInfoId: number): Observable<any> {
     return this.http.delete<any>(this.baseUrl + '/LaborInformations/DeleteLabor/' + laborInfoId)
-  }                                                         
+  }                       
+  
+  addLaborWithCategories(data :{laborInfo:LaborInfo, laborCategories: LaborByCategory[]}){
+    return this.http.post<any>(this.baseUrl + '/LaborInformations/AddLaborWithCategories', data)
+  }
 }

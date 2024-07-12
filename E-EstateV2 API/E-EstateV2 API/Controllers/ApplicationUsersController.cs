@@ -150,7 +150,7 @@ namespace E_EstateV2_API.Controllers
             }
             else
             {
-                return BadRequest(new { message = "Email or Password is incorrect" });
+                return BadRequest(new { message = "Username or Password is incorrect" });
             }
         }
 

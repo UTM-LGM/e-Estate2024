@@ -44,8 +44,10 @@
       <tr>
         <td class="detail">Financial Year</td>
         <td class="detail"><span>:</span></td>
-        <td *ngIf="companyDetail.startFinancialYear == null " class="detail" style="color: red;">Please update profile</td>
-        <td *ngIf="companyDetail.startFinancialYear != null " class="detail">{{companyDetail.startFinancialYear + ' - ' + companyDetail.endFinancialYear}} </td>
+        <td *ngIf="companyDetail.startFinancialYear == null " class="detail" style="color: red;">Please update profile
+        </td>
+        <td *ngIf="companyDetail.startFinancialYear != null " class="detail">{{companyDetail.startFinancialYear + ' - '
+          + companyDetail.endFinancialYear}} </td>
       </tr>
 
       <tr>
@@ -96,12 +98,12 @@
     <h1>List of Additional Contact</h1>
 
     <div style="float: left;">
-    <button class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
-      Add New Contact &nbsp; <i class="fa fa-plus"></i>
-    </button>
-  </div>
+      <button class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
+        Add New Contact &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div>
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Contact" />
+    <input type="text" [(ngModel)]="termContact" placeholder="Filter Contact" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>
@@ -123,12 +125,13 @@
         </tr>
 
         <tr *ngIf="contacts.length == 0">
-          <td colspan="6" style="color: red;"><b>No Additional Contact</b></td>
+          <td colspan="6" style="color: red;">No Additional Contact</td>
         </tr>
 
         <tbody
-          *ngFor="let contact of contacts | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          *ngFor="let contact of contacts | filter : termContact | paginate: { itemsPerPage: itemsPerPageContact, currentPage: contactsPageNumber, id: 'contacts'  }; let i = index">
           <tr class="list" style="cursor: default;">
+            <td>{{ (contactsPageNumber - 1) * itemsPerPageContact + i + 1 }}</td>
             <td style="cursor: pointer;">{{contact.name}}</td>
             <td>{{ contact.position }}</td>
             <td>{{ contact.phoneNo }}</td>
@@ -142,7 +145,8 @@
               </button>
             </td>
             <td>
-              <button class="btn-update" (click)="openDialogCompanyContact(contact, company)" style="padding: 3px 15px;">
+              <button class="btn-update" (click)="openDialogCompanyContact(contact, company)"
+                style="padding: 3px 15px;">
                 <i class="fa fa fa-pencil"></i>
               </button>
             </td>
@@ -153,7 +157,7 @@
         </tbody>
       </table>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+      <pagination-controls (pageChange)="contactsPageNumber = $event" id="contacts"></pagination-controls>
 
     </div>
   </div>
@@ -161,9 +165,9 @@
 
   <div class="box-container" *ngIf="userRole == 'Admin'">
     <!-- <span style="font-size: 12px; font-weight: bold; text-decoration: underline;">List of Estates</span> -->
-     <h1>List of Estates</h1>
+    <h1>List of Estates</h1>
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Estates" />
+    <input type="text" [(ngModel)]="termEstate" placeholder="Filter Estates" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>
@@ -186,12 +190,13 @@
         </tr>
 
         <tr *ngIf="company.premises.length == 0">
-          <td colspan="9" style="color: red;"><b>No Estate</b></td>
+          <td colspan="9" style="color: red;">No Estate</td>
         </tr>
 
         <tbody
-          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          *ngFor="let estate of company.premises | filter : termEstate | paginate: { itemsPerPage: itemsPerPageEstate, currentPage: estatesPageNumber, id: 'estates' }; let i = index">
           <tr class="list" style="cursor: default;">
+            <td>{{ (estatesPageNumber - 1) * itemsPerPageEstate + i + 1 }}</td>
             <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
               <a>{{estate.name + ', ' + estate.add1.slice(0, -1) }}</a>
             </td>
@@ -201,8 +206,9 @@
           </tr>
         </tbody>
       </table>
+      
+      <pagination-controls (pageChange)="estatesPageNumber = $event" id="estates"></pagination-controls>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
 
     </div>
   </div><br />

@@ -40,7 +40,7 @@
         </tr>
 
         <tr *ngIf="filterSales.length == 0 && !isLoading">
-          <td colspan="18" style="color: red;"><b>No Rubber Sale Transaction</b></td>
+          <td colspan="18" style="color: red;">No Rubber Sale Transaction</td>
         </tr>
 
         <ng-container *ngIf="!isLoading">
@@ -77,17 +77,18 @@
                 <button class="btn-update" (click)="printForm1(sale)"  title="Print Form 1">
                   <i class="fa fa-print"></i>
                 </button> &nbsp;
-                <button [disabled]="sale.paymentStatusId === 3 || sale.weightSlipNo !== null" class="btn-del" (click)="changeStatus(sale)">
+                <!-- <button [disabled]="sale.paymentStatusId === 3 || sale.weightSlipNo !== null" class="btn-del" (click)="changeStatus(sale)">
                   <i class="fa fa-trash"></i>
-                </button>
+                </button> -->
                 <!-- <button class="btn-update" (click)="print(sale)"  title="Print Receipt">
                   <i class="fa fa-print"></i>
                 </button> -->
               </div>
             </td>
-            <td [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">
+            <td *ngIf="sale.letterOfConsentNo" [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">
               {{ sale.paymentStatusId === 3 ? 'Complete' : 'In Process' }}
             </td>
+            <td *ngIf="!sale.letterOfConsentNo">History</td>
           </tr>
         </tbody>
       </ng-container>

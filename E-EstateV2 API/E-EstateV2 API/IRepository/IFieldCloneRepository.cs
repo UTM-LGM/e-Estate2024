@@ -7,5 +7,6 @@ namespace E_EstateV2_API.IRepository
 
         Task<IEnumerable<FieldClone>> AddFieldClone(FieldClone[] fieldClone);
         Task<List<FieldClone>> UpdateFieldCloneStatus(int fieldId);
+        Task UpdateFieldClones(int fieldId, FieldClone[] fieldClones);
     }
 }

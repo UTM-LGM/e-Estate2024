@@ -8,4 +8,5 @@ export interface FieldGrant {
     updatedBy: string
     updatedDate: Date
     fieldId:number
+    isActive:boolean
 }

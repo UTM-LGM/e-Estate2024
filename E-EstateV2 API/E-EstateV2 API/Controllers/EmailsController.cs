@@ -65,13 +65,20 @@ namespace E_EstateV2_API.Controllers
             try
             {
                 await _emailRepository.SendPasswordResetEmail(user);
-                return Ok(new { message = "Reset password link successfully sent to email !" });
+                return Ok(new { message = "Reset password link successfully sent to email!" });
+            }
+            catch (ApplicationException ex)
+            {
+                // Handle specific application exceptions thrown by SendPasswordResetEmail method
+                return BadRequest($"Failed to send reset password email: {ex.Message}");
             }
             catch (Exception ex)
             {
-                return BadRequest("Failed to send to inccorect email");
+                // Handle other unexpected exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to send reset password email.");
             }
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword([FromBody] DTO_User user)

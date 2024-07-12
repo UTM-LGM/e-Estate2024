@@ -35,8 +35,8 @@
     </tr>
 
     <tr
-      *ngFor="let otherCrop of otherCrops | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let otherCrop of otherCrops | filter : term | paginate: { itemsPerPage: itemsPerPageOther, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPageOther + i + 1 }}</td>
       <td>{{ otherCrop.otherCrop }}</td>
       <td>
         <button (click)="status(otherCrop)" [ngClass]="{

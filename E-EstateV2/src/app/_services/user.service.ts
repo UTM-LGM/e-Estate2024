@@ -54,7 +54,7 @@ export class UserService {
   }
 
   changePassword(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl + '/applicationusers/ChangePassword', user)
+    return this.http.post<User>(this.baseUrl + '/applicationusers/ChangePassword', user )
   }
 
   roleMatch(allowedRole: any[]): boolean {

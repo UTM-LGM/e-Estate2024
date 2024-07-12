@@ -30,5 +30,6 @@
         public int paymentStatusId { get; set; }
         public string paymentStatus { get; set; }
         public string deliveryAgent { get; set; }
+        public bool MSNRStatus { get; set; }
     }
 }

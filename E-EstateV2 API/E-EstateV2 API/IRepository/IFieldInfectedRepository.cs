@@ -7,6 +7,7 @@ namespace E_EstateV2_API.IRepository
     {
         Task<List<DTO_FieldInfected>> GetFieldInfectedByEstateId(int estateId);
         Task<FieldInfected> UpdateFieldInfectedRemark(FieldInfected fieldInfected);
-        Task<List<DTO_FieldInfected>> GetFieldInfectedById(int id);
+        Task<List<DTO_FieldInfected>> GetFieldInfectedByFieldId(int id);
+        Task<DTO_FieldInfected> GetFieldInfectedById(int id);
     }
 }

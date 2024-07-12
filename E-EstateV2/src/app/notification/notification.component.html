@@ -25,5 +25,9 @@
         [routerLink]="['/e-estate/cost-info/', estateId]">here</a>
     </div>
 
+    <div class="alert" *ngIf="warningGrantTitle" style="background-color: yellow;color: black;">
+        <i class="fa fa-exclamation"></i> &nbsp; You have field that have 0 land title, please update <a
+        [routerLink]="['/e-estate/field-info/', estateId]">here</a>
+    </div>
 
 </div>

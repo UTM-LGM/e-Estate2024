@@ -10,7 +10,7 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" >
       <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
 
@@ -21,10 +21,10 @@
 
   </div>
 
-  <div style="columns: 4;"
+  <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
-    <input type="text" [value]="estate.name" disabled />
+    <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
     <label>End Month Year : </label>
@@ -74,7 +74,7 @@
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="9" style="color: red; text-align: center;">No data found. Please choose estate</td>
+        <td colspan="9" style="color: red; text-align: center;">No data found. Please choose estate, start and end month year</td>
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'Admin'">
@@ -82,12 +82,12 @@
       </tr>
 
       <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'EstateClerk'">
-        <td colspan="9" style="color: red; text-align: center;">No data found.</td>
+        <td colspan="9" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
       <ng-container *ngIf="!isLoading && role != 'Admin'">
-        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-          <td>{{i + 1}}</td>
+        <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: itemsPerPageShortage, currentPage: pageNumber }; let i = index">
+          <td>{{ (pageNumber - 1) * itemsPerPageShortage + i + 1 }}</td>
           <td>{{ worker.estateName }}</td>
           <td>{{ totalTapperWorker }}</td>
           <td>{{ totalFieldWorker }}</td>

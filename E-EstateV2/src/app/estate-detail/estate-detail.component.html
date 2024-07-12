@@ -161,7 +161,7 @@
       Add New Contact &nbsp; <i class="fa fa-plus"></i>
     </button>
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Contact" />
+    <input type="text" [(ngModel)]="termContact" placeholder="Filter Contact" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>
@@ -183,12 +183,13 @@
         </tr>
 
         <tr *ngIf="contacts.length == 0">
-          <td colspan="6" style="color: red;"><b>No Additional Contact</b></td>
+          <td colspan="6" style="color: red;">No Additional Contact</td>
         </tr>
 
         <tbody
-          *ngFor="let contact of contacts | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+          *ngFor="let contact of contacts | filter : termContact | paginate: { itemsPerPage: itemsPerPageContact, currentPage: contactsPageNumber, id: 'contacts' }; let i = index">
           <tr class="list" style="cursor: default;">
+            <td>{{ (contactsPageNumber - 1) * itemsPerPageContact + i + 1 }}</td>
             <td style="cursor: pointer;">{{contact.name}}</td>
             <td>{{ contact.position }}</td>
             <td>{{ contact.phoneNo }}</td>
@@ -202,7 +203,7 @@
               </button>
             </td>
             <td>
-              <button class="btn-update" style="padding: 5px 15px;" (click)="openDialogContact(contact, estate)">
+              <button class="btn-update" style="padding: 3px 15px;" (click)="openDialogContact(contact, estate)">
                 <i class="fa fa fa-pencil"></i>
               </button>
             </td>
@@ -210,7 +211,7 @@
         </tbody>
       </table>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+      <pagination-controls (pageChange)="contactsPageNumber = $event" id="contacts"></pagination-controls>
 
     </div>
   </div><br />
@@ -218,13 +219,13 @@
   <div class="box-container" *ngIf="userRole !== 'EstateClerk'">
     <h1>List of Fields</h1>
     <hr />
-    <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/field-info/{{estate.id}}">
+    <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-field/{{estate.id}}">
       Add New Field &nbsp; <i class="fa fa-plus"></i>
     </button>
     <br />
-    <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
+    <input type="text" [(ngModel)]="termField" placeholder="Filter Field" />
 
-    <label><b>Total Area : {{ total }} Ha</b></label>
+    <label><b>Total Area : {{ total | number: '1.2-2' }} Ha</b></label>
     <div style="overflow-x: auto; width: 100%;">
       <table style="width: 100%;">
         <tr>
@@ -240,11 +241,12 @@
         </tr>
 
         <tr *ngIf="fields.length == 0">
-          <td colspan="10" style="color: red;"><b>No Field</b></td>
+          <td colspan="10" style="color: red;">No Field</td>
         </tr>
 
-        <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tbody *ngFor="let field of fields | filter : termField | paginate: { itemsPerPage: itemsPerPageField, currentPage: fieldsPageNumber, id: 'fields' }; let i = index">
           <tr class="list" style="cursor:default;">
+            <td>{{ (fieldsPageNumber - 1) * itemsPerPageField + i + 1 }}</td>
             <td class="td" style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{
                 field.fieldName }}</a></td>
             <td class="td">{{ field.area }}</td>
@@ -288,7 +290,7 @@
 
                 <tr *ngFor="let conversion of conversionField">
                   <td>{{conversion.fieldName}}</td>
-                  <td>{{conversion.otherCrop}}</td>
+                  <td>{{conversion.conversionCropName}}</td>
                   <td>{{conversion.sinceYear}}</td>
                 </tr>
               </table>
@@ -297,14 +299,13 @@
 
 
           <tr *ngIf="selectedField === field && conversionField.length ==0">
-            <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;"> <b> No field conversion data found
-              </b> </td>
+            <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;">No field conversion data found</td>
           <tr>
 
         </tbody>
       </table>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+      <pagination-controls (pageChange)="fieldsPageNumber = $event" id="fields"></pagination-controls>
 
     </div>
   </div>

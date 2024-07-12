@@ -5,4 +5,5 @@ export interface FieldClone {
     createdBy: string
     createdDate: Date
     isActive:boolean
+    cloneName:string
 }

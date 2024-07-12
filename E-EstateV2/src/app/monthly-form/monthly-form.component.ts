@@ -3,6 +3,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-monthly-form',
@@ -18,15 +19,30 @@ export class MonthlyFormComponent implements OnInit, OnDestroy {
   isProductionTabDisabled = false;
   isLaborTabDisabled = true;
   isLaborShortageTabDisabled = true;
+  previousMonth = new Date()
+  date: any
+
 
   constructor(
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit(): void {
+    this.getDate()
+    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.getEstate()
+  }
+
+  getDate() {
+    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  }
+
+  monthSelected(month: string) {
+    let monthDate = new Date(month)
+    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
   }
 
 

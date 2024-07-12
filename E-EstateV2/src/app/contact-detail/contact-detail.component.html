@@ -11,7 +11,8 @@
     </div>
     <div style="columns: 2">
       <label>Phone No <span style="color: red;">*</span> :</label>
-      <input type="text" name="phoneNo" [(ngModel)]="companyContact.phoneNo" />
+      <input type="text" name="phoneNo" [(ngModel)]="companyContact.phoneNo"
+        (change)="validatePhoneNo(companyContact.phoneNo)" placeholder="xxx-xxxxxxx / xx-xxxxxxxx" />
       <label>Email <span style="color: red;">*</span> :</label>
       <input type="email" name="email" [(ngModel)]="companyContact.email" />
     </div>
@@ -39,11 +40,17 @@
       <label>Name <span style="color: red;">*</span> :</label>
       <input type="text" name="nbsp" [(ngModel)]="estateContact.name" />
       <label>Position <span style="color: red;">*</span> :</label>
-      <input type="text" name="position" [(ngModel)]="estateContact.position" />
+      <mat-select  placeholder="Please Choose" name="position" [(ngModel)]="estateContact.position">
+        <mat-option value="MANAGER">MANAGER</mat-option>
+        <mat-option value="ASSISTANT MANAGER">ASSISTANT MANAGER</mat-option>
+        <mat-option value="SUPERVISOR">SUPERVISOR</mat-option>
+        <mat-option value="CLERK">CLERK</mat-option>
+      </mat-select>
     </div>
     <div style="columns: 2">
       <label>Phone No <span style="color: red;">*</span> :</label>
-      <input type="text" name="phoneNo" [(ngModel)]="estateContact.phoneNo" />
+      <input type="text" name="phoneNo" [(ngModel)]="estateContact.phoneNo"
+        (change)="validatePhoneNo(estateContact.phoneNo)" placeholder="xxx-xxxxxxx / xx-xxxxxxxx" />
       <label>Email <span style="color: red;">*</span>:</label>
       <input type="email" name="email" [(ngModel)]="estateContact.email" />
     </div>

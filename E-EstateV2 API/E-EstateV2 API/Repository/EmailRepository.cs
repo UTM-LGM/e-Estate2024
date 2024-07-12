@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using E_EstateV2_API.ViewModel;
+using System.Net;
 
 namespace E_EstateV2_API.Repository
 {
@@ -88,7 +89,6 @@ namespace E_EstateV2_API.Repository
                 email.To.Add(MailboxAddress.Parse("Embong@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("fattah@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("azimah@lgm.gov.my"));
-                email.To.Add(MailboxAddress.Parse("sabariah@lgm.gov.my"));
                 email.Subject = "Notice to verify new e-Estate user";
                 string htmlMessage = GenerateHtmlUserVerified(user.UserName);
                 email.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };
@@ -114,7 +114,7 @@ namespace E_EstateV2_API.Repository
 
             if (!tokenValid)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "Failed" });
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid or expired token." });
             }
 
             var result = await _usermanager.ResetPasswordAsync(applicationUser, originalToken, user.NewPassword);
@@ -147,13 +147,19 @@ namespace E_EstateV2_API.Repository
                     await client.DisconnectAsync(true).ConfigureAwait(false);
                 }
             }
+            else
+            {
+                throw new ApplicationException("Invalid email address or email is not verified.");
+            }
         }
 
         private string GenerateHtmlResetPassword(string userId, string token)
         {
-            string urlEncodedToken = UrlEncodeToken(token);
+            //string urlEncodedToken = UrlEncodeToken(token);
+            string urlEncodedToken = WebUtility.UrlEncode(token);
             byte[] plainBytes = System.Text.Encoding.UTF8.GetBytes(userId);
             string userIdCoded = Convert.ToBase64String(plainBytes);
+            //string resetLink = $"http://localhost:4200/forgotpassword/{userIdCoded}/{urlEncodedToken}";
             string resetLink = $"https://www5.lgm.gov.my/e-Estate/forgotpassword/{userIdCoded}/{urlEncodedToken}";
             string htmlMessage = "<html>" +
                 "<body>" +

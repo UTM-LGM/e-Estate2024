@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WorkerShortage } from 'src/app/_interface/workerShortage';
 import { SharedService } from 'src/app/_services/shared.service';
@@ -19,6 +19,8 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
 export class WorkerShortageComponent implements OnInit, OnDestroy {
 
   @Output() backTabEvent = new EventEmitter<void>();
+  @Input() selectedMonthYear = ''
+
 
   previousMonth = new Date()
   currentDate = new Date()
@@ -49,23 +51,31 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.getDate()
-    this.getWorkerShortage()
+    // this.getDate()
+    this.worker.monthYear = this.selectedMonthYear
   }
 
-  getDate() {
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
-    this.worker.monthYear = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedMonthYear']) {
+      // Handle changes here if needed
+      this.worker.monthYear = this.selectedMonthYear
+      this.getWorkerShortage()
+    }
   }
 
-  monthSelected(month: string) {
-    // this.worker.workerShortage = 0
-    this.worker.tapperWorkerShortage = 0
-    this.worker.fieldWorkerShortage = 0
-    let monthDate = new Date(month)
-    this.worker.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy')
-    this.getWorkerShortage()
-  }
+  // getDate() {
+  //   this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  //   this.worker.monthYear = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+  // }
+
+  // monthSelected(month: string) {
+  //   // this.worker.workerShortage = 0
+  //   this.worker.tapperWorkerShortage = 0
+  //   this.worker.fieldWorkerShortage = 0
+  //   let monthDate = new Date(month)
+  //   this.worker.monthYear = this.datePipe.transform(monthDate, 'MMM-yyyy')
+  //   this.getWorkerShortage()
+  // }
 
   futureMonth(): boolean {
     if (!this.worker.monthYear) {

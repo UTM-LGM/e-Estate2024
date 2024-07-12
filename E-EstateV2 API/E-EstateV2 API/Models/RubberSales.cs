@@ -40,5 +40,7 @@ namespace E_EstateV2_API.Models
         public int paymentStatusId { get; set; }
         public PaymentStatus paymentStatus { get; set; }
 
+        public bool MSNRStatus { get; set; }
+
     }
 }

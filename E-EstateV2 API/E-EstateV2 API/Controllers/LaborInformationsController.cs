@@ -1,4 +1,6 @@
-﻿using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.Data;
+using E_EstateV2_API.DTO;
+using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.Repository;
 using Microsoft.AspNetCore.Http;
@@ -12,11 +14,14 @@ namespace E_EstateV2_API.Controllers
     {
         private readonly ILaborInformationRepository _informationRepository;
         private readonly ILaborByCategoryRepository _byCategoryRepository;
+        private readonly ApplicationDbContext _context;
 
-        public LaborInformationsController(ILaborInformationRepository laborInformationRepository, ILaborByCategoryRepository laborByCategoryRepository)
+        public LaborInformationsController(ILaborInformationRepository laborInformationRepository, ILaborByCategoryRepository laborByCategoryRepository,
+            ApplicationDbContext context)
         {
             _informationRepository = laborInformationRepository;
             _byCategoryRepository = laborByCategoryRepository;
+            _context = context;
         }
 
         [HttpPost]
@@ -76,6 +81,36 @@ namespace E_EstateV2_API.Controllers
             var deletedLabor = await _informationRepository.DeleteLaborInfo(laborInfoId);
             var deletedLaborCategory = await _byCategoryRepository.DeleteLaborCategory(laborInfoId);
             return Ok(deletedLaborCategory);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddLaborWithCategories([FromBody] DTO_LaborWithCategories data)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var addedLaborInfo = await _informationRepository.AddLaborInfo(data.LaborInfo);
+
+                    foreach(var category in data.LaborByCategories)
+                    {
+                        category.laborInfoId = addedLaborInfo.Id;
+                        category.createdBy = data.LaborInfo.createdBy;
+                        category.createdDate = data.LaborInfo.createdDate;
+                    }
+
+                    var addedLaborCategories = await _byCategoryRepository.AddLaborByCategory(data.LaborByCategories.ToArray());
+
+                    await transaction.CommitAsync();
+                    return Ok(addedLaborInfo);
+
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
+                }
+            }
         }
     }
 }

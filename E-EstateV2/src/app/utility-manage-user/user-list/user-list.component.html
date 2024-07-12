@@ -34,7 +34,8 @@
             </tr>
 
             <ng-container *ngIf="!isLoading">
-            <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+            <tr class="list" *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
                 <td>{{user.fullName}}</td>
                 <td>{{user.licenseNo}}</td>
                 <td>{{user.position}}</td>

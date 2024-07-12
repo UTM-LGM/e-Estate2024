@@ -127,6 +127,10 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   monthSelected(month: string) {
+    this.stock.rubberType = ''
+    this.isLoadingProduction = true
+    this.isLoadingSale = true
+
     let monthDate = new Date(month)
     this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
 
@@ -217,7 +221,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100 
     }else if(this.stock.rubberType == 'LATEX'){
-      const production = this.totalCuplumpDry + this.stock.previousStock
+      const production = this.totalLatexDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
@@ -241,7 +245,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           const date = new Date(this.date)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive ==true;
           });
 
           this.calculateSale()

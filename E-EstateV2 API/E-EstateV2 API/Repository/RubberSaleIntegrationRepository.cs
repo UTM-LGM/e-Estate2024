@@ -53,6 +53,7 @@ namespace E_EstateV2_API.Repository
                 weightSlipNoDate = x.weightSlipNoDate,
                 receiptNoDate = x.receiptNoDate,
                 deliveryAgent = x.deliveryAgent,
+                msnrStatus = x.MSNRStatus
             }).FirstOrDefaultAsync();
             return rubberSale;
         }

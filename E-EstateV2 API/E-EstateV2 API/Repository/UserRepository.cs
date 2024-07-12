@@ -180,7 +180,7 @@ namespace E_EstateV2_API.Repository
                 estateId = estateId,
             };
 
-            var result = await _usermanager.CreateAsync(applicationUser, user.password);
+            var result = await _usermanager.CreateAsync(applicationUser, user.password.ToLower());
             //add AspNetUserClaim Table
             await _usermanager.AddClaimAsync(applicationUser, new Claim("CompanyId", newUser.companyId.ToString()));
             await _usermanager.AddClaimAsync(applicationUser, new Claim("EstateId", newUser.estateId.ToString()));
@@ -336,17 +336,34 @@ namespace E_EstateV2_API.Repository
         public async Task<object> ChangePassword(DTO_User user)
         {
             var applicationUser = await _usermanager.FindByIdAsync(user.id);
-            if (applicationUser != null)
+            if (applicationUser == null)
             {
-                var token = await _usermanager.GeneratePasswordResetTokenAsync(applicationUser);
-                var result = await _usermanager.ResetPasswordAsync(applicationUser, token, user.NewPassword);
+                throw new ApplicationException($"Unable to load user with ID '{user.id}'.");
+            }
+
+            // Check if the old password matches before changing
+            bool isOldPasswordCorrect = await CheckOldPassword(user.id, user.OldPassword.ToLower());
+            if (!isOldPasswordCorrect)
+            {
+                throw new ApplicationException("Old password is incorrect.");
+            }
+
+            // Change the password
+            var result = await _usermanager.ChangePasswordAsync(applicationUser, user.OldPassword.ToLower(), user.NewPassword.ToLower());
+
+            if (result.Succeeded)
+            {
                 return result;
             }
-            return applicationUser;
-
+            else
+            {
+                // Handle password change failure
+                throw new ApplicationException($"Failed to change password: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
         }
 
-        public async Task<Object> CheckOldPassword(string userId, string oldPassword)
+
+        public async Task<bool> CheckOldPassword(string userId, string oldPassword)
         {
             var userExist = await _usermanager.FindByIdAsync(userId);
             if (userExist != null)
@@ -354,13 +371,14 @@ namespace E_EstateV2_API.Repository
                 var result = await _usermanager.CheckPasswordAsync(userExist, oldPassword);
                 if (result)
                 {
-                    return result;
+                    return result; // This should return true if password matches, false if not
                 }
+                throw new ApplicationException("Old password is wrong");
 
-                throw new("Old password is wrong");
             }
-            throw new("User does not exist");
+            throw new ApplicationException("User does not exist");
         }
+
 
         public async Task<DTO_User> AddUserRole(DTO_User user)
         {

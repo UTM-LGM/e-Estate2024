@@ -38,17 +38,20 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   areaAffected = 0
   isSubmit = false
 
+  itemsPerPage = 10
+
   filteredFields: Field[] = []
   filterFieldDisease: FieldDisease[] = []
 
-  diseaseCategory : DiseaseCategory []=[]
-  diseaseName: FieldDisease []=[]
+  diseaseCategory: DiseaseCategory[] = []
+  diseaseName: FieldDisease[] = []
 
 
   sortableColumn = [
+    { columnName: 'no', displayText: 'No' },
     { columnName: 'dateInfected', displayText: 'Date Infected' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
-    { columnName: 'area', displayText: 'Field Area (Ha)' },
+    { columnName: 'area', displayText: 'Rubber Area (Ha)' },
     { columnName: 'areaInfectedPercentage', displayText: 'Area Infected Percentage (%)' },
     { columnName: 'areaInfected', displayText: 'Area Infected (Ha)' },
     { columnName: 'diseaseCategory', displayText: 'Disease Category' },
@@ -66,8 +69,8 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
     private dialog: MatDialog,
-    private subscriptionService:SubscriptionService,
-    private diseaseCategoryService:DiseaseCategoryService
+    private subscriptionService: SubscriptionService,
+    private diseaseCategoryService: DiseaseCategoryService
   ) { }
 
 
@@ -90,7 +93,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
                 this.getFieldInfected(routerParams['id'])
                 this.isLoading = false
               })
-          this.subscriptionService.add(getOneEstate);    
+          this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
@@ -103,7 +106,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
           this.fieldInfecteds = Response
         }
       )
-      this.subscriptionService.add(getFieldInfected);
+    this.subscriptionService.add(getFieldInfected);
 
   }
 
@@ -112,10 +115,10 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.allField = Response
-          this.filteredFields = this.allField.filter(x => x.estateId == this.sharedService.estateId && x.isActive == true && !x.fieldStatus.toLowerCase().includes("conversion to other crop"))
+          this.filteredFields = this.allField.filter(x => x.estateId == this.sharedService.estateId && x.isActive == true && !x.fieldStatus?.toLowerCase().includes("conversion to other crop"))
         }
       )
-      this.subscriptionService.add(getField);
+    this.subscriptionService.add(getField);
 
   }
 
@@ -127,26 +130,26 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
           this.filterFieldDisease = disease.filter(x => x.isActive == true)
         }
       )
-      this.subscriptionService.add(getFieldDisease);
+    this.subscriptionService.add(getFieldDisease);
 
   }
 
-  getDiseaseCategory(){
+  getDiseaseCategory() {
     this.diseaseCategoryService.getDiseaseCategory()
-    .subscribe(
-      Response =>{
-        this.diseaseCategory = Response
-      }
-    )
+      .subscribe(
+        Response => {
+          this.diseaseCategory = Response
+        }
+      )
   }
 
-  getDiseaseName(){
+  getDiseaseName() {
     this.fieldDiseaseService.getFieldDisease()
-    .subscribe(
-      Response =>{
-        this.diseaseName = Response.filter(y=>y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          this.diseaseName = Response.filter(y => y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
+        }
+      )
   }
 
   toggleField(event: any) {
@@ -191,13 +194,13 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
             });
           }
         });
-        this.isSubmit = false;
-      }
+      this.isSubmit = false;
+    }
   }
 
   selectedFieldName(fieldId: any) {
     const fieldIdSelected = this.filteredFields.find(x => x.id == fieldId.value)
-    this.fieldInfected.area = fieldIdSelected?.area
+    this.fieldInfected.area = fieldIdSelected?.rubberArea
   }
 
   toggleSort(columnName: string) {
@@ -248,22 +251,76 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  validateArea(){
-    if(this.fieldInfected.areaInfected > this.fieldInfected.area)
-      {
-        swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Please insert infected area less than field area',
-        });
-        this.fieldInfected.areaInfected = null
-      }
+  validateArea() {
+    if (this.fieldInfected.areaInfected > this.fieldInfected.area) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert infected area less than field area',
+      });
+      this.fieldInfected.areaInfected = null
+    }
   }
 
 
-  calculateArea(){
+  calculateArea() {
     const areaInfected = this.fieldInfected.area * (this.fieldInfected.areaInfectedPercentage / 100)
     return this.fieldInfected.areaInfected = areaInfected.toFixed(2)
   }
-  
+
+  validatePercentage() {
+    switch (this.fieldInfected.severityLevel) {
+      case 'HIGH':
+        this.validateHigh();
+        break;
+      case 'MEDIUM':
+        this.validateMedium();
+        break;
+      case 'LOW':
+        this.validateLow();
+        break;
+      default:
+        break;
+    }
+  }
+
+  validateHigh() {
+    const percentage = this.fieldInfected.areaInfectedPercentage;
+    if (percentage < 50) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Percentage should be greater than 50% for HIGH severity level.'
+      });
+      this.fieldInfected.areaInfectedPercentage = null
+    }
+  }
+
+  validateMedium() {
+    const percentage = this.fieldInfected.areaInfectedPercentage;
+    if (percentage < 21 || percentage > 49) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Percentage should be between 16% and 49% for MEDIUM severity level.'
+      });
+      this.fieldInfected.areaInfectedPercentage = null
+
+    }
+
+  }
+
+  validateLow() {
+    const percentage = this.fieldInfected.areaInfectedPercentage;
+    if (percentage < 1 || percentage > 20) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Percentage should be between 1% and 15% for LOW severity level.'
+      });
+      this.fieldInfected.areaInfectedPercentage = null
+
+    }
+  }
+
 }

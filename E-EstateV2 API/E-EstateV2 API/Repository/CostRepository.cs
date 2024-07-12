@@ -43,13 +43,22 @@ namespace E_EstateV2_API.Repository
 
         public async Task<List<DTO_Cost>> GetCostCategoryM()
         {
-            var costCat = await _context.costs.Where(x => x.isActive == true && x.isMature == true).Select(x => new DTO_Cost
-            {
-                costCategoryId = _context.costCategories.Where(y => y.Id == x.costCategoryId).Select(y => y.Id).FirstOrDefault(),
-                costCategory = _context.costCategories.Where(y => y.Id == x.costCategoryId).Select(y => y.costCategory).FirstOrDefault(),
-            }).Distinct().ToListAsync();
+            var costCat = await _context.costs
+                .Where(x => x.isActive == true && x.isMature == true)
+                .GroupBy(x => x.costCategoryId)
+                .Select(g => new DTO_Cost
+                {
+                    costCategoryId = g.Key,
+                    costCategory = _context.costCategories
+                        .Where(y => y.Id == g.Key)
+                        .Select(y => y.costCategory)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+
             return costCat;
         }
+
 
         public async Task<List<DTO_Cost>> GetCostSubCategoryM()
         {

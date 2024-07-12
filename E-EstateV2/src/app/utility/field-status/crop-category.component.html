@@ -41,8 +41,8 @@
     </tr>
 
     <tr
-      *ngFor="let crop of cropCategories | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
-      <td>{{ i + 1 }}</td>
+      *ngFor="let crop of cropCategories | filter : term | paginate: { itemsPerPage: itemsPerPageStatus, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPageStatus + i + 1 }}</td>
       <td>{{ crop.isMature == true ? "MATURE" : "IMMATURE" }}</td>
       <td>{{ crop.fieldStatus }}</td>
       <td>

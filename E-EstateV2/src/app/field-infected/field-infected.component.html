@@ -21,7 +21,7 @@
         </mat-select>
       </div>
 
-      <label>Area (Ha) : </label>
+      <label>Rubber Area (Ha) : </label>
       <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled />
     </div>
 
@@ -30,9 +30,9 @@
       <input type="date" name="date" [(ngModel)]="fieldInfected.dateScreening" />
       <label>Level Infected :</label>
       <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel">
-        <mat-option value="HIGH">HIGH</mat-option>
-        <mat-option value="MEDIUM">MEDIUM</mat-option>
-        <mat-option value="LOW">LOW</mat-option>
+        <mat-option value="HIGH">HIGH (>50%)</mat-option>
+        <mat-option value="MEDIUM">MEDIUM (16%-49%)</mat-option>
+        <mat-option value="LOW">LOW (1%-15%)</mat-option>
       </mat-select>
     </div>
 
@@ -58,7 +58,8 @@
 
     <div style="columns: 2" class="column">
       <label>Area Infected Percentage (%) : </label>
-      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" />
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" 
+      (blur)="validatePercentage()" />
       <label>Area Infected (Ha) : </label>
       <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled/>
     </div>
@@ -104,12 +105,13 @@
       </tr>
 
       <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
-        <td colspan="12" style="color: red;"><b>No Field Infected</b></td>
+        <td colspan="12" style="color: red;">No Field Infected</td>
       </tr>
 
       <tbody
-        *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
         <tr class="list" style="cursor: default;">
+          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
           <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
           <td style="cursor: pointer;">{{field.fieldName}}</td>
           <td>{{ field.area }}</td>

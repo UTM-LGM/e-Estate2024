@@ -15,6 +15,7 @@ namespace E_EstateV2_API.Models
 
         [ForeignKey("FieldId")]
         public int fieldId { get; set; }
+        //Navigation properties
         public Field Field { get; set; }
 
         [ForeignKey("CloneId")]

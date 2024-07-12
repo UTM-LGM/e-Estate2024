@@ -17,17 +17,17 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
 
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
     <label>End Month Year : </label>
-    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''" />
 
   </div>
- 
+
   <!-- <button [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}"
    class="btn-reset" (click)="reset()">Reset Filter</button> -->
 
@@ -40,38 +40,58 @@
     <label>Estate : </label>
     <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
       <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
-        {{estate.name}}
+        {{estate.name + ', ' + estate.add1}}
       </mat-option>
     </mat-select>
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
     <label>End Month Year : </label>
-    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''" />
 
   </div>
 
   <div style="columns: 3;"
     [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
     <label>Estate : </label>
-    <input type="text" [value]="estate.name" disabled />
-    
+    <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
+
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
     <label>End Month Year : </label>
-    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''" />
   </div>
 
   <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
-    <button class="btn-add" (click)="exportToExcelYear(costInformations, 'Cost Information Report')">
+    <button class="btn-add" (click)="exportToExcelYear(filteredCostInformation, 'Cost Information Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
-    </button>    
-  </div><br/><br/>
+    </button>
+  </div><br /><br />
+
+  <div *ngIf="radioButton">
+    <label>Cost Type : </label>
+    <label>
+      <input type="radio" name="choice" value="all" [(ngModel)]="costType" (change)="OnRadioChange()"> All
+    </label>
+    <label>
+      <input type="radio" name="choice" value="mature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct Mature
+      Cost
+    </label>
+    <label>
+      <input type="radio" name="choice" value="immature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct
+      Immature Cost
+    </label>
+    <label>
+      <input type="radio" name="choice" value="indirect" [(ngModel)]="costType" (change)="OnRadioChange()"> Indirect
+      Cost
+    </label>
+  </div>
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">
       <tr>
-        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="costInformations"
-          [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col"
+          [appSort]="filteredCostInformation" [attr.data-order]="order" [attr.data-name]="column.columnName"
+          (click)="toggleSort(column.columnName)">
           {{ column.displayText }}
           <i class="fa"
             [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
@@ -86,22 +106,25 @@
         </td>
       </tr>
 
-      <tr *ngIf="!isLoading && costInformations.length == 0 && role == 'Admin'">
-        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose company and estate
+      <tr *ngIf="!isLoading && filteredCostInformation.length == 0 && role == 'Admin'">
+        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose company, estate, start and
+          end month year
         </td>
       </tr>
 
-      <tr *ngIf="!isLoading && costInformations.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose estate, and year</td>
+      <tr *ngIf="!isLoading && filteredCostInformation.length == 0 && role == 'CompanyAdmin'">
+        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose estate, start and end month
+          year</td>
       </tr>
 
-      <tr *ngIf="!isLoading && costInformations.length == 0 && role == 'EstateClerk'">
-        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose year</td>
+      <tr *ngIf="!isLoading && filteredCostInformation.length == 0 && role == 'EstateClerk'">
+        <td colspan="7" style="color: red; text-align: center;">No data found. Please choose start and end month year
+        </td>
       </tr>
 
       <ng-container *ngIf="!isLoading && !showAll">
         <tr
-          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
+          *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
           <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
@@ -111,7 +134,7 @@
           <td>{{ cost.amount }}</td>
         </tr>
 
-        <tr *ngIf="costInformations.length > 0">
+        <tr *ngIf="filteredCostInformation.length > 0">
           <th colspan="6" style="font-weight: bold;">Total Cost</th>
           <th>{{ totalAmount }}</th>
         </tr>
@@ -119,7 +142,7 @@
 
       <ng-container *ngIf="!isLoading && showAll">
         <tr
-          *ngFor="let cost of costInformations | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
+          *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
           <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
@@ -129,7 +152,7 @@
           <td>{{ cost.totalAmount }}</td>
         </tr>
 
-        <tr *ngIf="costInformations.length > 0">
+        <tr *ngIf="filteredCostInformation.length > 0">
           <th colspan="6" style="font-weight: bold;">Total Cost</th>
           <th>{{ totalAmount }}</th>
         </tr>
@@ -138,5 +161,5 @@
 
     </table>
   </div>
-<pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  <!-- <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls> -->
 </div>

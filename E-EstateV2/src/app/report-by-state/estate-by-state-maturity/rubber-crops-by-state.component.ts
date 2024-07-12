@@ -98,8 +98,8 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
 
                       estate.fields.forEach((field: any) => {
                         if (field.isActive) {
-                          totalAreas[field.fieldStatus.toLowerCase()] += field.rubberArea;
-                          if (field.fieldStatus.toLowerCase().includes('abandoned')) {
+                          totalAreas[field.fieldStatus?.toLowerCase()] += field.rubberArea;
+                          if (field.fieldStatus?.toLowerCase().includes('abandoned')) {
                             totalAreas['abandoned'] += field.rubberArea;
                           }
                         }
@@ -190,5 +190,25 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  calculateNewPlanting(){
+    return this.stateTotalsArray.reduce((total, item) => total + item.totalNewPlantingArea, 0)
+  }
+
+  calculateReplanting(){
+    return this.stateTotalsArray.reduce((total, item) => total + item.totalReplantingArea, 0)
+  }
+
+  calculateTappedArea(){
+    return this.stateTotalsArray.reduce((total, item) => total + item.totalTappedArea, 0)
+  }
+
+  calculateAbandonedArea(){
+    return this.stateTotalsArray.reduce((total, item) => total + item.totalAbandonedArea, 0)
+  }
+
+  calculateTotal(){
+    return this.calculateNewPlanting() + this.calculateReplanting() + this.calculateTappedArea()
+   }
 
 }

@@ -143,21 +143,31 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   checkUsername(event: any) {
-    this.userService.checkUsername(event.target.value.toString())
-      .subscribe(
-        {
-          next: (Response: any) => {
-            this.username = Response
-          },
-          error: (Error) => {
-            swal.fire({
-              icon: 'error',
-              title: 'Error ! ' + Error.error + ' !',
-            });
-            this.register.userName = ''
+    const username = event.target.value.toString();
+  
+    if (username.includes(' ')) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error! Username cannot contain spaces!',
+      });
+      this.register.userName = '';
+    } else {
+      this.userService.checkUsername(username)
+        .subscribe(
+          {
+            next: (response: any) => {
+              this.username = response;
+            },
+            error: (error) => {
+              swal.fire({
+                icon: 'error',
+                title: 'Error! ' + error.error + '!',
+              });
+              this.register.userName = '';
+            }
           }
-        }
-      )
+        );
+    }
   }
 
 

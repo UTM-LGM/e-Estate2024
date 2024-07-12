@@ -9,15 +9,18 @@
 
   <div style="columns: 2">
     <label>Buyer <span style="color: red;">*</span> :</label>
-    <mat-select name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId">
+    <div *ngIf="buyers.length == 0" >
+    <span style="color: red; font-size: 11px;">**Please add buyer in utilities</span>
+    </div>
+    <mat-select *ngIf="buyers.length > 0" name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId">
       <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
         {{buyer.buyerName}}
       </mat-option>
     </mat-select>
     <label>Rubber Type <span style="color: red;">*</span> :</label>
     <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType">
-      <mat-option value="CUPLUMP">CUPLUMP</mat-option>
-      <mat-option value="LATEX">LATEX</mat-option>
+      <mat-option value="CUPLUMP">CUPLUMP (45% - 80%)</mat-option>
+      <mat-option value="LATEX">LATEX (20% - 55%)</mat-option>
     </mat-select>
   </div>
 
@@ -26,7 +29,7 @@
     <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00"
       (input)="calculateTotalPrice()" />
     <label>Estimated DRC (%) <span style="color: red;">*</span> :</label>
-    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" />
+    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)" />
   </div><br/>
 
   <div [style.columns]="deliveryAgent === 'yes' ? '2' : '1'">
@@ -52,10 +55,7 @@
     <input type="text" name="plateNo" [(ngModel)]="rubberSale.transportPlateNo" />
     <label>Driver Name <span style="color: red;">*</span> :</label>
     <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" />
-    
   </div>
-
-  
 
   <!-- <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
@@ -68,7 +68,7 @@
 
   <div style="columns:2">
     <label>Driver Ic Number <span style="color: red;">*</span> :</label>
-    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverIc" />
+    <input type="text" name="driverName" placeholder="xxxxxx-xx-xxxx" [(ngModel)]="rubberSale.driverIc" (change)="validateDriverIc(rubberSale.driverIc)"/>
   </div>
 
   <div>

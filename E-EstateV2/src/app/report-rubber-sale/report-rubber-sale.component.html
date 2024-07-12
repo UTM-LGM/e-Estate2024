@@ -5,7 +5,7 @@
     <div style="columns: 3;"
       [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
       <label>Estate : </label>
-      <input type="text" [value]="estate.name" disabled />
+      <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
       
       <label>Start Month Year : </label>
       <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
@@ -42,7 +42,7 @@
           </tr>
   
           <tr *ngIf="filterSales.length == 0 && !isLoading">
-            <td colspan="18" style="color: red;">No data found, Please choose start and end month year</td>
+            <td colspan="18" style="color: red;">No data found. Please choose start and end month year</td>
           </tr>
   
           <ng-container *ngIf="!isLoading">

@@ -29,7 +29,7 @@ import { FieldGrant } from '../_interface/fieldGrant';
   templateUrl: './field-detail.component.html',
   styleUrls: ['./field-detail.component.css'],
 })
-export class FieldDetailComponent implements OnInit,OnDestroy {
+export class FieldDetailComponent implements OnInit, OnDestroy {
   field: Field = {} as Field
   filteredFields: any = {}
 
@@ -45,11 +45,11 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   fieldStatus: FieldStatus[] = []
   filterFieldStatus: FieldStatus[] = []
 
-  fieldClones: Clone[] = []
+  fieldClones: FieldClone[] = []
   availableClones: Clone[] = []
   clones: Clone[] = []
   filterClones: Clone[] = []
-  selectedValues: Clone[] = []
+  selectedValues: FieldClone[] = []
 
   filterFieldDisease: FieldDisease[] = []
 
@@ -76,7 +76,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
 
   otherCrops: OtherCrop[] = []
 
-  fieldGrants:FieldGrant []=[]
+  fieldGrants: FieldGrant[] = []
   fieldGrant = {} as FieldGrant
 
   sortableColumn = [
@@ -103,14 +103,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     private fieldDiseaseService: FieldDiseaseService,
     private fieldInfectedService: FieldInfectedService,
     private otherCropService: OtherCropService,
-    private subscriptionService:SubscriptionService,
-    private fieldGrantService:FieldGrantService
+    private subscriptionService: SubscriptionService,
+    private fieldGrantService: FieldGrantService
   ) { }
 
   ngOnInit() {
     this.onInit = true
     this.getOneField()
-    this.getClone()
     this.getFieldDisease()
     this.getField()
     this.getOtherCrop()
@@ -123,7 +122,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
           this.otherCrops = Response.filter(x => x.isActive == true)
         }
       )
-      this.subscriptionService.add(getOtherCrop);
+    this.subscriptionService.add(getOtherCrop);
   }
 
   getOneField() {
@@ -134,18 +133,18 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
             Response => {
               this.field = Response
               this.getGrant()
-              if(this.field.rubberArea == this.field.area){
+              this.getClone()
+
+              if (this.field.rubberArea == this.field.area) {
                 this.rubberArea = 'yes'
               }
-              else{
+              else {
                 this.rubberArea = 'no'
               }
               this.isLoading = false
               this.getcategory(this.field)
-              this.field.cloneId = 0;
-              this.fieldClones = Response.clones
-              this.selectedValues = this.fieldClones
-              this.availableClones = this.filterClones.filter(clone => !this.selectedValues.some(selectedClone => selectedClone.id === clone.id))
+              this.field.cloneId = null;
+              this.fieldClones = Response.fieldClones
               this.getDate(Response.dateOpenTapping)
               this.getFieldInfected()
             });
@@ -160,15 +159,18 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
       .subscribe(
         Response => {
           this.filterFieldInfected = Response
-          const inActiveInfection = this.filterFieldInfected.filter(x=>x.isActive == false)
-          if (this.filterFieldInfected.length > 0 && inActiveInfection.length == 0) {
+          const inActiveInfection = this.filterFieldInfected.filter(x => x.isActive == false)
+          const activeInfection = this.filterFieldInfected.filter(x => x.isActive == true)
+          if (this.filterFieldInfected.length > 0) {
             this.fieldInfectedStatus = true
-          }else if(this.filterFieldInfected.length > 0){
             this.fieldInfecteds = true
+            if (inActiveInfection.length > 0 && activeInfection.length == 0) {
+              this.fieldInfectedStatus = false
+            }
           }
         }
       )
-      this.subscriptionService.add(getFieldInfected);
+    this.subscriptionService.add(getFieldInfected);
 
   }
 
@@ -180,13 +182,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
           this.fields = fields.filter(x => x.estateId == this.sharedService.estateId)
         }
       )
-      this.subscriptionService.add(getField);
+    this.subscriptionService.add(getField);
 
   }
 
   checkFieldStatus() {
-    const conversionField = this.field.fieldStatuses.map(x => x.fieldStatus.toLowerCase().includes("conversion"))
-    const convert = this.filterFieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion"))
+    const conversionField = this.field.fieldStatuses.map(x => x.fieldStatus?.toLowerCase().includes("conversion"))
+    const convert = this.filterFieldStatus.find(x => x.fieldStatus?.toLowerCase().includes("conversion"))
     if (this.field.conversionId != 0 && this.field.fieldStatusId == convert?.id && conversionField) {
       this.conversion = true
       this.updateConversionBtn = true
@@ -216,35 +218,87 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
             this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == this.field.isMature && c.isActive == true)
           }
         });
-      this.subscriptionService.add(getFieldStatus);
+    this.subscriptionService.add(getFieldStatus);
+  }
+
+  checkDOT() {
+    if (this.field.yearPlanted && this.field.dateOpenTappingFormatted) {
+      const yearPlanted = this.field.yearPlanted;
+      const dateOpenTappingYear = new Date(this.field.dateOpenTappingFormatted).getFullYear();
+
+      if (dateOpenTappingYear < parseInt(yearPlanted) + 5) {
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Date Open Tapping cannot be 5 year less than Year Planted',
+        });
+        this.field.dateOpenTappingFormatted = ''; // Resetting the dateOpenTapping field
+      }
+    }
   }
 
   updateField(field: Field) {
-    field.updatedBy = this.sharedService.userId.toString()
-    field.updatedDate = new Date()
-    if(field.dateOpenTappingFormatted){
-      field.dateOpenTapping = this.convertToDateTime(field.dateOpenTappingFormatted);
+    if (field.rubberArea == null || (field.remark == null && this.rubberArea == 'no')) {
+      swal.fire({
+        text: 'Please fill up the form',
+        icon: 'error'
+      });
+    } else {
+      // Prepare updated field object
+      const updatedField: Field = {
+        ...field, // Copy existing field properties
+        updatedBy: this.sharedService.userId.toString(),
+        updatedDate: new Date()
+      };
+  
+      // Handle dateOpenTappingFormatted and isMature logic
+      if (updatedField.dateOpenTappingFormatted) {
+        updatedField.dateOpenTapping = this.convertToDateTime(updatedField.dateOpenTappingFormatted);
+      } else if (updatedField.isMature === false) {
+        updatedField.dateOpenTapping = null;
+      }
+  
+      // Prepare updated clones
+      const updatedClones: any[] = this.fieldClones.map(clone => ({
+        ...clone,
+        isActive: true, // Set isActive as needed based on your logic
+        createdBy: this.sharedService.userId.toString(),
+        createdDate: new Date(),
+        fieldId: field.id // Assuming field.id is the identifier of the main field
+      }));
+  
+      // Prepare updated grants
+      const updatedGrants: any[] = this.fieldGrants.map(grant => ({
+        ...grant,
+        isActive: true, // Set isActive as needed based on your logic
+        createdBy: this.sharedService.userId.toString(),
+        createdDate: new Date(),
+        fieldId: field.id // Assuming field.id is the identifier of the main field
+      }));
+  
+      // Perform the update operation
+      this.fieldService.updateFieldWithDetails(updatedField, updatedClones, updatedGrants)
+        .subscribe(
+          () => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Field successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.ngOnInit(); // Refresh data as needed
+          },
+          error => {
+            swal.fire({
+              text: 'Error updating field',
+              icon: 'error'
+            });
+          }
+        );
     }
-    else{
-      // this.field.dateOpenTappingFormatted = null
-    }
-    const { fieldStatus, ...newFields } = this.field
-    this.filteredFields = newFields
-    // console.log(this.filteredFields)
-    this.fieldService.updateField(this.filteredFields)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Field successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.ngOnInit()
-        });
-
   }
+  
 
   convertToDateTime(monthYear: string): string {
     // monthYear is in the format YYYY-MM
@@ -252,7 +306,13 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     // Set the date to the first day of the selected month, time to midnight
     const date = new Date(year, month, 1, 0, 0, 0); // Adjust month without -1
     return date.toISOString(); // Convert to ISO string or any other desired format
-}
+  }
+
+  rubberAreaInput() {
+    if (this.rubberArea == "yes") {
+      this.field.rubberArea = this.field.area
+    }
+  }
 
 
   updateConversion(field: Field) {
@@ -289,18 +349,25 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
         Response => {
           this.clones = Response
           this.filterClones = this.clones.filter((e) => e.isActive == true)
+          this.updateAvailableClones();
         });
-      this.subscriptionService.add(getClone);
-
+    this.subscriptionService.add(getClone);
   }
 
-  getGrant(){
+  updateAvailableClones() {
+    // Filter out clones that are already selected (fieldClones)
+    this.availableClones = this.filterClones.filter(clone =>
+      !this.fieldClones.some(selectedClone => selectedClone.cloneId === clone.id)
+    );
+  }
+
+  getGrant() {
     const getGrant = this.fieldGrantService.getFieldGrantByFieldId(this.field.id)
-    .subscribe(
-      Response =>{
-        this.fieldGrants = Response
-      }
-    )
+      .subscribe(
+        Response => {
+          this.fieldGrants = Response.filter(g=>g.isActive == true)
+        }
+      )
     this.subscriptionService.add(getGrant);
 
   }
@@ -326,36 +393,52 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
   }
 
   addClone(field: Field) {
-    if (this.field.cloneId == 0) {
+    if (!field.cloneId) {
       swal.fire({
-        text: 'Please choose clone',
+        text: 'Please choose a clone',
         icon: 'error'
       });
-    } else {
-      this.fieldClone.fieldId = field.id
-      this.fieldClone.cloneId = field.cloneId
-      this.fieldClone.isActive = true
-      this.fieldClone.createdBy = this.sharedService.userId.toString()
-      this.fieldClone.createdDate = new Date()
-      this.fieldService.addClone(this.fieldClone)
-        .subscribe(
-          Response => {
-            swal.fire({
-              title: 'Done!',
-              text: 'Clone successfully added!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.ngOnInit()
-          }
-        )
+      return; // Exit early if cloneId is not selected
+    }
+
+    // Find the selected clone object from availableClones based on cloneId
+    const selectedClone = this.availableClones.find(clone => clone.id === field.cloneId);
+
+    if (selectedClone) {
+      // Create a new clone object
+      const newClone: any = {
+        id: 0,  // This will be assigned by the backend when saved
+        cloneId: selectedClone.id,
+        cloneName: selectedClone.cloneName,
+        fieldId: field.id, // Assuming field.id is the current field's ID
+        isActive: true, // Set default values as needed
+        createdBy: this.sharedService.userId.toString(),
+        createdDate: new Date()
+      };
+
+      // Add the new clone object to the fieldClones array
+      this.fieldClones.push(newClone);
+
+      // Optionally, clear or reset the field.cloneId if needed
+      field.cloneId = null;
+      this.availableClones = this.availableClones.filter(clone => clone.id !== selectedClone.id);
+
+
+      swal.fire({
+        title: 'Done!',
+        text: 'Clone successfully added!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1000
+      });
     }
   }
 
+
+
   changeFieldStatus(fieldStatusId: any) {
     this.checkDisease(fieldStatusId)
-    const conversionItem = this.filterFieldStatus.find(x => x.fieldStatus.toLowerCase().includes("conversion") && !x.fieldStatus.toLowerCase().includes("rubber"))
+    const conversionItem = this.filterFieldStatus.find(x => x.fieldStatus?.toLowerCase().includes("conversion") && !x.fieldStatus?.toLowerCase().includes("rubber"))
     if (fieldStatusId.value == conversionItem?.id && this.field.conversionId == 0) {
       this.conversion = true
       this.conversionButton = true
@@ -373,7 +456,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
 
   checkDisease(fieldStatusId: any) {
     if (this.field.isMature == true) {
-      const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == true);
+      const infected = this.fieldStatus.find(x => x.fieldStatus?.toLowerCase().includes("infected") && x.isMature == true);
       if (fieldStatusId.value == infected?.id) {
         this.fieldSick = true
       }
@@ -382,7 +465,7 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
       }
     }
     else if (this.field.isMature == false) {
-      const infected = this.fieldStatus.find(x => x.fieldStatus.toLowerCase().includes("infected") && x.isMature == false);
+      const infected = this.fieldStatus.find(x => x.fieldStatus?.toLowerCase().includes("infected") && x.isMature == false);
       if (fieldStatusId.value == infected?.id) {
         this.fieldSick = true
       }
@@ -392,63 +475,84 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     }
   }
 
-  delete(cloneId: number, fieldId: number) {
-    {
-      swal.fire({
-        title: "Are you sure to delete ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        denyButtonText: 'Cancel'
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.fieldService.deleteClone(cloneId, fieldId)
-              .subscribe(
-                Response => {
-                  swal.fire({
-                    title: 'Deleted!',
-                    text: 'Clone has been deleted!',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 1000
-                  });
-                  this.ngOnInit()
-                }
-              )
-          } else if (result.isDenied) {
-          }
-        });
-    }
+  delete(index: number) {
+    // {
+    //   swal.fire({
+    //     title: "Are you sure to delete ?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonText: 'Yes',
+    //     denyButtonText: 'Cancel'
+    //   })
+    //     .then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.fieldService.deleteClone(cloneId, fieldId)
+    //           .subscribe(
+    //             Response => {
+    //               swal.fire({
+    //                 title: 'Deleted!',
+    //                 text: 'Clone has been deleted!',
+    //                 icon: 'success',
+    //                 showConfirmButton: false,
+    //                 timer: 1000
+    //               });
+    //               this.ngOnInit()
+    //             }
+    //           )
+    //       } else if (result.isDenied) {
+    //       }
+    //     });
+    // }
+
+    this.selectedValues.splice(index, 1)
+    this.updateAvailableClones();
+
+    swal.fire({
+      title: 'Deleted!',
+      text: 'Clone has been deleted!',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000
+    });
+
   }
 
-  deleteGrant(grantId:number){
-    {
-      swal.fire({
-        title: "Are you sure to delete ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        denyButtonText: 'Cancel'
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            this.fieldGrantService.deleteGrant(grantId)
-            .subscribe(
-              Response =>{
-                swal.fire({
-                  title: 'Deleted!',
-                  text: 'Grant has been deleted!',
-                  icon: 'success',
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-                this.ngOnInit()
-              })
-          } else if (result.isDenied) {
-          }
-        });
-    }
+  deleteGrant(index: number) {
+    // {
+    //   swal.fire({
+    //     title: "Are you sure to delete ?",
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonText: 'Yes',
+    //     denyButtonText: 'Cancel'
+    //   })
+    //     .then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.fieldGrantService.deleteGrant(grantId)
+    //           .subscribe(
+    //             Response => {
+    //               swal.fire({
+    //                 title: 'Deleted!',
+    //                 text: 'Grant has been deleted!',
+    //                 icon: 'success',
+    //                 showConfirmButton: false,
+    //                 timer: 1000
+    //               });
+    //               this.ngOnInit()
+    //             })
+    //       } else if (result.isDenied) {
+    //       }
+    //     });
+    // }
+
+    this.fieldGrants.splice(index, 1)
+    swal.fire({
+      title: 'Deleted!',
+      text: 'Grant has been deleted!',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000
+    });
   }
 
   back() {
@@ -501,8 +605,8 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
           this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
         }
       )
-      this.subscriptionService.add(getFieldDisease);
-    
+    this.subscriptionService.add(getFieldDisease);
+
   }
 
   fieldInfected(field: Field) {
@@ -536,8 +640,8 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  areaRemark(){
-    if(this.field.rubberArea != null && this.field.rubberArea > this.field.area ){
+  areaRemark() {
+    if (this.field.rubberArea != null && this.field.rubberArea > this.field.area) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -551,34 +655,71 @@ export class FieldDetailComponent implements OnInit,OnDestroy {
     if (this.rubberArea === 'yes') {
       this.field.rubberArea = this.field.area;
     }
-    else{
+    else {
       this.field.rubberArea = null
     }
   }
 
-  addGrant(fieldGrant:FieldGrant){
-    if (fieldGrant.grantTitle == '') {
+  addGrant(fieldGrant: FieldGrant) {
+    if (fieldGrant.grantRubberArea == null) {
       swal.fire({
-        text: 'Please insert grant',
+        text: 'Please insert grant title',
         icon: 'error'
       });
     } else {
-      fieldGrant.fieldId = this.field.id
-      fieldGrant.createdBy = this.sharedService.userId.toString()
-      fieldGrant.createdDate = new Date()
-      this.fieldGrantService.addFieldGrant(fieldGrant)
-      .subscribe(
-        Response =>{
-          swal.fire({
-            title: 'Done!',
-            text: 'Grant successfully added!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.ngOnInit()
-        }
-      )
+      const totalGrantRubberArea = this.fieldGrants.reduce((sum, grant) => {
+        // Ensure grantRubberArea is a number before adding to sum
+        const area = grant.grantRubberArea || 0; // Use 0 if grantRubberArea is null or undefined
+        return sum + area;
+      }, 0);
+
+      if (this.field.rubberArea != null && totalGrantRubberArea + fieldGrant.grantRubberArea > this.field.rubberArea) {
+        swal.fire({
+          text: 'Total Rubber Area for grants exceeds the Rubber Area',
+          icon: 'error'
+        });
+      }
+      else {
+        const newGrant: any = {
+          id: 0,  // This will be assigned by the backend when saved
+          grantTitle: fieldGrant.grantTitle,
+          grantArea: fieldGrant.grantArea,
+          grantRubberArea: fieldGrant.grantRubberArea, // Assuming field.id is the current field's ID
+          isActive: true, // Set default values as needed
+          createdBy: this.sharedService.userId.toString(),
+          createdDate: new Date()
+        };
+        this.fieldGrants.push(newGrant)
+        swal.fire({
+          title: 'Done!',
+          text: 'Grant successfully added!',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000
+        });
+        this.fieldGrant.grantTitle = ''
+        this.fieldGrant.grantArea = null
+        this.fieldGrant.grantRubberArea = null
+      }
+      //   fieldGrant.fieldId = this.field.id
+      //   fieldGrant.createdBy = this.sharedService.userId.toString()
+      //   fieldGrant.createdDate = new Date()
+      //   this.fieldGrantService.addFieldGrant(fieldGrant)
+      //     .subscribe(
+      //       Response => {
+      //         swal.fire({
+      //           title: 'Done!',
+      //           text: 'Grant successfully added!',
+      //           icon: 'success',
+      //           showConfirmButton: false,
+      //           timer: 1000
+      //         });
+      //         this.ngOnInit()
+      //         this.fieldGrant.grantTitle = ''
+      //         this.fieldGrant.grantArea = null
+      //         this.fieldGrant.grantRubberArea = null
+      //       }
+      //     )
     }
   }
 

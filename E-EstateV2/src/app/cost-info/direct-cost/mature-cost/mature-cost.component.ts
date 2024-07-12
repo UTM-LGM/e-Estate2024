@@ -91,7 +91,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
         Response => {
           this.matureDirectCostAmount = Response
           this.filterMatureDirectCostAmount = this.matureDirectCostAmount.filter(x => x.monthYear === this.matureMonthYear
-            && x.costTypeId == this.costTypeId && x.isMature === true)
+            && x.costTypeId == this.costTypeId && x.isMature === true && x.estateId == this.sharedService.estateId)
           this.draftFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount
             .filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }));

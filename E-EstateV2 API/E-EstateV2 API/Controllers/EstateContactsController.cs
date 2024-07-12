@@ -1,4 +1,5 @@
-﻿using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.Data;
+using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,14 @@ namespace E_EstateV2_API.Controllers
     public class EstateContactsController : ControllerBase
     {
         private readonly IGenericRepository<EstateContact> _genericRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly IEstateContactHistoryRepository _estateHistoryRepository;
 
-        public EstateContactsController(IGenericRepository<EstateContact> genericRepository)
+        public EstateContactsController(IGenericRepository<EstateContact> genericRepository, ApplicationDbContext context, IEstateContactHistoryRepository historyRepository)
         {
             _genericRepository = genericRepository;
+            _context = context;
+            _estateHistoryRepository = historyRepository;
         }
 
         [HttpGet]
@@ -35,10 +40,53 @@ namespace E_EstateV2_API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateEstateContact([FromBody] EstateContact contact)
         {
-            contact.updatedDate = DateTime.Now;
-            var updatedEstateContact = await _genericRepository.Update(contact);
-            return Ok(updatedEstateContact);
+            try
+            {
+                contact.updatedDate = DateTime.Now;
+
+                // Retrieve the existing EstateContact entity
+                var existingContact = await _context.estateContacts.FindAsync(contact.Id);
+                if (existingContact != null)
+                {
+                    // Create an EstateContactHistory record from the existing entity
+                    var estateContactHistory = new EstateContactHistory
+                    {
+                        estateContactId = existingContact.Id,
+                        name = existingContact.name,
+                        position = existingContact.position,
+                        phoneNo = existingContact.phoneNo,
+                        email = existingContact.email,
+                        isActive = existingContact.isActive,
+                        createdBy = existingContact.createdBy,
+                        createdDate = existingContact.createdDate,
+                        updatedBy = existingContact.updatedBy,
+                        updatedDate = existingContact.updatedDate,
+                        estateId = existingContact.estateId
+                    };
+
+                    // Add the EstateContactHistory record to the database
+                    await _estateHistoryRepository.AddEstateContactHistory(estateContactHistory);
+
+                    // Update the existing EstateContact entity with the new data
+                    _context.Entry(existingContact).CurrentValues.SetValues(contact);
+                    existingContact.updatedDate = DateTime.Now;
+
+                    // Save the changes to the database
+                    await _context.SaveChangesAsync();
+
+                    return Ok(existingContact);
+                }
+                else
+                {
+                    return NotFound();
+                }}
+                catch (Exception ex)
+                {
+                    // Handle exception as per your application's error handling strategy
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error updating estate contact");
+                }
         }
+
 
     }
 

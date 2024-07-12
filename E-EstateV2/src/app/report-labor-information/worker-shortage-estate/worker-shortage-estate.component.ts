@@ -22,6 +22,7 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
   role = ''
   startMonth = ''
   endMonth = ''
+  itemsPerPageShortage = 10
 
   workerShortages: any[] = []
   labors: any[] = [];

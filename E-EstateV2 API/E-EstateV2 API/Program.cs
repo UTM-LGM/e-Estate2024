@@ -67,6 +67,11 @@ builder.Services.AddScoped<ILaborByCategoryRepository, LaborByCategoryRepository
 builder.Services.AddScoped<IRubberSaleIntegrationRepository, RubberSaleIntegrationRepository>();
 builder.Services.AddScoped<IFieldDiseaseRepository, FieldDiseaseRepository>();
 builder.Services.AddScoped<IFieldGrantRepository, FieldGrantRepository>();
+builder.Services.AddScoped<IFieldHistoryRepository, FieldHistoryRepository>();
+builder.Services.AddScoped<IFieldInfectedHistoryRepository, FieldInfectedHistoryRepository>();
+builder.Services.AddScoped<IRubberSaleHistoryRepository, RubberSaleHistoryRepository>();
+builder.Services.AddScoped<IEstateContactHistoryRepository, EstateContactHistoryRepository>();
+builder.Services.AddScoped<ICompanyContactHistoryRepository, CompanyContactHistoryRepository>();
 
 //configure password
 builder.Services.Configure<IdentityOptions>(options =>

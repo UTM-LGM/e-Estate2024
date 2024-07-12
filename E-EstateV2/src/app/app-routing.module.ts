@@ -72,6 +72,7 @@ import { MsalGuard } from '@azure/msal-angular';
 import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
 import { AddFieldComponent } from './add-field/add-field.component';
 import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sale.component';
+import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
@@ -175,7 +176,8 @@ const routes: Routes = [
         children: [
           { path: 'estate-by-state', component: EstateByStateComponent },
           { path: 'rubber-crops-by-state', component:RubberCropsByStateComponent},
-        ]
+          { path: 'state-detail/:id', component:StateDetailComponent}
+        ],
       },
       {
         path: 'report-rubber-area-by-clone',

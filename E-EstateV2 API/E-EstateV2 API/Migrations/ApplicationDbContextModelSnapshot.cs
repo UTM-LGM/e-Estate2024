@@ -273,6 +273,54 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("companyContacts");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyContactHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("companyContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("companyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("companyContactId");
+
+                    b.ToTable("companyContactHistories");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.CompanyDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -779,6 +827,54 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("estateContacts");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateContactHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("estateContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("estateContactId");
+
+                    b.ToTable("estateContactHistories");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.EstateDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -1031,6 +1127,77 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("fieldGrants");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<float>("area")
+                        .HasColumnType("real");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("currentTreeStand")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("dateOpenTapping")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("fieldId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("fieldName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("fieldStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("initialTreeStand")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isMature")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("rubberArea")
+                        .HasColumnType("real");
+
+                    b.Property<int>("totalTask")
+                        .HasColumnType("int");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("yearPlanted")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("fieldId");
+
+                    b.HasIndex("fieldStatusId");
+
+                    b.ToTable("fieldHistories");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>
                 {
                     b.Property<int>("Id")
@@ -1085,6 +1252,67 @@ namespace E_EstateV2_API.Migrations
                     b.HasIndex("fieldId");
 
                     b.ToTable("fieldInfecteds");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldInfectedHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<float>("areaInfected")
+                        .HasColumnType("real");
+
+                    b.Property<int>("areaInfectedPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("dateRecovered")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("dateScreening")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("fieldDiseaseId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("fieldId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("fieldInfectedId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("severityLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("fieldDiseaseId");
+
+                    b.HasIndex("fieldId");
+
+                    b.HasIndex("fieldInfectedId");
+
+                    b.ToTable("fieldInfectedHistories");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfoYearly", b =>
@@ -1697,6 +1925,109 @@ namespace E_EstateV2_API.Migrations
                     b.ToTable("rubberPurchases");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.RubberSaleHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<float>("DRC")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("MSNRStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("buyerDRC")
+                        .HasColumnType("real");
+
+                    b.Property<int>("buyerId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("buyerWetWeight")
+                        .HasColumnType("real");
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("deliveryAgent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("driverIc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("driverName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("letterOfConsentNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("paymentStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("receiptNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("receiptNoDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("rubberSalesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("rubberType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("saleDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("total")
+                        .HasColumnType("real");
+
+                    b.Property<string>("transportPlateNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("unitPrice")
+                        .HasColumnType("real");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("weightSlipNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("weightSlipNoDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("wetWeight")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("buyerId");
+
+                    b.HasIndex("paymentStatusId");
+
+                    b.HasIndex("rubberSalesId");
+
+                    b.ToTable("rubberSaleHistories");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.RubberSales", b =>
                 {
                     b.Property<int>("Id")
@@ -1707,6 +2038,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<float>("DRC")
                         .HasColumnType("real");
+
+                    b.Property<bool>("MSNRStatus")
+                        .HasColumnType("bit");
 
                     b.Property<float>("buyerDRC")
                         .HasColumnType("real");
@@ -2364,6 +2698,17 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Town");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.CompanyContactHistory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.CompanyContact", "CompanyContact")
+                        .WithMany()
+                        .HasForeignKey("companyContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyContact");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.Cost", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.CostCategory", "CostCategory")
@@ -2437,6 +2782,17 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Town");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.EstateContactHistory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.EstateContact", "EstateContact")
+                        .WithMany()
+                        .HasForeignKey("estateContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstateContact");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.EstateDetail", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.PlantingMaterial", "PlantingMaterial")
@@ -2498,6 +2854,23 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("DiseaseCategory");
                 });
 
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldHistory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("fieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.FieldStatus", "FieldStatus")
+                        .WithMany()
+                        .HasForeignKey("fieldStatusId");
+
+                    b.Navigation("Field");
+
+                    b.Navigation("FieldStatus");
+                });
+
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfected", b =>
                 {
                     b.HasOne("E_EstateV2_API.Models.FieldDisease", "FieldDisease")
@@ -2511,6 +2884,29 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("Field");
 
                     b.Navigation("FieldDisease");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldInfectedHistory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.FieldDisease", "FieldDisease")
+                        .WithMany()
+                        .HasForeignKey("fieldDiseaseId");
+
+                    b.HasOne("E_EstateV2_API.Models.Field", "Field")
+                        .WithMany()
+                        .HasForeignKey("fieldId");
+
+                    b.HasOne("E_EstateV2_API.Models.FieldInfected", "FieldInfected")
+                        .WithMany()
+                        .HasForeignKey("fieldInfectedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+
+                    b.Navigation("FieldDisease");
+
+                    b.Navigation("FieldInfected");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldInfoYearly", b =>
@@ -2628,6 +3024,33 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("company");
 
                     b.Navigation("seller");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.RubberSaleHistory", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.Buyer", "buyer")
+                        .WithMany()
+                        .HasForeignKey("buyerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.PaymentStatus", "paymentStatus")
+                        .WithMany()
+                        .HasForeignKey("paymentStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_EstateV2_API.Models.RubberSales", "RubberSales")
+                        .WithMany()
+                        .HasForeignKey("rubberSalesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RubberSales");
+
+                    b.Navigation("buyer");
+
+                    b.Navigation("paymentStatus");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.RubberSales", b =>

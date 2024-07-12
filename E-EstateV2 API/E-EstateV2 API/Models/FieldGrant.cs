@@ -19,5 +19,7 @@ namespace E_EstateV2_API.Models
 
         [ForeignKey("FieldId")]
         public int fieldId { get; set; }
+        public Field Field { get; set; }
+
     }
 }

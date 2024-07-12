@@ -15,7 +15,7 @@ namespace E_EstateV2_API.IRepository
         Task<object> CheckLicenseNo(string licenseNo);
         Task<object> CheckUsername(string username);
         Task<object> ChangePassword(DTO_User user);
-        Task<object> CheckOldPassword(string userId, string oldPassword);
+        Task<bool> CheckOldPassword(string userId, string oldPassword);
         Task<List<DTO_User>> GetAllUsers();
         Task<DTO_User> AddUserRole(DTO_User user);
         Task SendWelcomeEmail(string email);

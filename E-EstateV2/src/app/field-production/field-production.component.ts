@@ -102,7 +102,7 @@ export class FieldProductionComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const filterFields = Response.filter(x => x.estateId == this.estate.id)
-          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus.toLowerCase().includes("conversion"))
+          this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus?.toLowerCase().includes("conversion"))
           this.getProducts(this.filterFields)
           this.getAllProduction(this.filterFields)
         }

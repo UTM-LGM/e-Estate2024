@@ -209,7 +209,7 @@
       <div class="span-word">
         <span style="font-weight: bold;">Latex</span><br />
         <div *ngIf="!isLoadingProduction">
-          <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalLatexDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalCuplumpDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
+          <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalLatexDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalLatexDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
           </span>
         </div>
       </div>
@@ -222,7 +222,7 @@
     <div class="column box-container color2">
       <div class="span-word">
         <span style="font-weight: bold;">Total</span><br />
-        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalCuplumpDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
+        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
         </span>
       </div>
       <div *ngIf="isLoadingProduction">

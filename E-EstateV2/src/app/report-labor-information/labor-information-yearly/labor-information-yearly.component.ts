@@ -395,20 +395,23 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
       Category: labor.laborType,
       Local: labor.localNoOfWorkers,
       Foreign: labor.foreignNoOfWorkers,
-      Total: labor.localNoOfWorkers + labor.foreignNoOfWorkers
+      Total: labor.localNoOfWorkers + labor.foreignNoOfWorkers,
+      LatestMonthYear: this.getEarliestMonthYear()
     }));
   
      // Add local and foreign tapper field worker data
      filteredData.push({
       No: bilCounter++,
       Category: 'TAPPER WORKER',
-      ...this.calculateTotalTapperWorker(localTapperFieldWorker, foreignTapperFieldWorker)
+      ...this.calculateTotalTapperWorker(localTapperFieldWorker, foreignTapperFieldWorker),
+      LatestMonthYear: this.getEarliestMonthYear()
     });
   
     filteredData.push({
       No: bilCounter++,
       Category: 'FIELD WORKER',
-      ...this.calculateTotalFieldWorker(localTapperFieldWorker, foreignTapperFieldWorker)
+      ...this.calculateTotalFieldWorker(localTapperFieldWorker, foreignTapperFieldWorker),
+      LatestMonthYear: this.getEarliestMonthYear()
     });
       
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
@@ -422,4 +425,38 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  getEarliestMonthYear(): string {
+    if (this.labors.length === 0) {
+      return ''; // Return empty string if no data
+    }
+    // Find the earliest/latest monthYear across all labors
+    const earliestMonthYear = this.labors.reduce((earliest, current) => {
+      if (!earliest || current.latestMonthYear < earliest) {
+        return current.latestMonthYear;
+      }
+      return earliest;
+    }, '');
+
+    return earliestMonthYear;
+  }
+
+  calculateLocal(){
+    var category = this.labors.reduce((total, item) => total + item.localNoOfWorkers, 0)
+    var workerTapper = this.localTapperFieldWorker.reduce((total, item) => total + item.tapperWorker, 0)
+    var workerField = this.localTapperFieldWorker.reduce((total, item) => total + item.fieldWorker, 0)
+    return category + workerTapper + workerField
+  }
+
+  calculateForeign(){
+    var category = this.labors.reduce((total, item) => total + item.foreignNoOfWorkers, 0)
+    var workerTapper = this.foreignTapperFieldWorker.reduce((total, item) => total + item.tapperWorker, 0)
+    var workerField = this.foreignTapperFieldWorker.reduce((total, item) => total + item.fieldWorker, 0)
+    return category + workerTapper + workerField
+  }
+
+  calculateTotal(){
+    return this.calculateLocal() + this.calculateForeign()
+  }
+
 }

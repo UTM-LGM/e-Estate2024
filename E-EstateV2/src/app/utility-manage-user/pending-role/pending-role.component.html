@@ -19,18 +19,19 @@
           </thead>
   
           <tr *ngIf="isLoading">
-            <td colspan="8">
+            <td colspan="9">
               <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
               </ngx-skeleton-loader>
             </td>
           </tr>
 
           <tr *ngIf="users.length == 0 && !isLoading">
-            <td colspan="8" style="color: red;">No new user</td>
+            <td colspan="9" style="color: red;">No new user</td>
           </tr>
   
           <tr class="list"
-            *ngFor="let user of users | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }, let i = index">
+            *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }, let i = index">
+            <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
             <td>{{user.fullName}}</td>
             <td>{{user.email}}</td>
             <td>{{result[user.licenseNo]?.companyName}}</td>

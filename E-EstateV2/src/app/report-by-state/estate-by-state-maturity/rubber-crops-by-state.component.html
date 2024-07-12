@@ -57,6 +57,17 @@
           <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea}}</td>
         </tr>
       </ng-container>
+
+      <tr  *ngIf="!isLoading">
+        <th colspan="2">Total rubber area :</th>
+        <th>{{calculateNewPlanting()}}</th>
+        <th>{{calculateReplanting()}}</th>
+        <th>{{calculateTappedArea()}}</th>
+        <th>{{calculateAbandonedArea()}}</th>
+        <th>{{ calculateTotal()}}</th>
+
+      </tr>
+
     </table>
   </div>
 </div>

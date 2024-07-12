@@ -41,4 +41,22 @@ export class FieldService {
     return this.http.delete<FieldClone>(this.baseUrl + '/fields/deleteclone/' + cloneId + '/' + fieldId)
   }
 
+  addFieldWithDetails(field: Field, fieldClones: any[], fieldGrants: any[]): Observable<any> {
+    const payload = {
+      field,
+      fieldClones,
+      fieldGrants
+    };
+    return this.http.post<any>(this.baseUrl + '/fields/addFieldWithDetails', payload);
+  }
+
+  updateFieldWithDetails(field: Field, fieldClones: any[], fieldGrants: any[]): Observable<any> {
+    const payload = {
+      field: field,
+      fieldClones: fieldClones,
+      fieldGrants: fieldGrants
+    };
+    return this.http.post<any>(this.baseUrl + '/fields/updateFieldWithDetails', payload);
+  }
+
 }

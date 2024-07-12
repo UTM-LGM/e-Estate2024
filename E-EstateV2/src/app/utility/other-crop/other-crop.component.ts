@@ -18,6 +18,8 @@ export class OtherCropComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   isLoading = true
 
+  itemsPerPageOther = 10
+
   otherCrop: OtherCrop = {} as OtherCrop
   otherCrops: OtherCrop[] = []
 

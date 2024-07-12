@@ -20,6 +20,7 @@ export class CountryComponent implements OnInit, OnDestroy {
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
+  itemsPerPage = 10
 
   sortableColumns = [
     { columnName: 'isLocal', displayText: 'Origin' },

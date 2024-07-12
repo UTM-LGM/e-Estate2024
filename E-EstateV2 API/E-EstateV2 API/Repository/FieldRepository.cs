@@ -1,4 +1,5 @@
 ﻿using E_EstateV2_API.Data;
+using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
@@ -10,10 +11,12 @@ namespace E_EstateV2_API.Repository
     public class FieldRepository:IFieldRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFieldHistoryRepository _fieldHistoryRepository;
 
-        public FieldRepository(ApplicationDbContext context)
+        public FieldRepository(ApplicationDbContext context, IFieldHistoryRepository fieldHistoryRepository)
         {
             _context = context;
+            _fieldHistoryRepository = fieldHistoryRepository;
         }
 
         public async Task<Field> AddField(Field field)
@@ -42,7 +45,8 @@ namespace E_EstateV2_API.Repository
                 createdDate = x.createdDate,
                 rubberArea = x.rubberArea,
                 currentTreeStand = x.currentTreeStand,
-                remark = x.remark
+                remark = x.remark,
+                fieldGrants = _context.fieldGrants.Where(y=>y.fieldId == x.Id).ToList(),
             }).ToListAsync();
             return field;
         }
@@ -68,7 +72,7 @@ namespace E_EstateV2_API.Repository
 
         public async Task<DTO_Field> GetFieldById(int id)
         {
-            var cloneIds = _context.fieldClones.Where(y => y.fieldId == id).Select(y => y.cloneId).ToList();
+            var cloneIds = _context.fieldClones.Where(y => y.fieldId == id && y.isActive == true).Select(y => y.cloneId).ToList();
             
             var field = await _context.fields.Where(x => x.Id == id).Select(x => new DTO_Field
             {
@@ -88,10 +92,11 @@ namespace E_EstateV2_API.Repository
                     fieldStatus = y.fieldStatus,
                 }).ToList(),
                 //clones = _context.clones.Where(y=>y.Id == _context.fieldClones.Where(y => y.fieldId == id).Select(y => y.cloneId).FirstOrDefault()).ToList()
-                clones = _context.clones.Where(y => cloneIds.Contains(y.Id)).Select(y => new DTO_Clone
+                fieldClones = _context.fieldClones.Where(y => y.fieldId == id && y.isActive == true).Select(y=> new DTO_FieldClone
                 {
-                    id = y.Id,
-                    cloneName = y.cloneName
+                    Id = y.Id,
+                    cloneId = y.cloneId,
+                    cloneName = _context.clones.Where(c=>c.Id == y.cloneId).Select(c=>c.cloneName).FirstOrDefault(),
                 }).ToList(),
                 initialTreeStand = x.initialTreeStand,
                 totalTask = x.totalTask,
@@ -111,6 +116,30 @@ namespace E_EstateV2_API.Repository
             var existingField = await _context.fields.FirstOrDefaultAsync(x => x.Id == field.Id);
             if (existingField != null)
             {
+                var fieldHistory = new FieldHistory
+                {
+                    fieldId = existingField.Id,
+                    fieldName = existingField.fieldName,
+                    area = existingField.area,
+                    rubberArea = existingField.rubberArea,
+                    isMature = existingField.isMature,
+                    isActive = existingField.isActive,
+                    dateOpenTapping = existingField.dateOpenTapping,
+                    yearPlanted = existingField.yearPlanted,
+                    remark = existingField.remark,
+                    totalTask = existingField.totalTask,
+                    initialTreeStand = existingField.initialTreeStand,
+                    currentTreeStand = existingField.currentTreeStand,
+                    createdBy = existingField.createdBy,
+                    createdDate = existingField.createdDate,
+                    updatedBy = existingField.updatedBy,
+                    updatedDate = existingField.updatedDate,
+                    fieldStatusId = existingField.fieldStatusId,
+                    estateId = existingField.estateId,
+                };
+
+                await _fieldHistoryRepository.AddFieldHistory(fieldHistory);
+
                 existingField.fieldName = field.fieldName;
                 existingField.area = field.area;
                 existingField.isMature = field.isMature;
@@ -166,5 +195,6 @@ namespace E_EstateV2_API.Repository
             _context.fieldClones.Remove(fieldClone);
             await _context.SaveChangesAsync();
         }
+
     }
 }

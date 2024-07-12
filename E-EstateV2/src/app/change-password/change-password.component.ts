@@ -28,7 +28,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   submitNewPassword() {
-    this.register.id = this.sharedService.userId
+    this.register.id = this.sharedService.userId, 
     this.userService.changePassword(this.register)
       .subscribe(
         {

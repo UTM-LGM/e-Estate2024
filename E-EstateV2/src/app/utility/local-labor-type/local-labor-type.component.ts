@@ -21,6 +21,8 @@ export class LaborInformationComponent implements OnInit, OnDestroy {
   order = ''
   currentSortedColumn = ''
 
+  itemsPerPage = 10
+
   sortableColumns = [
     { columnName: 'laborType', displayText: 'Local Labor Type' },
   ];

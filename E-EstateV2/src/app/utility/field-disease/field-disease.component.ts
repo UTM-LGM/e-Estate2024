@@ -25,6 +25,8 @@ export class FieldDiseaseComponent implements OnInit, OnDestroy {
   pageNumber = 1
   isLoading = true
 
+  itemsPerPage = 10
+
   sortableColumns = [
     { columnName: 'diseaseCategory', displayText: 'Category'},
     { columnName: 'diseaseName', displayText: 'Disease Name' },

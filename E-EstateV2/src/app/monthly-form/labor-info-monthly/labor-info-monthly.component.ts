@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthGuard } from 'src/app/_interceptor/auth.guard.interceptor';
 import { Country } from 'src/app/_interface/country';
@@ -14,6 +14,7 @@ import { AddCountryComponent } from 'src/app/labor-info/labor-foreigner/add-coun
 import swal from 'sweetalert2';
 import { LaborInfoMonthlyDetailComponent } from '../labor-info-monthly-detail/labor-info-monthly-detail.component';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-labor-info-monthly',
@@ -24,10 +25,13 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
 
   @Output() backTabEvent = new EventEmitter<void>();
   @Output() nextTabEvent = new EventEmitter<void>();
+  @Input() selectedMonthYear = ''
+
   previousMonth = new Date()
   filterCountries: Country[] = []
   labor: LaborInfo = {} as LaborInfo
   filterLabors: LaborInfo[] = []
+  previousFilterLabors: LaborInfo[] = []
   laborCategory: any = {} as LaborByCategory
 
   laborCategories: any = {} as any
@@ -39,7 +43,10 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
   totalForeignWorker = 0
   date: any
 
-  laborCategoryArray: LaborByCategory[] = []
+  laborCategoryArray: any[] = []
+  selectedMonth = ''
+  previousWorker = false
+  radioSelected = ''
 
   constructor(
     private countryService: CountryService,
@@ -48,27 +55,118 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private laborInfoService: LaborInfoService,
     private datePipe: DatePipe,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     // this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
-    this.getDate()
+    // this.getDate()
+    this.date = this.selectedMonthYear
     this.getCountry()
-    this.getLaborType()
     this.getLabor()
   }
 
-  getDate() {
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
-    this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedMonthYear']) {
+      // Handle changes here if needed
+      this.date = this.selectedMonthYear
+      this.getLaborType()
+      this.getLabor()
+    }
   }
 
-  monthSelected(month: string) {
-    let monthDate = new Date(month)
-    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
-    this.getLabor()
+  countrySelected() {
+    this.radioSelected = ''
+    this.previousFilterLabors = []
+    this.filterTypes.forEach(type => {
+      this.laborCategory[type.id] = { noOfWorker: 0, };
+    });
+    this.labor.fieldCheckrole = 0
+    this.labor.fieldContractor = 0
+    this.labor.tapperCheckrole = 0
+    this.labor.tapperContractor = 0
+    const getLabor = this.laborInfoService.getLabor()
+      .subscribe(
+        Response => {
+          const labors = Response
+          const previousMonth = this.getPreviousMonth(this.date);
+          this.previousFilterLabors = labors.filter(e => e.monthYear == previousMonth.toUpperCase() && e.estateId == this.sharedService.estateId && e.countryId == this.labor.countryId)
+          if(this.previousFilterLabors.length > 0){
+            this.previousWorker = true
+          }
+          else{
+            this.previousWorker = false
+          }
+        });
+    this.subscriptionService.add(getLabor);
   }
+
+  onRadioChange() {
+    if (this.radioSelected == 'yes') {
+      this.updateLabor(this.previousFilterLabors[0]);
+    }
+  }
+
+  updateLabor(laborData: any) {
+    this.labor.tapperCheckrole = laborData.tapperCheckrole || 0;
+    this.labor.tapperContractor = laborData.tapperContractor || 0;
+    this.labor.fieldCheckrole = laborData.fieldCheckrole || 0;
+    this.labor.fieldContractor = laborData.fieldContractor || 0;
+    if (this.radioSelected === 'yes' && this.previousFilterLabors.length > 0) {
+      this.filterTypes.forEach(type => {
+        const matchingLabor = laborData.laborCategory.find((entry: any) => entry.laborTypeId === type.id);
+        if (matchingLabor) {
+          // Update existing entry
+          this.laborCategory[type.id].noOfWorker = matchingLabor.noOfWorker;
+        } else {
+          // Initialize with 0 if not found
+          this.laborCategory[type.id].noOfWorker = 0;
+        }
+      });
+    }
+  
+    // Initialize laborCategory if it's not already
+    //this.laborCategory = laborData.laborCategory || [];
+    // console.log(this.laborCategory)
+    // console.log(this.filterTypes)
+
+    // this.filterTypes.forEach(type => {
+    //   const matchingLabor = this.laborCategory.find((entry:any) => entry.laborTypeId === type.id);
+    //   if (matchingLabor) {
+    //     // Update existing entry
+    //     this.laborCategory[type.id].noOfWorker = matchingLabor.noOfWorker;
+    //   } else {
+    //     // Initialize new entry if not found
+    //     this.laborCategory[type.id] = { ...type, noOfWorker: 0 };
+    //   }
+    // });
+  }
+  
+
+  getPreviousMonth(dateStr: string): string {
+    const [month, year] = dateStr.split('-');
+    const date = new Date(`${month} 1, ${year}`);
+
+    // Get the previous month
+    date.setMonth(date.getMonth() - 1);
+
+    // Format the previous month (MMM-YYYY)
+    const options: Intl.DateTimeFormatOptions = { month: 'short', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options).replace(' ', '-');
+  }
+
+
+  // getDate() {
+  //   this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
+  //   // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+  // }
+
+  // monthSelected(month: string) {
+  //   let monthDate = new Date(month)
+  //   this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+  //   this.getLabor()
+  // }
 
   getLaborType() {
     const getType = this.laborTypeService.getType()
@@ -77,11 +175,15 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
           const types = Response
           this.filterTypes = types.filter(x => x.isActive == true)
           this.filterTypes.forEach(type => {
-            this.laborCategory[type.id] = { noOfWorker: null, };
+            this.laborCategory[type.id] = { noOfWorker: 0, };
           });
+          this.labor.fieldCheckrole = 0
+          this.labor.fieldContractor = 0
+          this.labor.tapperCheckrole = 0
+          this.labor.tapperContractor = 0
         }
       )
-      this.subscriptionService.add(getType);
+    this.subscriptionService.add(getType);
 
   }
 
@@ -98,7 +200,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
           const countries = Response
           this.filterCountries = countries.filter((e) => e.isActive == true && !this.filterLabors.some(x => x.countryId == e.id))
         });
-      this.subscriptionService.add(getCountry);
+    this.subscriptionService.add(getCountry);
 
   }
 
@@ -148,6 +250,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
             this.getLabor()
             this.getLaborType()
             this.isSubmit = false
+            this.previousWorker = false
           }, error: (err) => {
             swal.fire({
               text: 'Please fil up the form',
@@ -170,7 +273,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
             this.TotalForeign()
             this.isLoading = false
           });
-    this.subscriptionService.add(getLabor);
+      this.subscriptionService.add(getLabor);
 
     }, 2000)
 

@@ -35,8 +35,8 @@
     </tr>
 
     <tr
-      *ngFor=" let labor of labors | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber };  let i = index ">
-      <td>{{ i + 1 }}</td>
+      *ngFor=" let labor of labors | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber };  let i = index ">
+      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
       <td>{{ labor.laborType }}</td>
       <td>
         <button (click)="status(labor)" [ngClass]="{

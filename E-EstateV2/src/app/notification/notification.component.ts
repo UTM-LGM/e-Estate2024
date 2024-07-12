@@ -12,6 +12,7 @@ import { SubscriptionService } from '../_services/subscription.service';
 import { DatePipe } from '@angular/common';
 import { FieldProductionService } from '../_services/field-production.service';
 import { CostAmountService } from '../_services/cost-amount.service';
+import { FieldService } from '../_services/field.service';
 
 @Component({
   selector: 'app-notification',
@@ -37,6 +38,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   warningProductionDrafted = false
   warningCostDrafted = false
+  warningGrantTitle = false
 
   constructor(
     private reportService: ReportService,
@@ -49,6 +51,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private productionService:FieldProductionService,
     private costInformationService:CostAmountService,
+    private fieldService:FieldService
 
   ) { }
 
@@ -59,6 +62,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     // this.getFieldInfoYearly()
     this.getProductionDrafted()
     // this.getCostDrafted()
+    this.getGrantTitle()
   }
 
   getProductionDrafted(){
@@ -78,6 +82,22 @@ export class NotificationComponent implements OnInit, OnDestroy {
       }
     )
     this.subscriptionService.add(getProduction);
+  }
+
+  getGrantTitle(){
+    const getField = this.fieldService.getField()
+    .subscribe(
+      Response =>{
+        const field = Response.filter(x=>x.estateId == this.sharedService.estateId)
+        field.forEach(field =>{
+          if(field.fieldGrants && field.fieldGrants.length == 0){
+            this.warningGrantTitle = true
+            // this.showEmptyMessage = false
+            this.updateBadge()
+          }
+        })
+      }
+    )
   }
 
   // getCostDrafted(){
@@ -153,8 +173,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   updateBadge() {
     const badgeCount = (this.showAlertField ? 1 : 0) + (this.showAlertProduction ? 1 : 0) + (this.warningProductionDrafted ? 1 : 0) + (this.warningCostDrafted ? 1:0)
+    + (this.warningGrantTitle ? 1:0)
     this.badgeService.updateBadgeCount(badgeCount)
-    if (badgeCount == 0) {
+    if (badgeCount === 0) {
       this.showEmptyMessage = true
     }
   }

@@ -1,6 +1,6 @@
 <div class="box-container">
-<h1>Field Information</h1>
-  <hr />
+    <h1>Field Information</h1>
+    <hr />
     <div class="box">
         <div class="column">
             <form>
@@ -56,8 +56,7 @@
                     </div>
                 </div>
 
-
-                <div style="columns: 2" *ngIf="!conversion && field.isMature == true">
+                <div style="columns: 2" *ngIf="!conversion">
                     <label>Year Planted <span style="color: red;">*</span> :</label>
                     <b><input type="number" name="year" placeholder="yyyy" [(ngModel)]="field.yearPlanted"
                             (change)="yearSelected()" /></b>
@@ -78,68 +77,56 @@
                     <label>Total task <span style="color: red;">*</span> :</label>
                     <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
                 </div>
-                <hr/>
+                <hr />
 
-                <div style="columns: 4;">
-                    <label>Grant title <span style="color: red;">*</span> : </label>
-                    <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle"/>
-                    <label>Area (Ha) <span style="color: red;">*</span> :</label>
-                    <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea"/>
-                    <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
-                    <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea"/>
-                    <div>
-                        <button style="margin-top: 28px;" class="btn-add" (click)="selectedGrant(fieldGrant)">
-                            Add Grant &nbsp; <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
 
                 <div class="box-container">
-                    <h1>Grant title</h1>
-                    <hr />
-                    <div style="overflow-x: auto; overflow-y: auto">
-                        <table style="width: 100%">
-                            <tr>
-                                <th width="30px">No</th>
-                                <th>Grant title</th>
-                                <th>Area (Ha)</th>
-                                <th>Rubber Area (Ha)</th>
-                                <th width="90px">Action</th>
-                            </tr>
-    
-                            <tr *ngIf="addedGrant.length == 0">
-                                <td colspan="5" style="color: red;"><b>No Grant</b></td>
-                            </tr>
-    
-                            <tr *ngFor="let value of addedGrant; let i = index">
-                                <td>{{ i + 1 }}</td>
-                                <td>{{ value.grantTitle }}</td>
-                                <td>{{ value.grantArea }}</td>
-                                <td>{{ value.grantRubberArea }}</td>
-                                <td>
-                                    <button class="btn-del" (click)="deleteGrant(i)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </table>
+                    <h1>Land Title</h1><hr/>
+                    <div style="columns: 4;">
+                        <label>No <span style="color: red;">*</span> : </label>
+                        <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle" />
+                        <label>Total Area (Ha) <span style="color: red;">*</span> :</label>
+                        <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea" />
+                        <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+                        <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea" />
+                        <div>
+                            <button style="margin-top: 28px;" class="btn-add" (click)="selectedGrant(fieldGrant)">
+                                Add Land Title &nbsp; <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
                     </div>
-                </div><br/>
-    
 
-                <div>
-                    <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()"
-                        [disabled]="isSubmit">
-                        <ng-container *ngIf="isSubmit; else notLoading">
-                            Loading...
-                        </ng-container>
-                        <ng-template #notLoading>
-                            Add &nbsp; <i class="fa fa-plus"></i>
-                        </ng-template>
-                    </button>
-                    <button class="btn-back" (click)="back()">
-                        <i class="fa fa-arrow-left"></i> &nbsp; Back
-                      </button>
+                    <div class="box-container">
+                        <h1>List of Land Title</h1>
+                        <hr />
+                        <div style="overflow-x: auto; overflow-y: auto">
+                            <table style="width: 100%">
+                                <tr>
+                                    <th width="30px">No</th>
+                                    <th>Land Title</th>
+                                    <th>Total Area (Ha)</th>
+                                    <th>Rubber Area (Ha)</th>
+                                    <th width="90px">Action</th>
+                                </tr>
+
+                                <tr *ngIf="addedGrant.length == 0">
+                                    <td colspan="5" style="color: red;">No Land Title</td>
+                                </tr>
+
+                                <tr *ngFor="let value of addedGrant; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ value.grantTitle }}</td>
+                                    <td>{{ value.grantArea }}</td>
+                                    <td>{{ value.grantRubberArea }}</td>
+                                    <td>
+                                        <button class="btn-del" (click)="deleteGrant(i)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -171,7 +158,7 @@
                         </tr>
 
                         <tr *ngIf="selectedValues.length == 0">
-                            <td colspan="3" style="color: red;"><b>No Clone</b></td>
+                            <td colspan="3" style="color: red;">No Clone</td>
                         </tr>
 
                         <tr *ngFor="let value of selectedValues; let i = index">
@@ -185,14 +172,24 @@
                         </tr>
                     </table>
                 </div>
-            </div><br/>
-
-
+            </div>
+            <br />
         </div>
+    </div><br/>
 
-        
-        
-
+    <div>
+        <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()" [disabled]="isSubmit">
+            <ng-container *ngIf="isSubmit; else notLoading">
+                Loading...
+            </ng-container>
+            <ng-template #notLoading>
+                Save &nbsp; <i class="fa fa-check"></i>
+            </ng-template>
+        </button>
+        <button class="btn-back" (click)="back()">
+            <i class="fa fa-arrow-left"></i> &nbsp; Back
+        </button>
     </div>
+
     <br />
 </div>

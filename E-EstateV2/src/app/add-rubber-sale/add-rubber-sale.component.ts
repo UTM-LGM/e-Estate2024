@@ -22,7 +22,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   currentDate = ''
   letterOfConsentNo = ''
 
-  deliveryAgent: string = '';
+  deliveryAgent: string = ''
   isSubmit = false
 
   constructor(
@@ -30,7 +30,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     private rubberSaleService: RubberSaleService,
     private location: Location,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -58,7 +58,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
         }
       )
     this.subscriptionService.add(getBuyer);
-    
+
   }
 
   selectedDate(date: string) {
@@ -68,38 +68,67 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   addSale() {
-    this.generateLetterOfConsetnNo()
-    this.rubberSale.isActive = true
-    this.rubberSale.createdBy = this.sharedService.userId.toString()
-    this.rubberSale.createdDate = new Date()
-    this.rubberSale.estateId = this.sharedService.estateId
-    this.rubberSale.paymentStatusId = 1
-    this.rubberSale.letterOfConsentNo = this.letterOfConsentNo
-    this.isSubmit = true
-    this.rubberSaleService.addSale(this.rubberSale)
-      .subscribe(
-        {
-          next: (Response) => {
-            swal.fire({
-              title: 'Done!',
-              text: 'Rubber Sale successfully submitted!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.ngOnInit()
-            this.print(Response)
-            this.location.back()
-          },
-          error: (err) => {
-            swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Please fill up the form',
-            });
-            this.isSubmit = false
-          }
-        })
+    if (this.rubberSale.drc == 0) {
+      swal.fire({
+        title: 'Error!',
+        text: 'DRC cannot be 0. Please enter a valid percentage.',
+        icon: 'error',
+        showConfirmButton: true
+      });
+    } else {
+      this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
+      if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
+        this.generateLetterOfConsetnNo();
+      }
+      this.rubberSale.isActive = true
+      this.rubberSale.createdBy = this.sharedService.userId.toString()
+      this.rubberSale.createdDate = new Date()
+      this.rubberSale.estateId = this.sharedService.estateId
+      this.rubberSale.paymentStatusId = 1
+      this.rubberSale.letterOfConsentNo = this.letterOfConsentNo
+      this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
+      this.isSubmit = true
+      this.rubberSaleService.addSale(this.rubberSale)
+        .subscribe(
+          {
+            next: (Response) => {
+              swal.fire({
+                title: 'Done!',
+                text: 'Rubber Sale successfully submitted!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+              this.ngOnInit()
+              this.print(Response)
+              this.location.back()
+            },
+            error: (err) => {
+              swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill up the form',
+              });
+              this.isSubmit = false
+            }
+          })
+    }
+  }
+
+  isTodayOrFutureDate(date: Date): boolean {
+    // Get today's date without the time component
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
+  
+    // Set the provided date's time component to zero for comparison
+    const dateToCompare = new Date(date);
+    dateToCompare.setHours(0, 0, 0, 0);
+  
+    if (dateToCompare >= today) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 
@@ -134,8 +163,54 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  deliveryAgentRemark(){
+  deliveryAgentRemark() {
     this.rubberSale.remark = 'Using delivery agent : ' + this.rubberSale.deliveryAgent
+  }
+
+  validateDriverIc(driverIc: string) {
+    const icPattern = /^\d{6}-\d{2}-\d{4}$/;
+
+    if (!icPattern.test(driverIc)) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Driver IC number must be in xxxxxx-xx-xxxx format.'
+      });
+      this.rubberSale.driverIc = '';
+    }
+  }
+
+  validateCuplumpDRC(drc: any) {
+    const drcValue = drc.target.value
+    if (drcValue >= 45 && drcValue <= 80) {
+      return drcValue
+    }
+    else {
+      swal.fire({
+        title: 'Error!',
+        text: 'CuplumpDRC must be between 45% to 80%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.rubberSale.drc = 0
+    }
+  }
+
+  validateLatexDRC(drc: any) {
+    const drcValue = drc.target.value
+    if (drcValue >= 20 && drcValue <= 55) {
+      return drcValue
+    }
+    else {
+      swal.fire({
+        title: 'Error!',
+        text: 'LatexDRC must be between 20% to 55%',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.rubberSale.drc = 0
+    }
+
   }
 
 }

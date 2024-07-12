@@ -15,6 +15,7 @@ export class PlantingMaterialComponent implements OnInit ,OnDestroy {
   term = ''
   pageNumber = 1
   order = ''
+  itemsPerPagePlanting = 10
   currentSortedColumn = ''
   isLoading = true
 

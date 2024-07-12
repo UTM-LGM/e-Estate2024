@@ -10,10 +10,14 @@ namespace E_EstateV2_API.Controllers
     public class FieldInfectedsController : ControllerBase
     {
         private readonly IFieldInfectedRepository _fieldInfectedRepository;
+        private readonly IFieldInfectedHistoryRepository _historyRepository;
 
-        public FieldInfectedsController(IFieldInfectedRepository fieldInfectedRepository)
+
+        public FieldInfectedsController(IFieldInfectedRepository fieldInfectedRepository, IFieldInfectedHistoryRepository historyRepository)
         {
             _fieldInfectedRepository = fieldInfectedRepository;
+            _historyRepository = historyRepository;
+
         }
 
         [HttpGet]
@@ -36,7 +40,29 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> UpdateFieldInfected([FromBody] FieldInfected fieldInfected)
         {
             fieldInfected.updatedDate = DateTime.Now;
+
+            var existingFieldInfected = await _fieldInfectedRepository.GetFieldInfectedById(fieldInfected.Id);
+            var fieldInfectedHistory = new FieldInfectedHistory
+            {
+                fieldInfectedId = existingFieldInfected.id,
+                areaInfected = existingFieldInfected.areaInfected,
+                areaInfectedPercentage = existingFieldInfected.areaInfectedPercentage,
+                dateScreening = existingFieldInfected.dateScreening,
+                dateRecovered = existingFieldInfected.dateRecovered,
+                severityLevel = existingFieldInfected.severityLevel,
+                remark = existingFieldInfected.remark,
+                isActive = existingFieldInfected.isActive,
+                createdBy = existingFieldInfected.createdBy,
+                createdDate = existingFieldInfected.createdDate,
+                updatedBy = existingFieldInfected.updatedBy,
+                updatedDate = existingFieldInfected.updatedDate,
+                fieldDiseaseId = existingFieldInfected.fieldDiseaseId,
+                fieldId = existingFieldInfected.fieldId,
+            };
+            await _historyRepository.AddFieldInfectedHistory(fieldInfectedHistory);
+
             var updatedFieldInfected = await _fieldInfectedRepository.Update(fieldInfected);
+
             return Ok(updatedFieldInfected);
         }
 
@@ -61,7 +87,7 @@ namespace E_EstateV2_API.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> GetFieldInfectedById([FromRoute] int id)
         {
-            var field = await _fieldInfectedRepository.GetFieldInfectedById(id);
+            var field = await _fieldInfectedRepository.GetFieldInfectedByFieldId(id);
             return Ok(field);
         }
     }

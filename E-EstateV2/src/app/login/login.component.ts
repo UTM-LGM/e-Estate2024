@@ -27,7 +27,21 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.handleRedirect();
     this.checkAuthentication();
+  }
+
+  handleRedirect() {
+    this.msalService.instance.handleRedirectPromise().then((response) => {
+      if (response && response.account) {
+        console.log(response, response.account)
+        this.msalService.instance.setActiveAccount(response.account);
+        localStorage.setItem('activeAccount', JSON.stringify(response.account));
+        this.router.navigateByUrl('/e-estate/home');
+      }
+    }).catch((error) => {
+      console.error('Error handling redirect:', error);
+    });
   }
 
   checkAuthentication() {

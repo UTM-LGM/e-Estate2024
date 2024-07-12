@@ -19,7 +19,16 @@ namespace E_EstateV2_API.Controllers
         public async Task<IActionResult> GetClones()
         {
             var clones = await _genericRepository.GetAll();
-            var sortedClones = clones.OrderBy(clone => clone.cloneName).ToList();
+
+            var sortedClones = clones
+                .OrderBy(clone =>
+                {
+                    var numericPart = new string(clone.cloneName.Where(char.IsDigit).ToArray());
+                    return int.Parse(numericPart);
+                })
+                .ThenBy(clone => clone.cloneName)  // In case of numeric tie, sort by the full cloneName
+                .ToList();
+
             return Ok(sortedClones);
         }
 

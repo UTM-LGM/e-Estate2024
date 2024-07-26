@@ -13,7 +13,6 @@ export class UpperCaseInterceptor implements HttpInterceptor {
 
     if (request.method === 'POST' &&
       (request.url.includes('/Login') ||
-       request.url.includes('/Register') ||
        request.url.includes('/SendEmailVerification') ||
        request.url.includes('/AddUserRole') ||
        request.url.includes('/AddUser') ||

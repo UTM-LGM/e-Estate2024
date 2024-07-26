@@ -11,7 +11,7 @@
 
   <div class="box-container">
     <div style="margin-top: -10px">
-      <button class="btn-add" routerLink="/e-estate/add-rubber-sale/{{estate.id}}">
+      <button class="btn-add" routerLink="/add-rubber-sale/{{estate.id}}">
         Add Rubber Sale &nbsp; <i class="fa fa-plus"></i>
       </button>
     </div>
@@ -23,9 +23,6 @@
             <th *ngFor="let column of sortableColumns" scope="col" [appSort]="filterSales" [attr.data-order]="order"
               [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
               {{ column.displayText }}
-              <i class="fa"
-                [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
             <th width="30px">Action</th>
             <th width="30px">Status</th>

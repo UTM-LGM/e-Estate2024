@@ -11,12 +11,8 @@
         <table style="width: 100%">
             <thead>
                 <tr>
-                    <th *ngFor="let column of sortableColumns" scope="col" (click)="toggleSort(column.columnName)">
+                    <th *ngFor="let column of sortableColumns" scope="col" [appSort]="users" [attr.data-order]="order" [attr.data-name]="column.columnName"  (click)="toggleSort(column.columnName)">
                         {{ column.displayText }}
-                        <i class="fa"
-                            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                      'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}">
-                        </i>
                     </th>
                     <th width="90px">Action</th>
                 </tr>

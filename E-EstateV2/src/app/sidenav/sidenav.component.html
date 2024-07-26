@@ -2,21 +2,21 @@
 
   <i class="fa fa-user"></i> &nbsp;
   <span>Log in as: </span>
-  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'Admin' || role == 'CompanyAdmin'}">
+  <div style="padding-bottom: 10px;" *ngIf="role == 'EstateClerk'">
     <span style="text-align: left;">{{ estate.name + ", " + estate.add1}}</span>
   </div>
 
-  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'Admin' || role == 'EstateClerk'}">
+  <div style="padding-bottom: 10px;" *ngIf="role == 'CompanyAdmin'">
     <span style="text-align: left;">{{ company.name }}</span>
   </div>
 
-  <div style="padding-bottom: 10px;" [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}">
+  <div style="padding-bottom: 10px;" *ngIf="role == 'Admin' || role == 'Management'">
     <span style="text-align: left;">MALAYSIAN RUBBER BOARD</span>
   </div>
 
 
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
     <button class="side-btn fixed" (click)="toggleGeneral()">
       General
       <div style="float: right;">
@@ -28,56 +28,56 @@
   </div>
 
   <div
-    [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showGeneral }">
-    <button class="side-btn" routerLink="/e-estate/company-list" routerLinkActive="active">
+    [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showGeneral }">
+    <button class="side-btn" routerLink="/company-list" routerLinkActive="active">
       List of all Companies
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/estate-list" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showGeneral}">
+    <button class="side-btn" routerLink="/estate-list" routerLinkActive="active">
       List of all Estates
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/company-profile/{{ companyId }}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' || !showGeneral}">
+    <button class="side-btn" routerLink="/company-profile/{{ companyId }}" routerLinkActive="active">
       Company Profile
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/estate-detail/{{ estateId }}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showGeneral}">
+    <button class="side-btn" routerLink="/estate-detail/{{ estateId }}" routerLinkActive="active">
       Estate Profile
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/estate/{{ companyId }}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' || !showGeneral}">
+    <button class="side-btn" routerLink="/estate/{{ companyId }}" routerLinkActive="active">
       List of Estates
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/field-info/{{estateId}}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showGeneral}">
+    <button class="side-btn" routerLink="/field-info/{{estateId}}" routerLinkActive="active">
       Field Information
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showGeneral}">
-    <button class="side-btn" routerLink="/e-estate/field-disease/{{estateId}}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showGeneral}">
+    <button class="side-btn" routerLink="/field-disease/{{estateId}}" routerLinkActive="active">
       Field Disease
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
     <button class="side-btn fixed" (click)="toggleOthers()">
       Daily
       <div style="float: right;">
@@ -88,14 +88,14 @@
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showOthers}">
-    <button class="side-btn" routerLink="/e-estate/rubber-sale/{{ estateId }}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showOthers}">
+    <button class="side-btn" routerLink="/rubber-sale/{{ estateId }}" routerLinkActive="active">
       Rubber Sales
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
     <button class="side-btn fixed" (click)="toggleMonthly()">
       Monthly
       <div style="float: right;">
@@ -107,23 +107,23 @@
   </div>
 
   <div
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showMonthly }">
-    <button class="side-btn" routerLink="/e-estate/field-production/{{estateId}}" routerLinkActive="active">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showMonthly }">
+    <button class="side-btn" routerLink="/field-production/{{estateId}}" routerLinkActive="active">
       Monthly Form
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showMonthly}">
-    <button class="side-btn" routerLink="/e-estate/cost-info/{{estateId}}" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showMonthly}">
+    <button class="side-btn" routerLink="/cost-info/{{estateId}}" routerLinkActive="active">
       Cost Information
     </button>
     <hr />
   </div>
 
   <div
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showMonthly }">
-    <button class="side-btn" routerLink="/e-estate/rubber-stock/{{estateId}}" routerLinkActive="active">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showMonthly }">
+    <button class="side-btn" routerLink="/rubber-stock/{{estateId}}" routerLinkActive="active">
       Rubber Stock
     </button>
     <hr />
@@ -142,7 +142,7 @@
 
   
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management' || role == 'CompanyAdmin' || role == 'EstateClerk'}">
     <button class="side-btn fixed" (click)="toggleReport()">
       Reports
       <div style="float: right;">
@@ -153,63 +153,63 @@
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-by-state" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/report-by-state" routerLinkActive="active">
       Rubber Area by State
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-rubber-area-by-clone" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/report-rubber-area-by-clone" routerLinkActive="active">
       Rubber Area by Clone
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-field-information" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management'  || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
+    <button class="side-btn" routerLink="/report-field-information" routerLinkActive="active">
       Field Information
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-labor-information" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management'  || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
+    <button class="side-btn" routerLink="/report-labor-information" routerLinkActive="active">
       Labor Information
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-cost-information" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management'  || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
+    <button class="side-btn" routerLink="/report-cost-information" routerLinkActive="active">
       Cost Information
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-rubber-sale" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'  || !showReport}">
+    <button class="side-btn" routerLink="/report-rubber-sale" routerLinkActive="active">
       Rubber Sale
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-production-by-year" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management'  || role == 'CompanyAdmin' || role == 'EstateClerk', 'none': !showReport}">
+    <button class="side-btn" routerLink="/report-production-by-year" routerLinkActive="active">
       Production by Year
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
-    <button class="side-btn" routerLink="/e-estate/report-productivity-by-year" routerLinkActive="active">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/report-productivity-by-year" routerLinkActive="active">
       Productivity by Year
     </button>
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'Admin' || role == 'EstateClerk', 'none': role == 'CompanyAdmin'}">
+  <div [ngClass]="{'display': role == 'Admin' || role == 'EstateClerk', 'none': role == 'CompanyAdmin' || role == 'Management'}">
     <button class="side-btn fixed" (click)="toggleUtility()">
       Utilities
       <div style="float: right;">
@@ -221,21 +221,21 @@
   </div>
 
   <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showUtility}">
-    <button class="side-btn" routerLink="/e-estate/utilities-admin" routerLinkActive="active">
+    <button class="side-btn" routerLink="/utilities-admin" routerLinkActive="active">
       Utilities (Admin)
     </button>
     <hr />
   </div>
 
   <div [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showUtility}">
-    <button class="side-btn" routerLink="/e-estate/utility-manage-user" routerLinkActive="active">
+    <button class="side-btn" routerLink="/utility-manage-user" routerLinkActive="active">
       Manage User
     </button>
     <hr />
   </div>
 
   <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || !showUtility}">
-    <button class="side-btn" routerLink="/e-estate/utilities-clerk" routerLinkActive="active">
+    <button class="side-btn" routerLink="/utilities-clerk" routerLinkActive="active">
       Utilities (Clerk)
     </button>
     <hr />

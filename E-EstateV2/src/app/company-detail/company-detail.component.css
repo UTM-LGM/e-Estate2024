@@ -6,6 +6,10 @@
 }
 
 th {
-  cursor: pointer;
   font-size: 12px;
+}
+
+button:disabled{
+  border-radius: 0px;
+  cursor: default;
 }

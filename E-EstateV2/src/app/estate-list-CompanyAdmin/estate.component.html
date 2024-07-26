@@ -13,12 +13,9 @@
       <table style="width: 100%">
         <thead>
           <tr>
-            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.estates" [attr.data-order]="order"
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises" [attr.data-order]="order"
               [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
               {{ column.displayText }}
-              <i class="fa"
-                [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
           </tr>
         </thead>
@@ -36,7 +33,7 @@
 
         <tr class="list"
           *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index"
-          routerLink="/e-estate/estate-detail/{{ estate.id }}">
+          routerLink="/estate-detail/{{ estate.id }}">
            <td>{{ (pageNumber - 1) * itemsPerPage + i + 1}}</td>
           <td><a>{{estate.name + ',' + estate.add1.slice(0, -1)}}</a></td>
           <td>{{estate.state}}</td>

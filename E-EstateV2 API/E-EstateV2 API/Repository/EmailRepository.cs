@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using E_EstateV2_API.ViewModel;
 using System.Net;
+using System.Web;
 
 namespace E_EstateV2_API.Repository
 {
@@ -155,12 +156,20 @@ namespace E_EstateV2_API.Repository
 
         private string GenerateHtmlResetPassword(string userId, string token)
         {
+            byte[] plainBytesUserId = System.Text.Encoding.UTF8.GetBytes(userId);
+            string idEncoded = Convert.ToBase64String(plainBytesUserId);
+
+            byte[] plainBytesToken = System.Text.Encoding.UTF8.GetBytes(token);
+            string tokenEncoded = Convert.ToBase64String(plainBytesToken);
+
+
             //string urlEncodedToken = UrlEncodeToken(token);
-            string urlEncodedToken = WebUtility.UrlEncode(token);
-            byte[] plainBytes = System.Text.Encoding.UTF8.GetBytes(userId);
-            string userIdCoded = Convert.ToBase64String(plainBytes);
-            //string resetLink = $"http://localhost:4200/forgotpassword/{userIdCoded}/{urlEncodedToken}";
-            string resetLink = $"https://www5.lgm.gov.my/e-Estate/forgotpassword/{userIdCoded}/{urlEncodedToken}";
+            //string urlEncodedToken = WebUtility.UrlEncode(token);
+            //byte[] plainBytes = System.Text.Encoding.UTF8.GetBytes(userId);
+            //string userIdCoded = WebUtility.UrlEncode(userId);
+            //string resetLink = $"http://localhost:4200/forgotpassword?userId={idEncoded}&token={tokenEncoded}";
+
+            string resetLink = $"https://www5.lgm.gov.my/e-Estate/forgotpassword?userId={idEncoded}&token={tokenEncoded}";
             string htmlMessage = "<html>" +
                 "<body>" +
                 "<h2>Assalamualaikum wbt & Greetings,</h2>" +

@@ -181,7 +181,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         Response => {
           const productions = Response
 
-          this.filterProductions = productions.filter(e =>e.status == "Submitted" && e.estateId == this.sharedService.estateId && e.monthYear == this.date)
+          this.filterProductions = productions.filter(e =>e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear == this.date.toUpperCase())
           if(this.stock.rubberType == 'CUPLUMP'){
             this.TotalCuplump()
           }
@@ -230,6 +230,15 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         icon: 'error',
         title: 'Error',
         text: 'Weight Loss cannot below than 0',
+      });
+      this.stock.weightLoss = 0
+      this.stock.currentStock = 0
+    }
+    else if(this.stock.weightLoss >= 15){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Weight Loss cannot higher than 15%',
       });
       this.stock.weightLoss = 0
       this.stock.currentStock = 0

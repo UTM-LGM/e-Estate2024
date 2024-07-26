@@ -126,7 +126,7 @@ export class FieldInfoYearlyComponent implements OnInit, OnDestroy {
                   confirmButtonText: 'Done',
                 })
               })
-          this.router.navigateByUrl('/e-estate/notification')
+          this.router.navigateByUrl('/notification')
         }
       })
   }

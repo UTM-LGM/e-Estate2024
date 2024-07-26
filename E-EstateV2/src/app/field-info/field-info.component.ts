@@ -56,7 +56,6 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
   itemsPerPage = 10
 
   sortableColumns = [
-    { columnName: 'no', displayText: 'No' },
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'rubberArea', displayText: 'Rubber Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },

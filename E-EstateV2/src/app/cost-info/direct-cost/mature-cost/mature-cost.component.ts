@@ -90,12 +90,12 @@ export class MatureCostComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.matureDirectCostAmount = Response
-          this.filterMatureDirectCostAmount = this.matureDirectCostAmount.filter(x => x.monthYear === this.matureMonthYear
+          this.filterMatureDirectCostAmount = this.matureDirectCostAmount.filter(x => x.monthYear == this.matureMonthYear.toUpperCase()
             && x.costTypeId == this.costTypeId && x.isMature === true && x.estateId == this.sharedService.estateId)
           this.draftFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount
-            .filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
+            .filter(x => x.status === "DRAFT" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }));
-          this.submitFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
+          this.submitFilterMatureDirectCostAmount = this.filterMatureDirectCostAmount.filter(x => x.status === "SUBMITTED" && x.estateId == this.sharedService.estateId)
           this.totalMatureCost(this.filterMatureDirectCostAmount)
         }
       )
@@ -125,7 +125,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
         ...obj,
         monthYear: this.matureMonthYear,
         estateId: this.sharedService.estateId,
-        status: 'Draft',
+        status: 'DRAFT',
         createdBy: this.sharedService.userId.toString(),
         createdDate: new Date()
       };
@@ -183,7 +183,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
     const updatedBy = this.sharedService.userId.toString()
     const date = new Date()
     const updatedArray = this.draftFilterMatureDirectCostAmount.map(obj => {
-      return { ...obj, status: 'Submitted', updatedBy: updatedBy, updatedDate: date }
+      return { ...obj, status: 'SUBMITTED', updatedBy: updatedBy, updatedDate: date }
     });
     swal.fire({
       title: 'Are you sure to submit ? ',

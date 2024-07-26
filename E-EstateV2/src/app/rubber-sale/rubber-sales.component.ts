@@ -164,9 +164,10 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
       .then((result)=>{
         if(result.isConfirmed){
           sale.isActive = false
-          const { paymentStatus, ...obj } = sale
-          const rubberSale:any = obj
-          this.rubberSaleService.updateSale(rubberSale)
+          // const { paymentStatus, ...obj } = sale
+          // const rubberSale:any = obj
+          sale.paymentStatus = null
+          this.rubberSaleService.updateSale(sale)
             .subscribe(
               Response =>{
                 swal.fire({

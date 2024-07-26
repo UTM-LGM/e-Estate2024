@@ -67,7 +67,6 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
   ];
 
   sortableColumnContacts = [
-    { columnName: 'no', displayText: 'No' },
     { columnName: 'name', displayText: 'Name' },
     { columnName: 'position', displayText: 'Position' },
     { columnName: 'phoneNo', displayText: 'Phone No' },

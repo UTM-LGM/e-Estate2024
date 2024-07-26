@@ -154,7 +154,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         product.monthYear = this.date,
         product.createdBy = this.sharedService.userId.toString(),
         product.createdDate = new Date(),
-        product.status = "Draft"
+        product.status = "DRAFT"
       this.products.push(product)
     });
   }
@@ -293,9 +293,9 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const productions = Response
-          this.filterProductions = productions.filter(e => e.monthYear == this.date && Fields.some(field => field.id === e.fieldId))
-          this.draftFilterProductions = this.filterProductions.filter(e => e.status === "Draft")
-          this.submitFilterProductions = this.filterProductions.filter(e => e.status == "Submitted")
+          this.filterProductions = productions.filter(e => e.monthYear == this.date.toUpperCase() && Fields.some(field => field.id === e.fieldId))
+          this.draftFilterProductions = this.filterProductions.filter(e => e.status === "DRAFT")
+          this.submitFilterProductions = this.filterProductions.filter(e => e.status == "SUBMITTED")
           this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
           this.calculateLatexDry(this.filterProductions, this.latexDry)
           this.calculateUSSDry(this.filterProductions, this.USSDry)
@@ -390,7 +390,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     const updatedBy = this.sharedService.userId.toString()
     const date = new Date()
     const updatedArray = this.draftFilterProductions.map(obj => {
-      return { ...obj, status: 'Submitted', updatedBy: updatedBy, updatedDate: date }
+      return { ...obj, status: 'SUBMITTED', updatedBy: updatedBy, updatedDate: date }
     });
     this.isSubmit = true
     this.fieldProductionService.updateProductionDraft(updatedArray)

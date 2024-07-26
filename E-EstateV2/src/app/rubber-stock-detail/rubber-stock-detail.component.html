@@ -42,7 +42,7 @@
     <label>Previous Month End Stock :</label>
     <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" disabled />
     <label>Month End Stock :</label>
-    <input type="number" name="currentStock" (input)="calculateWaterDepletion()"  [(ngModel)]="stock.currentStock" />
+    <input type="number" name="currentStock" (change)="calculateWaterDepletion()"  [(ngModel)]="stock.currentStock" />
   </div>
   <div>
     <label>Weight Loss (%) :</label>

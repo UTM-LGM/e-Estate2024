@@ -18,6 +18,6 @@ export class ReportProductivityByYearComponent implements OnInit {
 
   ngOnInit() {
     this.role = this.sharedService.role
-    this.router.navigateByUrl('/e-estate/report-productivity-by-year/clone-productivity-yearly')
+    this.router.navigateByUrl('/report-productivity-by-year/clone-productivity-yearly')
   }
 }

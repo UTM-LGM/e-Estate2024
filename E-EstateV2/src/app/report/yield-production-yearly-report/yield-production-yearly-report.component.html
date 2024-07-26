@@ -10,7 +10,7 @@
 
 <div style="columns:2">
 
-    <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+    <div [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
         <label>Estate : </label>
 
         <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
@@ -21,7 +21,7 @@
         </mat-select>
     </div>
 
-    <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
         <label>Estate : </label>
         <select disabled [(ngModel)]="estate.id">
             <option value="0" disabled selected>Please Choose</option>
@@ -29,7 +29,7 @@
         </select>
     </div>
 
-    <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    <div [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management'}">
         <label>Estate : </label>
         <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
             (selectionChange)="estateSelected()">

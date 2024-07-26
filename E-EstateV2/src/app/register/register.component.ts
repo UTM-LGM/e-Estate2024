@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private emailService: EmailService,
     private myLesenService: MyLesenIntegrationService,
     private spinnerService: SpinnerService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.roles = Response;
         }
       )
-      this.subscriptionService.add(getRole);
+    this.subscriptionService.add(getRole);
   }
 
   openDialog(): void {
@@ -117,15 +117,26 @@ export class RegisterComponent implements OnInit, OnDestroy {
         .subscribe(
           {
             next: (Response) => {
-              this.result = Response
-              this.spinnerService.requestEnded();
-              swal.fire({
-                title: 'Done!',
-                text: 'Data found!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
+              if (Response) {
+                this.result = Response
+                this.spinnerService.requestEnded();
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Data found!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+              }
+              else {
+                this.spinnerService.requestEnded();
+                swal.fire({
+                  icon: 'error',
+                  title: 'Error! License No does not exist',
+                });
+                this.register.licenseNo = ''
+                this.result = {}
+              }
             },
             error: (Error) => {
               this.spinnerService.requestEnded();
@@ -144,7 +155,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   checkUsername(event: any) {
     const username = event.target.value.toString();
-  
+
     if (username.includes(' ')) {
       swal.fire({
         icon: 'error',

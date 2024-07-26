@@ -8,7 +8,7 @@
 
   <!-- <span style="font-size: 12px !important; font-weight: bold; text-decoration: underline;">Company Profile</span> -->
 
-  <div style="float:right;">
+  <div *ngIf="userRole != 'Management'" style="float:right;">
     <button class="btn-update" (click)="openDialog(company,companyDetail)">
       Update &nbsp; <i class="fa fa-pencil"></i>
     </button>
@@ -97,7 +97,7 @@
   <div>
     <h1>List of Additional Contact</h1>
 
-    <div style="float: left;">
+    <div style="float: left;"  *ngIf="userRole != 'Management'">
       <button class="btn-add" (click)="openDialogCompanyContact(contacts, company)">
         Add New Contact &nbsp; <i class="fa fa-plus"></i>
       </button>
@@ -108,12 +108,18 @@
       <table style="width: 100%">
         <thead>
           <tr>
+            <th>No</th>
             <th *ngFor="let column of sortableColumnContacts" scope="col" [appSort]="contacts" [attr.data-order]="order"
-              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)" >
               {{ column.displayText }}
+              <!-- [ngStyle]="{'cursor': column.columnName === 'name' ? 'pointer' : 'auto'}"
+              <i *ngIf="column.columnName === 'name'"
+                [ngClass]="{'fa-sort': currentSortedColumn !== 'name', 'fa-sort-up': currentSortedColumn === 'name' && order === 'asc'
+                , 'fa-sort-down': currentSortedColumn === 'name' && order === 'desc'}"
+                class="fa"></i> -->
             </th>
             <th width="90px">Status</th>
-            <th width="30px">Action</th>
+            <th *ngIf="userRole != 'Management'" width="30px">Action</th>
           </tr>
         </thead>
 
@@ -124,7 +130,11 @@
           </td>
         </tr>
 
-        <tr *ngIf="contacts.length == 0">
+        <tr *ngIf="contacts.length == 0 && userRole != 'Management'">
+          <td colspan="7" style="color: red;">No Additional Contact</td>
+        </tr>
+
+        <tr *ngIf="contacts.length == 0 && userRole == 'Management'">
           <td colspan="6" style="color: red;">No Additional Contact</td>
         </tr>
 
@@ -132,19 +142,19 @@
           *ngFor="let contact of contacts | filter : termContact | paginate: { itemsPerPage: itemsPerPageContact, currentPage: contactsPageNumber, id: 'contacts'  }; let i = index">
           <tr class="list" style="cursor: default;">
             <td>{{ (contactsPageNumber - 1) * itemsPerPageContact + i + 1 }}</td>
-            <td style="cursor: pointer;">{{contact.name}}</td>
+            <td>{{contact.name}}</td>
             <td>{{ contact.position }}</td>
             <td>{{ contact.phoneNo }}</td>
             <td>{{ contact.email }} </td>
             <td>
-              <button style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
+              <button [disabled]="userRole == 'Management'" style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
                 'active-btn': contact.isActive == true,
                 'inactive-btn': contact.isActive == false
               }">
                 {{ contact.isActive == true ? "Active" : "Inactive" }}
               </button>
             </td>
-            <td>
+            <td *ngIf="userRole != 'Management'">
               <button class="btn-update" (click)="openDialogCompanyContact(contact, company)"
                 style="padding: 3px 15px;">
                 <i class="fa fa fa-pencil"></i>
@@ -163,7 +173,7 @@
   </div>
   <br />
 
-  <div class="box-container" *ngIf="userRole == 'Admin'">
+  <div class="box-container" *ngIf="userRole == 'Admin' || userRole == 'Management'">
     <!-- <span style="font-size: 12px; font-weight: bold; text-decoration: underline;">List of Estates</span> -->
     <h1>List of Estates</h1>
 
@@ -175,9 +185,6 @@
             <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises"
               [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
               {{ column.displayText }}
-              <i class="fa"
-                [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
             </th>
           </tr>
         </thead>
@@ -197,7 +204,7 @@
           *ngFor="let estate of company.premises | filter : termEstate | paginate: { itemsPerPage: itemsPerPageEstate, currentPage: estatesPageNumber, id: 'estates' }; let i = index">
           <tr class="list" style="cursor: default;">
             <td>{{ (estatesPageNumber - 1) * itemsPerPageEstate + i + 1 }}</td>
-            <td style="cursor: pointer;" routerLink="/e-estate/estate-detail/{{ estate.id }}">
+            <td style="cursor: pointer;" routerLink="/estate-detail/{{ estate.id }}">
               <a>{{estate.name + ', ' + estate.add1.slice(0, -1) }}</a>
             </td>
             <td>{{ estate.state }}</td>
@@ -206,14 +213,14 @@
           </tr>
         </tbody>
       </table>
-      
+
       <pagination-controls (pageChange)="estatesPageNumber = $event" id="estates"></pagination-controls>
 
 
     </div>
   </div><br />
   <div>
-    <button class="btn-back" (click)="back()" *ngIf="userRole == 'Admin'">
+    <button class="btn-back" (click)="back()" *ngIf="userRole == 'Admin' || userRole == 'Management'">
       <i class="fa fa-arrow-left"></i> &nbsp; Back
     </button>
   </div>

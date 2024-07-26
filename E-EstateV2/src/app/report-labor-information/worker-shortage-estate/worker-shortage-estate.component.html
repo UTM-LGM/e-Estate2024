@@ -2,7 +2,7 @@
   <h1>Labor Shortage in estate</h1>
 
   <div style="columns:4"
-    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' }">
     <div>
       <label>Company</label>
       <input type="text" [value]="company.name" disabled />
@@ -22,7 +22,7 @@
   </div>
 
   <div style="columns: 3;"
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'  || role == 'Management'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
     <label>Start Month Year : </label>
@@ -31,26 +31,26 @@
     <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
   
-  <div *ngIf="role=='Admin'" style="columns: 4;">
+  <div *ngIf="role =='Admin' || role == 'Management'" style="columns: 4;">
     <label>Start Month Year : </label>
     <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
     <label>End Month Year : </label>
     <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
   </div>
 
-  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role != 'Admin'">
+  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role != 'Admin' && role != 'Management'">
     <button class="btn-add" (click)="exportToExcel(workerShortages, 'Worker Shortage Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
 
-  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role== 'Admin'">
+  <div style="margin-top: 3px; margin-bottom: 3px;" *ngIf="role== 'Admin' || role == 'Management'">
     <button class="btn-add" (click)="exportToExcelAdmin(workerShortages, workerTapperAndField, 'Worker Shortage Report')">
       Export Excel &nbsp; <i class="fa fa-file"></i>
     </button>
   </div>
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
+  <input type="text" [(ngModel)]="term" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">
@@ -77,7 +77,7 @@
         <td colspan="9" style="color: red; text-align: center;">No data found. Please choose estate, start and end month year</td>
       </tr>
 
-      <tr *ngIf="!isLoading && workerShortages.length == 0 && role == 'Admin'">
+      <tr *ngIf="!isLoading && workerShortages.length == 0 && (role == 'Admin' || role == 'Management')">
         <td colspan="9" style="color: red; text-align: center;">No data found. Please choose start and end month year </td>
       </tr>
 
@@ -85,7 +85,7 @@
         <td colspan="9" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
-      <ng-container *ngIf="!isLoading && role != 'Admin'">
+      <ng-container *ngIf="!isLoading && role != 'Admin' && role != 'Management'">
         <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: itemsPerPageShortage, currentPage: pageNumber }; let i = index">
           <td>{{ (pageNumber - 1) * itemsPerPageShortage + i + 1 }}</td>
           <td>{{ worker.estateName }}</td>
@@ -99,7 +99,7 @@
         </tr>
       </ng-container>
 
-      <ng-container *ngIf="!isLoading && role == 'Admin'">
+      <ng-container *ngIf="!isLoading && role == 'Admin' || role == 'Management'">
         <tr *ngFor="let worker of workerShortages | filter: term | paginate: { itemsPerPage: 10, currentPage: pageNumber }; let i = index">
           <td>{{i + 1}}</td>
           <td>{{ worker.estateName }}</td>

@@ -8,9 +8,6 @@
                     [attr.data-order]="order" [attr.data-name]="column.columnName"
                     (click)="toggleSort(column.columnName)">
                     {{ column.displayText }}
-                    <i class="fa"
-                        [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                      'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
                 </th>
                 <th width="30px">Action</th>
             </tr>
@@ -35,11 +32,11 @@
                 <td>{{stock.totalProduction | number:'1.2-2' }}</td>
                 <td>{{stock.totalSale | number:'1.2-2'}}</td>
                 <td>{{stock.currentStock | number:'1.2-2'}}</td>
-                <td [style.color]="stock.weightLoss > 2.5 ? 'red' : 'inherit'">{{stock.weightLoss | number:'1.2-2' }}
+                <td [style.color]="stock.weightLoss > 15 ? 'red' : 'inherit'">{{stock.weightLoss | number:'1.2-2' }}
                 </td>
                 <td>
                     <button class="btn-update" (click)="openDialogEdit(stock,estate)"
-                        [disabled]="!isLastMonth(stock.monthYear)">
+                        [disabled]="isLastMonth(stock.monthYear)">
                         <i class="fa fa-pencil"></i>
                     </button>
                 </td>

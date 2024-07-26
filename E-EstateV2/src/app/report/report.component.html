@@ -18,12 +18,12 @@
         </button>
 
         <button class="btn" routerLink="company-status" routerLinkActive="active"
-            [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+            [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
             Company Status Report
         </button>
 
         <button class="btn" routerLink="estate-status" routerLinkActive="active"
-            [ngClass]="{'display': role == 'Admin' || role == 'CompanyAdmin', 'none':role == 'EstateClerk' }">
+            [ngClass]="{'display': role == 'Admin' || role == 'Management'|| role == 'CompanyAdmin', 'none':role == 'EstateClerk' }">
             Estate Status Report
         </button>
     </div>

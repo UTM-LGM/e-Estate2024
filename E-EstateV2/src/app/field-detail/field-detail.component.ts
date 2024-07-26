@@ -70,6 +70,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   order = ''
   currentSortedColumn = ''
   pageNumber = 1
+  itemsPerPage = 2
   term = ''
   rubberArea = ''
 
@@ -423,7 +424,6 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
       field.cloneId = null;
       this.availableClones = this.availableClones.filter(clone => clone.id !== selectedClone.id);
 
-
       swal.fire({
         title: 'Done!',
         text: 'Clone successfully added!',
@@ -504,7 +504,8 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     //     });
     // }
 
-    this.selectedValues.splice(index, 1)
+    this.fieldClones.splice(index, 1)
+    // console.log(this.fieldClones)
     this.updateAvailableClones();
 
     swal.fire({

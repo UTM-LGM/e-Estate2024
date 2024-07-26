@@ -51,7 +51,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     this.username = this.sharedService.userName
     this.success(this.username)
     this.role = this.sharedService.role
-    if (this.role != 'Admin') {
+    if (this.role != 'Admin' && this.role != 'Management') {
       const userSubscribe = this.userService.getUser(this.username)
         .subscribe(
           Response => {
@@ -102,6 +102,8 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
   logOutStaff() {
     this.msalService.logoutRedirect({
       postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
+      //postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/e-Estate'
+
     });
     localStorage.clear();
   }

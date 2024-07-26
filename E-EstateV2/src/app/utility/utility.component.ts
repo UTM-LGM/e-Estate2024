@@ -13,7 +13,7 @@ export class UtilityComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.router.navigateByUrl('/e-estate/utilities-admin/planting-material');
+    this.router.navigateByUrl('/utilities-admin/planting-material');
   }
 
 }

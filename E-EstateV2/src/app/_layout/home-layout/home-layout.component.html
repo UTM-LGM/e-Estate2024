@@ -8,7 +8,7 @@
     </div>
     <span class="span"><img width="40px" style="padding: 5px;"
         src="assets/Images/LGM-logo.png" /></span> &nbsp;
-    <span class="homelink" routerLink="/e-estate/home">Malaysian Rubber Board</span>
+    <span class="homelink" routerLink="/home">Malaysian Rubber Board</span>
 
     <span class="flexExpand"></span>
     <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-address-card"></i></span> &nbsp;
@@ -18,7 +18,7 @@
     &nbsp;
 
     <div *ngIf="role == 'EstateClerk'">
-      <span style="cursor: pointer;" routerLink="/e-estate/notification">
+      <span style="cursor: pointer;" routerLink="/notification">
         <i class="fa fa-envelope"></i>
         <div class="badge" *ngIf="badgeCount > 0">
           <div style="margin-top: -6px;"><span>{{ badgeCount }}</span></div>
@@ -34,11 +34,11 @@
         <span><i class="fa fa-user"></i> Position : {{position}}</span><br />
         <hr>
         <div style="text-align: center;">
-          <div *ngIf="role != 'Admin'">
+          <div *ngIf="role != 'Admin' && role != 'Management'">
             <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
           </div>
-          <button *ngIf="role != 'Admin'" class="btn-danger" (click)="logOut()">LOGOUT</button>
-          <button *ngIf="role == 'Admin'" class="btn-danger" (click)="logOutStaff()">LogOut Staff</button>
+          <button *ngIf="role != 'Admin' && role != 'Management'" class="btn-danger" (click)="logOut()">LOGOUT</button>
+          <button *ngIf="role == 'Admin' || role == 'Management'" class="btn-danger" (click)="logOutStaff()">LogOut Staff</button>
         </div>
 
       </div>

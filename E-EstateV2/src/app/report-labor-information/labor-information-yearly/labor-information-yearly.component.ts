@@ -330,7 +330,7 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
       Total: 0
     };  
 
-    if(this.role == 'Admin'){
+    if(this.role == 'Admin' || this.role == 'Management'){
       localTapperFieldWorker.forEach(worker => {
         totalTapperWorker.Local += worker.totalTapperWorker;
         totalTapperWorker.Total += worker.totalTapperWorker;
@@ -362,7 +362,7 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
       Total: 0
     };
   
-    if(this.role == 'Admin'){
+    if(this.role == 'Admin' || this.role == 'Management'){
       localTapperFieldWorker.forEach(worker => {
         totalFieldWorker.Local += worker.totalFieldWorker;
         totalFieldWorker.Total += worker.totalFieldWorker;

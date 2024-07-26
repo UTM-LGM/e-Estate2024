@@ -19,6 +19,6 @@ export class ReportProductionByYearComponent implements OnInit {
 
   ngOnInit() {
     this.role = this.sharedService.role
-    this.router.navigateByUrl('/e-estate/report-production-by-year/rubber-production-yearly')
+    this.router.navigateByUrl('/report-production-by-year/rubber-production-yearly')
   }
 }

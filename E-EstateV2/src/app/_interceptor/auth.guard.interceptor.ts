@@ -6,6 +6,7 @@ import { UserService } from '../_services/user.service';
 import { User } from '../_interface/user';
 import { SharedService } from '../_services/shared.service';
 import { MsalService } from '@azure/msal-angular';
+import { InteractionRequiredAuthError } from '@azure/msal-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,12 @@ export class AuthGuard implements CanActivate {
     private sharedService: SharedService,
     private msalService: MsalService
   ) {
+    const activeAccount = localStorage.getItem('activeAccount');
+    if (activeAccount) {
+      this.msalService.instance.setActiveAccount(JSON.parse(activeAccount));
+    }
   }
+
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean> {
     const accounts = this.msalService.instance.getAllAccounts();
     const token = localStorage.getItem('token')
@@ -112,78 +118,136 @@ export class AuthGuard implements CanActivate {
     const token = localStorage.getItem('accessToken');
     if (token != null) {
       const decodedToken: any = jwt_decode(token);
-  
+
       this.sharedService.roles = decodedToken.roles;
       this.sharedService.role = decodedToken.roles[0];
-  
-      // Check JWT expiration time
+
       const currentTime = new Date().getTime();
       if (decodedToken.exp * 1000 < currentTime) {
+        const activeAccount = this.msalService.instance.getActiveAccount();
+        this.msalService.instance.initialize();
+
         // Token expired, try to acquire a new token silently
-        return this.msalService.acquireTokenSilent({
-          scopes: ["api://e-EstateAPI/.default"]
-        }).pipe(
-          switchMap((response) => {
-            // Save the new token
-            localStorage.setItem('accessToken', response.accessToken);
-            return of(true);
-          }),
-          catchError((error) => {
-            // Silent token acquisition failed, logout and redirect to login page
-            this.msalService.logoutRedirect({
-              postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
-            });
-            localStorage.clear();
-            this.router.navigateByUrl('/login');
-            return of(false);
-          })
-        );
+        if (activeAccount) {
+          return this.msalService.acquireTokenSilent({
+            scopes: ["api://e-EstateAPI/.default"],
+            account: activeAccount
+          }).pipe(
+            switchMap((response) => {
+              // Save the new token
+              localStorage.setItem('accessToken', response.accessToken);
+              return of(true);
+            }),
+            catchError((error) => {
+              console.error('Token acquisition error:', error);
+
+              if (error instanceof InteractionRequiredAuthError) {
+                console.log('Interaction required, redirecting to login...');
+                // Interaction is required, redirect to login page
+                this.msalService.loginRedirect({
+                  scopes: ["api://e-EstateAPI/.default"],
+                  redirectUri: 'https://www5.lgm.gov.my/e-Estate'
+                });
+                localStorage.clear();
+                this.router.navigateByUrl('/login');
+                return of(false);
+              } else {
+                console.log('Silent token acquisition failed, logging out...');
+                // Silent token acquisition failed, logout and redirect to login page
+                this.msalService.logoutRedirect({
+                  postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
+                });
+                localStorage.clear();
+                this.router.navigateByUrl('/login');
+                return of(false);
+              }
+            })
+          );
+        } else {
+          console.log('No active account found, logging out...');
+          // No active account found
+          this.msalService.logoutRedirect({
+            postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
+          });
+          localStorage.clear();
+          this.router.navigateByUrl('/login');
+          return of(false);
+        }
       } else {
         return of(true);
       }
-    }
+    } else {
+      console.log('No token found, redirecting to login...');
+      // No token found, redirect to login page
+      this.msalService.loginRedirect({
+        scopes: ["api://e-EstateAPI/.default"],
+        redirectUri: 'https://www5.lgm.gov.my/e-Estate'
+      });
+
+    // const currentTime = new Date().getTime()
+    // //*1000 to convert milisecond
+    // if (decodedToken.exp * 1000 < currentTime) {
+    //   this.msalService.logoutRedirect({
+    //     postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
+    //   });
+    //   localStorage.clear()
+    //   this.router.navigateByUrl('/login')
+    //   return of(false)
+    // }
+    // else {
+    //   return of(true)
+    // }
+  }
     return of(true);
   }
-  
-  
 
-  decodeIdToken() {
-    const token = localStorage.getItem('idToken')
-    if (token != null) {
-      const decodedToken: any = jwt_decode(token)
-      if (decodedToken != null) {
-        this.sharedService.email = decodedToken.email
-        this.sharedService.fullName = decodedToken.name
-        this.sharedService.userId = decodedToken.oid
-        this.sharedService.userName = decodedToken.preferred_username
-      }
-      else {
-      }
+decodeIdToken() {
+  const token = localStorage.getItem('idToken')
+  if (token != null) {
+    const decodedToken: any = jwt_decode(token)
+    if (decodedToken != null) {
+      this.sharedService.email = decodedToken.email
+      this.sharedService.fullName = decodedToken.name
+      this.sharedService.userId = decodedToken.oid
+      this.sharedService.userName = decodedToken.preferred_username
+    }
+    else {
     }
   }
+}
 
-  getUser(estateId: number, companyId: number) {
-    this.userService.getUser(this.sharedService.userName)
-      .subscribe(
-        Response => {
-          this.user = Response
-          this.sharedService.userId = this.user.id
-          this.sharedService.email = this.user.email
-          if (this.sharedService.role != "Admin") {
-            if (this.user.estateId == estateId && this.user.companyId == companyId) {
-              this.sharedService.companyId = this.user.companyId
-              this.sharedService.estateId = this.user.estateId
-            }
-            else {
-              this.router.navigateByUrl('/login')
-            }
+setActiveAccount() {
+  var acc = localStorage.getItem('activeAccount')
+  if (acc != null) {
+    const activeAccount = JSON.parse(acc);
+    if (activeAccount) {
+      this.msalService.instance.setActiveAccount(activeAccount);
+    }
+  }
+}
+
+getUser(estateId: number, companyId: number) {
+  this.userService.getUser(this.sharedService.userName)
+    .subscribe(
+      Response => {
+        this.user = Response
+        this.sharedService.userId = this.user.id
+        this.sharedService.email = this.user.email
+        if (this.sharedService.role != "Admin" && this.sharedService.role != "Management") {
+          if (this.user.estateId == estateId && this.user.companyId == companyId) {
+            this.sharedService.companyId = this.user.companyId
+            this.sharedService.estateId = this.user.estateId
           }
           else {
-
+            this.router.navigateByUrl('/login')
           }
+        }
+        else {
 
         }
-      )
-  }
+
+      }
+    )
+}
 
 }

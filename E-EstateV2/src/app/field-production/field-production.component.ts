@@ -194,7 +194,7 @@ export class FieldProductionComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const productions = Response
-          this.filterProductions = productions.filter(e => e.monthYear == this.date && Fields.some(field => field.id === e.fieldId))
+          this.filterProductions = productions.filter(e => e.monthYear == this.date.toUpperCase() && Fields.some(field => field.id === e.fieldId))
           this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
           this.calculateLatexDry(this.filterProductions, this.latexDry)
           this.calculateUSSDry(this.filterProductions, this.USSDry)

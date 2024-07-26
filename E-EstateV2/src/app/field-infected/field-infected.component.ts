@@ -284,6 +284,11 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     }
   }
 
+  levelChange(){
+    this.fieldInfected.areaInfectedPercentage = null
+    this.fieldInfected.areaInfected = null
+  }
+
   validateHigh() {
     const percentage = this.fieldInfected.areaInfectedPercentage;
     if (percentage < 50) {
@@ -298,25 +303,24 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
 
   validateMedium() {
     const percentage = this.fieldInfected.areaInfectedPercentage;
-    if (percentage < 21 || percentage > 49) {
+    if (percentage < 16 || percentage > 49) {
       swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Percentage should be between 16% and 49% for MEDIUM severity level.'
+        text: 'Percentage should be between 16% - 49% for MEDIUM severity level.'
       });
       this.fieldInfected.areaInfectedPercentage = null
-
     }
 
   }
 
   validateLow() {
     const percentage = this.fieldInfected.areaInfectedPercentage;
-    if (percentage < 1 || percentage > 20) {
+    if (percentage < 1 || percentage > 15) {
       swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Percentage should be between 1% and 15% for LOW severity level.'
+        text: 'Percentage should be between 1% - 15% for LOW severity level.'
       });
       this.fieldInfected.areaInfectedPercentage = null
 

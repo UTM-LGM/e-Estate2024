@@ -8,7 +8,7 @@
 
   <!-- <h1>Estate Profile</h1> -->
 
-  <div style="float:right;">
+  <div style="float:right;" *ngIf="userRole != 'Management'">
     <button class="btn-update" (click)="openDialog(estate,estateDetail)">
       Update &nbsp; <i class="fa fa-pencil"></i>
     </button>
@@ -103,7 +103,7 @@
 
       <tr>
 
-        <td>Estate Manager</td>
+        <td>Person in charge</td>
         <td><span>:</span></td>
         <td>{{estate.personInCharge}}</td>
 
@@ -157,7 +157,7 @@
 
   <div>
     <h1>List of Additional Contact</h1>
-    <button style="margin-bottom: 10px" class="btn-add" (click)="openDialogContact(contacts, estate)">
+    <button *ngIf="userRole != 'Management'" style="margin-bottom: 10px" class="btn-add" (click)="openDialogContact(contacts, estate)">
       Add New Contact &nbsp; <i class="fa fa-plus"></i>
     </button>
 
@@ -171,7 +171,7 @@
               {{ column.displayText }}
             </th>
             <th width="90px">Status</th>
-            <th width="30px">Action</th>
+            <th width="30px" *ngIf="userRole != 'Management'">Action</th>
           </tr>
         </thead>
 
@@ -182,7 +182,11 @@
           </td>
         </tr>
 
-        <tr *ngIf="contacts.length == 0">
+        <tr *ngIf="contacts.length == 0 && userRole != 'Management'">
+          <td colspan="7" style="color: red;">No Additional Contact</td>
+        </tr>
+
+        <tr *ngIf="contacts.length == 0 && userRole == 'Management'">
           <td colspan="6" style="color: red;">No Additional Contact</td>
         </tr>
 
@@ -194,15 +198,15 @@
             <td>{{ contact.position }}</td>
             <td>{{ contact.phoneNo }}</td>
             <td>{{ contact.email }} </td>
-            <td>
-              <button style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
+            <td >
+              <button [disabled]="userRole == 'Management'" style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
                 'active-btn': contact.isActive == true,
                 'inactive-btn': contact.isActive == false
               }">
                 {{ contact.isActive == true ? "Active" : "Inactive" }}
               </button>
             </td>
-            <td>
+            <td *ngIf="userRole != 'Management'">
               <button class="btn-update" style="padding: 3px 15px;" (click)="openDialogContact(contact, estate)">
                 <i class="fa fa fa-pencil"></i>
               </button>
@@ -219,7 +223,7 @@
   <div class="box-container" *ngIf="userRole !== 'EstateClerk'">
     <h1>List of Fields</h1>
     <hr />
-    <button style="margin-bottom: 10px" class="btn-add" routerLink="/e-estate/add-field/{{estate.id}}">
+    <button *ngIf="userRole != 'Management'" style="margin-bottom: 10px" class="btn-add" routerLink="/add-field/{{estate.id}}">
       Add New Field &nbsp; <i class="fa fa-plus"></i>
     </button>
     <br />
@@ -229,26 +233,24 @@
     <div style="overflow-x: auto; width: 100%;">
       <table style="width: 100%;">
         <tr>
-          <th class="th" *ngFor="let column of sortableColumns" scope="col" [appSort]="estate.fields"
+          <th class="th" *ngFor="let column of sortableColumns" scope="col" [appSort]="fields"
             [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
-            <i class="fa"
-              [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
           </th>
           <th class="th" width="90px">Status</th>
           <th class="th" width="30px">Action</th>
         </tr>
 
         <tr *ngIf="fields.length == 0">
-          <td colspan="10" style="color: red;">No Field</td>
+          <td colspan="12" style="color: red;">No Field</td>
         </tr>
 
         <tbody *ngFor="let field of fields | filter : termField | paginate: { itemsPerPage: itemsPerPageField, currentPage: fieldsPageNumber, id: 'fields' }; let i = index">
           <tr class="list" style="cursor:default;">
             <td>{{ (fieldsPageNumber - 1) * itemsPerPageField + i + 1 }}</td>
-            <td class="td" style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}"><a>{{
+            <td *ngIf="userRole != 'Management'" class="td" style="cursor: pointer;"  routerLink="/field-detail/{{ field.id }}"><a>{{
                 field.fieldName }}</a></td>
+            <td *ngIf="userRole == 'Management'">{{field.fieldName}}</td>
             <td class="td">{{ field.area }}</td>
             <td class="td">
               {{ field.isMature == true ? "Mature" : "Immature" }}

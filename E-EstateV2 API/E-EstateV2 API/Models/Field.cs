@@ -28,5 +28,8 @@ namespace E_EstateV2_API.Models
         public FieldStatus FieldStatus { get; set; }
         public int estateId { get; set; }
 
+        public List<FieldClone> fieldClones { get; set; }
+        public List<FieldGrant> fieldGrants { get; set; }
+
     }
 }

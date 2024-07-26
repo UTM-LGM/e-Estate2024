@@ -5,7 +5,7 @@
 
   <div class="box-container" *ngIf="role === 'EstateClerk'">
     <div style="margin-top: -10px">
-      <button class="btn-add" routerLink="/e-estate/add-field/{{estate.id}}">
+      <button class="btn-add" routerLink="/add-field/{{estate.id}}">
         Add Field &nbsp; <i class="fa fa-plus"></i>
       </button>
     </div>
@@ -16,11 +16,10 @@
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <tr>
-          <th *ngFor="let column of sortableColumns" scope="col" [appSort]="estate.fields" [attr.data-order]="order"
+          <th style="width: 10px;">No</th>
+          <th style="width: 90px;" *ngFor="let column of sortableColumns" scope="col" [appSort]="estate.fields" [attr.data-order]="order"
             [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
-            <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                   'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
           </th>
           <th width="90px">Status</th>
           <th width="30px">Action</th>
@@ -40,7 +39,7 @@
         <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
           <tr class="list" style="cursor:default;">
             <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
-            <td style="cursor: pointer;" routerLink="/e-estate/field-detail/{{ field.id }}">
+            <td style="cursor: pointer;" routerLink="/field-detail/{{ field.id }}">
               <a [ngStyle]="{'color': (field.fieldGrants && field.fieldGrants.length === 0) ? 'red' : 'blue'}">{{ field.fieldName }}</a>
             </td>                     
             <td>{{ field.rubberArea | number:'1.2-2' }}</td>
@@ -101,7 +100,7 @@
     </div>
   </div>
   <br />
-  <div *ngIf="role === 'Admin' || role === 'CompanyAdmin'">
+  <div *ngIf="role === 'Admin' || role === 'CompanyAdmin' || role === 'Management'">
     <button class="btn-back" (click)="back()">
       <i class="fa fa-arrow-left"></i> &nbsp; Back
     </button>

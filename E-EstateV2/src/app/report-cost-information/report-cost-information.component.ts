@@ -29,6 +29,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   radioButton = false
 
   costType = 'all'
+  costTypeSub = ''
+
 
   companies: any[] = []
   estate: any = {} as any
@@ -36,7 +38,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   filterLGMAdmin: any[] = []
   filterCompanyAdmin: any[] = []
   costInformations: any[] = []
-  filteredCostInformation : any[]=[]
+  filteredCostInformation: any[] = []
 
   showAll = false
 
@@ -75,6 +77,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   monthChange() {
     this.isLoading = true
     this.getCostInformation()
+    this.costType = 'all'
+    this.costTypeSub = 'allSub'
   }
 
   chageStartMonth() {
@@ -173,11 +177,13 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   getCostInformation() {
     setTimeout(() => {
+      this.totalAmount = 0
       const getCostInformation = this.reportService.getAllCostInformation(this.startMonth, this.endMonth)
         .subscribe(
           Response => {
+            let groupedResponse = [];
             if (this.estate.id == null) {
-              const groupedResponse = Response.reduce((acc, obj) => {
+              groupedResponse = Response.reduce((acc, obj) => {
                 const existingItem = acc.find((item: any) => item.costId === obj.costId);
                 if (existingItem) {
                   existingItem.totalAmount += obj.amount;
@@ -199,7 +205,25 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
               this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
               this.showAll = true
             } else {
-              this.costInformations = Response.filter(x => x.estateId == this.estate.id);
+              groupedResponse = Response.filter(x => x.estateId == this.estate.id).reduce((acc, obj) => {
+                const existingItem = acc.find((item: any) => item.costId === obj.costId);
+                if (existingItem) {
+                  existingItem.amount += obj.amount;
+                } else {
+                  acc.push({
+                    costId: obj.costId,
+                    amount: obj.amount,
+                    costCategory: obj.costCategory,
+                    costSubcategories1: obj.costSubcategories1,
+                    costSubcategories2: obj.costSubcategories2,
+                    costType: obj.costType,
+                    isMature: obj.isMature,
+                    estateId: obj.estateId
+                  });
+                }
+                return acc
+              }, [])
+              this.costInformations = groupedResponse
               this.filteredCostInformation = this.costInformations
               this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
             }
@@ -213,11 +237,16 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    if (this.role == 'Admin') {
+    if (this.role == 'Admin' || this.role == 'Management') {
       this.estate.companyId = null
       this.estate.id = null
-      this.year = ''
-      this.costInformations = [];
+      this.startMonth = ''
+      this.endMonth = ''
+      this.filteredCostInformation = [];
+      this.radioButton = false
+      this.costType = 'all'
+      this.costTypeSub = 'allSub'
+      this.totalAmount = 0
     }
   }
 
@@ -229,7 +258,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
       let bilCounter = 1
       const filteredData: any = data.map(row => ({
         No: bilCounter++,
-        CostType: row.costType,
+        CostType: this.formatCostType(row.costType),
         Maturity: row.isMature ? "Mature" : "Immature",
         CostCategory: row.costCategory,
         CostSubCategory1: row.costSubcategories1,
@@ -243,13 +272,15 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
         {}, // Empty row for separation
         {
           No: 'No', CostType: 'CostType', Maturity: 'Maturity', CostCategory: 'CostCategory',
-          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'costSubcategories2', Amount: 'Amount'
+          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'CostSubcategory2', Amount: 'Amount'
         }
       ];
 
+      const footerRow = [{ Amount: this.totalAmount, No: '', CostType: '', Maturity: '', CostCategory: '', CostSubCategory1: '', CostSubCategory2: 'Total Amount:' }];
+
       const exportData = headerRow.concat(filteredData);
 
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([...exportData, ...footerRow], { skipHeader: true });
 
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
@@ -262,7 +293,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
       let bilCounter = 1
       const filteredData: any = data.map(row => ({
         No: bilCounter++,
-        CostType: row.costType,
+        CostType: this.formatCostType(row.costType),
         Maturity: row.isMature ? "Mature" : "Immature",
         CostCategory: row.costCategory,
         CostSubCategory1: row.costSubcategories1,
@@ -270,19 +301,25 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
         Amount: row.totalAmount,
       }))
 
+      const totalAmount = filteredData.reduce((sum: any, row: any) => sum + row.totalAmount, 0);
+
+
       const headerRow = [
         { No: 'Start Month Year:', State: this.startMonth },
         { No: 'End Month Year:', State: this.endMonth },
         {}, // Empty row for separation
         {
           No: 'No', CostType: 'CostType', Maturity: 'Maturity', CostCategory: 'CostCategory',
-          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'costSubcategories2', Amount: 'Amount'
+          CostSubCategory1: 'CostSubCategory1', CostSubCategory2: 'CostSubCategory2', Amount: 'Amount'
         }
       ];
 
+      const footerRow = [{ Amount: this.totalAmount, No: '', CostType: '', Maturity: '', CostCategory: '', CostSubCategory1: '', CostSubCategory2: 'Total Amount:' }];
+
+
       const exportData = headerRow.concat(filteredData);
 
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([...exportData, ...footerRow], { skipHeader: true });
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
       XLSX.writeFile(wb, `${fileName}.xlsx`);
@@ -290,27 +327,139 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
 
   }
 
+  formatCostType(costType: string): string {
+    if (costType === 'DIRECT COST') {
+      return 'Direct Cost';
+    } else if (costType === 'INDIRECT COST') {
+      return 'Indirect Cost';
+    } else {
+      return costType;
+    }
+  }
+
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
 
-  OnRadioChange(){
+  OnRadioChange() {
+
+    this.costTypeSub = 'allSub'
     if (this.costType === 'all') {
-      this.filteredCostInformation = this.costInformations;
+      this.filteredCostInformation = this.costInformations.filter(x => x.estateId == this.estate.id);
       this.totalAmount = 0
-      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
     } else if (this.costType === 'mature') {
-      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == true);
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == true && cost.estateId == this.estate.id);
       this.totalAmount = 0
-      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
     } else if (this.costType === 'immature') {
-      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == false);
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == false && cost.estateId == this.estate.id);
       this.totalAmount = 0
-      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
     } else if (this.costType === 'indirect') {
-      this.filteredCostInformation = this.costInformations.filter(cost => cost.costType == "INDIRECT COST");
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costType == "INDIRECT COST" && cost.estateId == this.estate.id);
       this.totalAmount = 0
-      this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    }
+  }
+
+  OnRadioChangeSub() {
+    if (this.costTypeSub === 'allSub') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.isMature == true && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'manuring') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1 == "Manuring" && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'weeding') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1 == "Weeding" && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'others') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1.includes("Others") && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'tapping') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1.includes("Tapping") && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'stimulation') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1 == "Stimulation" && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    } else if (this.costTypeSub === 'transport') {
+      this.filteredCostInformation = this.costInformations.filter(cost => cost.costSubcategories1.includes("Transport") && cost.estateId == this.estate.id);
+      this.totalAmount = 0
+      if (this.showAll == true) {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.totalAmount, 0);
+      } else {
+        this.totalAmount = this.filteredCostInformation.reduce((total, cost) => total + cost.amount, 0);
+      }
+    }
+  }
+
+
+  // shouldApplyFixedWidth(column: any): boolean {
+  //   // Adjust condition based on your specific columns
+  //   return column.columnName === 'costSubCategories2' || column.columnName === 'costSubCategories1';
+  // }
+
+  getColumnStyle(columnName: string) {
+    switch (columnName) {
+      case 'no':
+        return { 'width': '10px' };
+      case 'costType':
+      case 'isMature':
+        return { 'width': '50px' };
+      case 'costCategory':
+      case 'costSubCategories1':
+      case 'amount':
+        return { 'width': '100px' };
+      case 'costSubCategories2':
+        return { 'width': '170px' };
+      default:
+        return {};
     }
   }
 

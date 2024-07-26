@@ -18,6 +18,6 @@ export class ReportLaborInformationComponent {
 
   ngOnInit() {
     this.role = this.sharedService.role
-    this.router.navigateByUrl('/e-estate/report-labor-information/labor-information-yearly')
+    this.router.navigateByUrl('/report-labor-information/labor-information-yearly')
   }
 }

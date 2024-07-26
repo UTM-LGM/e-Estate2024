@@ -47,7 +47,6 @@ export class ReportFieldInformationComponent implements OnInit, OnDestroy {
   selectedEstateName= ''
 
   sortableColumns = [
-    { columnName: 'no', displayText: 'No'},
     { columnName: 'fieldName', displayText: 'Field / Block' },
     { columnName: 'area', displayText: 'Field Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },

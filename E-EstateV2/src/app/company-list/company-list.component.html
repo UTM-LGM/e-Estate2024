@@ -11,7 +11,7 @@
   <div class="column" *ngIf="showDefault">
     <div class="box-container list"
       *ngFor="let company of companies | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
-      routerLink="/e-estate/company-profile/{{ company.id }}">
+      routerLink="/company-profile/{{ company.id }}">
       <h3>
         <a>{{company.name}}</a>
       </h3>

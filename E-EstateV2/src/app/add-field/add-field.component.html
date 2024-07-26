@@ -81,7 +81,8 @@
 
 
                 <div class="box-container">
-                    <h1>Land Title</h1><hr/>
+                    <h1>Land Title</h1>
+                    <hr />
                     <div style="columns: 4;">
                         <label>No <span style="color: red;">*</span> : </label>
                         <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle" />
@@ -113,8 +114,9 @@
                                     <td colspan="5" style="color: red;">No Land Title</td>
                                 </tr>
 
-                                <tr *ngFor="let value of addedGrant; let i = index">
-                                    <td>{{ i + 1 }}</td>
+                                <tr
+                                    *ngFor="let value of addedGrant | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                                    <td>{{(pageNumber - 1) * itemsPerPage + i + 1 }}</td>
                                     <td>{{ value.grantTitle }}</td>
                                     <td>{{ value.grantArea }}</td>
                                     <td>{{ value.grantRubberArea }}</td>
@@ -125,6 +127,7 @@
                                     </td>
                                 </tr>
                             </table>
+                            <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
                         </div>
                     </div>
                 </div>
@@ -175,7 +178,7 @@
             </div>
             <br />
         </div>
-    </div><br/>
+    </div><br />
 
     <div>
         <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()" [disabled]="isSubmit">

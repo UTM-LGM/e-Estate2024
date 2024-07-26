@@ -350,11 +350,11 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   providers: [
     DatePipe,
     MatDialog,
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: UserActivityLogInterceptor,
-    //   multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UserActivityLogInterceptor,
+      multi: true
+    },
     {
       provide:HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

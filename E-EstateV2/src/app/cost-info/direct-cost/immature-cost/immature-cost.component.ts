@@ -76,11 +76,11 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.immatureDirectCostAmount = Response
-          this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.monthYear === this.immatureMonthYear
+          this.filterImmatureDirectCostAmount = this.immatureDirectCostAmount.filter(x => x.monthYear === this.immatureMonthYear.toUpperCase()
             && x.costTypeId == this.costTypeId && x.isMature === false && x.isMature !== null && x.estateId == this.sharedService.estateId)
-          this.draftFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Draft" && x.estateId == this.sharedService.estateId)
+          this.draftFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "DRAFT" && x.estateId == this.sharedService.estateId)
             .map(item => ({ ...item, amount: Number(item.amount).toFixed(2) }))
-          this.submitFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "Submitted" && x.estateId == this.sharedService.estateId)
+          this.submitFilterImmatureDirectCostAmount = this.filterImmatureDirectCostAmount.filter(x => x.status === "SUBMITTED" && x.estateId == this.sharedService.estateId)
           this.totalImmatureCost(this.filterImmatureDirectCostAmount)
         }
       )
@@ -106,7 +106,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
         ...obj,
         monthYear: this.immatureMonthYear,
         estateId: this.sharedService.estateId,
-        status: 'Draft',
+        status: 'DRAFT',
         createdBy: this.sharedService.userId.toString(),
         createdDate: new Date()
       };
@@ -161,7 +161,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
     const updatedBy = this.sharedService.userId.toString()
     const date = new Date()
     const updatedArray = this.draftFilterImmatureDirectCostAmount.map(obj => {
-      return { ...obj, status: 'Submitted', updatedBy: updatedBy, updatedDate: date }
+      return { ...obj, status: 'SUBMITTED', updatedBy: updatedBy, updatedDate: date }
     });
     swal.fire({
       title: 'Are you sure to submit ? ',

@@ -46,6 +46,10 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   isSubmit = false
   isLoading = true
 
+  pageNumber = 1
+  itemsPerPage = 10
+
+
   constructor(
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
@@ -221,11 +225,11 @@ export class AddFieldComponent implements OnInit, OnDestroy {
           return { 'cloneId': item.id, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
         });
   
-        const combineGrant : any [] = this.addedGrant.map((item:any) =>{
+        const combineLandTitle : any [] = this.addedGrant.map((item:any) =>{
           return {'grantTitle': item.grantTitle.toUpperCase(), 'grantArea': item.grantArea, 'grantRubberArea': item.grantRubberArea, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
         });
   
-        this.fieldService.addFieldWithDetails(this.field, combineClone, combineGrant)
+        this.fieldService.addFieldWithDetails(this.field, combineClone, combineLandTitle)
           .subscribe(
             {
               next: (response:any) => {

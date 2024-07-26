@@ -72,7 +72,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     const getProduction = this.productionService.getProduction()
     .subscribe(
       Response =>{
-        const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "Draft" && x.monthYear == date)
+        const production = Response.filter(x=>x.estateId == this.sharedService.estateId && x.status == "DRAFT" && x.monthYear == date?.toUpperCase())
         if(production.length > 0)
           {
             

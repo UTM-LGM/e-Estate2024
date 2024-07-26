@@ -27,44 +27,30 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.handleRedirect();
     this.checkAuthentication();
   }
 
-  handleRedirect() {
-    this.msalService.instance.handleRedirectPromise().then((response) => {
-      if (response && response.account) {
-        console.log(response, response.account)
-        this.msalService.instance.setActiveAccount(response.account);
-        localStorage.setItem('activeAccount', JSON.stringify(response.account));
-        this.router.navigateByUrl('/e-estate/home');
-      }
-    }).catch((error) => {
-      console.error('Error handling redirect:', error);
-    });
-  }
-
   checkAuthentication() {
-    this.spinnerService.requestStarted()
+    this.spinnerService.requestStarted();
     setTimeout(() => {
-      this.msalService.handleRedirectObservable().subscribe({
-        next: () => {
-          const accounts = this.msalService.instance.getAllAccounts();
-          if (accounts.length > 0) {
-            this.spinnerService.requestEnded()
-            this.router.navigateByUrl('/e-estate/home')
-          }
-          else {
-            this.spinnerService.requestEnded()
-            this.router.navigateByUrl('/login')
-          }
-        },
-        error: (err) => {
-          localStorage.clear()
-          this.spinnerService.requestEnded()
+      const accounts = this.msalService.instance.getAllAccounts();
+      if (accounts.length > 0) {
+        const activeAccount = localStorage.getItem('activeAccount');
+        if (activeAccount) {
+          // Set the active account from local storage
+          this.msalService.instance.setActiveAccount(JSON.parse(activeAccount));
+        } else {
+          // Set the first account as the active account if none is set
+          this.msalService.instance.setActiveAccount(accounts[0]);
+          localStorage.setItem('activeAccount', JSON.stringify(accounts[0]));
         }
-      })
-    }, 2000)
+        this.spinnerService.requestEnded();
+        this.router.navigateByUrl('/home');
+      } else {
+        this.spinnerService.requestEnded();
+        this.router.navigateByUrl('/login');
+      }
+    }, 2000);
   }
 
 
@@ -77,7 +63,7 @@ export class LoginComponent implements OnInit {
             next: (Response: any) => {
               localStorage.setItem('token', Response.token)
               this.spinnerService.requestEnded()
-              this.router.navigateByUrl('/e-estate')
+              this.router.navigateByUrl('/home')
             },
             error: (Error) => {
               swal.fire({

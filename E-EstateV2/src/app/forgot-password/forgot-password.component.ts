@@ -26,17 +26,17 @@ export class ForgotPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe((routerParams) => {
+    this.route.queryParams.subscribe((routerParams) => {
       const encodedUserId = routerParams['userId']
-      this.register.token = routerParams['token']
-      if (encodedUserId) {
+      const encodedToken = routerParams['token'];
+      if (encodedUserId  && encodedToken) {
         this.userId = this.decodeBase64(encodedUserId)
-        if (this.userId && this.userId.length > 0) {
+        this.register.token = this.decodeBase64(encodedToken);
+        if (this.userId) {
           this.isForgotPassword = true
         }
       }
       else{
-
       }
     });
   }

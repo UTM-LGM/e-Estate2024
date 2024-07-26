@@ -91,6 +91,15 @@ export class RubberStockDetailComponent implements OnInit {
       this.stock.weightLoss = 0
       this.stock.currentStock = 0
     }
+    else if(this.stock.weightLoss >= 15){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Weight Loss cannot higher than 15%',
+      });
+      this.stock.weightLoss = 0
+      this.stock.currentStock = 0
+    }
   }
 
   getAllProduction() {
@@ -99,7 +108,7 @@ export class RubberStockDetailComponent implements OnInit {
         Response => {
           const productions = Response
 
-          this.filterProductions = productions.filter(e =>e.status == "Submitted" && e.estateId == this.sharedService.estateId && e.monthYear?.toUpperCase() == this.stock.monthYear)
+          this.filterProductions = productions.filter(e =>e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear?.toUpperCase() == this.stock.monthYear)
 
           if(this.stock.rubberType == 'CUPLUMP'){
             this.TotalCuplump()
@@ -131,6 +140,12 @@ export class RubberStockDetailComponent implements OnInit {
 
   update() {
     this.stock.updatedBy = this.sharedService.userId
+    if(this.stock.rubberType == 'CUPLUMP'){
+      this.stock.totalProduction = this.totalCuplumpDry
+    }
+    else if(this.stock.rubberType == 'LATEX'){
+      this.stock.totalProduction = this.totalLatexDry
+    }
     this.rubberStockService.updateRubberStock(this.stock)
       .subscribe(
         Response => {

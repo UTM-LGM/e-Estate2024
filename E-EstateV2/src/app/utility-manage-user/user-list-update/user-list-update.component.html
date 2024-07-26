@@ -18,7 +18,13 @@
 
     <div style="columns: 2" class="column">
       <label>Position :</label>
-      <input type="text" name="fullname" [(ngModel)]="user.position"/>
+      <mat-select  placeholder="Please Choose" name="position" [(ngModel)]="user.position">
+        <mat-option value="MANAGER">MANAGER</mat-option>
+        <mat-option value="ASSISTANT MANAGER">ASSISTANT MANAGER</mat-option>
+        <mat-option value="SUPERVISOR">SUPERVISOR</mat-option>
+        <mat-option value="CLERK">CLERK</mat-option>
+        <mat-option value="COMPANY ADMIN(HQ)">COMPANY ADMIN (HQ)</mat-option>
+      </mat-select>
       <label>Username :</label>
       <input type="text" name="fullname" [(ngModel)]="user.userName"/>
     </div>

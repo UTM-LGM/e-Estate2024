@@ -36,8 +36,8 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   constructor(
     private buyerService: BuyerService,
     private sharedService: SharedService,
-    private myLesenService:MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService,
+    private myLesenService: MyLesenIntegrationService,
+    private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
   ) { }
 
@@ -92,7 +92,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
         .subscribe(
           Response => {
             const buyers = Response
-            this.buyers = buyers.filter(x=>x.estateId == this.sharedService.estateId)
+            this.buyers = buyers.filter(x => x.estateId == this.sharedService.estateId)
             this.isLoading = false
           });
       this.subscriptionService.add(getBuyer);
@@ -130,38 +130,50 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   checkLicenseNo(event: any) {
     this.spinnerService.requestStarted()
     setTimeout(() => {
-    const getLicenseNo = this.myLesenService.getLicenseNo(event.target.value.toString())
-      .subscribe(
-        {
-          next: (Response) => {
-            this.result = Response
-            this.result.premiseName = this.result.premiseName + "," + this.result.premiseAdd1.slice(0,-1)
-            swal.fire({
-              title: 'Done!',
-              text: 'Data found!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-          this.subscriptionService.add(getLicenseNo);
-          this.spinnerService.requestEnded()
-          },
-          error: (Error) => {
-            swal.fire({
-              icon: 'error',
-              title: 'Error! License No does not exist',
-            });
-            this.buyer.licenseNo = ''
-            this.result = {}
-          }
-        })
-      },1000)
+      const getLicenseNo = this.myLesenService.getLicenseNo(event.target.value.toString())
+        .subscribe(
+          {
+            next: (Response) => {
+              if (Response) {
+                this.result = Response
+                this.result.premiseName = this.result.premiseName + "," + this.result.premiseAdd1.slice(0, -1)
+                this.spinnerService.requestEnded()
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Data found!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+              } else {
+                this.spinnerService.requestEnded();
+                swal.fire({
+                  icon: 'error',
+                  title: 'Error! License No does not exist',
+                });
+                this.buyer.licenseNo = ''
+                this.result = {}
+              }
+
+            },
+            error: (Error) => {
+              swal.fire({
+                icon: 'error',
+                title: 'Error! License No does not exist',
+              });
+              this.buyer.licenseNo = ''
+              this.result = {}
+            }
+          })
+      this.subscriptionService.add(getLicenseNo);
+
+    }, 1000)
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
 
-  
+
 
 }

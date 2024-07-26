@@ -14,20 +14,20 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
   templateUrl: './user-list-update.component.html',
   styleUrls: ['./user-list-update.component.css']
 })
-export class UserListUpdateComponent implements OnInit, OnDestroy{
+export class UserListUpdateComponent implements OnInit, OnDestroy {
 
-  user:User = {} as User
+  user: User = {} as User
   result = {} as any
 
   constructor(
-    private location:Location,
-    private dialog:MatDialogRef<User>,
-    @Inject(MAT_DIALOG_DATA) public data : {data:User},
-    private userService:UserService,
-    private myLesenService:MyLesenIntegrationService,
+    private location: Location,
+    private dialog: MatDialogRef<User>,
+    @Inject(MAT_DIALOG_DATA) public data: { data: User },
+    private userService: UserService,
+    private myLesenService: MyLesenIntegrationService,
     private spinnerService: SpinnerService,
-    private subscriptionService:SubscriptionService
-  ){}
+    private subscriptionService: SubscriptionService
+  ) { }
 
   ngOnInit(): void {
     this.user = this.data.data
@@ -38,31 +38,42 @@ export class UserListUpdateComponent implements OnInit, OnDestroy{
     this.dialog.close()
   }
 
-  getLicenseDetail(){
+  getLicenseDetail() {
     this.myLesenService.getLicenseNo(this.user.licenseNo)
-    .subscribe(
-      Response =>{
-        this.result = Response
-      }
-    )
+      .subscribe(
+        Response => {
+          this.result = Response
+        }
+      )
   }
 
-  checkLicenseNo(event:any){
+  checkLicenseNo(event: any) {
     this.spinnerService.requestStarted()
     setTimeout(() => {
       const getLicense = this.myLesenService.getLicenseNo(event.target.value.toString())
         .subscribe(
           {
             next: (Response) => {
-              this.result = Response
-              this.spinnerService.requestEnded();
-              swal.fire({
-                title: 'Done!',
-                text: 'Data found!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
+              if (Response) {
+                this.result = Response
+                this.spinnerService.requestEnded();
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Data found!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+              }else{
+                this.spinnerService.requestEnded();
+                swal.fire({
+                  icon: 'error',
+                  title: 'Error! License No does not exist',
+                });
+                this.user.licenseNo = ''
+                this.result = {}
+              }
+
             },
             error: (Error) => {
               this.spinnerService.requestEnded();
@@ -79,31 +90,31 @@ export class UserListUpdateComponent implements OnInit, OnDestroy{
     }, 1000)
   }
 
-  update(){
-    if(this.user.licenseNo == ''){
+  update() {
+    if (this.user.licenseNo == '') {
       swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Please fill up the form',
       });
-    }else{
+    } else {
       this.user.companyId = this.result.companyId
       this.user.estateId = this.result.premiseId
       this.userService.updateUser(this.user)
-      .subscribe(
-        Response =>{
-          swal.fire({
-            title: 'Done!',
-            text: 'User successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-        }
-      )
+        .subscribe(
+          Response => {
+            swal.fire({
+              title: 'Done!',
+              text: 'User successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+          }
+        )
       this.dialog.close()
-      }
-      
+    }
+
   }
 
   ngOnDestroy(): void {

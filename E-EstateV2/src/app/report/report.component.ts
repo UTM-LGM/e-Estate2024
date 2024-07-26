@@ -19,6 +19,6 @@ export class ReportComponent implements OnInit {
 
   ngOnInit() {
     this.role = this.sharedService.role
-    this.router.navigateByUrl('/e-estate/reports/estate-by-state')
+    this.router.navigateByUrl('/reports/estate-by-state')
   }
 }

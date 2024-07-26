@@ -146,7 +146,7 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
       { No: 'Start Month Year:', State: this.startMonth},
       { No: 'End Month Year:', State: this.endMonth},
       {}, // Empty row for separation
-      { No: 'No', State: 'State', EstateNo: 'EstateNo', TotalRubberArea: 'TotalRubberArea' }
+      { No: 'No', State: 'State', EstateNo: 'EstateNo', TotalRubberArea: 'TotalRubberArea(Ha)' }
     ];
 
     // Combine the header row with the filtered data
@@ -169,6 +169,10 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   calculateTotal(){
     return this.stateTotalAreasArray.reduce((total, item) => total + item.totalArea, 0)
 
+  }
+
+  calculateEstate(){
+    return this.stateTotalAreasArray.reduce((total, item) => total + item.estateNo, 0)
   }
 
  

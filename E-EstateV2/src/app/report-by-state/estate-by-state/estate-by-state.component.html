@@ -21,11 +21,9 @@
     <table style="width: 100%">
       <tr>
         <th width="30px">No</th>
-        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="stateTotalAreas"
+        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="stateTotalAreasArray"
           [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
           {{ column.displayText }}
-          <i class="fa" [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
         </th>
       </tr>
 
@@ -43,12 +41,13 @@
       <ng-container *ngIf="!isLoading">
         <tr *ngFor="let town of stateTotalAreasArray | filter: term; let i = index">
           <td>{{ i + 1 }}</td>
-          <td style="cursor: pointer;"  [routerLink]="['/e-estate/report-by-state/state-detail', town.stateId]"  [queryParams]="{startMonth:startMonth, endMonth:endMonth}" ><a>{{ town.state }}</a></td>
+          <td style="cursor: pointer;"  [routerLink]="['/report-by-state/state-detail', town.stateId]"  [queryParams]="{startMonth:startMonth, endMonth:endMonth}" ><a>{{ town.state }}</a></td>
           <td>{{ town.estateNo }}</td>
           <td>{{ town.totalArea }}</td>
         </tr>
         <tr>
-          <th colspan="3">Total rubber area for all estate :</th>
+          <th colspan="2">Total :</th>
+          <th>{{calculateEstate()}}</th>
           <th>{{calculateTotal()}}</th>
         </tr>
       </ng-container>

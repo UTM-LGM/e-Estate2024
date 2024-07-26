@@ -99,45 +99,45 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'forgotpassword/:userId/:token',
+    path: 'forgotpassword',
     component: LoginLayoutComponent,
     children: [
       { path: '', component: ForgotPasswordComponent },
     ],
   },
   {
-    path: 'e-estate',
+    path: '',
     component: HomeLayoutComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
-      { path: 'company-list', component: CompanyListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] } },
-      { path: 'company-profile/:id', component: CompanyDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin'] } },
-      { path: 'estate/:id', component: EstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'add-estate', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'add-estate/:id', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin'] } },
-      { path: 'estate-list', component: EstateListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] } },
-      { path: 'estate-detail/:id', component: EstateDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'field-info/:id', component: FieldInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'add-field/:id', component: AddFieldComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'field-disease/:id', component: FieldInfectedComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'field-detail/:id', component: FieldDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'CompanyAdmin', 'EstateClerk'] } },
-      { path: 'field-production/:id', component: MonthlyFormComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'rubber-stock/:id', component: RubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'add-rubber-stock', component: AddRubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'labor-info/:id', component: LaborInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'cost-info/:id', component: CostInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'rubber-sale/:id', component: RubberSalesComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'add-rubber-sale/:id', component: AddRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'rubber-purchase/:id', component: RubberPurchaseComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
-      { path: 'add-rubber-purchase/:id', component: AddRubberPurchaseComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] } },
+      { path: 'company-list', component: CompanyListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] } },
+      { path: 'company-profile/:id', component: CompanyDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin'] } },
+      { path: 'estate/:id', component: EstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'add-estate', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'add-estate/:id', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin'] } },
+      { path: 'estate-list', component: EstateListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] } },
+      { path: 'estate-detail/:id', component: EstateDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'field-info/:id', component: FieldInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'add-field/:id', component: AddFieldComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'field-disease/:id', component: FieldInfectedComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'field-detail/:id', component: FieldDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
+      { path: 'field-production/:id', component: MonthlyFormComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'rubber-stock/:id', component: RubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'add-rubber-stock', component: AddRubberStockComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'labor-info/:id', component: LaborInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'cost-info/:id', component: CostInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'rubber-sale/:id', component: RubberSalesComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'add-rubber-sale/:id', component: AddRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'rubber-purchase/:id', component: RubberPurchaseComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
+      { path: 'add-rubber-purchase/:id', component: AddRubberPurchaseComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] } },
       { path: 'notification', component: NotificationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-info-yearly/:id', component: FieldInfoYearlyComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-infected-status/:id', component: FieldInfectedStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
 
       {
         path: 'utilities-admin',
-        component: UtilityComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] },
+        component: UtilityComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] },
         children: [
           { path: 'planting-material', component: PlantingMaterialComponent },
           { path: 'other-crop', component: OtherCropComponent },
@@ -160,10 +160,10 @@ const routes: Routes = [
 
         ],
       },
-      { path : 'utility-manage-user', component: UtilityManageUserComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin'] }},
+      { path : 'utility-manage-user', component: UtilityManageUserComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] }},
       {
         path: 'utilities-clerk',
-        component: UtilityClerkComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk'] },
+        component: UtilityClerkComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] },
         children: [
           { path: 'register-buyer', component: RegisterBuyerComponent },
           { path: 'register-seller', component: RegisterSellerComponent },
@@ -172,7 +172,7 @@ const routes: Routes = [
       },
       {
         path: 'report-by-state',
-        component: ReportByStateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component: ReportByStateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children: [
           { path: 'estate-by-state', component: EstateByStateComponent },
           { path: 'rubber-crops-by-state', component:RubberCropsByStateComponent},
@@ -181,11 +181,11 @@ const routes: Routes = [
       },
       {
         path: 'report-rubber-area-by-clone',
-        component: ReportRubberAreaByCloneComponent, canActivate : [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component: ReportRubberAreaByCloneComponent, canActivate : [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
         path:'report-production-by-year',
-        component:ReportProductionByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportProductionByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children:[
           { path: 'rubber-production-yearly', component: RubberProductionYearlyComponent },
           { path: 'clone-production-yearly', component: CloneProductionYearlyComponent}
@@ -193,18 +193,18 @@ const routes: Routes = [
       },
       {
         path:'report-productivity-by-year',
-        component:ReportProductivityByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportProductivityByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children:[
           { path: 'clone-productivity-yearly',component:CloneProductivityYearlyComponent}
         ]
       },
       {
         path:'report-field-information',
-        component:ReportFieldInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportFieldInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
         path:'report-labor-information',
-        component:ReportLaborInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportLaborInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children:[
           { path: 'labor-information-yearly', component:LaborInformationYearlyComponent},
           { path: 'worker-shortage-estate', component:WorkerShortageEstateComponent}
@@ -212,11 +212,11 @@ const routes: Routes = [
       },
       {
         path:'report-cost-information',
-        component:ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
         path:'report-rubber-sale',
-        component:ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'EstateClerk', 'CompanyAdmin'] },
+        component:ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       }
     ],
   },

@@ -129,7 +129,7 @@ export class StateDetailComponent implements OnInit {
       { No: 'Start Month Year:', EstateName: this.startMonth },
       { No: 'End Month Year:', EstateName: this.endMonth },
       {}, // Empty row for separation
-      { No: 'No', EstateName: 'EstateName', TotalRubberArea: 'TotalRubberArea', State: 'State' }
+      { No: 'No', EstateName: 'EstateName', TotalRubberArea: 'TotalRubberArea(Ha)', State: 'State' }
     ];
 
     // Combine the header row with the filtered data

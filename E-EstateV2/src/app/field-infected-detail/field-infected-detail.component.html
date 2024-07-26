@@ -2,34 +2,34 @@
   <h1>Field Infected Information</h1>
 
   <div style="columns: 2">
-    <label>Field / Block : </label>
+    <label>Field / Block <span style="color: red;">*</span> : </label>
     <input type="text" name="fieldName" [(ngModel)]="fieldInfected.fieldName" disabled />
 
-    <label>Rubber Area (Ha) : </label>
+    <label>Rubber Area (Ha) <span style="color: red;">*</span> : </label>
     <input type="text" name="area" [(ngModel)]="fieldInfected.area" disabled />
   </div>
 
   <div style="columns: 2" class="column">
-    <label>Date of screening :</label>
+    <label>Date of screening <span style="color: red;">*</span> :</label>
     <input type="date" name="date" #date value="{{formattedDate}}" (change)="selectedDate(date.value)" />
-    <label>Level Infected :</label>
-    <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel">
-      <mat-option value="HIGH">HIGH</mat-option>
-      <mat-option value="MEDIUM">MEDIUM</mat-option>
-      <mat-option value="LOW">LOW</mat-option>
+    <label>Level Infected <span style="color: red;">*</span> :</label>
+    <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel" (selectionChange)="levelChange()">
+      <mat-option value="HIGH">HIGH (>50%)</mat-option>
+      <mat-option value="MEDIUM">MEDIUM (16%-49%)</mat-option>
+      <mat-option value="LOW">LOW (1%-15%)</mat-option>
     </mat-select>
   </div>
 
   <div style="columns: 2">
 
-    <label>Disease Category : </label>
+    <label>Disease Category <span style="color: red;">*</span> : </label>
       <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldInfected.diseaseCategoryId" (selectionChange)="getDiseaseName()">
         <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
           {{ category.category }}
         </mat-option>
       </mat-select>
 
-    <label>Disease Name :</label>
+    <label>Disease Name <span style="color: red;">*</span> :</label>
     <mat-select name="diseaseName" placeholder="Please Choose" name="diseaseName"
       [(ngModel)]="fieldInfected.fieldDiseaseId">
       <mat-option *ngFor="let diseaseName of filterFieldDisease" [value]="diseaseName.id">
@@ -39,16 +39,17 @@
   </div>
 
   <div style="columns: 2" class="column">
-    <label>Area Infected Percentage (%) : </label>
-    <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" />
-    <label>Area Infected (Ha) : </label>
+    <label>Area Infected Percentage (%) <span style="color: red;">*</span> : </label>
+    <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()"
+    (blur)="validatePercentage()" />
+    <label>Area Infected (Ha) <span style="color: red;">*</span> : </label>
     <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled/>
   </div>
 
   <div style="columns: 2" *ngIf="fieldInfected.dateRecovered">
-    <label>Date Recovered :</label>
+    <label>Date Recovered <span style="color: red;">*</span> :</label>
     <input type="date" name="date" #date value="{{dateRecovered}}" (change)="selectedDateRecovered(date.value)" />
-    <label>Remark :</label>
+    <label>Remark <span style="color: red;">*</span> :</label>
     <textarea [(ngModel)]="fieldInfected.remark"></textarea>
   </div>
 

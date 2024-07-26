@@ -47,7 +47,7 @@ namespace E_EstateV2_API.Repository
                 currentTreeStand = x.currentTreeStand,
                 remark = x.remark,
                 fieldGrants = _context.fieldGrants.Where(y=>y.fieldId == x.Id).ToList(),
-            }).ToListAsync();
+            }).OrderByDescending(c => c.yearPlanted).ToListAsync();
             return field;
         }
 

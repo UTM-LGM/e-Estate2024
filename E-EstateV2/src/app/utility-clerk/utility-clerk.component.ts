@@ -13,7 +13,7 @@ export class UtilityClerkComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.router.navigateByUrl('/e-estate/utilities-clerk/register-buyer');
+    this.router.navigateByUrl('/utilities-clerk/register-buyer');
   }
 
 }

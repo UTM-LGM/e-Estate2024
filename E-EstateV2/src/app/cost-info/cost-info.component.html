@@ -13,7 +13,6 @@
         <!-- <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear"
           [(ngModel)]="selectedYear" (change)="yearSelected()" /> -->
         <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
-
       </div>
 
       <div style="width: 60%; display: flex; flex-wrap: wrap; align-items: center;">

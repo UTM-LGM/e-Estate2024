@@ -2,10 +2,10 @@
   <h1>Cost Information</h1>
   <hr />
 
-  <!-- <span *ngIf="role == 'Admin'" style="color: red;font-size: 12px;">**Please insert date only to filter yearly</span> -->
+  <span *ngIf="role == 'Admin' || role == 'Management'" style="color: red;font-size: 12px;">**Please insert start month and end month only to see data for all estates</span>
 
   <div style="columns:4"
-    [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+    [ngClass]="{'display': role == 'Admin'|| role == 'Management' , 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
     <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
       (selectionChange)="companySelected()">
@@ -28,11 +28,11 @@
 
   </div>
 
-  <!-- <button [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}"
-   class="btn-reset" (click)="reset()">Reset Filter</button> -->
+  <button [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}"
+   class="btn-reset" (click)="reset()">Reset Filter</button>
 
   <div style="columns:4"
-    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management'}">
     <div>
       <label>Company</label>
       <input type="text" [value]="company.name" disabled />
@@ -51,7 +51,7 @@
   </div>
 
   <div style="columns: 3;"
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
 
@@ -70,19 +70,45 @@
   <div *ngIf="radioButton">
     <label>Cost Type : </label>
     <label>
-      <input type="radio" name="choice" value="all" [(ngModel)]="costType" (change)="OnRadioChange()"> All
+      <input type="radio" name="all" value="all" [(ngModel)]="costType" (change)="OnRadioChange()"> All
     </label>
     <label>
-      <input type="radio" name="choice" value="mature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct Mature
+      <input type="radio" name="mature" value="mature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct Mature
       Cost
     </label>
     <label>
-      <input type="radio" name="choice" value="immature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct
+      <input type="radio" name="immature" value="immature" [(ngModel)]="costType" (change)="OnRadioChange()"> Direct
       Immature Cost
     </label>
     <label>
-      <input type="radio" name="choice" value="indirect" [(ngModel)]="costType" (change)="OnRadioChange()"> Indirect
+      <input type="radio" name="indirect" value="indirect" [(ngModel)]="costType" (change)="OnRadioChange()"> Indirect
       Cost
+    </label>
+  </div>
+
+  <div *ngIf="costType == 'mature'">
+    <hr>
+    <label>Cost Subcategory 1 : </label>
+    <label>
+      <input type="radio" name="allSub" value="allSub" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> All
+    </label>
+    <label>
+      <input type="radio" name="manuring" value="manuring" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Manuring
+    </label>
+    <label>
+      <input type="radio" name="weeding" value="weeding" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Weeding
+    </label>
+    <label>
+      <input type="radio" name="others" value="others" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Others ( Pet and Disease Control)
+    </label>
+    <label>
+      <input type="radio" name="tapping" value="tapping" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Tapping and Collection
+    </label>
+    <label>
+      <input type="radio" name="stimulation" value="stimulation" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Stimulation
+    </label>
+    <label>
+      <input type="radio" name="transport" value="transport" [(ngModel)]="costTypeSub" (change)="OnRadioChangeSub()"> Transport to factory
     </label>
   </div>
 
@@ -91,11 +117,8 @@
       <tr>
         <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col"
           [appSort]="filteredCostInformation" [attr.data-order]="order" [attr.data-name]="column.columnName"
-          (click)="toggleSort(column.columnName)">
+          (click)="toggleSort(column.columnName)" [ngStyle]="getColumnStyle(column.columnName)">
           {{ column.displayText }}
-          <i class="fa"
-            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
         </th>
       </tr>
 
@@ -106,7 +129,7 @@
         </td>
       </tr>
 
-      <tr *ngIf="!isLoading && filteredCostInformation.length == 0 && role == 'Admin'">
+      <tr *ngIf="!isLoading && filteredCostInformation.length == 0 && (role == 'Admin' || role == 'Management')">
         <td colspan="7" style="color: red; text-align: center;">No data found. Please choose company, estate, start and
           end month year
         </td>
@@ -157,8 +180,6 @@
           <th>{{ totalAmount }}</th>
         </tr>
       </ng-container>
-
-
     </table>
   </div>
   <!-- <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls> -->

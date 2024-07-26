@@ -198,4 +198,19 @@ export class RubberProductionYearlyComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
+  getColumnStyle(columnName: string) {
+    switch (columnName) {
+      case 'monthYear':
+        return { 'width': '30px' };
+      case 'cuplump':
+      case 'latex':
+      case 'totalProduction':
+        return { 'width': '100px' };
+      case 'costSubCategories2':
+        return { 'width': '170px' };
+      default:
+        return {};
+    }
+  }
+
 }

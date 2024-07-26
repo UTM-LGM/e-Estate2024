@@ -2,7 +2,7 @@
   <h1>Rubber Production</h1>
 
   <div style="columns:3"
-    [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+    [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
     <label>Company : </label>
     <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
       (selectionChange)="companySelected()">
@@ -25,7 +25,7 @@
 
 
   <div style="columns:3"
-    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management'}">
     <div>
       <label>Company</label>
       <input type="text" [value]="company.name" disabled />
@@ -41,7 +41,7 @@
   </div>
 
   <div style="columns: 3;"
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin'}">
+    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
     <label>Estate : </label>
     <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
     <label>Please choose year : </label>
@@ -59,11 +59,8 @@
       <tr>
         <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col"
           [appSort]="filterProductionYearly" [attr.data-order]="order" [attr.data-name]="column.columnName"
-          (click)="toggleSort(column.columnName)">
+          (click)="toggleSort(column.columnName)" [ngStyle]="getColumnStyle(column.columnName)">
           {{ column.displayText }}
-          <i class="fa"
-            [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
         </th>
       </tr>
 
@@ -74,7 +71,7 @@
         </td>
       </tr>
 
-      <tr *ngIf="!isLoading && filterProductionYearly.length == 0 && role == 'Admin'">
+      <tr *ngIf="!isLoading && filterProductionYearly.length == 0 && (role == 'Admin' || role == 'Management')">
         <td colspan="6" style="color: red; text-align: center;">No data found. Please choose company, estate and year
         </td>
       </tr>

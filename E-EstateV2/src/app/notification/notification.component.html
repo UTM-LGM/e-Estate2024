@@ -6,7 +6,7 @@
 
     <div class="alert" *ngIf="showAlertField">
         <i class="fa fa-exclamation"></i> &nbsp; Please update field information for {{yearNow}}, Click <a
-            [routerLink]="['/e-estate/field-info-yearly/', estateId]">here</a>
+            [routerLink]="['/field-info-yearly/', estateId]">here</a>
     </div>
 
     <div class="alert" *ngIf="showAlertProduction">
@@ -17,17 +17,17 @@
 
     <div class="alert" *ngIf="warningProductionDrafted" style="background-color: yellow;color: black;">
         <i class="fa fa-exclamation"></i> &nbsp; You have rubber production in drafted, please submit <a
-        [routerLink]="['/e-estate/field-production/', estateId]">here</a>
+        [routerLink]="['/field-production/', estateId]">here</a>
     </div>
 
     <div class="alert" *ngIf="warningCostDrafted" style="background-color: yellow;color: black;">
         <i class="fa fa-exclamation"></i> &nbsp; You have cost information in drafted, please submit <a
-        [routerLink]="['/e-estate/cost-info/', estateId]">here</a>
+        [routerLink]="['/cost-info/', estateId]">here</a>
     </div>
 
     <div class="alert" *ngIf="warningGrantTitle" style="background-color: yellow;color: black;">
         <i class="fa fa-exclamation"></i> &nbsp; You have field that have 0 land title, please update <a
-        [routerLink]="['/e-estate/field-info/', estateId]">here</a>
+        [routerLink]="['/field-info/', estateId]">here</a>
     </div>
 
 </div>

@@ -22,9 +22,6 @@
           <th style="cursor: pointer;" *ngFor="let column of sortableColumns1" scope="col" [appSort]="costCategories"
             [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
-            <i class="fa"
-              [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
           </th>
           <th width="90px">Action</th>
         </tr>
@@ -101,9 +98,6 @@
             [appSort]="costSubCategories1" [attr.data-order]="order" [attr.data-name]="column.columnName"
             (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
-            <i class="fa"
-              [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
           </th>
           <th width="90px">Action</th>
         </tr>
@@ -147,9 +141,6 @@
             [appSort]="costSubCategories2" [attr.data-order]="order" [attr.data-name]="column.columnName"
             (click)="toggleSort(column.columnName)">
             {{ column.displayText }}
-            <i class="fa"
-              [ngClass]="{'fa-chevron-down': order === 'desc' && currentSortedColumn === column.columnName,
-                                    'fa-chevron-up': order === 'asc' && currentSortedColumn === column.columnName}"></i>
           </th>
           <th width="90px">Action</th>
         </tr>

@@ -183,7 +183,7 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
   getTapperAndFieldWorker() {
     const getWorker = this.reportService.getAllTapperAndFieldWorker(this.startMonth, this.endMonth)
       .subscribe(Response => {
-        if(this.role =='Admin'){
+        if(this.role =='Admin' || this.role == 'Management'){
           this.localTapperFieldWorker = Response
           const groupedData = Response.reduce((acc, currentValue) => {
             const { estateId, tapperWorker, fieldWorker } = currentValue;

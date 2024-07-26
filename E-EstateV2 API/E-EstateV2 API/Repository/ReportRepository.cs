@@ -23,7 +23,7 @@ namespace E_EstateV2_API.Repository
         {
             int year = DateTime.Now.Year;
 
-            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
                 cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
@@ -46,7 +46,7 @@ namespace E_EstateV2_API.Repository
         public async Task<object> GetProductivity()
         {
             var fieldProduction = await _context.fieldProductions
-                .Where(x => x.status == "Submitted") // Filter by status
+                .Where(x => x.status == "SUBMITTED") // Filter by status
                 .Select(x => new
                 {
                     EstateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
@@ -133,7 +133,7 @@ namespace E_EstateV2_API.Repository
         public async Task<object> GetProductionYearlyByField(int year)
         {
             var monthyearstrings = await _context.fieldProductions
-                .Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString()))
+                .Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString()))
                 .Select(x => new
                 {
                     monthYear = x.monthYear,
@@ -151,7 +151,7 @@ namespace E_EstateV2_API.Repository
                 }).ToList();
 
 
-            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
@@ -204,7 +204,7 @@ namespace E_EstateV2_API.Repository
 
         public List<DTO_FieldProduction> GetProductionYearly(int year)
         {
-            var fieldProduction = _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString()))
+            var fieldProduction = _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString()))
                 .Join(_context.fields, prod => prod.fieldId, field => field.Id, (prod, field) => new
                 {
                     prod.monthYear,
@@ -275,7 +275,7 @@ namespace E_EstateV2_API.Repository
 
         public async Task<object> GetProductionYearlyByClone(int year)
         {
-            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
                 area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
@@ -363,7 +363,7 @@ namespace E_EstateV2_API.Repository
         public async Task<object> GetProductivityYearlyByClone(int year)
         {
 
-            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "Submitted" && x.monthYear.Contains(year.ToString())).Select(x => new
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 fieldId = x.fieldId,
                 area = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.rubberArea).FirstOrDefault(),
@@ -400,8 +400,8 @@ namespace E_EstateV2_API.Repository
             }
 
 
-            var allProduction = await _context.fieldProductions.Where(x=>x.status == "Submitted").ToListAsync();
-            var filteredProduction = allProduction.Where(x => IsWithinRange(x.monthYear) && x.status == "Submitted").ToList();
+            var allProduction = await _context.fieldProductions.Where(x=>x.status == "SUBMITTED").ToListAsync();
+            var filteredProduction = allProduction.Where(x => IsWithinRange(x.monthYear) && x.status == "SUBMITTED").ToList();
 
             var fieldProduction = filteredProduction.Select(x => new
             {
@@ -832,7 +832,7 @@ namespace E_EstateV2_API.Repository
         public async Task<object> GetCostInformation(int year)
         {
             string yearString = year.ToString();
-            var cost = await _context.costAmounts.Where(x =>x.status == "Submitted" && x.monthYear.Contains(yearString)).Select(x => new
+            var cost = await _context.costAmounts.Where(x =>x.status == "SUBMITTED" && x.monthYear.Contains(yearString)).Select(x => new
             {
                 amount = x.amount,
                 costType = _context.costTypes.Where(y=>y.Id == (_context.costs.Where(z=>z.Id == x.costId).Select(z=>z.costTypeId).FirstOrDefault())).Select(y=>y.costType).FirstOrDefault(),
@@ -906,14 +906,26 @@ namespace E_EstateV2_API.Repository
             }
 
             var allCostAmount = await _context.costAmounts
-                .Where(x => x.status == "Submitted")
+                .Where(x => x.status == "SUBMITTED")
                 .ToListAsync();
 
             var allCost = allCostAmount
                 .Where(x => IsWithinRange(x.monthYear))
+                .Select(x => new
+                {
+                    id = x.Id,
+                    amount = x.amount,
+                    costType = _context.costTypes.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costTypeId).FirstOrDefault())).Select(y => y.costType).FirstOrDefault(),
+                    isMature = _context.costs.Where(y => y.Id == x.costId).Select(y => y.isMature).FirstOrDefault(),
+                    costCategory = _context.costCategories.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costCategoryId).FirstOrDefault())).Select(y => y.costCategory).FirstOrDefault(),
+                    costSubcategories1 = _context.costSubcategories1.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costSubcategory1Id).FirstOrDefault())).Select(y => y.costSubcategory1).FirstOrDefault(),
+                    costSubcategories2 = _context.costSubcategories2.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costSubcategory2Id).FirstOrDefault())).Select(y => y.costSubcategory2).FirstOrDefault(),
+                    estateId = x.estateId,
+                    costId = x.costId
+                })
                 .ToList();
 
-            var groupedCosts = allCost
+            /*var groupedCosts = allCost
                 .GroupBy(x => x.costId)
                 .Select(g => new
                 {
@@ -941,9 +953,9 @@ namespace E_EstateV2_API.Repository
                         .FirstOrDefault(),
                     estateId = g.FirstOrDefault().estateId // Assuming estateId is the same for all entries with the same costId
                 })
-                .ToList();
+                .ToList();*/
 
-            return groupedCosts;
+            return allCost;
         }
 
 

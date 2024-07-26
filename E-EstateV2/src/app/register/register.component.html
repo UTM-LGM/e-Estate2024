@@ -22,7 +22,13 @@
           <label>Email :</label>
           <input type="email" name="email" [(ngModel)]="register.email" />
           <label>Position :</label>
-          <input type="text" name="position" [(ngModel)]="register.position" />
+          <mat-select  placeholder="Please Choose" name="position" [(ngModel)]="register.position">
+            <mat-option value="MANAGER">MANAGER</mat-option>
+            <mat-option value="ASSISTANT MANAGER">ASSISTANT MANAGER</mat-option>
+            <mat-option value="SUPERVISOR">SUPERVISOR</mat-option>
+            <mat-option value="CLERK">CLERK</mat-option>
+            <mat-option value="COMPANY ADMIN(HQ)">COMPANY ADMIN (HQ)</mat-option>
+          </mat-select>
         </div>
 
         <div class="column">

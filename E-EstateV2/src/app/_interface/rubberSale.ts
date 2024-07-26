@@ -22,7 +22,7 @@ export interface RubberSale {
     estateId: number
     transportPlateNo:string
     paymentStatusId:number
-    paymentStatus : string,
+    paymentStatus : string | null,
     buyerLicenseNo:string
     driverName:string
     remark:string

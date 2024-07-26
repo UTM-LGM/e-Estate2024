@@ -32,3 +32,8 @@ mat-option {
 .none {
   display: none;
 }
+
+.fixed-width {
+  width: 170px; /* Adjust the width as per your requirement */
+}
+

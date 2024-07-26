@@ -98,6 +98,9 @@ namespace E_EstateV2_API.Controllers
         [HttpPost]
         public async Task<bool> AddFieldWithDetails([FromBody] DTO_FieldWithDetails dto)
         {
+            /**var addedField = await _fieldRepository.AddField(dto);
+            return Ok(addedField);**/
+
             using (var transaction = await _applicationDbContext.Database.BeginTransactionAsync())
             {
                 try
@@ -132,6 +135,9 @@ namespace E_EstateV2_API.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateFieldWithDetails([FromBody] DTO_FieldWithDetails dto)
         {
+            /**var updatedField = await _fieldRepository.UpdateField(dto);
+            return Ok(updatedField);**/
+
             using (var transaction = await _applicationDbContext.Database.BeginTransactionAsync())
             {
                 try

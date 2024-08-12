@@ -56,12 +56,12 @@ export class FieldProductionDetailComponent implements OnInit {
     this.dialogRef.close()
   }
 
-  validateCuplumpDRC(drc:any){
+  validateCuplumpDRC(drc: any) {
     const drcValue = drc.target.value
     if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
       return drcValue
     }
-    else{
+    else {
       swal.fire({
         title: 'Error!',
         text: 'CuplumpDRC must be between 45% to 80%',
@@ -72,12 +72,12 @@ export class FieldProductionDetailComponent implements OnInit {
     }
   }
 
-  validateLatexDRC(drc:any){
+  validateLatexDRC(drc: any) {
     const drcValue = drc.target.value
     if ((drcValue >= 20 && drcValue <= 55) || drc === 0) {
       return drcValue
     }
-    else{
+    else {
       swal.fire({
         title: 'Error!',
         text: 'LatexDRC must be between 20% to 55%',
@@ -90,7 +90,17 @@ export class FieldProductionDetailComponent implements OnInit {
   }
 
   taskTap(taskTap: any, totalTask: number) {
-    this.product.noTaskUntap = totalTask - taskTap
+    if (taskTap > totalTask) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No of Task Tap is more than total task ! Total Task :' + totalTask,
+      });
+      this.product.noTaskTap = 0
+    }
+    else {
+      this.product.noTaskUntap = totalTask - taskTap
+    }
   }
 
   initialZeroCuplump(index: any) {

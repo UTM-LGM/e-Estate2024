@@ -1104,6 +1104,12 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("fieldId")
                         .HasColumnType("int");
 
+                    b.Property<string>("fileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("filePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float>("grantArea")
                         .HasColumnType("real");
 
@@ -1123,6 +1129,8 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("fieldId");
 
                     b.ToTable("fieldGrants");
                 });
@@ -1476,6 +1484,28 @@ namespace E_EstateV2_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("financialYears");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.GrantTitle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("grantTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("licenseNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("grantTitles");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.HistoryLog", b =>
@@ -2822,7 +2852,7 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.HasOne("E_EstateV2_API.Models.Field", "Field")
-                        .WithMany()
+                        .WithMany("fieldClones")
                         .HasForeignKey("fieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2852,6 +2882,17 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.Navigation("DiseaseCategory");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldGrant", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.Field", "Field")
+                        .WithMany("fieldGrants")
+                        .HasForeignKey("fieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldHistory", b =>
@@ -3169,6 +3210,13 @@ namespace E_EstateV2_API.Migrations
                     b.Navigation("BuyerCompanies");
 
                     b.Navigation("SellerCompanies");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.Field", b =>
+                {
+                    b.Navigation("fieldClones");
+
+                    b.Navigation("fieldGrants");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.Seller", b =>

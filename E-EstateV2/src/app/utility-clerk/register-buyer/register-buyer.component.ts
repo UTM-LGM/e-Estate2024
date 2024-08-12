@@ -174,6 +174,23 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
+  calculateIndex(index: number): number {
+    return (this.pageNumber - 1) * this.itemsPerPage + index + 1;
+  }
+
+  onPageChange(newPageNumber: number) {
+    if (newPageNumber < 1) {
+      this.pageNumber = 1;
+    } else {
+      this.pageNumber = newPageNumber;
+    }
+  }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
+  }
+
 
 
 }

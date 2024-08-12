@@ -20,7 +20,7 @@
 
 <h1>List of Town</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Town" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Town" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

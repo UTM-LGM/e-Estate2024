@@ -10,7 +10,7 @@
         Add Rubber Purchase &nbsp; <i class="fa fa-plus"></i>
       </button>
     </div>
-    <input type="text" [(ngModel)]="term" placeholder="Filter Rubber Purchase" />
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Rubber Purchase" />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <thead>

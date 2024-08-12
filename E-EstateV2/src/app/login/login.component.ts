@@ -77,9 +77,10 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  loginStaff() {
+  async loginStaff() {
+    //handle error: Interaction is currently in progress. Please ensure that this interaction has been completed before calling an interactive API.
     if (this.msalGuardConfig.authRequest) {
-      this.msalService.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
+      await this.msalService.instance.loginRedirect({ ...this.msalGuardConfig.authRequest } as RedirectRequest);
     } else {
       this.msalService.loginRedirect();
     }

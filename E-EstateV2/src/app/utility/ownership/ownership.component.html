@@ -14,7 +14,7 @@
 
 <h1>List of Ownership</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Ownership" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Ownership" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

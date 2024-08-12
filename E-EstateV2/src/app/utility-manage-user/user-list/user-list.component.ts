@@ -16,7 +16,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   currentSortedColumn = ''
   isLoading = true
   pageNumber = 1
-  users:User[]=[]
+  users: User[] = []
   itemsPerPage = 10
 
   sortableColumns = [
@@ -29,9 +29,9 @@ export class UserListComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    private userService:UserService,
+    private userService: UserService,
     private dialog: MatDialog,
-  ){}
+  ) { }
 
   ngOnInit(): void {
     this.isLoading = true
@@ -49,7 +49,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    
+
   }
 
   toggleSort(columnName: string) {
@@ -61,15 +61,32 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog(user:User){
-    const dialogRef = this.dialog.open(UserListUpdateComponent,{
-      data : {data:user}
+  openDialog(user: User) {
+    const dialogRef = this.dialog.open(UserListUpdateComponent, {
+      data: { data: user }
     })
     dialogRef.afterClosed()
       .subscribe(
         Response => {
           this.ngOnInit()
-    });
+        });
+  }
+
+  calculateIndex(index: number): number {
+    return (this.pageNumber - 1) * this.itemsPerPage + index + 1;
+  }
+
+  onPageChange(newPageNumber: number) {
+    if (newPageNumber < 1) {
+      this.pageNumber = 1;
+    } else {
+      this.pageNumber = newPageNumber;
+    }
+  }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
   }
 
 

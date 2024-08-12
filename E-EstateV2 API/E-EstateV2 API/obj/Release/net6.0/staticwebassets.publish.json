@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "78urnG4p1R3bbY3T1YB7noQuGsItgg2CJwbSPTU/MOo=",
+  "Hash": "PxCv26pYz2LOln4J0EHkxYBg9wrkeBwXnjN5SOEvjI8=",
   "Source": "E-EstateV2 API",
   "BasePath": "_content/E-EstateV2 API",
   "Mode": "Default",
@@ -15,23 +15,5 @@
       "Pattern": "**"
     }
   ],
-  "Assets": [
-    {
-      "Identity": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\TRY.png",
-      "SourceId": "E-EstateV2 API",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\",
-      "BasePath": "_content/E-EstateV2 API",
-      "RelativePath": "api/Images/TRY.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\api\\Images\\TRY.png"
-    }
-  ]
+  "Assets": []
 }

@@ -2,7 +2,7 @@
   <h1>List of Estates</h1>
   <hr />
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Estate" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Estate" />
 
   <div *ngIf="isLoading">
     <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>

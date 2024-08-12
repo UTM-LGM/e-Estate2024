@@ -57,7 +57,7 @@
     </button>    
   </div>
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
   <div style="overflow-x: auto;">
     <table style="width: 100%;">
       <tr>
@@ -107,7 +107,7 @@
                     'active-btn': field.isActive == true,
                     'inactive-btn': field.isActive == false
                   }">
-              {{ field.isActive == true ? "Active" : "Active" }}
+              {{ field.isActive == true ? "Active" : "Inactive" }}
             </button>
           </td>
 

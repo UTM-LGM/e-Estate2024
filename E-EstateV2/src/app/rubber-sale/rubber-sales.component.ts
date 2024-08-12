@@ -187,4 +187,9 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     
   }
 
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
+  }
+
 }

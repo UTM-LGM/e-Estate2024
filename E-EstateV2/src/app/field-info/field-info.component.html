@@ -1,6 +1,7 @@
 <div class="box-container">
   <h1>Field Information</h1>
   <hr />
+  <span style="color: red;font-size: 12px;">**Please update land title at red Field Name</span>
 
 
   <div class="box-container" *ngIf="role === 'EstateClerk'">
@@ -10,7 +11,7 @@
       </button>
     </div>
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
 
     <label><b>Total Area : {{ total | number:'1.2-2' }} Ha</b></label>
     <div style="overflow-x: auto">
@@ -38,7 +39,7 @@
 
         <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
           <tr class="list" style="cursor:default;">
-            <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+            <td>{{ calculateIndex(i) }}</td>
             <td style="cursor: pointer;" routerLink="/field-detail/{{ field.id }}">
               <a [ngStyle]="{'color': (field.fieldGrants && field.fieldGrants.length === 0) ? 'red' : 'blue'}">{{ field.fieldName }}</a>
             </td>                     
@@ -95,7 +96,7 @@
         </tbody>
       </table>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+      <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
 
     </div>
   </div>

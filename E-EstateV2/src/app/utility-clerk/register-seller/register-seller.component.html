@@ -17,7 +17,7 @@
 
 <h1>List of Seller</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Seller" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Seller" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

@@ -27,4 +27,8 @@ export class CountryService {
   getCountryAsc(): Observable<Country[]> {
     return this.http.get<Country[]>(this.baseUrl + '/countries/GetCountriesAsc')
   }
+
+  getAllCountry():Observable<any[]>{
+    return this.http.get<any[]>('https://restcountries.com/v3.1/all');
+  }
 }

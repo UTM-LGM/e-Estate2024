@@ -65,7 +65,7 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   getEstate() {
     setTimeout(() => {
-      const getAllEstate = this.myLesenService.getAllEstate()
+      const getAllEstate = this.myLesenService.getAllActiveEstate()
         .subscribe(
           estates => {
             this.estates = estates;
@@ -173,6 +173,11 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   calculateEstate(){
     return this.stateTotalAreasArray.reduce((total, item) => total + item.estateNo, 0)
+  }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
   }
 
  

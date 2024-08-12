@@ -145,6 +145,9 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
               {
                 this.workerShortages = response.filter(x=>x.estateId == this.estate.id)
               }
+            else{
+              this.workerShortages = response
+            }
             const estateRequests = this.workerShortages.map(workerShortage => {
               return this.myLesenService.getOneEstate(workerShortage.estateId).pipe(
                 map(estateResponse => {
@@ -338,6 +341,11 @@ export class WorkerShortageEstateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
   }
   
 }

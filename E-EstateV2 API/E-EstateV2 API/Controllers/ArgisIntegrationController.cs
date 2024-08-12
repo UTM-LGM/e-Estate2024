@@ -1,4 +1,5 @@
 ﻿using E_EstateV2_API.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ namespace E_EstateV2_API.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    //[Authorize("ClientIdPolicy")]
     public class ArgisIntegrationController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -19,9 +21,9 @@ namespace E_EstateV2_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLandTitles()
         {
-            var landTitle = await _context.fieldGrants.Select(x => new
+            var landTitle = await _context.grantTitles.Select(x => new
             {
-                estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
+                estateId = x.estateId,
                 grantId = x.Id,
                 grantTitle = x.grantTitle,
             }).ToListAsync();

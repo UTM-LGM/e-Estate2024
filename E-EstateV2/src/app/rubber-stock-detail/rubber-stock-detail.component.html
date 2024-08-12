@@ -15,7 +15,7 @@
   <div class="card">
     <div class="box">
       <div class="column box-container color1">
-        <span>Total Production 100% Dry (Kg)</span><br />
+        <span>Total Production 100% DRC (Kg)</span><br />
         <!-- <span *ngIf="!isLoadingProduction"><b> {{stock.totalProduction| number: '1.2-2'}} Kg</b></span> -->
         <span *ngIf="!isLoadingProduction && stock.rubberType == 'CUPLUMP'"><b> {{ totalCuplumpDry | number: '1.2-2'}} Kg</b></span>
         <span *ngIf="!isLoadingProduction && stock.rubberType == 'LATEX'"><b> {{ totalLatexDry | number: '1.2-2'}} Kg</b></span>
@@ -27,7 +27,7 @@
       </div>
 
       <div class="column box-container color2">
-        <span>Total Rubber Sale 100% Dry (Kg)</span><br />
+        <span>Total Rubber Sale 100% DRC (Kg)</span><br />
         <span *ngIf="!isLoadingSale"><b> {{stock.totalSale| number: '1.2-2'}} Kg</b></span>
         <div *ngIf="isLoadingSale">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"

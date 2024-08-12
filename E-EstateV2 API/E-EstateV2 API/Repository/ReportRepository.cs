@@ -316,26 +316,31 @@ namespace E_EstateV2_API.Repository
         {
             DateTime startDate = DateTime.ParseExact(start, "yyyy-MM", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
-                                          .AddMonths(1).AddDays(-1);
+                                       .AddMonths(1).AddDays(-1);
 
             // Fetch the raw data
-            var fieldClone = await _context.fieldClones.Where(x => x.createdDate >= startDate && x.createdDate <= endDate).Select(x => new
-            {
-                fieldId = x.fieldId,
-                cloneId = x.cloneId,
-                cloneName = _context.clones.Where(y => y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
-                area = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).FirstOrDefault(),
-            }).ToListAsync();
+            var fieldClone = await _context.fieldClones
+                .Where(x => x.createdDate >= startDate && x.createdDate <= endDate)
+                .Select(x => new
+                {
+                    fieldId = x.fieldId,
+                    cloneId = x.cloneId,
+                    cloneName = _context.clones.Where(y => y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
+                    areas = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).ToList()
+                })
+                .Where(x => x.areas.Count > 0) // Ensure there are areas to sum
+                .ToListAsync();
 
-            // Group by fieldId and create a list of cloneId for each fieldId
+            // Group by fieldId and sum the area, collect clone names
             var groupedResult = fieldClone
-                .GroupBy(x => new { x.fieldId, x.area })
+                .GroupBy(x => x.fieldId)
                 .Select(g => new
                 {
-                    fieldId = g.Key.fieldId,
-                    area = g.Key.area,
-                    cloneNames = g.Select(x => x.cloneName).ToList()
-                }).ToList();
+                    fieldId = g.Key,
+                    area = g.SelectMany(x => x.areas).Sum(),  // Sum all areas for the fieldId
+                    cloneNames = g.Select(x => x.cloneName).Distinct().ToList()  // Collect distinct clone names
+                })
+                .ToList();
 
             return groupedResult;
         }
@@ -808,25 +813,25 @@ namespace E_EstateV2_API.Repository
             // Filter allWorkerShortage to only include entries that match the specified year range
             var filteredWorkerShortage = allWorkerShortage.Where(x => IsWithinRange(x.monthYear)).ToList();
 
-            // Find the latest month within the specified range
-            var latestMonthShortage = filteredWorkerShortage
-                .OrderByDescending(x => GetMonthValue(x.monthYear)) // Order by month value descending to get the latest
-                .FirstOrDefault();
-
-            // Prepare the result object based on the latest worker shortage found
-            var workerShortageData = latestMonthShortage != null ? new List<object>
+            // Group by estateId and select the latest record for each estate
+            var latestWorkerShortageForEachEstate = filteredWorkerShortage
+                .GroupBy(x => x.estateId)
+                .Select(group => group
+                    .OrderByDescending(x => GetMonthValue(x.monthYear))
+                    .FirstOrDefault())
+                .Select(x => new
                 {
-                    new
-                    {
-                        EstateId = latestMonthShortage.estateId,
-                        MonthYear = latestMonthShortage.monthYear,
-                        TapperShortage = latestMonthShortage.tapperWorkerShortage,
-                        FieldShortage = latestMonthShortage.fieldWorkerShortage
-                    }
-                } : new List<object>();
+                    EstateId = x.estateId,
+                    MonthYear = x.monthYear,
+                    TapperShortage = x.tapperWorkerShortage,
+                    FieldShortage = x.fieldWorkerShortage
+                })
+                .ToList();
 
-            return workerShortageData;
+            return latestWorkerShortageForEachEstate;
         }
+
+
 
 
         public async Task<object> GetCostInformation(int year)

@@ -40,9 +40,9 @@ export class RubberProductionYearlyComponent implements OnInit, OnDestroy {
 
   sortableColumns = [
     { columnName: 'monthYear', displayText: 'Month and Year' },
-    { columnName: 'cuplump', displayText: 'Cuplump dry (Kg)' },
-    { columnName: 'latex', displayText: 'Latex dry (Kg)' },
-    { columnName: 'totalProduction', displayText: 'Total Production dry monthly (Kg)' },
+    { columnName: 'cuplump', displayText: 'Cuplump 100% DRC (Kg)' },
+    { columnName: 'latex', displayText: 'Latex 100% DRC (Kg)' },
+    { columnName: 'totalProduction', displayText: 'Total Production 100% DRC monthly (Kg)' },
   ];
 
   constructor(

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, tap } from 'rxjs';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import * as XLSX from 'xlsx';
@@ -70,23 +70,26 @@ export class StateDetailComponent implements OnInit {
         map((response: any) => ({
           estateName: estate.name,
           estateAdd1: estate.add1,
+          estateId:estate.id,
           fields: response.filter((x: any) => x.estateId === estate.id && x.isActive === true &&
             !x.fieldStatus?.toLowerCase().includes('abandoned') &&
             !x.fieldStatus?.toLowerCase().includes('government') &&
             !x.fieldStatus?.toLowerCase().includes('conversion to other crop'))
-        }))
+        })),
       )
     );
 
     forkJoin(observables).subscribe((results: any) => {
       this.stateTotalAreasArray = this.estates.map((estate: any) => {
-        const result = results.find((res: any) => res.estateName === estate.name);
+        const result = results.find((res: any) => res.estateId === estate.id);
+        console.log(result)
 
         if (result) {
           const totalArea = result.fields.reduce((acc: any, curr: any) => acc + (curr.area || 0), 0);
           return {
             estateName: estate.name,
             estateAdd1: estate.add1,
+            estateLicenseNo : estate.licenseNo,
             totalArea: totalArea,
             state: estate.state
           };
@@ -94,6 +97,7 @@ export class StateDetailComponent implements OnInit {
           return {
             estateName: estate.name,
             estateAdd1: estate.add1,
+            estateLicenseNo : estate.licenseNo,
             totalArea: 0,
             state: estate.state
           };

@@ -83,7 +83,7 @@
   <hr />
   <h1>List of Field Disease</h1>
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Field" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
   <div style="overflow-x: auto">
     <table style="width: 100%">
       <thead>
@@ -111,7 +111,7 @@
       <tbody
         *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
         <tr class="list" style="cursor: default;">
-          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+          <td>{{ calculateIndex(i) }}</td>
           <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
           <td style="cursor: pointer;">{{field.fieldName}}</td>
           <td>{{ field.area }}</td>
@@ -139,7 +139,8 @@
       </tbody>
     </table>
 
-    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+    <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
 
   </div>
 </div><br />

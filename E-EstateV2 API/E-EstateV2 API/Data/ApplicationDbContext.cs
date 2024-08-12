@@ -78,6 +78,7 @@ namespace E_EstateV2_API.Data
         public DbSet<RubberSaleHistory> rubberSaleHistories { get; set; }
         public DbSet<CompanyContactHistory> companyContactHistories { get; set; }
         public DbSet<EstateContactHistory> estateContactHistories { get; set; }
+        public DbSet<GrantTitle> grantTitles { get; set; }
     }
 
 }

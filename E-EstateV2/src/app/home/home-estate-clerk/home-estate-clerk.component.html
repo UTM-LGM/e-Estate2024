@@ -1,5 +1,5 @@
 <h1 class="tittle">Dashboard Estate Clerk:
-  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.name + ", " + estate.add1.slice(0,-1)}}</span>
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{estate.name + " (" + estate.licenseNo + ")"}}</span>
   <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
       [theme]="{'height':'20px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
 </h1>

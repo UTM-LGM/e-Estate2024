@@ -140,7 +140,7 @@ import { OtherCropComponent } from './utility/other-crop/other-crop.component';
 import { LaborInformationYearlyComponent } from './report-labor-information/labor-information-yearly/labor-information-yearly.component';
 import { WorkerShortageEstateComponent } from './report-labor-information/worker-shortage-estate/worker-shortage-estate.component';
 import { ReportCostInformationComponent } from './report-cost-information/report-cost-information.component';
-import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
+import { MsalBroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent, MsalService } from '@azure/msal-angular';
 import { BrowserCacheLocation, InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { AuthInterceptor } from './_interceptor/token.interceptor';
 import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/report-rubber-area-by-clone.component';
@@ -153,7 +153,9 @@ import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sa
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
-             window.navigator.userAgent.indexOf('Trident/') > -1;
+  window.navigator.userAgent.indexOf('Trident/') > -1;
+
+register()
 
 @NgModule({
   declarations: [
@@ -312,9 +314,9 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
         },
         cache: {
           cacheLocation: BrowserCacheLocation.LocalStorage,
-	        //Can be set true or false
+          //Can be set true or false
           storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
-        },
+        }
 
         //Staging
         // auth: {
@@ -326,7 +328,7 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
         // },
         // cache: {
         //   cacheLocation: BrowserCacheLocation.LocalStorage,
-	      //   //Can be set true or false
+        //   //Can be set true or false
         //   storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
         // },
 
@@ -356,9 +358,9 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
       multi: true
     },
     {
-      provide:HTTP_INTERCEPTORS,
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi:true
+      multi: true
     },
     // {
     //   provide: HTTP_INTERCEPTORS,
@@ -367,15 +369,17 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
     // },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass : UpperCaseInterceptor,
-      multi:true
+      useClass: UpperCaseInterceptor,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: MsalInterceptor,
       multi: true,
     },
+    MsalService,
     MsalGuard,
+    MsalBroadcastService,
     AuthGuard,
     SharedService,
     NotificationComponent

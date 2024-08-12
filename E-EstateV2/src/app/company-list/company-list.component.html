@@ -2,7 +2,7 @@
   <h1>List of Companies</h1>
   <hr />
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Company" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Company" />
 
   <div *ngIf="isLoading">
     <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>

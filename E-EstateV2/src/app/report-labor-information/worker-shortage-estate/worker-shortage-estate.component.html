@@ -50,7 +50,7 @@
     </button>
   </div>
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Estate" [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk'}"/>
 
   <div style="overflow-x: auto;">
     <table style="width: 100%">

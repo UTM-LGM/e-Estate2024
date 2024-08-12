@@ -205,7 +205,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getEstate() {
-    const getAllEstate = this.myLesenService.getAllEstate()
+    const getAllEstate = this.myLesenService.getAllActiveEstate()
       .subscribe(
         Response => {
           this.filterEstates = Response

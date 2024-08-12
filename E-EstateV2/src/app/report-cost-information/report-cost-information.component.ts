@@ -463,4 +463,16 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
     }
   }
 
+  calculateIndex(index: number): number {
+    return (this.pageNumber - 1) * this.itemsPerPage + index + 1;
+  }
+
+  onPageChange(newPageNumber: number) {
+    if (newPageNumber < 1) {
+      this.pageNumber = 1;
+    } else {
+      this.pageNumber = newPageNumber;
+    }
+  }
+
 }

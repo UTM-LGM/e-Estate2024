@@ -3,7 +3,7 @@
 <form>
   <label>Tittle : </label>
   <input type="text" name="tittle" [(ngModel)]="announcement.tittle" />
-  <label>File Upload : </label>
+  <label>File Upload <span style="color: red;">(Size: 840px X 450px)</span> : </label>
   <input type="file" name="file" (change)="onFileSelected($event)" />
 </form>
 
@@ -16,7 +16,7 @@
 
 <h1>List of Slide Announcement</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Slide Announcement" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Slide Announcement" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
@@ -36,7 +36,7 @@
 
     <tr
       *ngFor="let announcement of announcements | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+      <td>{{ calculateIndex(i) }}</td>
       <td>{{ announcement.tittle }}</td>
       <td><img style="width: 30%; height: 30%;" [src]="baseUrl + '/Images/' + announcement.filePath" /></td>
       <td>
@@ -50,6 +50,7 @@
     </tr>
   </table>
 
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
 
 </div>

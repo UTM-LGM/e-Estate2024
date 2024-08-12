@@ -3,7 +3,7 @@
   <i class="fa fa-user"></i> &nbsp;
   <span>Log in as: </span>
   <div style="padding-bottom: 10px;" *ngIf="role == 'EstateClerk'">
-    <span style="text-align: left;">{{ estate.name + ", " + estate.add1}}</span>
+    <span style="text-align: left;">{{ estate.name + " (" + estate.licenseNo + ")" }}</span>
   </div>
 
   <div style="padding-bottom: 10px;" *ngIf="role == 'CompanyAdmin'">

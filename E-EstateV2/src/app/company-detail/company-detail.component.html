@@ -205,7 +205,7 @@
           <tr class="list" style="cursor: default;">
             <td>{{ (estatesPageNumber - 1) * itemsPerPageEstate + i + 1 }}</td>
             <td style="cursor: pointer;" routerLink="/estate-detail/{{ estate.id }}">
-              <a>{{estate.name + ', ' + estate.add1.slice(0, -1) }}</a>
+              <a>{{estate.name + ' (' + estate.licenseNo + ')' }}</a>
             </td>
             <td>{{ estate.state }}</td>
             <td>{{ estate.town }}</td>

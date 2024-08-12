@@ -29,10 +29,10 @@ export class LatexRubberStockComponent implements OnInit, OnDestroy {
 
   sortableColumns = [
     { columnName: 'monthYear', displayText: 'Month and Year' },
-    { columnName: 'previousStock', displayText: 'Previous End Stock 100% Dry (Kg)' },
-    { columnName: 'production', displayText: 'Total Production 100% Dry (Kg)' },
-    { columnName: 'rubberSale', displayText: 'Total Rubber Sale 100% Dry (Kg)' },
-    { columnName: 'endStock', displayText: 'Month End Stock 100% Dry (Kg)' },
+    { columnName: 'previousStock', displayText: 'Previous End Stock 100% DRC (Kg)' },
+    { columnName: 'production', displayText: 'Total Production 100% DRC (Kg)' },
+    { columnName: 'rubberSale', displayText: 'Total Rubber Sale 100% DRC (Kg)' },
+    { columnName: 'endStock', displayText: 'Month End Stock 100% DRC (Kg)' },
     { columnName: 'weightLoss', displayText: 'Weight Loss (%)' },
   ];
 
@@ -110,6 +110,11 @@ export class LatexRubberStockComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
   }
 
   

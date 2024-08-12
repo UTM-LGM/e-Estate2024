@@ -14,7 +14,7 @@
 
 <h1>List of Clones</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Clone" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Clone" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
@@ -34,7 +34,7 @@
 
     <tr
       *ngFor="let clone of clones | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+      <td>{{ calculateIndex(i) }}</td>
       <td>{{ clone.cloneName }}</td>
       <td>
         <button (click)="status(clone)" [ngClass]="{
@@ -47,6 +47,7 @@
     </tr>
   </table>
 
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
 
 </div>

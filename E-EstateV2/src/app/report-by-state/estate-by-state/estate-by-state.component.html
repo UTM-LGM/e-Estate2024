@@ -16,7 +16,7 @@
 
   <br />
 
-  <input type="text" [(ngModel)]="term" placeholder="Filter State" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter State" />
   <div style="overflow-x: auto;">
     <table style="width: 100%">
       <tr>

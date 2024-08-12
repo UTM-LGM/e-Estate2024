@@ -148,7 +148,7 @@
       <ng-container *ngIf="!isLoading && !showAll">
         <tr
           *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
-          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+          <td>{{ calculateIndex(i) }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
           <td>{{ cost.costCategory }}</td>
@@ -166,7 +166,7 @@
       <ng-container *ngIf="!isLoading && showAll">
         <tr
           *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
-          <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+          <td>{{ calculateIndex(i) }}</td>
           <td>{{ cost.costType }}</td>
           <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
           <td>{{ cost.costCategory }}</td>
@@ -182,5 +182,7 @@
       </ng-container>
     </table>
   </div>
-  <!-- <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls> -->
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
+
 </div>

@@ -87,8 +87,8 @@ export class ReportRubberAreaByCloneComponent implements OnInit, OnDestroy {
       const getArea = this.reportService.getAreaByAllClone(this.startMonth, this.endMonth)
       .subscribe(
         Response => {
-          this.cloneArea = this.processCloneArea(Response);
-          this.isLoading = false;
+          this.cloneArea = this.processCloneArea(Response)
+          this.isLoading = false
         }
       )
     this.subscriptionService.add(getArea);

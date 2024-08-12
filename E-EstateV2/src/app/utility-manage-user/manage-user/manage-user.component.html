@@ -5,7 +5,7 @@
         Add New User &nbsp; <i class="fa fa-plus"></i>
       </button> -->
 
-    <input type="text" [(ngModel)]="term" placeholder="Filter Users" />
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Users" />
 
     <div style="overflow-x: auto">
         <table style="width: 100%">
@@ -32,7 +32,7 @@
             <ng-container *ngIf="!isLoading">
                 <tr class="list"
                     *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-                    <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+                    <td>{{ calculateIndex(i) }}</td>
                     <td>{{user.fullName}}</td>
                     <td>{{user.email}}</td>
                     <td>{{result[user.licenseNo]?.companyName}}</td>
@@ -48,6 +48,7 @@
             </ng-container>
         </table>
 
-        <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+        <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
     </div>
 </div>

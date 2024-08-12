@@ -17,7 +17,7 @@
 
 <h1>List of Buyer</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Buyer" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Buyer" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
@@ -41,7 +41,7 @@
 
     <tr
       *ngFor="let buyer of buyers | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-      <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+      <td>{{ calculateIndex(i) }}</td>
       <td>{{ buyer.licenseNo }}</td>
       <td>{{ buyer.buyerName }}</td>
       <td>
@@ -55,7 +55,8 @@
     </tr>
   </table>
 
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
 
 </div>
 

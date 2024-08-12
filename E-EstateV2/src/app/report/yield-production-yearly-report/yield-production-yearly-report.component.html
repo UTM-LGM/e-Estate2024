@@ -55,7 +55,7 @@
     <br /> <br />
 
     <div class="box-container">
-        <input type="text" [(ngModel)]="term" placeholder="Filter Report" />
+        <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Report" />
         <div style="overflow-x: auto">
             <table class="table">
                 <tr>

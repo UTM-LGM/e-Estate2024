@@ -20,7 +20,7 @@
 
 <h1>List of Field Status</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Field Status" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field Status" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

@@ -211,4 +211,9 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
     return this.calculateNewPlanting() + this.calculateReplanting() + this.calculateTappedArea()
    }
 
+   onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
+  }
+
 }

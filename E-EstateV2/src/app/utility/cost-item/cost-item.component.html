@@ -50,7 +50,7 @@
 
 <h1>List of Cost Item</h1>
 <div class="box-container">
-  <input type="text" [(ngModel)]="term" placeholder="Filter Cost Item" />
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Cost Item" />
   <div style="overflow-x: auto">
     <table style="width: 100%">
       <tr>

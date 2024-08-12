@@ -75,7 +75,7 @@ import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sa
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'e-estate', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   { path: 'generate-form-1/:id', component: GenerateForm1Component},
   {
     path: 'login',

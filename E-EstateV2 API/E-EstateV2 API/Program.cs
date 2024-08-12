@@ -10,6 +10,9 @@ using E_EstateV2_API.Repository;
 using System.Security.Cryptography;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.OpenApi.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,8 +120,12 @@ builder.Services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
 // Add authorization policies
 builder.Services.AddAuthorization(config =>
 {
-    config.AddPolicy("AdminPolicy", policyBuilder =>
-        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAD:Scopes" }));
+    /*config.AddPolicy("AdminPolicy", policyBuilder =>
+        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAD:Scopes" }));*/
+    config.AddPolicy("ClientIdPolicy", policy =>
+    {
+        policy.RequireClaim("client_id");
+    });
 });
 
 builder.Services.AddCors(options =>
@@ -128,6 +135,40 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .AllowAnyMethod());
 });
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+    // Include security requirement (client ID) in Swagger UI
+    c.AddSecurityDefinition("ClientIdSecurity", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        Name = "Client-ID",
+        In = ParameterLocation.Header,
+        Description = "Please enter your client ID.",
+    });
+
+    // Apply security requirement (client ID) globally to all endpoints
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ClientIdSecurity"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -139,6 +180,44 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseCors("CorsPolicy");
 }
 app.UseStaticFiles();
+
+// Middleware to validate client ID in incoming requests
+app.Use(async (context, next) =>
+{
+    var endpoint = context.GetEndpoint();
+
+    // Only enforce client ID check if the endpoint has [Authorize] attribute
+    if (endpoint?.Metadata?.GetMetadata<AuthorizeAttribute>() != null)
+    {
+        string clientId = context.Request.Headers["Client-ID"].FirstOrDefault();
+
+        var registeredClients = new Dictionary<string, string>
+        {
+            { "ceced9cc-f6b2-4cae-8b60-1c7b67dc70db", "" }, // No client secret required
+            // Add other registered clients...
+        };
+
+        if (!string.IsNullOrEmpty(clientId) && registeredClients.ContainsKey(clientId))
+        {
+            // Add the client_id claim for the authorization policy to work
+            var claims = new List<Claim> { new Claim("client_id", clientId) };
+            var identity = new ClaimsIdentity(claims);
+            context.User.AddIdentity(identity);
+
+            await next();
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("Unauthorized. Invalid client ID.");
+        }
+    }
+    else
+    {
+        await next();
+    }
+});
+
 
 app.UseCors("CorsPolicy");
 

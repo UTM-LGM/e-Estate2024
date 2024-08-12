@@ -139,7 +139,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   addStock() {
-    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase() && e.rubberType == this.stock.rubberType)
+    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase() && e.rubberType == this.stock.rubberType && e.estateId == this.sharedService.estateId)
     if(existingMonth.length != 0 ){
       swal.fire({
         icon: 'error',

@@ -143,7 +143,7 @@
 
                   <tr
                     *ngFor="let value of fieldGrants | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-                    <td>{{ (pageNumber - 1) * itemsPerPage + i + 1 }}</td>
+                    <td>{{ calculateIndex(i) }}</td>
                     <td>{{ value.grantTitle }}</td>
                     <td>{{ value.grantArea }}</td>
                     <td>{{ value.grantRubberArea }}</td>
@@ -154,7 +154,8 @@
                     </td>
                   </tr>
                 </table>
-                <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
               </div>
             </div><br />
 

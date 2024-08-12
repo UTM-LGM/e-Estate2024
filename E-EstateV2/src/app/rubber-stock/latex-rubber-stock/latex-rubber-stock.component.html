@@ -1,4 +1,4 @@
-<input type="text" [(ngModel)]="term" placeholder="Filter Rubber Stock" />
+<input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Rubber Stock" />
 
 <div style="overflow-x: auto">
     <table style="width: 100%">

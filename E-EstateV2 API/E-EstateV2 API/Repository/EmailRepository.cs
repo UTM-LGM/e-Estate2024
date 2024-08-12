@@ -90,6 +90,7 @@ namespace E_EstateV2_API.Repository
                 email.To.Add(MailboxAddress.Parse("Embong@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("fattah@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("azimah@lgm.gov.my"));
+                email.To.Add(MailboxAddress.Parse("sabariah@lgm.gov.my"));
                 email.Subject = "Notice to verify new e-Estate user";
                 string htmlMessage = GenerateHtmlUserVerified(user.UserName);
                 email.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };

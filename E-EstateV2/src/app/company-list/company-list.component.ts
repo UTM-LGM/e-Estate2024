@@ -79,4 +79,9 @@ export class CompanyListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  onFilterChange(term: string): void {
+    this.term = term;
+    this.pageNumber = 1; // Reset to first page on filter change
+  }
 }

@@ -25,6 +25,10 @@ export class MyLesenIntegrationService {
     return this.http.get<any[]>(this.baseUrl + '/estate/GetPremises')
   }
 
+  getAllActiveEstate():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/estate/getactivepremises')
+  }
+
   getLicenseNo(id:string):Observable<any[]>{
     return this.http.get<any[]>(this.baseUrl + '/estate/GetDetailByLicense/' + id)
   }

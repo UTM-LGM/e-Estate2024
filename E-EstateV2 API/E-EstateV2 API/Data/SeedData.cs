@@ -16,6 +16,7 @@ namespace E_EstateV2_API.Data
                 return; // Exit if context or roleManager is null
             }
 
+            await AddClone(context);
             await AddPaymentStatus(context);
             await AddPlantingMaterial(context);
             await AddRubberDisease(context);
@@ -29,9 +30,8 @@ namespace E_EstateV2_API.Data
             await AddCostCategory1(context);
             await AddCostCategory2(context);
             await AddCost(context);
-            await AddRoles(roleManager);
             await AddFieldDisease(context);
-            await AddClone(context);
+            await AddRoles(roleManager);
         }
 
         private static async Task AddPaymentStatus(ApplicationDbContext context)
@@ -71,6 +71,8 @@ namespace E_EstateV2_API.Data
             {
                 await roleManager.CreateAsync(new IdentityRole("EstateClerk"));
             }
+            
+
         }
 
         private static async Task AddPlantingMaterial(ApplicationDbContext context)
@@ -568,37 +570,37 @@ namespace E_EstateV2_API.Data
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PESTALOTIOPSIS LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PESTALOTIOPSIS LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PESTALOTIOPSIS LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "OIDIUM SECONDARY LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "OIDIUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "OIDIUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "COLLETOTRICHUM SECONDARY LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "COLLETOTRICHUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "COLLETOTRICHUM SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "CORYNESPORA  SECONDARY LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "CORYNESPORA  SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "CORYNESPORA  SECONDARY LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "FUSICOCUM LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "FUSICOCUM LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "FUSICOCUM LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PHYTHOPTORA ABNORMAL LEAF FALL"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PHYTHOPTORA ABNORMAL LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "PHYTHOPTORA ABNORMAL LEAF FALL", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "BIRD’S EYE SPOT"))
             {
-                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BIRD’S EYE SPOT", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 4 });
+                context.fieldDiseases.Add(new FieldDisease { diseaseName = "BIRD’S EYE SPOT", isActive = true, createdBy = "SYSTEM GENERATED", diseaseCategoryId = 3 });
             }
 
             if (!context.fieldDiseases.Any(ps => ps.diseaseName == "PINK DISEASE"))

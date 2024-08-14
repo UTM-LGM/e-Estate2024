@@ -1,6 +1,5 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.IRepository;
-using E_EstateV2_API.Migrations;
 using E_EstateV2_API.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Web;

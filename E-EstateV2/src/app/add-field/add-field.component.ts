@@ -26,7 +26,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   fields: Field[] = []
   field: Field = {} as Field
 
-  fieldGrant:FieldGrant = {} as FieldGrant
+  fieldGrant: FieldGrant = {} as FieldGrant
 
   cropCategories: FieldStatus[] = []
   filterCropCategories: FieldStatus[] = []
@@ -38,7 +38,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   clones: Clone[] = []
   filterClones: Clone[] = []
   availableClones: Clone[] = []
-  addedGrant:any[]=[]
+  addedGrant: any[] = []
 
 
   rubberArea = ''
@@ -53,18 +53,18 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService,
+    private subscriptionService: SubscriptionService,
     private fieldService: FieldService,
     private sharedService: SharedService,
     private fieldCloneService: FieldCloneService,
     private cloneService: CloneService,
     private fieldStatusService: FieldStatusService,
     private location: Location,
-    private fieldGrantService:FieldGrantService
-  ){}
+    private fieldGrantService: FieldGrantService
+  ) { }
 
 
-  ngOnInit(){
+  ngOnInit() {
     this.getEstate()
     this.getClone()
     this.getCrop()
@@ -79,7 +79,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         this.filterClones = this.clones.filter((e) => e.isActive == true)
         this.availableClones = this.filterClones
       });
-      this.subscriptionService.add(getClone);
+    this.subscriptionService.add(getClone);
 
   }
 
@@ -105,7 +105,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
                 this.getField()
                 this.isLoading = false
               })
-        this.subscriptionService.add(getOneEstate);
+          this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
@@ -117,7 +117,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         Response => {
           this.cropCategories = Response
         });
-      this.subscriptionService.add(getCrop);
+    this.subscriptionService.add(getCrop);
   }
 
   getField() {
@@ -128,8 +128,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
           this.fields = fields.filter(x => x.estateId == this.estate.id)
         }
       )
-      this.subscriptionService.add(getField);
-      
+    this.subscriptionService.add(getField);
+
   }
 
   getcategory() {
@@ -138,8 +138,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       && !(c.fieldStatus?.toLowerCase().includes("conversion") && c.isMature == true))
   }
 
-  rubberAreaInput(){
-    if(this.rubberArea == "yes"){
+  rubberAreaInput() {
+    if (this.rubberArea == "yes") {
       this.field.rubberArea = this.field.area
     }
   }
@@ -148,13 +148,13 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     if (this.rubberArea === 'yes') {
       this.field.rubberArea = this.field.area;
     }
-    else{
+    else {
       this.field.rubberArea = null
     }
   }
 
-  areaRemark(){
-    if(this.field.rubberArea != null && this.field.rubberArea > this.field.area ){
+  areaRemark() {
+    if (this.field.rubberArea != null && this.field.rubberArea > this.field.area) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -177,7 +177,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
   }
 
-  checkDOT(){
+  checkDOT() {
     if (this.field.yearPlanted && this.field.dateOpenTapping) {
       const yearPlanted = this.field.yearPlanted;
       const dateOpenTappingYear = new Date(this.field.dateOpenTapping).getFullYear();
@@ -195,7 +195,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
 
   onSubmit() {
-    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null ) {
+    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null) {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
@@ -203,62 +203,63 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       this.isSubmit = false;
     }
     else {
-      if(this.selectedValues.length == 0 && this.field.isMature == true){
-        swal.fire({
-          text: 'Please insert clone planted',
-          icon: 'error'
-        });
+      this.field.estateId = this.estate.id;
+      this.field.isActive = true;
+      this.field.createdBy = this.sharedService.userId.toString();
+      this.field.createdDate = new Date();
+      if (this.field.dateOpenTapping) {
+        this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
       }
-      else{
-        this.field.estateId = this.estate.id;
-        this.field.isActive = true;
-        this.field.createdBy = this.sharedService.userId.toString();
-        this.field.createdDate = new Date();
-        if(this.field.dateOpenTapping){
-          this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
-        }
-        else{
-          this.field.dateOpenTapping = null;
-        }
-  
-        const combineClone: any[] = this.selectedValues.map(item => {
-          return { 'cloneId': item.id, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
-        });
-  
-        const combineLandTitle : any [] = this.addedGrant.map((item:any) =>{
-          return {'grantTitle': item.grantTitle.toUpperCase(), 'grantArea': item.grantArea, 'grantRubberArea': item.grantRubberArea, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
-        });
-  
-        this.fieldService.addFieldWithDetails(this.field, combineClone, combineLandTitle)
-          .subscribe(
-            {
-              next: (response:any) => {
-                swal.fire({
-                  title: 'Done!',
-                  text: 'Field successfully submitted!',
-                  icon: 'success',
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-                this.selectedValues = [];
-                this.addedGrant = [];
-                this.field = {} as Field;
-                this.ngOnInit();
-                this.rubberArea = '';
-                this.isSubmit = false;
-              },
-              error: (err:any) => {
-                swal.fire({
-                  text: 'Please fill up the form',
-                  icon: 'error'
-                });
-                this.isSubmit = false;
-              }
-            });
+      else {
+        this.field.dateOpenTapping = null;
       }
+
+      const combineClone: any[] = this.selectedValues.map(item => {
+        return { 'cloneId': item.id, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
+      });
+
+      const combineLandTitle: any[] = this.addedGrant.map((item: any) => {
+        return { 'grantTitle': item.grantTitle.toUpperCase(), 'grantArea': item.grantArea, 'grantRubberArea': item.grantRubberArea, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
+      });
+
+      this.fieldService.addFieldWithDetails(this.field, combineClone, combineLandTitle)
+        .subscribe(
+          {
+            next: (response: any) => {
+              swal.fire({
+                title: 'Done!',
+                text: 'Field successfully submitted!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+              this.selectedValues = [];
+              this.addedGrant = [];
+              this.field = {} as Field;
+              this.ngOnInit();
+              this.rubberArea = '';
+              this.isSubmit = false;
+            },
+            error: (err: any) => {
+              swal.fire({
+                text: 'Please fill up the form',
+                icon: 'error'
+              });
+              this.isSubmit = false;
+            }
+          });
+      // if(this.selectedValues.length == 0 && this.field.isMature == true){
+      //   swal.fire({
+      //     text: 'Please insert clone planted',
+      //     icon: 'error'
+      //   });
+      // }
+      // else{
+      //   
+      // }
     }
   }
-  
+
 
   convertToDateTime(monthYear: string): string {
     // monthYear is in the format YYYY-MM
@@ -266,7 +267,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     // Set the date to the first day of the selected month, time to midnight UTC
     const date = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
     return date.toISOString(); // Convert to ISO string
-}
+  }
 
 
   selectedClone(value: Field) {
@@ -302,7 +303,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     } else {
       // Calculate the total grantRubberArea
       const totalGrantRubberArea = this.addedGrant.reduce((sum, grant) => sum + grant.grantRubberArea, 0);
-      
+
       // Check if the totalGrantRubberArea exceeds the rubberArea
       if (this.field.rubberArea != null && totalGrantRubberArea + fieldGrant.grantRubberArea > this.field.rubberArea) {
         swal.fire({
@@ -321,7 +322,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       }
     }
   }
-  
+
 
   deleteGrant(index: number) {
     this.addedGrant.splice(index, 1)
@@ -331,7 +332,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  
+
 
 
 

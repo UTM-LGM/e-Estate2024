@@ -73,10 +73,12 @@ import { ReportRubberAreaByCloneComponent } from './report-rubber-area-by-clone/
 import { AddFieldComponent } from './add-field/add-field.component';
 import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sale.component';
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
+import { EstateByCloneComponent } from './report-rubber-area-by-clone/estate-by-clone/estate-by-clone.component';
+import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clone/area-by-clone.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
-  { path: 'generate-form-1/:id', component: GenerateForm1Component},
+  { path: 'generate-form-1/:id', component: GenerateForm1Component },
   {
     path: 'login',
     component: LoginLayoutComponent,
@@ -154,13 +156,13 @@ const routes: Routes = [
           { path: 'cost-item', component: CostItemComponent },
           { path: 'labor-type', component: LaborInformationComponent },
           { path: 'announcement', component: AnnouncementComponent },
-          { path: 'ownership', component:OwnershipComponent },
-          { path: 'tapping-system',component:TappingSystemComponent },
+          { path: 'ownership', component: OwnershipComponent },
+          { path: 'tapping-system', component: TappingSystemComponent },
           { path: 'field-disease', component: FieldDiseaseComponent },
 
         ],
       },
-      { path : 'utility-manage-user', component: UtilityManageUserComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] }},
+      { path: 'utility-manage-user', component: UtilityManageUserComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] } },
       {
         path: 'utilities-clerk',
         component: UtilityClerkComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk'] },
@@ -175,48 +177,52 @@ const routes: Routes = [
         component: ReportByStateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children: [
           { path: 'estate-by-state', component: EstateByStateComponent },
-          { path: 'rubber-crops-by-state', component:RubberCropsByStateComponent},
-          { path: 'state-detail/:id', component:StateDetailComponent}
+          { path: 'rubber-crops-by-state', component: RubberCropsByStateComponent },
+          { path: 'state-detail/:id', component: StateDetailComponent }
         ],
       },
       {
         path: 'report-rubber-area-by-clone',
-        component: ReportRubberAreaByCloneComponent, canActivate : [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        component: ReportRubberAreaByCloneComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        children: [
+          { path: 'area-by-clone', component: AreaByCloneComponent },
+          { path: 'clone-detail', component: EstateByCloneComponent }
+        ]
       },
       {
-        path:'report-production-by-year',
-        component:ReportProductionByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
-        children:[
+        path: 'report-production-by-year',
+        component: ReportProductionByYearComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        children: [
           { path: 'rubber-production-yearly', component: RubberProductionYearlyComponent },
-          { path: 'clone-production-yearly', component: CloneProductionYearlyComponent}
+          { path: 'clone-production-yearly', component: CloneProductionYearlyComponent }
         ]
       },
       {
-        path:'report-productivity-by-year',
-        component:ReportProductivityByYearComponent,canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
-        children:[
-          { path: 'clone-productivity-yearly',component:CloneProductivityYearlyComponent}
+        path: 'report-productivity-by-year',
+        component: ReportProductivityByYearComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        children: [
+          { path: 'clone-productivity-yearly', component: CloneProductivityYearlyComponent }
         ]
       },
       {
-        path:'report-field-information',
-        component:ReportFieldInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        path: 'report-field-information',
+        component: ReportFieldInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
-        path:'report-labor-information',
-        component:ReportLaborInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
-        children:[
-          { path: 'labor-information-yearly', component:LaborInformationYearlyComponent},
-          { path: 'worker-shortage-estate', component:WorkerShortageEstateComponent}
+        path: 'report-labor-information',
+        component: ReportLaborInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        children: [
+          { path: 'labor-information-yearly', component: LaborInformationYearlyComponent },
+          { path: 'worker-shortage-estate', component: WorkerShortageEstateComponent }
         ]
       },
       {
-        path:'report-cost-information',
-        component:ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        path: 'report-cost-information',
+        component: ReportCostInformationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       },
       {
-        path:'report-rubber-sale',
-        component:ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+        path: 'report-rubber-sale',
+        component: ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       }
     ],
   },

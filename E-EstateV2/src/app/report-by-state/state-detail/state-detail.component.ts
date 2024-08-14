@@ -27,6 +27,7 @@ export class StateDetailComponent implements OnInit {
   isLoading = true
   pageNumber = 1
   itemsPerPage = 20
+  totalArea = 0
 
   stateId: any
   estates: any = []
@@ -82,8 +83,6 @@ export class StateDetailComponent implements OnInit {
     forkJoin(observables).subscribe((results: any) => {
       this.stateTotalAreasArray = this.estates.map((estate: any) => {
         const result = results.find((res: any) => res.estateId === estate.id);
-        console.log(result)
-
         if (result) {
           const totalArea = result.fields.reduce((acc: any, curr: any) => acc + (curr.area || 0), 0);
           return {
@@ -103,8 +102,15 @@ export class StateDetailComponent implements OnInit {
           };
         }
       });
+
+      this.calculateArea()
       this.isLoading = false;
     });
+  }
+
+  calculateArea(){
+    this.totalArea = this.stateTotalAreasArray.reduce((acc, worker) => acc + (worker.totalArea || 0), 0)
+
   }
 
 

@@ -47,7 +47,6 @@ export class FieldService {
       fieldClones,
       fieldGrants
     };
-    console.log(payload)
     return this.http.post<any>(this.baseUrl + '/fields/addFieldWithDetails', payload);
   }
 

@@ -8,7 +8,8 @@
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
         public bool isActive { get; set; }
-        public string cloneName { get; set; }  
+        public string cloneName { get; set; }
         public int cloneId { get; set; }
+        
     }
 }

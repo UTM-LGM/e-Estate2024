@@ -80,7 +80,8 @@ export class AuthGuard implements CanActivate {
     const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
 
     //STaging
-    //const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
+    // const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
+    
     const tokenInfoString = localStorage.getItem(`msal.token.keys.${clientId}`)
 
     if (tokenInfoString !== null) {

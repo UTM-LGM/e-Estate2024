@@ -302,10 +302,11 @@ namespace E_EstateV2_API.Repository
             // Group by fieldId and create a list of cloneId for each fieldId
             var groupedResult = fieldClone
                 .GroupBy(x => new { x.fieldId, x.area })
-                .Select(g => new
+                .Select(g => new 
                 {
                     fieldId = g.Key.fieldId,
                     area = g.Key.area,
+                    cloneIds = g.Select(x => x.cloneId).ToList(),
                     cloneNames = g.Select(x => x.cloneName).ToList()
                 }).ToList();
 
@@ -326,24 +327,26 @@ namespace E_EstateV2_API.Repository
                     fieldId = x.fieldId,
                     cloneId = x.cloneId,
                     cloneName = _context.clones.Where(y => y.Id == x.cloneId).Select(y => y.cloneName).FirstOrDefault(),
-                    areas = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).ToList()
+                    area = _context.fields.Where(y => y.Id == x.fieldId && y.isActive == true).Select(y => y.rubberArea).FirstOrDefault()
                 })
-                .Where(x => x.areas.Count > 0) // Ensure there are areas to sum
+                .Where(x => x.area > 0) // Ensure there is an area to consider
                 .ToListAsync();
 
-            // Group by fieldId and sum the area, collect clone names
+            // Group by fieldId and ensure area is only counted once per field
             var groupedResult = fieldClone
                 .GroupBy(x => x.fieldId)
-                .Select(g => new
+                .Select(g => new DTO_EstateByClone
                 {
                     fieldId = g.Key,
-                    area = g.SelectMany(x => x.areas).Sum(),  // Sum all areas for the fieldId
+                    area = g.First().area,  // Only take the first area's value
+                    cloneIds = g.Count() == 1 ? (object)g.First().cloneId : (object)g.Select(x => x.cloneId).ToList(),
                     cloneNames = g.Select(x => x.cloneName).Distinct().ToList()  // Collect distinct clone names
                 })
                 .ToList();
 
             return groupedResult;
         }
+
 
         public async Task<object> GetCurrentField(int year)
         {

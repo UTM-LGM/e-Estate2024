@@ -1,18 +1,17 @@
 using E_EstateV2_API.Data;
-using E_EstateV2_API.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using E_EstateV2_API.IRepository;
+using E_EstateV2_API.Models;
 using E_EstateV2_API.Repository;
-using System.Security.Cryptography;
-using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 

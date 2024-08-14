@@ -151,6 +151,8 @@ import { CuplumpRubberStockComponent } from './rubber-stock/cuplump-rubber-stock
 import { LatexRubberStockComponent } from './rubber-stock/latex-rubber-stock/latex-rubber-stock.component';
 import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sale.component';
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
+import { EstateByCloneComponent } from './report-rubber-area-by-clone/estate-by-clone/estate-by-clone.component';
+import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clone/area-by-clone.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -274,6 +276,8 @@ register()
     LatexRubberStockComponent,
     ReportRubberSaleComponent,
     StateDetailComponent,
+    EstateByCloneComponent,
+    AreaByCloneComponent,
   ],
   imports: [
     BrowserModule,

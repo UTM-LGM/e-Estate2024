@@ -106,7 +106,8 @@ namespace E_EstateV2_API.Repository
                 otherCropId = _context.fieldConversions.Where(y => y.fieldId == x.Id).Select(y => y.otherCropId).FirstOrDefault(),
                 rubberArea = x.rubberArea,
                 currentTreeStand = x.currentTreeStand,
-                remark = x.remark
+                remark = x.remark,
+                estateId = x.estateId
             }).FirstOrDefaultAsync();
             return field;
         }

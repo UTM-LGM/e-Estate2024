@@ -37,7 +37,6 @@ export class LaborInfoComponent implements OnInit, OnDestroy {
               }
             )
           this.subscriptionService.add(getOneEstate);
-
         }
       });
     }, 2000)

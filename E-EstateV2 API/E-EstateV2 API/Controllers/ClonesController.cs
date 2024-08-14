@@ -24,13 +24,16 @@ namespace E_EstateV2_API.Controllers
                 .OrderBy(clone =>
                 {
                     var numericPart = new string(clone.cloneName.Where(char.IsDigit).ToArray());
-                    return int.Parse(numericPart);
+                    // If no numeric part is found, return a high value to push this clone to the end
+                    return string.IsNullOrEmpty(numericPart) ? int.MaxValue : int.Parse(numericPart);
                 })
-                .ThenBy(clone => clone.cloneName)  // In case of numeric tie, sort by the full cloneName
+                .ThenBy(clone => clone.cloneName)  // Sort alphabetically within the same numeric group
                 .ToList();
 
             return Ok(sortedClones);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> AddClone([FromBody] Clone clone)

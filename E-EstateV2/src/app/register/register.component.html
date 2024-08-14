@@ -31,12 +31,24 @@
           </mat-select>
         </div>
 
+        <hr/>
+
         <div class="column">
           <label>Username :</label>
           <input type="text" name="username" [(ngModel)]="register.userName" (change)="checkUsername($event)" />
+        </div>
+
+        <div class="column">
           <label>Password :</label>
           <div class="password-toggle">
             <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
+            <span (click)="togglePasswordVisibility()">
+              <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+            </span>
+          </div>
+          <label>Confirm Password :</label>
+          <div class="password-toggle">
+            <input type="{{ showPassword ? 'text' : 'password' }}" name="confirmPassword" [(ngModel)]="register.confirmPassword" (change)="checkingPassword()" />
             <span (click)="togglePasswordVisibility()">
               <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
             </span>

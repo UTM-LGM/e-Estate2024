@@ -251,14 +251,14 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         updatedBy: this.sharedService.userId.toString(),
         updatedDate: new Date()
       };
-  
+
       // Handle dateOpenTappingFormatted and isMature logic
       if (updatedField.dateOpenTappingFormatted) {
         updatedField.dateOpenTapping = this.convertToDateTime(updatedField.dateOpenTappingFormatted);
       } else if (updatedField.isMature === false) {
         updatedField.dateOpenTapping = null;
       }
-  
+
       // Prepare updated clones
       const updatedClones: any[] = this.fieldClones.map(clone => ({
         ...clone,
@@ -267,7 +267,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         createdDate: new Date(),
         fieldId: field.id // Assuming field.id is the identifier of the main field
       }));
-  
+
       // Prepare updated grants
       const updatedGrants: any[] = this.fieldGrants.map(grant => ({
         ...grant,
@@ -276,7 +276,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         createdDate: new Date(),
         fieldId: field.id // Assuming field.id is the identifier of the main field
       }));
-  
+
       // Perform the update operation
       this.fieldService.updateFieldWithDetails(updatedField, updatedClones, updatedGrants)
         .subscribe(
@@ -299,7 +299,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         );
     }
   }
-  
+
 
   convertToDateTime(monthYear: string): string {
     // monthYear is in the format YYYY-MM
@@ -366,7 +366,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     const getGrant = this.fieldGrantService.getFieldGrantByFieldId(this.field.id)
       .subscribe(
         Response => {
-          this.fieldGrants = Response.filter(g=>g.isActive == true)
+          this.fieldGrants = Response.filter(g => g.isActive == true)
         }
       )
     this.subscriptionService.add(getGrant);
@@ -735,6 +735,22 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     } else {
       this.pageNumber = newPageNumber;
     }
+  }
+
+  yearSelected() {
+    if (this.field.sinceYear != null) {
+      const yearAsString = this.field.sinceYear.toString()
+      if (yearAsString?.length !== 4) {
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please insert correct year',
+        });
+        this.field.sinceYear = 0
+      }
+    }
+
+
   }
 
 

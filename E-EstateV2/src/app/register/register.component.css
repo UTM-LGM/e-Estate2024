@@ -2,13 +2,17 @@
   background-color: #fff;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Consider removing this or adjusting it */
   width: 670px;
+  max-height: 86vh; /* Set a max height to the container */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .form-container {
   padding: 20px;
-  height: 100%;
+  height: auto; /* Allow the form to grow with content */
+  max-height: 100%; /* Constrain form height within its container */
+  overflow-y: auto; /* Enable scrolling for the form content */
   background-color: ghostwhite;
 }
 

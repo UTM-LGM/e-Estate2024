@@ -68,6 +68,8 @@ export class ManageUserComponent implements OnInit, OnDestroy {
               console.error("Error fetching license number:", error);
             }
           })})  
+        this.isLoading = false
+
     })
     this.subscriptionService.add(getAllUser);
   }, 1000)

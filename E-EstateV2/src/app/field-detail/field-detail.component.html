@@ -79,7 +79,7 @@
             </mat-select>
 
             <label>Since year <span style="color: red;">*</span> :</label>
-            <input type="number" name="year" [(ngModel)]="field.sinceYear" />
+            <input type="number" name="year" [(ngModel)]="field.sinceYear" (change)="yearSelected()" />
           </div>
         </div>
 
@@ -279,8 +279,11 @@
     </div>
   </div>
 
+  <br/>
+
   <div class="box-container" style="overflow-x: auto" *ngIf="fieldInfecteds">
     <h1>List of Field Disease</h1>
+    <hr>
     <table style="width: 100%">
       <thead>
         <tr>

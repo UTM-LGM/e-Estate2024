@@ -190,4 +190,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
+  checkingPassword(){
+    if (this.register.password !== this.register.confirmPassword) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error! Password not same!',
+      });
+    this.register.confirmPassword = ''
+    }
+  }
+
 }

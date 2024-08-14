@@ -139,6 +139,14 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   }
 
   rubberAreaInput() {
+    if(this.field.area <= 0){
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Rubber area cannot be less than 0',
+      });
+      this.field.area = 0
+    }
     if (this.rubberArea == "yes") {
       this.field.rubberArea = this.field.area
     }
@@ -154,6 +162,17 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   }
 
   areaRemark() {
+    if(this.field.rubberArea != null ){ 
+      if(this.field.rubberArea <= 0){ 
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Rubber area cannot be less than 0',
+        });
+        this.field.rubberArea = 0
+      }
+      
+    }
     if (this.field.rubberArea != null && this.field.rubberArea > this.field.area) {
       swal.fire({
         icon: 'error',

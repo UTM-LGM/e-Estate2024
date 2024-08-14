@@ -106,4 +106,14 @@ export class ForgotPasswordComponent implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword
   }
+
+  checkingPassword(){
+    if (this.register.newPassword !== this.register.confirmPassword) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error! Password not same!',
+      });
+    this.register.confirmPassword = ''
+    }
+  }
 }

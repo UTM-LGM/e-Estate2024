@@ -29,7 +29,7 @@
                 <td colspan="9" style="color: red;">No new user</td>
             </tr>
 
-            <ng-container *ngIf="!isLoading">
+            <ng-container >
                 <tr class="list"
                     *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
                     <td>{{ calculateIndex(i) }}</td>

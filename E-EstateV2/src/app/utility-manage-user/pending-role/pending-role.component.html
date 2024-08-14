@@ -26,6 +26,7 @@
             <td colspan="9" style="color: red;">No new user</td>
           </tr>
   
+          <ng-container *ngIf="!isLoading">
           <tr class="list"
             *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }, let i = index">
             <td>{{ calculateIndex(i) }}</td>
@@ -41,6 +42,7 @@
                 <i class="fa fa fa-pencil"></i>
               </button></td>
           </tr>
+        </ng-container>
 
         </table>  
         <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>

@@ -2,9 +2,14 @@
     <button class="btn-print" (click)="print()">Print <i class="fa fa-print"></i></button>
     <div style="text-align: center;" style="border: 1px solid black; padding: 15px;">
         <table class="table1" width="90%">
-            <tr>
-                <td colspan="8" style="text-align:right">
+            <tr *ngIf="rubberSale.letterOfConsentNo != ''"> 
+                <td  colspan="8" style="text-align:right">
                     <qrcode [qrdata]="qrcodedata" [width]="80"></qrcode>
+                </td>
+            </tr>
+
+            <tr *ngIf="rubberSale.letterOfConsentNo == ''"> 
+                <td colspan="8" style="text-align:right; height: 80px;">
                 </td>
             </tr>
             <div style="text-align: center; margin-top: -70px;">

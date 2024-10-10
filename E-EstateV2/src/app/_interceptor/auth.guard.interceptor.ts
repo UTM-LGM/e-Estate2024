@@ -80,7 +80,7 @@ export class AuthGuard implements CanActivate {
     const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
 
     //STaging
-    // const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
+    //const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
     
     const tokenInfoString = localStorage.getItem(`msal.token.keys.${clientId}`)
 
@@ -96,6 +96,10 @@ export class AuthGuard implements CanActivate {
           this.decodeAccessToken();
         }
       }
+    }
+    else {
+      localStorage.clear()
+      window.location.reload()
     }
   }
 
@@ -131,7 +135,8 @@ export class AuthGuard implements CanActivate {
             console.log('Interaction required, redirecting to login...');
             this.msalService.loginRedirect({
               scopes: ["api://e-EstateAPI/.default"],
-              redirectUri: 'https://www5.lgm.gov.my/e-Estate'
+              redirectUri: 'https://www5.lgm.gov.my/RRIMestet/home'
+              // redirectUri: 'https://www5.lgm.gov.my/trainingE-estate'
             });
             localStorage.clear();
             this.router.navigateByUrl('/login');
@@ -199,7 +204,8 @@ export class AuthGuard implements CanActivate {
       console.log('No token found, redirecting to login...');
       this.msalService.loginRedirect({
         scopes: ["api://e-EstateAPI/.default"],
-        redirectUri: 'https://www5.lgm.gov.my/e-Estate'
+        redirectUri: 'https://www5.lgm.gov.my/RRIMestet'
+        // redirectUri: 'https://www5.lgm.gov.my/trainingE-estate'
       });
       localStorage.clear();
       this.router.navigateByUrl('/login');

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Country } from 'src/app/_interface/country';
 import { CountryService } from 'src/app/_services/country.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -30,7 +31,8 @@ export class CountryComponent implements OnInit, OnDestroy {
   constructor(
     private countryService: CountryService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit() {
@@ -58,6 +60,7 @@ export class CountryComponent implements OnInit, OnDestroy {
       else {
         this.country.isLocal = false
       }
+      this.spinnerService.requestStarted()
       this.country.isActive = true
       this.country.createdBy = this.sharedService.userId.toString()
       this.country.createdDate = new Date()
@@ -74,6 +77,7 @@ export class CountryComponent implements OnInit, OnDestroy {
 
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           });
     }
   }

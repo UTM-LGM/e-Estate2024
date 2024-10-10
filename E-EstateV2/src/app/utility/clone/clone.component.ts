@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Clone } from 'src/app/_interface/clone';
 import { CloneService } from 'src/app/_services/clone.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -29,7 +30,9 @@ export class CloneComponent implements OnInit, OnDestroy {
   constructor(
     private cloneService: CloneService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
+
   ) { }
 
   ngOnInit() {
@@ -51,6 +54,7 @@ export class CloneComponent implements OnInit, OnDestroy {
       });
     }
     else {
+      this.spinnerService.requestStarted()
       this.clone.isActive = true
       this.clone.createdBy = this.sharedService.userId.toString()
       this.clone.createdDate = new Date()
@@ -66,6 +70,7 @@ export class CloneComponent implements OnInit, OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           });
     }
   }

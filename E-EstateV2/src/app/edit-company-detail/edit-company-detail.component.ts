@@ -13,6 +13,7 @@ import { MembershipType } from '../_interface/membership';
 import { MembershipService } from '../_services/membership.service';
 import { CompanyDetailService } from '../_services/company-detail.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private membershipService: MembershipService,
     private companyDetailService: CompanyDetailService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -95,6 +97,7 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     if (this.companyDetail.id == undefined) {
       this.companyDetail.companyId = this.company.id
       this.companyDetail.membershipTypeId = this.companyDetail.membershipTypeId
@@ -104,6 +107,7 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
       this.companyDetailService.addCompanyDetail(this.companyDetail)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Company successfully updated!',
@@ -121,6 +125,7 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
       this.companyDetailService.updateCompanyDetail(this.companyDetail)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Company successfully updated!',

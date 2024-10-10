@@ -4,6 +4,7 @@ import { Role } from 'src/app/_interface/role';
 import { User } from 'src/app/_interface/user';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { RoleService } from 'src/app/_services/role.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { UserService } from 'src/app/_services/user.service';
 import swal from 'sweetalert2';
@@ -26,7 +27,8 @@ export class PendingRoleDetailComponent implements OnInit, OnDestroy{
     private roleService:RoleService,
     private userService:UserService,
     private myLesenService:MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService
   ){}
 
   ngOnInit(): void {
@@ -60,40 +62,68 @@ export class PendingRoleDetailComponent implements OnInit, OnDestroy{
     this.subscriptionService.add(getLicenseNo);
   }
 
-  update(){
-    this.userService.addUserRole(this.user)
-    .subscribe(
-      Response => {
-      if(Response.roleName == null){
-        this.userService.sendWelcomeEmail(JSON.stringify(this.user.email))
-        .subscribe(
-          Response =>{
+  update() {
+    this.spinnerService.requestStarted()
+    this.userService.addUserRole(this.user).subscribe(
+      (response) => {
+        // Handle success response
+        if (response.roleName == null) {
+          this.userService.sendWelcomeEmail(JSON.stringify(this.user.email)).subscribe(() => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'User successfully updated!',
               icon: 'success',
               showConfirmButton: false,
-              timer: 1000
+              timer: 1000,
             });
-          }
-        )
-        this.dialog.close()
-      }
-      else{
+          });
+          this.dialog.close();
+        } else {
+          this.spinnerService.requestEnded()
+          swal.fire({
+            title: 'Done!',
+            text: 'User successfully updated!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000,
+          });
+          this.dialog.close();
+        }
+      },
+      (error) => {
+        // Handle error response
+        this.spinnerService.requestEnded()
+        const errorMessage = error.error?.message || 'An error occurred while updating the user.';
         swal.fire({
-          title: 'Done!',
-          text: 'User successfully updated!',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
+          title: 'Error!',
+          text: errorMessage,
+          icon: 'error',
+          showConfirmButton: true,
         });
-        this.dialog.close()
       }
-  })
-}
+    );
+  }
+  
 
 ngOnDestroy(): void {
   this.subscriptionService.unsubscribeAll();
+}
+
+deactive(){
+  this.userService.deactiveAccount(this.user)
+  .subscribe(
+    Response =>{
+      swal.fire({
+        title: 'Done!',
+        text: 'Account successfully deactivated!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      this.dialog.close();
+    }
+  )
 }
 
 }

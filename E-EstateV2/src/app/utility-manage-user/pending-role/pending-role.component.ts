@@ -26,6 +26,7 @@ export class PendingRoleComponent implements OnInit, OnDestroy {
     { columnName: 'no', displayText: 'No'},
     { columnName: 'fullName', displayText: 'User Fullname' },
     { columnName: 'email', displayText: 'Email' },
+    { columnName: 'licenseNo', displayText: 'License No' },
     { columnName: 'companyName', displayText: 'Company Name' },
     { columnName: 'estateName', displayText: 'Estate Name' },
     { columnName: 'companyPhoneNo', displayText: 'Company Phone No'},
@@ -50,7 +51,7 @@ export class PendingRoleComponent implements OnInit, OnDestroy {
     .subscribe(
       Response=>{
         const users = Response
-        this.users = users.filter((x:any)=>x.roleId == null && x.isEmailVerified == true)
+        this.users = users.filter((x:any)=>x.roleId == null && x.isEmailVerified == true && x.isActive == true)
         this.users.forEach((user: any) => {
           const getLicenseNo = this.myLesenService.getLicenseNo(user.licenseNo)
           .subscribe(
@@ -84,6 +85,7 @@ export class PendingRoleComponent implements OnInit, OnDestroy {
   openDialog(user:User){
     const dialogRef = this.dialog.open(PendingRoleDetailComponent, {
       data : {data:user},
+      width: '40%'
     });
     dialogRef.afterClosed()
       .subscribe(

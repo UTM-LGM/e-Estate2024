@@ -4,6 +4,7 @@ import { FieldDisease } from 'src/app/_interface/fieldDisease';
 import { DiseaseCategoryService } from 'src/app/_services/disease-category.service';
 import { FieldDiseaseService } from 'src/app/_services/field-disease.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -37,7 +38,8 @@ export class FieldDiseaseComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private fieldDiseaseService: FieldDiseaseService,
     private subscriptionService:SubscriptionService,
-    private diseaseCategoryService:DiseaseCategoryService
+    private diseaseCategoryService:DiseaseCategoryService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -80,6 +82,7 @@ export class FieldDiseaseComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
     } else {
+      this.spinnerService.requestStarted()
       this.fieldDisease.isActive = true
       this.fieldDisease.createdBy = this.sharedService.userId.toString()
       this.fieldDisease.createdDate = new Date()
@@ -95,6 +98,7 @@ export class FieldDiseaseComponent implements OnInit, OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           }
         )
     }

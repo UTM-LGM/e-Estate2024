@@ -16,6 +16,7 @@ namespace E_EstateV2_API.Models
         public DateTime updatedDate { get; set; }
 
         public int estateId { get; set; }
+        public string renameBuyer { get; set; }
 
         //many to many relation
         //public ICollection <BuyerCompany> BuyerCompanies { get; set; }

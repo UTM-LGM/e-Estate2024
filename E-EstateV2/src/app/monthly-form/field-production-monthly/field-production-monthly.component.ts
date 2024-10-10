@@ -8,6 +8,7 @@ import { FieldProductionService } from 'src/app/_services/field-production.servi
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { FieldProductionDetailComponent } from 'src/app/field-production-detail/field-production-detail.component';
 import swal from 'sweetalert2';
@@ -59,6 +60,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   totalDry: FieldProduction[] = []
   USSDry: FieldProduction[] = []
   OthersDry: FieldProduction[] = []
+  productions: any[] = []
 
 
   constructor(
@@ -69,8 +71,8 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private fieldProductionService: FieldProductionService,
     private dialog: MatDialog,
-    private subscriptionService:SubscriptionService
-
+    private subscriptionService: SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -113,7 +115,6 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
               Response => {
                 this.estate = Response;
                 this.getField()
-                this.isLoading = false
               }
             )
           this.subscriptionService.add(getOneEstate);
@@ -132,7 +133,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
           this.getAllProduction(this.filterFields)
         }
       )
-      this.subscriptionService.add(getField);
+    this.subscriptionService.add(getField);
 
   }
 
@@ -156,6 +157,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         product.createdDate = new Date(),
         product.status = "DRAFT"
       this.products.push(product)
+      // this.isLoading = false
     });
   }
 
@@ -261,12 +263,14 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   }
 
   add() {
+    this.spinnerService.requestStarted()
     const filteredProducts = this.products.filter(x => x !== null)
     if (filteredProducts.length === this.products.length) {
       this.fieldProductionService.addProduction(this.products)
         .subscribe(
           {
             next: (Response) => {
+              this.spinnerService.requestEnded()
               swal.fire({
                 title: 'Done!',
                 text: 'Field Production information successfully saved!',
@@ -277,6 +281,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
               this.getEstate()
             },
             error: (err) => {
+              this.spinnerService.requestEnded()
               swal.fire({
                 text: 'Please fil up the form',
                 icon: 'error'
@@ -292,8 +297,8 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     const getProduction = this.fieldProductionService.getProduction()
       .subscribe(
         Response => {
-          const productions = Response
-          this.filterProductions = productions.filter(e => e.monthYear == this.date.toUpperCase() && Fields.some(field => field.id === e.fieldId))
+          this.productions = Response
+          this.filterProductions = this.productions.filter(e => e.monthYear == this.date.toUpperCase() && Fields.some(field => field.id === e.fieldId))
           this.draftFilterProductions = this.filterProductions.filter(e => e.status === "DRAFT")
           this.submitFilterProductions = this.filterProductions.filter(e => e.status == "SUBMITTED")
           this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
@@ -305,7 +310,8 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
           this.TotalUSS()
           this.TotalOthers()
         });
-      this.subscriptionService.add(getProduction);
+    this.isLoading = false
+    this.subscriptionService.add(getProduction);
 
   }
 
@@ -387,6 +393,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   }
 
   submitProduction() {
+    this.spinnerService.requestStarted()
     const updatedBy = this.sharedService.userId.toString()
     const date = new Date()
     const updatedArray = this.draftFilterProductions.map(obj => {
@@ -396,6 +403,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     this.fieldProductionService.updateProductionDraft(updatedArray)
       .subscribe({
         next: (response) => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Field Production information successfully submitted!',
@@ -404,23 +412,25 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
             timer: 1000
           });
           this.getEstate()
-      },
-      error: (error) => {
-        swal.fire({
-          title: 'Error!',
-          text: 'Failed to submit Field Production!',
-          icon: 'error',
-          showConfirmButton: true
-        });
-        this.isSubmit = false;
-      }
-    })
+        },
+        error: (error) => {
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to submit Field Production!',
+            icon: 'error',
+            showConfirmButton: true
+          });
+          this.isSubmit = false;
+        }
+      })
   }
 
   save() {
+    this.spinnerService.requestStarted()
     this.fieldProductionService.updateProductionDraft(this.draftFilterProductions)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Field Production information successfully saved!',
@@ -437,12 +447,12 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  validateCuplumpDRC(drc:any, i:any){
+  validateCuplumpDRC(drc: any, i: any) {
     const drcValue = drc.target.value
     if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
       return drcValue
     }
-    else{
+    else {
       swal.fire({
         title: 'Error!',
         text: 'CuplumpDRC must be between 45% to 80%',
@@ -453,12 +463,12 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     }
   }
 
-  validateLatexDRC(drc:any, i:any){
+  validateLatexDRC(drc: any, i: any) {
     const drcValue = drc.target.value
     if ((drcValue >= 20 && drcValue <= 55) || drc === 0) {
       return drcValue
     }
-    else{
+    else {
       swal.fire({
         title: 'Error!',
         text: 'LatexDRC must be between 20% to 55%',
@@ -469,5 +479,5 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     }
 
   }
-  
+
 }

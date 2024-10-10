@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Field } from '../_interface/field';
 import swal from 'sweetalert2';
 import { FieldStatus } from '../_interface/fieldStatus';
@@ -14,6 +14,9 @@ import { FieldStatusService } from '../_services/field-status.service';
 import { Location } from '@angular/common';
 import { FieldGrant } from '../_interface/fieldGrant';
 import { FieldGrantService } from '../_services/field-grant.service';
+import { SpinnerService } from '../_services/spinner.service';
+import { FieldGrantAttachmentComponent } from '../field-grant-attachment/field-grant-attachment.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -23,6 +26,8 @@ import { FieldGrantService } from '../_services/field-grant.service';
 })
 export class AddFieldComponent implements OnInit, OnDestroy {
 
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  
   fields: Field[] = []
   field: Field = {} as Field
 
@@ -39,6 +44,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   filterClones: Clone[] = []
   availableClones: Clone[] = []
   addedGrant: any[] = []
+
+  selectedFile: File[] = []
 
 
   rubberArea = ''
@@ -60,7 +67,9 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     private cloneService: CloneService,
     private fieldStatusService: FieldStatusService,
     private location: Location,
-    private fieldGrantService: FieldGrantService
+    private fieldGrantService: FieldGrantService,
+    private spinnerService: SpinnerService,
+    private dialog: MatDialog,
   ) { }
 
 
@@ -68,8 +77,6 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     this.getEstate()
     this.getClone()
     this.getCrop()
-
-
   }
 
   getClone() {
@@ -81,6 +88,10 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       });
     this.subscriptionService.add(getClone);
 
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = Array.from(event.target.files);
   }
 
 
@@ -139,7 +150,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   }
 
   rubberAreaInput() {
-    if(this.field.area <= 0){
+    if (this.field.area <= 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -162,8 +173,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   }
 
   areaRemark() {
-    if(this.field.rubberArea != null ){ 
-      if(this.field.rubberArea <= 0){ 
+    if (this.field.rubberArea != null) {
+      if (this.field.rubberArea <= 0) {
         swal.fire({
           icon: 'error',
           title: 'Error',
@@ -171,7 +182,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         });
         this.field.rubberArea = 0
       }
-      
+
     }
     if (this.field.rubberArea != null && this.field.rubberArea > this.field.area) {
       swal.fire({
@@ -220,16 +231,15 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
       this.isSubmit = false;
-    }
-    else {
+    } else {
+      this.spinnerService.requestStarted();
       this.field.estateId = this.estate.id;
       this.field.isActive = true;
       this.field.createdBy = this.sharedService.userId.toString();
       this.field.createdDate = new Date();
       if (this.field.dateOpenTapping) {
         this.field.dateOpenTapping = this.convertToDateTime(this.field.dateOpenTapping);
-      }
-      else {
+      } else {
         this.field.dateOpenTapping = null;
       }
 
@@ -241,43 +251,67 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         return { 'grantTitle': item.grantTitle.toUpperCase(), 'grantArea': item.grantArea, 'grantRubberArea': item.grantRubberArea, 'isActive': true, 'fieldId': 0, 'createdBy': this.sharedService.userId.toString(), 'createdDate': new Date() };
       });
 
-      this.fieldService.addFieldWithDetails(this.field, combineClone, combineLandTitle)
-        .subscribe(
-          {
-            next: (response: any) => {
-              swal.fire({
-                title: 'Done!',
-                text: 'Field successfully submitted!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
-              this.selectedValues = [];
-              this.addedGrant = [];
-              this.field = {} as Field;
-              this.ngOnInit();
-              this.rubberArea = '';
-              this.isSubmit = false;
-            },
-            error: (err: any) => {
-              swal.fire({
-                text: 'Please fill up the form',
-                icon: 'error'
-              });
-              this.isSubmit = false;
-            }
+      this.fieldService.addFieldWithDetails(this.field, combineClone, combineLandTitle).subscribe({
+        next: (response: any) => {
+          // Assuming response contains fieldGrantIds
+          const fieldGrantIds = response.fieldGrantIds;
+
+          if (this.selectedFile.length > 0) {
+            this.fieldService.addFieldAttachments(fieldGrantIds, this.selectedFile, this.sharedService.userId).subscribe({
+              next: () => {
+                swal.fire({
+                  title: 'Done!',
+                  text: 'Field and attachments successfully submitted!',
+                  icon: 'success',
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+                this.selectedValues = [];
+                this.addedGrant = [];
+                this.field = {} as Field;
+                this.ngOnInit();
+                this.rubberArea = '';
+                this.isSubmit = false;
+                this.spinnerService.requestEnded();
+              },
+              error: (err: any) => {
+                swal.fire({
+                  text: 'Failed to upload attachments',
+                  icon: 'error'
+                });
+                this.isSubmit = false;
+                this.spinnerService.requestEnded();
+              }
+            });
+          } else {
+            swal.fire({
+              title: 'Done!',
+              text: 'Field successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.selectedValues = [];
+            this.addedGrant = [];
+            this.field = {} as Field;
+            this.ngOnInit();
+            this.rubberArea = '';
+            this.isSubmit = false;
+            this.spinnerService.requestEnded();
+          }
+        },
+        error: (err: any) => {
+          swal.fire({
+            text: 'Failed to submit field data',
+            icon: 'error'
           });
-      // if(this.selectedValues.length == 0 && this.field.isMature == true){
-      //   swal.fire({
-      //     text: 'Please insert clone planted',
-      //     icon: 'error'
-      //   });
-      // }
-      // else{
-      //   
-      // }
+          this.isSubmit = false;
+          this.spinnerService.requestEnded();
+        }
+      });
     }
   }
+
 
 
   convertToDateTime(monthYear: string): string {
@@ -330,14 +364,18 @@ export class AddFieldComponent implements OnInit, OnDestroy {
           icon: 'error'
         });
       } else {
-        let grantInfo = {} as any;
-        grantInfo.grantTitle = fieldGrant.grantTitle;
-        grantInfo.grantArea = fieldGrant.grantArea;
-        grantInfo.grantRubberArea = fieldGrant.grantRubberArea;
+        const grantInfo = {
+          grantTitle: fieldGrant.grantTitle,
+          grantArea: fieldGrant.grantArea,
+          grantRubberArea: fieldGrant.grantRubberArea,
+          files: this.selectedFile
+        };
+
         this.addedGrant.push(grantInfo);
         this.fieldGrant.grantTitle = '';
         this.fieldGrant.grantArea = null;
         this.fieldGrant.grantRubberArea = null;
+        this.fileInput.nativeElement.value = '';
       }
     }
   }
@@ -351,8 +389,28 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
+  viewDocuments(files: File[]) {
+    const dialogRef = this.dialog.open(FieldGrantAttachmentComponent, {
+      width: '80%',
+      data: { files, isUpdating: false }
+    });
+  
+    dialogRef.componentInstance.filesUpdated.subscribe((updatedFiles: File[]) => {
+      this.updateGrantFiles(updatedFiles);
+    });
+  }
+  
 
+  updateGrantFiles(updatedFiles: File[]): void {
+    // Find the index of the grant in the addedGrant array
+    const index = this.addedGrant.findIndex(grant => grant.files === this.selectedFile);
 
+    if (index !== -1) {
+      // Update the files for the specific grant
+      this.addedGrant[index].files = updatedFiles;
+    }
 
-
+    // Also update the selectedFile if needed
+    this.selectedFile = updatedFiles;
+  }
 }

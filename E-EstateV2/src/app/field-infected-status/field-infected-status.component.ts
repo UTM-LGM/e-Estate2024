@@ -15,6 +15,7 @@ import { FieldCloneService } from '../_services/field-clone.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { Location } from '@angular/common';
 import { FieldInfectedComponent } from '../field-infected/field-infected.component';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-field-infected-status',
@@ -52,7 +53,7 @@ export class FieldInfectedStatusComponent implements OnInit {
     private sharedService: SharedService,
     private fieldInfectedService: FieldInfectedService,
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
-
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -68,11 +69,13 @@ export class FieldInfectedStatusComponent implements OnInit {
       });
     }
     else {
+      this.spinnerService.requestStarted()
       this.fieldInfected.isActive = false
       this.fieldInfected.updatedBy = this.sharedService.userId
       this.fieldInfectedService.updateFieldInfectedRemark(this.fieldInfected)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Field Infected updated!',

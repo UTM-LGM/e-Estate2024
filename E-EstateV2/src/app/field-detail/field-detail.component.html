@@ -98,68 +98,77 @@
             <label>Date Open Tapping <span style="color: red;">*</span> :</label>
             <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted "
               (change)="checkDOT()" />
-
           </div>
 
           <div style="columns: 2" *ngIf="field.isMature == true">
             <label>Total task <span style="color: red;">*</span> :</label>
             <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
           </div>
+        </div>
+        <hr />
+
+        <div class="box-container">
+          <h1>Land Title</h1>
           <hr />
+          <div style="columns: 2;">
+            <label>No <span style="color: red;">*</span> : </label>
+            <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle" />
+            <label>Total Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea" />
+          </div>
+
+          <div style="columns: 2;">
+            <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea" />
+            <label>Land Title / Other related documents (pdf only) <span style="color: red;">*</span> : </label>
+            <input type="file" #fileInput name="file" accept=".pdf" multiple (change)="onFileSelected($event)" />
+          </div>
+
+          <div style="float: right;">
+            <button class="btn-add" (click)="addGrant(fieldGrant)">
+              Add Land Title &nbsp; <i class="fa fa-plus"></i>
+            </button>
+          </div><br /><br />
 
           <div class="box-container">
-            <h1>Land Title</h1>
+            <h1>List of Land title</h1>
             <hr />
-            <div style="columns: 4;">
-              <label>No <span style="color: red;">*</span> : </label>
-              <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle" />
-              <label>Total Area (Ha) <span style="color: red;">*</span> :</label>
-              <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea" />
-              <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
-              <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea" />
-              <div>
-                <button style="margin-top: 28px;" class="btn-add" (click)="addGrant(fieldGrant)">
-                  Add Land Title &nbsp; <i class="fa fa-plus"></i>
-                </button>
-              </div>
+            <div style="overflow-x: auto; overflow-y: auto">
+              <table style="width: 100%">
+                <tr>
+                  <th width="30px">No</th>
+                  <th>Land title</th>
+                  <th>Total Area (Ha)</th>
+                  <th>Rubber Area (Ha)</th>
+                  <th>Document</th>
+                  <th width="90px">Action</th>
+                </tr>
+
+                <tr *ngIf="fieldGrants.length == 0">
+                  <td colspan="6" style="color: red;">No Land Title</td>
+                </tr>
+
+                <tr
+                  *ngFor="let value of fieldGrants | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                  <td>{{ calculateIndex(i) }}</td>
+                  <td>{{ value.grantTitle }}</td>
+                  <td>{{ value.grantArea }}</td>
+                  <td>{{ value.grantRubberArea }}</td>
+                  <td> <button class="btn-doc" (click)="viewDocuments(value.files, value.id)">
+                      <i class="fa fa-folder"></i> <!-- Document icon -->
+                    </button> </td>
+                  <td>
+                    <button class="btn-del" (click)="deleteGrant(i)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
             </div>
+          </div><br />
 
-            <div class="box-container">
-              <h1>List of Land title</h1>
-              <hr />
-              <div style="overflow-x: auto; overflow-y: auto">
-                <table style="width: 100%">
-                  <tr>
-                    <th width="30px">No</th>
-                    <th>Land title</th>
-                    <th>Total Area (Ha)</th>
-                    <th>Rubber Area (Ha)</th>
-                    <th width="90px">Action</th>
-                  </tr>
-
-                  <tr *ngIf="fieldGrants.length == 0">
-                    <td colspan="5" style="color: red;">No Land Title</td>
-                  </tr>
-
-                  <tr
-                    *ngFor="let value of fieldGrants | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-                    <td>{{ calculateIndex(i) }}</td>
-                    <td>{{ value.grantTitle }}</td>
-                    <td>{{ value.grantArea }}</td>
-                    <td>{{ value.grantRubberArea }}</td>
-                    <td>
-                      <button class="btn-del" (click)="deleteGrant(i)">
-                        <i class="fa fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                </table>
-                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
-
-              </div>
-            </div><br />
-
-          </div>
         </div>
         <br />
       </div>
@@ -233,14 +242,14 @@
     </button>
   </div><br />
 
-  <div class="box-container" *ngIf="conversion">
+  <div class="box-container" *ngIf="isHistory">
     <h1>Initial Field Information</h1>
     <hr />
     <div style="overflow-x: auto">
       <table style="width: 100%">
         <tr>
           <th>Field / Block</th>
-          <th>Field Area (Ha)
+          <th>Rubber Area (Ha) </th>
           <th>Maturity</th>
           <th>Field Status</th>
           <th>Year Planted</th>
@@ -258,20 +267,20 @@
         </tr>
 
         <tr class="list" style="pointer-events: none">
-          <td>{{ field.fieldName }}</td>
-          <td>{{ field.area }}</td>
-          <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
-          <td *ngFor="let fieldStatus of field.fieldStatuses">{{ fieldStatus.fieldStatus }}</td>
-          <td>{{ field.yearPlanted }}</td>
-          <td>{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
-          <td>{{ field.initialTreeStand }}</td>
-          <td>{{ field.totalTask }}</td>
+          <td>{{ fieldHistory.fieldName }}</td>
+          <td>{{ fieldHistory.area }}</td>
+          <td>{{ fieldHistory.isMature == true ? "MATURE" : "IMMATURE" }}</td>
+          <td>{{ fieldHistory.fieldStatus.fieldStatus }}</td>
+          <td>{{ fieldHistory.yearPlanted }}</td>
+          <td>{{ fieldHistory.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+          <td>{{ fieldHistory.initialTreeStand }}</td>
+          <td>{{ fieldHistory.totalTask }}</td>
           <td>
             <button class="btn-detail" [ngClass]="{
-                  'active-btn': field.isActive == true,
-                  'inactive-btn': field.isActive == false
+                  'active-btn': fieldHistory.isActive == true,
+                  'inactive-btn': fieldHistory.isActive == false
                 }">
-              {{ field.isActive == true ? "Active" : "Inactive" }}
+              {{ fieldHistory.isActive == true ? "Active" : "Inactive" }}
             </button>
           </td>
         </tr>
@@ -279,7 +288,7 @@
     </div>
   </div>
 
-  <br/>
+  <br />
 
   <div class="box-container" style="overflow-x: auto" *ngIf="fieldInfecteds">
     <h1>List of Field Disease</h1>
@@ -329,3 +338,5 @@
   </div>
 
 </div>
+
+<app-spinner></app-spinner>

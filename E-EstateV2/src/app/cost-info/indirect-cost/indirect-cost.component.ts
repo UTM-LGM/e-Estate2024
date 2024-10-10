@@ -4,6 +4,7 @@ import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -42,7 +43,8 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
     private costService: CostService,
     private costAmountService: CostAmountService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -117,12 +119,14 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
         createdDate: new Date()
       };
     });
+    this.spinnerService.requestStarted()
     this.indirectCosts = newArray
     this.costAmount = this.indirectCosts.map(({ amount, id, monthYear, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, monthYear, estateId, status, createdBy, createdDate })) as unknown as CostAmount[]
     this.costAmountService.addCostAmount(this.costAmount)
       .subscribe(
         {
           next: (Response) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Cost amount successfully saved!',
@@ -133,6 +137,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
             this.getIndirectCostAmount();
           },
           error: (err) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               text: 'Please fil up the form',
               icon: 'error'
@@ -144,9 +149,11 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
   }
 
   save() {
+    this.spinnerService.requestStarted()
     this.costAmountService.updateCostAmount(this.draftFilterIndirectCostAmount)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Cost amount successfully saved!',
@@ -175,9 +182,11 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
     })
       .then((result) => {
         if (result.isConfirmed) {
+          this.spinnerService.requestStarted()
           this.costAmountService.updateCostAmount(updatedArray)
             .subscribe(
               Response => {
+                this.spinnerService.requestEnded()
                 swal.fire({
                   title: 'Done!',
                   text: 'Cost Amount successfully submitted!',

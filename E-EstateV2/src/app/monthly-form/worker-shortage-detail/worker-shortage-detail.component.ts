@@ -5,6 +5,7 @@ import { WorkerShortageComponent } from '../worker-shortage/worker-shortage.comp
 import { SharedService } from 'src/app/_services/shared.service';
 import { WorkerShortageService } from 'src/app/_services/worker-shortage.service';
 import swal from 'sweetalert2';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class WorkerShortageDetailComponent implements OnInit {
     public dialogRef: MatDialogRef<WorkerShortageComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { data: WorkerShortage },
     private sharedService: SharedService,
-    private workerShortageService: WorkerShortageService
+    private workerShortageService: WorkerShortageService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -32,11 +34,13 @@ export class WorkerShortageDetailComponent implements OnInit {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     this.worker.updatedBy = this.sharedService.userId.toString()
     this.worker.updatedDate = new Date()
     this.workerShortageService.updateWorkerShortage(this.worker)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Worker Shortage successfully updated!',

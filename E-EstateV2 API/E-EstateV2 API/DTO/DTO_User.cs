@@ -19,5 +19,6 @@
         public string OldPassword { get; set; }
         public bool isEmailVerified { get; set; }
         public string licenseNo { get; set; }
+        public bool? isActive { get; set; }
     }
 }

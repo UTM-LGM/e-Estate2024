@@ -13,6 +13,7 @@ import { RubberStock } from '../_interface/rubberStock';
 import { RubberStockService } from '../_services/rubber-stock.service';
 import swal from 'sweetalert2';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-add-rubber-stock',
@@ -78,6 +79,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private rubberStockService: RubberStockService,
     private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.estate = data.estate;
@@ -94,11 +96,20 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
 
   chooseRubberType(){
     this.stock.previousStock = 0
-    this.stock.currentStock = 0
-    this.stock.weightLoss = 0
     this.getAllProduction()
     this.getSales()
     this.getStock()
+    
+  }
+
+  calculateStockCuplump(){
+    var stockCuplump = ((this.totalCuplumpDry + this.stock.previousStock) - this.stock.totalSale)-1
+    this.stock.currentStock = stockCuplump
+  }
+
+  calculateStockLatx(){
+    var stockLatex = ((this.totalLatexDry + this.stock.previousStock)- this.stock.totalSale)-1
+    this.stock.currentStock = stockLatex
   }
 
   getStock() {
@@ -111,6 +122,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
             this.stock.previousStock = latestItem.currentStock;
             this.isPreviousStock = true
+            
           }
         }
       )
@@ -147,6 +159,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         text: 'Month already exist',
       });
     }else{
+      this.spinnerService.requestStarted()
       this.stock.estateId = this.estate.id
       this.stock.monthYear = this.date
       this.stock.createdBy = this.sharedService.userId
@@ -161,6 +174,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       this.rubberStockService.addRubberStock(this.stock)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Stock successfully submitted!',
@@ -200,6 +214,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       return { cuplumpDry }
     });
     this.totalCuplumpDry = this.totalCuplump.reduce((total, item) => total + item.cuplumpDry, 0)
+    this.calculateStockCuplump()
+    this.calculateWaterDepletion()
   }
 
   TotalLatex() {
@@ -208,6 +224,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       return { latexDry }
     });
     this.totalLatexDry = this.totalLatex.reduce((total, item) => total + item.latexDry, 0)
+    this.calculateStockLatx()
+    this.calculateWaterDepletion()
   }
 
 
@@ -272,10 +290,12 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     this.stock.updatedBy = this.sharedService.userId
     this.rubberStockService.updateRubberStock(this.stock)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Stock successfully updated!',

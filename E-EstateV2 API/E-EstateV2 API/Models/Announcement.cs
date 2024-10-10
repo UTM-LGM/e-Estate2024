@@ -13,5 +13,6 @@ namespace E_EstateV2_API.Models
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
         public string filePath { get; set; }
+        public int hierarchy { get; set; }
     }
 }

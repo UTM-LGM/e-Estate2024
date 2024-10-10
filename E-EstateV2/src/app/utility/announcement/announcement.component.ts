@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Announcement } from 'src/app/_interface/annoucement';
 import { AnnoucementService } from 'src/app/_services/annoucement.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { environment } from 'src/environments/environments';
 import swal from 'sweetalert2';
+import { EditHierarchyComponent } from './edit-hierarchy/edit-hierarchy.component';
 
 
 @Component({
@@ -28,13 +31,16 @@ export class AnnouncementComponent implements OnInit, OnDestroy {
 
   sortableColumns = [
     { columnName: 'tittle', displayText: 'Tittle' },
+    { columnName: 'hierarchy', displayText: 'Hierarchy (Order No)' },
     { columnName: 'filePath', displayText: 'Image' },
   ];
 
   constructor(
     private announcementService: AnnoucementService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -58,8 +64,14 @@ export class AnnouncementComponent implements OnInit, OnDestroy {
         text: 'Slide announcement already exists!',
         icon: 'error'
       });
+    }else if (this.announcements.some(s => s.hierarchy === this.announcement.hierarchy)) {
+      swal.fire({
+        text: 'Hierarchy already exists!',
+        icon: 'error'
+      });
     }
     else {
+      this.spinnerService.requestStarted()
       this.announcement.isActive = true
       this.announcement.createdBy = this.sharedService.userId
       if (this.selectedFile != null) {
@@ -75,6 +87,7 @@ export class AnnouncementComponent implements OnInit, OnDestroy {
               });
               this.reset()
               this.ngOnInit()
+              this.spinnerService.requestEnded()
             })
       }
     }
@@ -147,6 +160,18 @@ export class AnnouncementComponent implements OnInit, OnDestroy {
   onFilterChange(term: string): void {
     this.term = term;
     this.pageNumber = 1; // Reset to first page on filter change
+  }
+
+  edit(annoucement:any){
+    const dialogRef = this.dialog.open(EditHierarchyComponent, {
+      data: { data: annoucement },
+    });
+    dialogRef.afterClosed()
+      .subscribe(
+        Response => {
+          this.ngOnInit()
+        }
+      )
   }
   
 }

@@ -5,9 +5,9 @@
       <hr>
       <form>
         <div class="column">
-          <label>Full Name :</label>
+          <label>Full Name <span style="color: red;">*</span> :</label>
           <input type="text" name="fullName" [(ngModel)]="register.fullName" />
-          <label>License No :</label>
+          <label>License No <span style="color: red;">*</span> :</label>
           <input type="text" name="licenseNo" [(ngModel)]="register.licenseNo" (change)="checkLicenseNo($event)" />
         </div>
 
@@ -19,9 +19,9 @@
         </div>
 
         <div class="column">
-          <label>Email :</label>
+          <label>Email <span style="color: red;">*</span> :</label>
           <input type="email" name="email" [(ngModel)]="register.email" />
-          <label>Position :</label>
+          <label>Position <span style="color: red;">*</span> :</label>
           <mat-select  placeholder="Please Choose" name="position" [(ngModel)]="register.position">
             <mat-option value="MANAGER">MANAGER</mat-option>
             <mat-option value="ASSISTANT MANAGER">ASSISTANT MANAGER</mat-option>
@@ -34,19 +34,19 @@
         <hr/>
 
         <div class="column">
-          <label>Username :</label>
+          <label>Username <span style="color: red;">*</span> :</label>
           <input type="text" name="username" [(ngModel)]="register.userName" (change)="checkUsername($event)" />
         </div>
 
         <div class="column">
-          <label>Password :</label>
+          <label>Password <span style="color: red;">*</span> :</label>
           <div class="password-toggle">
             <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
             <span (click)="togglePasswordVisibility()">
               <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
             </span>
           </div>
-          <label>Confirm Password :</label>
+          <label>Confirm Password <span style="color: red;">*</span> :</label>
           <div class="password-toggle">
             <input type="{{ showPassword ? 'text' : 'password' }}" name="confirmPassword" [(ngModel)]="register.confirmPassword" (change)="checkingPassword()" />
             <span (click)="togglePasswordVisibility()">

@@ -112,6 +112,17 @@ namespace E_EstateV2_API.Repository
             return field;
         }
 
+        public async Task<FieldHistory> GetOneFieldHistory(int id)
+        {
+            var getFieldHistory = await _context.fieldHistories
+                .Include(x => x.FieldStatus)
+                .Where(x => x.fieldId == id)
+                .OrderByDescending(x => x.Id) 
+                .FirstOrDefaultAsync();
+
+            return getFieldHistory;
+        }
+
         public async Task<Field> UpdateField(Field field)
         {
             var existingField = await _context.fields.FirstOrDefaultAsync(x => x.Id == field.Id);

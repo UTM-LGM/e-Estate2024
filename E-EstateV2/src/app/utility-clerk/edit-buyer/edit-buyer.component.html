@@ -1,0 +1,30 @@
+<div style="padding: 20px;" class="box-container">
+    <h1>Buyer Information</h1>
+    <hr>
+  
+    <div style="columns: 2">
+      <label>LicenseNo :</label>
+      <input type="text" name="licenseNo" disabled [(ngModel)]="buyer.licenseNo" />
+      <label>Buyer Name :</label>
+      <input type="text" name="buyerName" disabled [(ngModel)]="buyer.buyerName" />
+    </div>
+
+    <div style="columns: 2">
+        <label>Rename Buyer :</label>
+        <input type="text" name="renameBuyer"  [(ngModel)]="buyer.renameBuyer" />
+      </div>
+
+    <div>
+      <button style="float: right" class="btn-update" type="submit" (click)="update()">
+        Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>
+    </div>
+  
+    <div (click)="back()">
+      <button class="btn-back">
+        <i class="fa fa-arrow-left"></i> &nbsp; Back
+      </button>
+    </div>
+  </div>
+  
+  <app-spinner></app-spinner>

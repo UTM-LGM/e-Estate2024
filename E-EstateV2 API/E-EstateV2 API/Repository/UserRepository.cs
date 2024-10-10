@@ -15,6 +15,7 @@ using System.Security.Cryptography;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 using System.ComponentModel.Design;
+using System.Numerics;
 
 
 namespace E_EstateV2_API.Repository
@@ -115,7 +116,8 @@ namespace E_EstateV2_API.Repository
                     CompanyName = companyName,
                     EstateName = estateName,
                     CompanyPhoneNo = companyPhoneNo,
-                    licenseNo = user.licenseNo
+                    licenseNo = user.licenseNo,
+                    isActive = user.isActive,
                 };
 
                 usersWithRoles.Add(dtoUser);
@@ -180,7 +182,7 @@ namespace E_EstateV2_API.Repository
                 estateId = estateId,
             };
 
-            var result = await _usermanager.CreateAsync(applicationUser, user.password.ToLower());
+            var result = await _usermanager.CreateAsync(applicationUser, user.password);
             //add AspNetUserClaim Table
             await _usermanager.AddClaimAsync(applicationUser, new Claim("CompanyId", newUser.companyId.ToString()));
             await _usermanager.AddClaimAsync(applicationUser, new Claim("EstateId", newUser.estateId.ToString()));
@@ -228,7 +230,7 @@ namespace E_EstateV2_API.Repository
         {
             var user = await _usermanager.FindByNameAsync(login.username);
 
-            if (user != null && await _usermanager.CheckPasswordAsync(user, login.password) && user.isEmailVerified == true)
+            if (user != null && await _usermanager.CheckPasswordAsync(user, login.password) && user.isEmailVerified == true && user.isActive == true)
             {
                 var role = await _usermanager.GetRolesAsync(user);
 
@@ -257,7 +259,7 @@ namespace E_EstateV2_API.Repository
                         new Claim("estateId", estateID),
                         new Claim ("companyId", companyID)
                         }),
-                        Expires = DateTime.UtcNow.AddDays(1),
+                        Expires = DateTime.UtcNow.AddHours(2),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
                     };
                     var tokenHandler = new JwtSecurityTokenHandler();
@@ -382,32 +384,90 @@ namespace E_EstateV2_API.Repository
 
         public async Task<DTO_User> AddUserRole(DTO_User user)
         {
+            // Find the existing user by userId
             var existingUser = await _usermanager.FindByIdAsync(user.id);
 
+            // Get the license number of the user
+            var licenseNumber = user.licenseNo;  // Assuming `licenseNo` is part of the DTO_User
+
+            // Get role IDs for "CompanyAdmin" and "EstateClerk"
+            var companyAdminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "CompanyAdmin");
+            var estateClerkRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "EstateClerk");
+
+            if (companyAdminRole == null || estateClerkRole == null)
+            {
+                throw new InvalidOperationException("Roles not found in the database.");
+            }
+
+            var role = await _context.Roles
+            .FirstOrDefaultAsync(r => r.Id == user.RoleId);
+            user.RoleName = role.Name;
+
+            // Query to get users with the same licenseNo and their roles
+            var usersWithSameLicenseRoles = await _context.Users
+                .OfType<ApplicationUser>()
+                .Where(u => u.licenseNo == licenseNumber && u.isActive == true)
+                .Join(_context.UserRoles,
+                    u => u.Id,
+                    ur => ur.UserId,
+                    (u, ur) => new { u, ur.RoleId })
+                .ToListAsync();
+
+            // Check if the user is trying to add the "CompanyAdmin" role
+            if (user.RoleName == "CompanyAdmin")
+            {
+                var companyAdminCount = usersWithSameLicenseRoles.Count(ur =>
+                    ur.RoleId == companyAdminRole.Id);
+
+                if (companyAdminCount >= 1)
+                {
+                    throw new InvalidOperationException("This license already has a Company Admin.");
+                }
+            }
+
+            // Check if the user is trying to add the "EstateClerk" role
+            if (user.RoleName == "EstateClerk")
+            {
+                var estateClerkCount = usersWithSameLicenseRoles.Count(ur =>
+                    ur.RoleId == estateClerkRole.Id);
+
+                if (estateClerkCount >= 2)
+                {
+                    throw new InvalidOperationException("This license already has the maximum number of Estate Clerks.");
+                }
+            }
+
+            // Add or update user roles as needed
             if (existingUser == null)
             {
-                // User does not exist, create a new user with the provided userId and roleId
-                var newUser = new ApplicationUser { Id = user.id };
+                // User does not exist, create a new user
+                var newUser = new ApplicationUser
+                {
+                    Id = user.id,
+                    licenseNo = licenseNumber,
+                    fullName = user.FullName,
+                    isEmailVerified = user.isEmailVerified,
+                    position = user.Position
+                };
                 _context.Users.Add(newUser);
 
                 var userRole = new IdentityUserRole<string>()
                 {
                     UserId = user.id,
-                    RoleId = user.RoleId
+                    RoleId = user.RoleId  // Assign the role GUID
                 };
 
                 _context.Set<IdentityUserRole<string>>().Add(userRole);
-
                 await _context.SaveChangesAsync();
 
-                await SendWelcomeEmail(user.Email);
 
                 return user;
             }
             else
             {
                 // User exists, find and remove the existing user role
-                var existingUserRole = await _context.UserRoles.FirstOrDefaultAsync(ur => ur.UserId == user.id);
+                var existingUserRole = await _context.UserRoles
+                    .FirstOrDefaultAsync(ur => ur.UserId == user.id);
 
                 if (existingUserRole != null)
                 {
@@ -419,24 +479,26 @@ namespace E_EstateV2_API.Repository
                 var userRole = new IdentityUserRole<string>()
                 {
                     UserId = user.id,
-                    RoleId = user.RoleId
+                    RoleId = user.RoleId  // Assign the role GUID
                 };
 
                 _context.Set<IdentityUserRole<string>>().Add(userRole);
-
                 await _context.SaveChangesAsync();
+
+                await SendWelcomeEmail(user.Email);
 
                 return user;
             }
         }
 
+
         public async Task SendWelcomeEmail(string email)
         {
             var mimeEmail = new MimeMessage();
-            mimeEmail.From.Add(MailboxAddress.Parse("e-estate@lgm.gov.my"));
+            mimeEmail.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
             //User email
             mimeEmail.To.Add(MailboxAddress.Parse(email));
-            mimeEmail.Subject = "Welcome to e-Estate system";
+            mimeEmail.Subject = "Welcome to RRIMestet system";
             string htmlMessage = GenerateHtmlWelcomeUser();
             mimeEmail.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };
             using (var client = new SmtpClient())
@@ -455,18 +517,73 @@ namespace E_EstateV2_API.Repository
                 "<h2>Assalamualaikum wbt & Greetings,</h2>" +
                 "<p>To whom it may concern,  <br/>" +
                 "<br>" +
-                "Thank you for registering with e-Estate. " +
+                "Thank you for registering with RRIMestet. " +
                 "Your account have been verified ! " +
-                "Please click <a href = 'https://www5.lgm.gov.my/e-Estate" + "'>Login e-Estate</a><br>" +
+                "Please click <a href = 'https://www5.lgm.gov.my/RRIMestet" + "'>Login RRIMestet</a><br>" +
+                //"Please click <a href = 'https://lgm20.lgm.gov.my/RRIMestet" + "'>Login RRIMestet</a><br>" +
+                //"Please click <a href = 'https://www5.lgm.gov.my/trainingE-estate" + "'>Login RRIMestet</a><br>" +
                 "<br>" +
                 "Thank you," +
                 "<br>" +
-                "e-Estate Admin" +
+                "RRIMestet Admin" +
                 "<br><br>" +
                 "<i>Attention, this message is automatically generated by the system. <i>" +
                 "</body>" +
                 "</html>";
             return htmlMessage;
         }
+ 
+        public async Task<ApplicationUser> DeactiveAccount(DTO_User user)
+        {
+            var existingUser = await _usermanager.FindByIdAsync(user.id);
+            if (existingUser != null)
+            {
+                existingUser.isActive = false;
+                await _usermanager.UpdateAsync(existingUser);
+                await SendRejectAccount(user.Email);
+            }
+            return existingUser;
+        }
+
+        public async Task SendRejectAccount(string email)
+        {
+            var mimeEmail = new MimeMessage();
+            mimeEmail.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+            //User email
+            mimeEmail.To.Add(MailboxAddress.Parse(email));
+            mimeEmail.Subject = "LGM Admin RRIMestet deactive user account";
+            string htmlMessage = GenerateHtmlRejectUser();
+            mimeEmail.Body = new TextPart(TextFormat.Html) { Text = htmlMessage };
+            using (var client = new SmtpClient())
+            {
+                client.LocalDomain = "lgm.gov.my";
+                await client.ConnectAsync(_config.GetSection("EmailHost").Value, 25, SecureSocketOptions.None).ConfigureAwait(false);
+                await client.SendAsync(mimeEmail).ConfigureAwait(false);
+                await client.DisconnectAsync(true).ConfigureAwait(false);
+            }
+        }
+
+        private string GenerateHtmlRejectUser()
+        {
+            //Please click<a href= 'https://www5.lgm.gov.my/RRIMestet' > e - Estate </ a >
+            string htmlMessage = @"
+            <html>
+                <body>
+                    <h2>Assalamualaikum wbt & Greetings,</h2>
+                    <p>
+                        To whom it may concern,<br/><br/>
+                        Your account has been deactivated due to an existing account found! 
+                        Please click <a href='https://www5.lgm.gov.my/RRIMestet'>RRIMestet</a> 
+                        and click on 'Contact Us' for any enquiries.<br/><br/>
+                        Thank you,<br/>
+                        RRIMestet Admin<br/><br/>
+                        <i>Attention: This message is automatically generated by the system.</i>
+                    </p>
+                </body>
+            </html>";
+            return htmlMessage;
+        }
+
     }
 }
+

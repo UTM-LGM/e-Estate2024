@@ -489,7 +489,6 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\staticwebassets.build.json
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\staticwebassets.development.json
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\scopedcss\bundle\E-EstateV2 API.styles.css
-C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\E-EstateV2 API.csproj.CopyComplete
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\E-EstateV2 API.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\refint\E-EstateV2 API.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\E-EstateV2 API.pdb
@@ -610,3 +609,5 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-(Latest)\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\ref\E-EstateV2 API.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Release\net6.0\Microsoft.AspNetCore.Authentication.AzureAD.UI.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\bin\Release\net6.0\System.ClientModel.dll
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\E-EstateV2 API.sourcelink.json
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024-Manual-SIgn-In-\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\E-Estate.175522E2.Up2Date

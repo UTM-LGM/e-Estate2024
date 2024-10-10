@@ -1,14 +1,14 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <div>
+    <div style="margin-top: -13px;">
       <button mat-button class="menu-button" *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
         <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
         <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
       </button>
     </div>
-    <span class="span"><img width="40px" style="padding: 5px;"
-        src="assets/Images/LGM-logo.png" /></span> &nbsp;
-    <span class="homelink" routerLink="/home">Malaysian Rubber Board</span>
+    <span class="span" style="cursor: pointer;" routerLink="/home"><img style="padding: 5px;"
+        src="assets/Images/RRIMestet-Logo1.png" /></span>&nbsp;
+    <!-- <span class="homelink" routerLink="/home">Malaysian Rubber Board</span> -->
 
     <span class="flexExpand"></span>
     <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-address-card"></i></span> &nbsp;
@@ -38,7 +38,8 @@
             <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
           </div>
           <button *ngIf="role != 'Admin' && role != 'Management'" class="btn-danger" (click)="logOut()">LOGOUT</button>
-          <button *ngIf="role == 'Admin' || role == 'Management'" class="btn-danger" (click)="logOutStaff()">LogOut Staff</button>
+          <button *ngIf="role == 'Admin' || role == 'Management'" class="btn-danger" (click)="logOutStaff()">LogOut
+            Staff</button>
         </div>
 
       </div>
@@ -50,26 +51,29 @@
           <span style="font-weight: bold;">Estate Responsibility</span><br />
           <hr />
           <span>
-            The estate is responsible for filling in daily sales, monthly production, total workforce, stock
+            Estate is responsible for filling in daily sales, monthly production, total workforce, stock
             and annually rubber plantation area, production costs information.
           </span>
           <br />
           <hr style="border-top: 2px dotted navy">
         </div>
 
-        <span style="font-weight: bold;">e-Estate Info</span><br />
+        <span style="font-weight: bold;">RRIMestet Info</span><br />
         <hr />
-        <span>Data, statistics and information obtained from the implementation of the e-Estate project are rubber
+        <span>Data, statistics and information obtained from the implementation of the RRIMestet project are rubber
           production data,
           rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate
           sector.</span>
-        <hr/>
+        <hr />
 
-        <div (click)="downloadFile()">
-          <button class="btn-update" >User Manual <i class="fa fa-download"></i>&nbsp; &nbsp;</button>
+        <div>
+          <button *ngIf="role == 'CompanyAdmin'" (click)="downloadFileAdmin()" class="btn-update">User Manual Company
+            Admin <i class="fa fa-download"></i>&nbsp; &nbsp;</button>
+          <button *ngIf="role == 'EstateClerk'" (click)="downloadFileClerk()" class="btn-update">User Manual Estate
+            Clerk <i class="fa fa-download"></i>&nbsp; &nbsp;</button>
         </div>
-
       </div>
+
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

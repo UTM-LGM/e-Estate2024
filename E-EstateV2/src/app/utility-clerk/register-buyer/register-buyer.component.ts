@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Buyer } from 'src/app/_interface/buyer';
 import { BuyerService } from 'src/app/_services/buyer.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
@@ -6,6 +7,7 @@ import { SharedService } from 'src/app/_services/shared.service';
 import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
+import { EditBuyerComponent } from '../edit-buyer/edit-buyer.component';
 
 @Component({
   selector: 'app-register-buyer',
@@ -31,6 +33,8 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   sortableColumns = [
     { columnName: 'licenseNo', displayText: 'Lisence No' },
     { columnName: 'buyerName', displayText: 'Buyer Name' },
+    { columnName: 'renameBuyer', displayText: 'Rename Buyer' },
+
   ];
 
   constructor(
@@ -39,9 +43,11 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
     private myLesenService: MyLesenIntegrationService,
     private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
+    this.isLoading = true
     this.getBuyer()
     this.buyer.licenseNo = ''
     this.result.premiseName = ''
@@ -61,6 +67,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
       });
     }
     else {
+      this.spinnerService.requestStarted()
       this.buyer.buyerName = this.result.premiseName
       this.buyer.isActive = true
       this.buyer.createdBy = this.sharedService.userId.toString()
@@ -78,6 +85,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           })
     }
   }
@@ -190,6 +198,20 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
     this.term = term;
     this.pageNumber = 1; // Reset to first page on filter change
   }
+
+  openDialog(buyer:Buyer){
+    const dialogRef = this.dialog.open(EditBuyerComponent,{
+      data: { data: buyer },
+    })
+    dialogRef.afterClosed()
+      .subscribe(
+        Response => {
+          this.ngOnInit()
+        }
+      )
+  }
+
+
 
 
 

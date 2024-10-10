@@ -9,6 +9,7 @@ import { WorkerShortageDetailComponent } from '../worker-shortage-detail/worker-
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
 import { LaborInfo } from 'src/app/_interface/laborInfo';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 
 
 @Component({
@@ -46,8 +47,8 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
     private workerShortageService: WorkerShortageService,
     private dialog: MatDialog,
     private laborInfoService: LaborInfoService,
-    private subscriptionService:SubscriptionService
-
+    private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -93,6 +94,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
 
   add() {
     // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    this.spinnerService.requestStarted()
     this.worker.estateId = this.sharedService.estateId
     this.worker.createdBy = this.sharedService.userId.toString()
     this.worker.createdDate = new Date()
@@ -102,6 +104,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
       .subscribe(
         {
           next: (Response) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Worker Shortage successfully submitted!',
@@ -113,6 +116,7 @@ export class WorkerShortageComponent implements OnInit, OnDestroy {
             this.isSubmit = false
           },
           error: (err) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               text: 'Please fil up the form',
               icon: 'error'

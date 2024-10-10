@@ -5,7 +5,8 @@
   <input type="text" name="lisenceNo" [(ngModel)]="buyer.licenseNo" (change)="checkLicenseNo($event)" />
   <label>Buyer Name : </label>
   <input type="text" name="name" [(ngModel)]="result.premiseName" disabled />
-
+  <label>Rename Buyer : </label>
+  <input type="text" name="renameBuyer" [(ngModel)]="buyer.renameBuyer" />
 </form>
 
 <button style="float: right" class="btn-add" (click)="submit()">
@@ -25,34 +26,43 @@
         [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
         {{ column.displayText }}
       </th>
-      <th width="90px">Action</th>
+      <th width="90px">Status</th>
+      <th width="30px">Action</th>
     </tr>
 
     <tr *ngIf="isLoading">
-      <td colspan="4">
+      <td colspan="6">
         <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
         </ngx-skeleton-loader>
       </td>
     </tr>
 
     <tr *ngIf="buyers.length == 0 && !isLoading">
-      <td colspan="4" style="color: red;">No Buyer</td>
+      <td colspan="6" style="color: red;">No Buyer</td>
     </tr>
 
-    <tr
-      *ngFor="let buyer of buyers | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-      <td>{{ calculateIndex(i) }}</td>
-      <td>{{ buyer.licenseNo }}</td>
-      <td>{{ buyer.buyerName }}</td>
-      <td>
-        <button (click)="status(buyer)" [ngClass]="{
+    <ng-container *ngIf="!isLoading">
+      <tr
+        *ngFor="let buyer of buyers | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+        <td>{{ calculateIndex(i) }}</td>
+        <td>{{ buyer.licenseNo }}</td>
+        <td>{{ buyer.buyerName }}</td>
+        <td>{{ buyer.renameBuyer }}</td>
+        <td>
+          <button (click)="status(buyer)" [ngClass]="{
             'active-btn': buyer.isActive == true,
             'inactive-btn': buyer.isActive == false
           }">
-          {{ buyer.isActive == true ? "Active" : "Inactive" }}
-        </button>
-      </td>
-    </tr>
+            {{ buyer.isActive == true ? "Active" : "Inactive" }}
+          </button>
+        </td>
+        <td>
+          <button class="btn-update" (click)="openDialog(buyer)">
+            <i class="fa fa fa-pencil"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-container>
   </table>
 
   <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>

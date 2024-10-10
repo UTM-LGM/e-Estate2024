@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\.angular",
+    "\\src"
   ],
+  "SelectedNode": "\\.editorconfig",
   "PreviewInSolutionExplorer": false
 }

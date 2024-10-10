@@ -56,7 +56,6 @@ export class EstateByCloneComponent implements OnInit, OnDestroy {
       this.cloneId = params['id'];
       this.startMonth = params['startMonth'];
       this.endMonth = params['endMonth'];
-      console.log(this.cloneId)
       if (this.cloneId != null) {
         const getCloneName = this.cloneService.getClone()
           .subscribe(
@@ -88,7 +87,6 @@ export class EstateByCloneComponent implements OnInit, OnDestroy {
             let requests = this.cloneArea.map(clone =>
               this.fieldService.getOneField(clone.fieldId).pipe(
                 switchMap(fieldResponse => {
-                  console.log(fieldResponse)
                   if (fieldResponse.rubberArea != null) {
                     let cloneDetail = {
                       rubberArea: fieldResponse.rubberArea,
@@ -97,8 +95,6 @@ export class EstateByCloneComponent implements OnInit, OnDestroy {
                       estateLicense: '',
                       fieldName: fieldResponse.fieldName
                     };
-
-                    console.log(cloneDetail)
 
                     // Fetch estate name
                     return this.myLesenService.getOneEstate(cloneDetail.estateId).pipe(

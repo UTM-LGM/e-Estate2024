@@ -19,6 +19,7 @@ import { EstateDetail } from '../_interface/estate-detail';
 import { FieldService } from '../_services/field.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-estate-detail',

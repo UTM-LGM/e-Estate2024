@@ -25,3 +25,7 @@ mat-select {
   mat-option{
     font-size: 12px;
   }
+
+  .btn-del{
+    padding: 7px 13px;
+  }

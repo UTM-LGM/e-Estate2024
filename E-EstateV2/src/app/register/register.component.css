@@ -19,7 +19,7 @@
 button {
   border-radius: 20px;
   border: 1px solid white;
-  background-color: #002b5c;
+  background-color: #43675f;
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
@@ -43,7 +43,7 @@ button:disabled {
   overflow: hidden;
   transition: transform 0.6s ease-in-out;
   z-index: 100;
-  background: #002b5c;
+  background: #43675f;
 }
 
 .overlay-panel {

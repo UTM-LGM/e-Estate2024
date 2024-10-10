@@ -9,6 +9,7 @@
         public string rubberType { get; set; }
         public string letterOfConsentNo { get; set; }
         public string receiptNo { get; set; }
+        public DateTime receiptNoDate { get; set; }
         public string transportPlateNo { get; set; }
         public string driverName { get; set; }
         public string remark { get; set; }
@@ -31,5 +32,6 @@
         public string paymentStatus { get; set; }
         public string deliveryAgent { get; set; }
         public bool MSNRStatus { get; set; }
+        public string licenseNoTrace { get; set; }
     }
 }

@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     this.userService.getAllUser()
       .subscribe(
         Response => {
-          this.users = Response
+          this.users = Response.filter(x=>x.isEmailVerified == true && x.isActive == true)
           this.isLoading = false
         }
       )

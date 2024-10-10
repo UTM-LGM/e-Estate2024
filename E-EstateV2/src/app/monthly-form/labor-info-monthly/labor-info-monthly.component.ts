@@ -15,6 +15,7 @@ import swal from 'sweetalert2';
 import { LaborInfoMonthlyDetailComponent } from '../labor-info-monthly-detail/labor-info-monthly-detail.component';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import { ActivatedRoute } from '@angular/router';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 
 @Component({
   selector: 'app-labor-info-monthly',
@@ -56,7 +57,8 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
     private laborInfoService: LaborInfoService,
     private datePipe: DatePipe,
     private subscriptionService: SubscriptionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -216,6 +218,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
+    this.spinnerService.requestStarted()
     this.labor.monthYear = this.date
     this.labor.estateId = this.sharedService.estateId
     this.labor.createdBy = this.sharedService.userId.toString()
@@ -236,6 +239,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
             this.laborInfoService.addLaborCategory(this.laborCategoryArray)
               .subscribe(
                 Response => {
+                  this.spinnerService.requestEnded()
                   swal.fire({
                     title: 'Done!',
                     text: 'Labor successfully submitted!',
@@ -252,6 +256,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
             this.isSubmit = false
             this.previousWorker = false
           }, error: (err) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               text: 'Please fil up the form',
               icon: 'error'
@@ -312,9 +317,11 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
     })
       .then((result) => {
         if (result.isConfirmed) {
+          this.spinnerService.requestStarted()
           this.laborInfoService.deleteLabor(id)
             .subscribe(
               Response => {
+                this.spinnerService.requestEnded()
                 swal.fire(
                   'Deleted!',
                   'Labor information has been deleted.',

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FieldStatus } from 'src/app/_interface/fieldStatus';
 import { FieldStatusService } from 'src/app/_services/field-status.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -30,7 +31,8 @@ export class CropCategoryComponent implements OnInit, OnDestroy {
   constructor(
     private fieldStatusService: FieldStatusService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit() {
@@ -46,6 +48,7 @@ export class CropCategoryComponent implements OnInit, OnDestroy {
       });
     }
     else {
+      this.spinnerService.requestStarted()
       this.crop.isActive = true
       this.crop.createdBy = this.sharedService.userId.toString()
       this.crop.createdDate = new Date()
@@ -62,6 +65,7 @@ export class CropCategoryComponent implements OnInit, OnDestroy {
               });
               this.reset()
               this.ngOnInit()
+              this.spinnerService.requestEnded()
             },
             error: (err) => {
               swal.fire({

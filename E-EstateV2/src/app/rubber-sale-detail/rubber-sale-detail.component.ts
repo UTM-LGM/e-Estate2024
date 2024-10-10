@@ -10,6 +10,7 @@ import { SharedService } from '../_services/shared.service';
 import { BuyerService } from '../_services/buyer.service';
 import { RubberSaleService } from '../_services/rubber-sale.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-rubber-sale-detail',
@@ -34,7 +35,8 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -85,6 +87,7 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
         showConfirmButton: true
       });
     } else {
+      this.spinnerService.requestStarted()
       this.rubberSale.updatedBy = this.sharedService.userId.toString()
       this.rubberSale.updatedDate = new Date()
       this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
@@ -93,6 +96,7 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
       this.rubberSaleService.updateSale(this.filterRubberSale)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Rubber Sale successfully updated!',

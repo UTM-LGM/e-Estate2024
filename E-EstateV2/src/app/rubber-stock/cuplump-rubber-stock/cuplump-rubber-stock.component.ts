@@ -106,7 +106,7 @@ export class CuplumpRubberStockComponent implements OnInit, OnDestroy {
     const previousMonth = new Date()
     previousMonth.setMonth(previousMonth.getMonth() - 1)
     const date = this.datePipe.transform(previousMonth, 'MMM-yyyy')
-    return monthYear === date?.toUpperCase()
+    return monthYear !== date?.toUpperCase()
   }
 
   ngOnDestroy(): void {

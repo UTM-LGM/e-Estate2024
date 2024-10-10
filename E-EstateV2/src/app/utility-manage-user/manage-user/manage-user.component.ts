@@ -30,6 +30,7 @@ export class ManageUserComponent implements OnInit, OnDestroy {
     { columnName: 'no', displayText: 'No' },
     { columnName: 'fullName', displayText: 'User Fullname' },
     { columnName: 'email', displayText: 'Email' },
+    { columnName: 'licenseNo', displayText: 'License No' },
     { columnName: 'companyName', displayText: 'Company Name' },
     { columnName: 'estateName', displayText: 'Estate Name' },
     { columnName: 'companyPhoneNo', displayText: 'Company Phone No'},
@@ -54,7 +55,7 @@ export class ManageUserComponent implements OnInit, OnDestroy {
    .subscribe(
      Response=>{
        const users = Response
-       this.users = users.filter(x=>x.roleId != null)
+       this.users = users.filter(x=>x.roleId != null && x.isActive == true)
        this.users.forEach((user: any) => {
         const getLicenseNo = this.myLesenService.getLicenseNo(user.licenseNo)
         .subscribe(
@@ -87,6 +88,7 @@ export class ManageUserComponent implements OnInit, OnDestroy {
   openDialog(user:User){
     const dialogRef = this.dialog.open(PendingRoleDetailComponent, {
       data : {data:user},
+      width: '40%'
     });
     dialogRef.afterClosed()
       .subscribe(
@@ -97,7 +99,6 @@ export class ManageUserComponent implements OnInit, OnDestroy {
 
   addUser(){
     const dialogRef = this.dialog.open(AddUserComponent, {
-
     });
     dialogRef.afterClosed()
       .subscribe(

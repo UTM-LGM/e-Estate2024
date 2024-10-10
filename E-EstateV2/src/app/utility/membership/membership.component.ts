@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MembershipType } from 'src/app/_interface/membership';
 import { MembershipService } from 'src/app/_services/membership.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -29,8 +30,8 @@ export class MembershipComponent implements OnInit, OnDestroy {
   constructor(
     private membershipService: MembershipService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
-
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit() {
@@ -52,6 +53,7 @@ export class MembershipComponent implements OnInit, OnDestroy {
       });
     }
     else {
+      this.spinnerService.requestStarted()
       this.membershipType.isActive = true
       this.membershipType.createdBy = this.sharedService.userId.toString()
       this.membershipType.createdDate = new Date()
@@ -67,6 +69,7 @@ export class MembershipComponent implements OnInit, OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           });
     }
   }

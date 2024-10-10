@@ -6,6 +6,7 @@ import swal from 'sweetalert2';
 import { FieldProductionComponent } from '../field-production/field-production.component';
 import { SharedService } from '../_services/shared.service';
 import { FieldProductionService } from '../_services/field-production.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-field-production-detail',
@@ -19,7 +20,8 @@ export class FieldProductionDetailComponent implements OnInit {
     public dialogRef: MatDialogRef<FieldProductionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { data: FieldProduction },
     private fieldProductionService: FieldProductionService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -27,12 +29,14 @@ export class FieldProductionDetailComponent implements OnInit {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     this.product.updatedBy = this.sharedService.userId.toString()
     this.product.updatedDate = new Date()
     this.fieldProductionService.updateProduction(this.product)
       .subscribe(
         {
           next: (Response) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Production successfully updated!',
@@ -43,6 +47,7 @@ export class FieldProductionDetailComponent implements OnInit {
             this.dialogRef.close()
           },
           error: (err) => {
+            this.spinnerService.requestEnded()
             swal.fire({
               icon: 'error',
               title: 'Error',
@@ -86,7 +91,6 @@ export class FieldProductionDetailComponent implements OnInit {
       });
       this.product.latexDRC = 0
     }
-
   }
 
   taskTap(taskTap: any, totalTask: number) {

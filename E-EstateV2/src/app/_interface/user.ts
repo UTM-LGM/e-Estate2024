@@ -18,4 +18,5 @@ export interface User {
     estateName:string
     companyName:string
     companyPhoneNo:number
+    isActive:boolean
 }

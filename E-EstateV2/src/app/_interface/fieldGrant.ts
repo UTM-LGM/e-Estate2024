@@ -9,4 +9,5 @@ export interface FieldGrant {
     updatedDate: Date
     fieldId:number
     isActive:boolean
+    files:any[]
 }

@@ -1,6 +1,6 @@
 // export const environment = {
 //     production: false,
-//     apiUrl: 'https://localhost:6001/api'
+//     apiUrl: 'https://localhost:44381/api'
 //   };
 
 export const MyLesenEnv = {
@@ -8,12 +8,22 @@ export const MyLesenEnv = {
   apiUrl: 'https://api02.lgm.gov.my/ApiMyLesenAdmin/api'
 }
 
+export const RRIMGeoRubber = {
+  production:true,
+  apiUrl: ''
+}
+
 // export const environment = {
 //   production: false,
-//   apiUrl: 'https://lgm20.lgm.gov.my/e-EstateApi/api'
+//   apiUrl: 'https://lgm20.lgm.gov.my/RRIMestetApi/api'
 // };
 
 export const environment = {
-  production:false,
-  apiUrl: 'https://api02.lgm.gov.my/e-EstateApi/api'
+  production:true,
+  apiUrl: 'https://api02.lgm.gov.my/RRIMestetApi/api'
 }
+
+// export const environment = {
+//   production:false,
+//   apiUrl: 'https://api02.lgm.gov.my/trainingE-estateApi/api'
+// }

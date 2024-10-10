@@ -5,6 +5,8 @@
   <input type="text" name="tittle" [(ngModel)]="announcement.tittle" />
   <label>File Upload <span style="color: red;">(Size: 840px X 450px)</span> : </label>
   <input type="file" name="file" (change)="onFileSelected($event)" />
+  <label>Hierarchy (Order No) : </label>
+  <input type="number" name="hierarchy" [(ngModel)]="announcement.hierarchy" />
 </form>
 
 <button style="float: right" class="btn-add" (click)="submit()">
@@ -28,7 +30,7 @@
     </tr>
 
     <tr *ngIf="isLoading">
-      <td colspan="4">
+      <td colspan="5">
         <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
         </ngx-skeleton-loader>
       </td>
@@ -37,7 +39,8 @@
     <tr
       *ngFor="let announcement of announcements | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
       <td>{{ calculateIndex(i) }}</td>
-      <td>{{ announcement.tittle }}</td>
+      <td><a style="cursor: pointer;" (click)="edit(announcement)">{{ announcement.tittle }}</a></td>
+      <td>{{ announcement.hierarchy}}</td>
       <td><img style="width: 30%; height: 30%;" [src]="baseUrl + '/Images/' + announcement.filePath" /></td>
       <td>
         <button (click)="status(announcement)" [ngClass]="{
@@ -51,6 +54,6 @@
   </table>
 
   <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
-
-
 </div>
+
+<app-spinner></app-spinner>

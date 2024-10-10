@@ -64,7 +64,7 @@ export class UserListUpdateComponent implements OnInit, OnDestroy {
                   showConfirmButton: false,
                   timer: 1000
                 });
-              }else{
+              } else {
                 this.spinnerService.requestEnded();
                 swal.fire({
                   icon: 'error',
@@ -98,11 +98,13 @@ export class UserListUpdateComponent implements OnInit, OnDestroy {
         text: 'Please fill up the form',
       });
     } else {
+      this.spinnerService.requestStarted()
       this.user.companyId = this.result.companyId
       this.user.estateId = this.result.premiseId
       this.userService.updateUser(this.user)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'User successfully updated!',
@@ -110,9 +112,9 @@ export class UserListUpdateComponent implements OnInit, OnDestroy {
               showConfirmButton: false,
               timer: 1000
             });
+            this.dialog.close()
           }
         )
-      this.dialog.close()
     }
 
   }

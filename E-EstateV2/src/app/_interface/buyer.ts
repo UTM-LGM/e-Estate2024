@@ -8,4 +8,5 @@ export interface Buyer {
     updatedBy: string
     updatedDate: Date
     estateId: number
+    renameBuyer:string
 }

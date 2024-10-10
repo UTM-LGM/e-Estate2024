@@ -21,6 +21,7 @@ namespace E_EstateV2_API.IRepository
         Task SendWelcomeEmail(string email);
         Task<IdentityResult> AddUser(User user);
         Task<ApplicationUser> UpdateUser(User user);
+        Task<ApplicationUser> DeactiveAccount(DTO_User user);
 
     }
 }

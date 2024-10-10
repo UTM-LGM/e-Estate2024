@@ -87,9 +87,17 @@
       <div class="span-word">
         <span style="font-weight: bold;">Malaysia</span><br />
         <div *ngIf="!isLoadingMalaysia">
-        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}</span>
+          <span *ngFor="let cuplumpProductivity of productivityByYear">
+            {{
+              (cuplumpProductivity.totalRubberDry !== null && cuplumpProductivity.totalRubberDry !== undefined &&
+               cuplumpProductivity.totalArea !== null && cuplumpProductivity.totalArea !== undefined)
+                ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2')
+                : 0
+            }}
+          </span>
         </div>
       </div>
+      
       <div *ngIf="isLoadingMalaysia">
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>

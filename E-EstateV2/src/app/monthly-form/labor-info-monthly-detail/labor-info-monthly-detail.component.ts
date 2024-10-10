@@ -7,6 +7,7 @@ import { SharedService } from 'src/app/_services/shared.service';
 import { LaborInformation } from 'src/app/_interface/laborInformation';
 import swal from 'sweetalert2';
 import { LaborInfoService } from 'src/app/_services/labor-info.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 
 @Component({
   selector: 'app-labor-info-monthly-detail',
@@ -24,7 +25,8 @@ export class LaborInfoMonthlyDetailComponent {
     public dialogRef: MatDialogRef<LaborInfoMonthlyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { data: LaborInfo },
     private sharedService: SharedService,
-    private laborInfoService: LaborInfoService
+    private laborInfoService: LaborInfoService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class LaborInfoMonthlyDetailComponent {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     this.labor.updatedBy = this.sharedService.userId.toString()
     this.labor.updatedDate = new Date()
     this.laborInfoService.updateLaborInfo(this.labor)
@@ -42,6 +45,7 @@ export class LaborInfoMonthlyDetailComponent {
           this.laborInfoService.updateLaborCategory(filterLabor)
             .subscribe(
               Response => {
+                this.spinnerService.requestEnded()
                 swal.fire({
                   title: 'Done!',
                   text: 'Labor successfully updated!',

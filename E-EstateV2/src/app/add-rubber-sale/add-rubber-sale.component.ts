@@ -7,6 +7,8 @@ import { Location } from '@angular/common';
 import { SharedService } from '../_services/shared.service';
 import { BuyerService } from '../_services/buyer.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
+import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 
 @Component({
   selector: 'app-add-rubber-sale',
@@ -25,12 +27,17 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   deliveryAgent: string = ''
   isSubmit = false
 
+  estate: any = {} as any
+
+
   constructor(
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
     private location: Location,
     private sharedService: SharedService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService,
+    private myLesenService: MyLesenIntegrationService,
   ) { }
 
   ngOnInit() {
@@ -40,6 +47,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     if (this.currentDate) {
       this.rubberSale.saleDateTime = new Date(this.currentDate)
     }
+    this.getEstate()
   }
 
   initialForm() {
@@ -47,6 +55,17 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     this.rubberSale = {} as RubberSale
     this.rubberSale.buyerId = 0
     this.rubberSale.rubberType = '0'
+  }
+
+  getEstate() {
+    const getOneEstate = this.myLesenService.getOneEstate(this.sharedService.estateId)
+      .subscribe(
+        Response => {
+          this.estate = Response
+          this.rubberSale.licenseNoTrace = this.estate.licenseNoTrace
+        }
+      )
+    this.subscriptionService.add(getOneEstate);
   }
 
   getBuyer() {
@@ -80,6 +99,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
       if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
         this.generateLetterOfConsetnNo();
       }
+      this.spinnerService.requestStarted()
       this.rubberSale.isActive = true
       this.rubberSale.createdBy = this.sharedService.userId.toString()
       this.rubberSale.createdDate = new Date()
@@ -100,6 +120,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
                 timer: 1000
               });
               this.ngOnInit()
+              this.spinnerService.requestEnded();
               this.print(Response)
               this.location.back()
             },
@@ -119,11 +140,11 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     // Get today's date without the time component
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
-  
+
     // Set the provided date's time component to zero for comparison
     const dateToCompare = new Date(date);
     dateToCompare.setHours(0, 0, 0, 0);
-  
+
     if (dateToCompare >= today) {
       return true;
     } else {

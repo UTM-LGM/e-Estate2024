@@ -39,6 +39,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("filePath")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("hierarchy")
+                        .HasColumnType("int");
+
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
@@ -80,6 +83,9 @@ namespace E_EstateV2_API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("licenseNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("renameBuyer")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("updatedBy")
@@ -1104,12 +1110,6 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("fieldId")
                         .HasColumnType("int");
 
-                    b.Property<string>("fileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("filePath")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<float>("grantArea")
                         .HasColumnType("real");
 
@@ -1133,6 +1133,42 @@ namespace E_EstateV2_API.Migrations
                     b.HasIndex("fieldId");
 
                     b.ToTable("fieldGrants");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldGrantAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("createdBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("fieldGrantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("fileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("updatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("fieldGrantId");
+
+                    b.ToTable("fieldGrantAttachments");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldHistory", b =>
@@ -2105,6 +2141,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("letterOfConsentNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("licenseNoTrace")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("paymentStatusId")
                         .HasColumnType("int");
 
@@ -2654,6 +2693,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<string>("fullName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("isActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("isEmailVerified")
                         .HasColumnType("bit");
 
@@ -2893,6 +2935,17 @@ namespace E_EstateV2_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Field");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.FieldGrantAttachment", b =>
+                {
+                    b.HasOne("E_EstateV2_API.Models.FieldGrant", "FieldGrant")
+                        .WithMany()
+                        .HasForeignKey("fieldGrantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FieldGrant");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.FieldHistory", b =>

@@ -9,5 +9,6 @@ namespace E_EstateV2_API.Models
         public string licenseNo { get; set; }
         public string position { get; set; }
         public bool isEmailVerified { get;set; }
+        public bool? isActive { get; set; }
     }
 }

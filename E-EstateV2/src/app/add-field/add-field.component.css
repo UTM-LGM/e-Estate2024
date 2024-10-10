@@ -51,3 +51,17 @@ mat-option {
 .clone {
   width: 140%;
 }
+
+input[type="file"]{
+  height: 37px;
+}
+
+.btn-doc{
+  border: none;
+    background-color: blue;
+    padding: 5px 13px;
+    cursor: pointer;
+    border-radius: 15px;
+    color: white;
+    font-size: 11px;
+}

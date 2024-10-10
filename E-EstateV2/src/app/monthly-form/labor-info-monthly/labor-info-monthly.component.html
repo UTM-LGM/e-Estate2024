@@ -54,12 +54,7 @@
 
   <div>
     <button style="float: right" class="btn-add" type="submit" (click)="onSubmit()" [disabled]="isSubmit">
-      <ng-container *ngIf="isSubmit; else notLoading">
-        Loading...
-      </ng-container>
-      <ng-template #notLoading>
-        Add &nbsp; <i class="fa fa-plus"></i>
-      </ng-template>
+      Add &nbsp; <i class="fa fa-plus"></i>
     </button>
   </div><br /><br />
 
@@ -144,3 +139,5 @@
   <div>
 
   </div>
+
+<app-spinner></app-spinner>

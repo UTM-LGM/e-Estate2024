@@ -19,6 +19,7 @@ import { PlantingMaterial } from '../_interface/planting-material';
 import { EstateDetail } from '../_interface/estate-detail';
 import { EstateDetailService } from '../_services/estate-detail.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-edit-estate-detail',
@@ -60,7 +61,9 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private plantingMaterialService: PlantingMaterialService,
     private estateDetailService: EstateDetailService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService,
+
   ) { }
 
   ngOnInit() {
@@ -93,7 +96,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
         }
       )
     this.subscriptionService.add(getPlantingMaterial);
-    
+
   }
 
   getMembership() {
@@ -149,6 +152,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     if (this.estateDetail.id == undefined) {
       this.estateDetail.estateId = this.estate.id
       this.estateDetail.grantNo = this.estateDetail.grantNo
@@ -158,6 +162,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
       this.estateDetailService.addEstateDetail(this.estateDetail)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Estate successfully updated!',
@@ -177,6 +182,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
       this.estateDetailService.updateEstateDetail(this.filteredEstate)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
               text: 'Estate successfully updated!',

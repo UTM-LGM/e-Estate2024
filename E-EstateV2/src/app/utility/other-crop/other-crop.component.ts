@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OtherCrop } from 'src/app/_interface/otherCrop';
 import { OtherCropService } from 'src/app/_services/other-crop.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -30,7 +31,8 @@ export class OtherCropComponent implements OnInit, OnDestroy {
   constructor(
     private otherCropService: OtherCropService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService: SpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -64,6 +66,7 @@ export class OtherCropComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
     } else {
+      this.spinnerService.requestStarted()
       this.otherCrop.isActive = true
       this.otherCrop.createdBy = this.sharedService.userId.toString()
       this.otherCrop.createdDate = new Date()
@@ -79,6 +82,7 @@ export class OtherCropComponent implements OnInit, OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           }
         )
 

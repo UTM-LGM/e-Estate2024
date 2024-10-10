@@ -14,7 +14,7 @@
     </div>
     <mat-select *ngIf="buyers.length > 0" name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId">
       <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
-        {{buyer.buyerName}}
+        {{buyer.renameBuyer}}
       </mat-option>
     </mat-select>
     <label>Rubber Type <span style="color: red;">*</span> :</label>
@@ -67,7 +67,7 @@
 
 
   <div style="columns:2">
-    <label>Driver Ic Number <span style="color: red;">*</span> :</label>
+    <label>Driver Ic Number (xxxxxx-xx-xxxx) <span style="color: red;">*</span> :</label>
     <input type="text" name="driverName" placeholder="xxxxxx-xx-xxxx" [(ngModel)]="rubberSale.driverIc" (change)="validateDriverIc(rubberSale.driverIc)"/>
   </div>
 
@@ -78,12 +78,7 @@
 
   <div style="margin-top: 10px">
     <button style="float: right" class="btn-add" (click)="addSale()" [disabled]="isSubmit">
-      <ng-container *ngIf="isSubmit; else notLoading">
-        Loading...
-      </ng-container>
-      <ng-template #notLoading>
-        Add &nbsp; <i class="fa fa-plus"></i>
-      </ng-template>
+      Add &nbsp; <i class="fa fa-plus"></i>
     </button>
   </div>
   
@@ -96,3 +91,5 @@
 
   <br />
 </div>
+
+<app-spinner></app-spinner>

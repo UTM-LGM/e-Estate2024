@@ -4,25 +4,9 @@
 
     <span *ngIf="showEmptyMessage" ><b>You have no new notification</b> </span>
 
-    <div class="alert" *ngIf="showAlertField">
-        <i class="fa fa-exclamation"></i> &nbsp; Please update field information for {{yearNow}}, Click <a
-            [routerLink]="['/field-info-yearly/', estateId]">here</a>
-    </div>
-
-    <div class="alert" *ngIf="showAlertProduction">
-        <i class="fa fa-exclamation"></i> &nbsp; Your current year production is <b>{{ message }}</b> than previous
-        year, Please state the reason <a
-            (click)="openDialog(sumTotalDryCurrentMonthYear, sumTotalDryPreviousMonthYear )">here</a>
-    </div>
-
     <div class="alert" *ngIf="warningProductionDrafted" style="background-color: yellow;color: black;">
         <i class="fa fa-exclamation"></i> &nbsp; You have rubber production in drafted, please submit <a
         [routerLink]="['/field-production/', estateId]">here</a>
-    </div>
-
-    <div class="alert" *ngIf="warningCostDrafted" style="background-color: yellow;color: black;">
-        <i class="fa fa-exclamation"></i> &nbsp; You have cost information in drafted, please submit <a
-        [routerLink]="['/cost-info/', estateId]">here</a>
     </div>
 
     <div class="alert" *ngIf="warningGrantTitle" style="background-color: yellow;color: black;">

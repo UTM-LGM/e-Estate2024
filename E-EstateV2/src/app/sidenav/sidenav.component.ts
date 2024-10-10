@@ -97,7 +97,7 @@ export class SidenavComponent implements OnInit , OnDestroy{
 
   getUser() {
     this.username = this.sharedService.userName
-    if (this.role != 'Admin' && this.role != 'Management') {
+    if (this.role =='EstateClerk' ) {
       const getUser = this.userService.getUser(this.username)
         .subscribe(
           Response => {

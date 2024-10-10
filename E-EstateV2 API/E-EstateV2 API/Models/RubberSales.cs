@@ -32,6 +32,8 @@ namespace E_EstateV2_API.Models
         public string updatedBy { get; set; }
         public DateTime updatedDate { get; set; }
 
+        public string licenseNoTrace { get; set; }
+
         [ForeignKey("BuyerId")]
         public int buyerId { get; set; }
         public Buyer buyer { get; set; }

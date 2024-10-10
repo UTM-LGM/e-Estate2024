@@ -153,6 +153,10 @@ import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sa
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
 import { EstateByCloneComponent } from './report-rubber-area-by-clone/estate-by-clone/estate-by-clone.component';
 import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clone/area-by-clone.component';
+import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
+import { FieldGrantAttachmentComponent } from './field-grant-attachment/field-grant-attachment.component';
+import { EditHierarchyComponent } from './utility/announcement/edit-hierarchy/edit-hierarchy.component';
+import { EditBuyerComponent } from './utility-clerk/edit-buyer/edit-buyer.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -278,6 +282,10 @@ register()
     StateDetailComponent,
     EstateByCloneComponent,
     AreaByCloneComponent,
+    GenerateReceiptComponent,
+    FieldGrantAttachmentComponent,
+    EditHierarchyComponent,
+    EditBuyerComponent,
   ],
   imports: [
     BrowserModule,
@@ -307,19 +315,19 @@ register()
     MsalModule.forRoot(
       new PublicClientApplication({
 
-        //Production
+        // Production
         auth: {
           clientId: "4c278748-3ef9-49f9-94ec-9591a665a4b7", // Application (client) ID from the app registration
           authority:
             "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
-          redirectUri: "https://www5.lgm.gov.my/e-Estate", // This is your redirect URI
+          redirectUri: "https://www5.lgm.gov.my/RRIMestet/home", // This is your redirect URI
           //redirectUri: "http://localhost:4300", // This is your redirect URI
 
         },
         cache: {
           cacheLocation: BrowserCacheLocation.LocalStorage,
           //Can be set true or false
-          storeAuthStateInCookie: isIE, // Set to true for Internet Explorer 11
+          storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
         }
 
         //Staging
@@ -327,7 +335,10 @@ register()
         //   clientId: "91409c1e-06ba-4c11-89b6-6002d296a769", // Application (client) ID from the app registration
         //   authority:
         //     "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
-        //   redirectUri: "https://lgm20.lgm.gov.my/e-Estate", // This is your redirect URI
+        //    //redirectUri: "https://lgm20.lgm.gov.my/RRIMestet", // This is your redirect URI
+        //    redirectUri: "https://www5.lgm.gov.my/trainingE-estate", // This is your redirect URI
+        //   // redirectUri: "http://localhost:4200", // This is your redirect URI
+
 
         // },
         // cache: {
@@ -348,7 +359,7 @@ register()
       {
         interactionType: InteractionType.Redirect, // MSAL Interceptor Configuration
         protectedResourceMap: new Map([
-          ["https://graph.microsoft.com/User.Read", ["User.Read"]],
+          ["https://graph.microsoft.com/User.Read", ["User.Read"]]
         ]),
       }
     ),

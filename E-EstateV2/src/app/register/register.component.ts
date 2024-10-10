@@ -63,11 +63,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   submitRegister() {
-    if (this.register.userName == '') {
+    this.spinnerService.requestStarted()
+    if (this.register.userName == '' || this.register.fullName == null || this.register.licenseNo == null || this.register.email == null || this.register.position == null || this.register.confirmPassword == null ) {
       swal.fire({
         icon: 'error',
         title: 'Error, Please fill up the form',
       })
+      this.spinnerService.requestEnded();
     }
     else {
       this.register.isEmailVerified = false
@@ -91,6 +93,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
                         confirmButtonText: 'Done',
                       });
                       this.reset()
+                      this.spinnerService.requestEnded();
                     }
                   }
                 )
@@ -103,6 +106,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             }
           })
     }
+    this.spinnerService.requestEnded();
   }
 
   reset() {
@@ -190,13 +194,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  checkingPassword(){
+  checkingPassword() {
     if (this.register.password !== this.register.confirmPassword) {
       swal.fire({
         icon: 'error',
         title: 'Error! Password not same!',
       });
-    this.register.confirmPassword = ''
+      this.register.confirmPassword = ''
     }
   }
 

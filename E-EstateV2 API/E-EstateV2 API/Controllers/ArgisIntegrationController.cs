@@ -26,6 +26,7 @@ namespace E_EstateV2_API.Controllers
                 estateId = x.estateId,
                 grantId = x.Id,
                 grantTitle = x.grantTitle,
+                licenseNo = x.licenseNo,
             }).ToListAsync();
             return Ok(landTitle);
         }

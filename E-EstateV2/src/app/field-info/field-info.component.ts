@@ -95,7 +95,6 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
               Response => {
                 this.estate = Response
                 this.getField()
-                this.isLoading = false
               })
         this.subscriptionService.add(getOneEstate);
         }
@@ -116,11 +115,12 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
               fields.forEach(field => {
                 const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
                 this.result[field.id] = filteredData;
-
               });
             })
 
           this.sum(this.fields)
+          this.isLoading = false
+
         }
       )
       this.subscriptionService.add(getField);
@@ -218,4 +218,13 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     this.term = term;
     this.pageNumber = 1; // Reset to first page on filter change
   }
+
+  getFieldColor(field: any): string {
+    // Return 'red' if the array is empty or if any of the fieldGrants have isActive === false
+    if (!field.fieldGrants || field.fieldGrants.length === 0) {
+      return 'red';
+    }
+    return 'blue';
+  }
+
 }

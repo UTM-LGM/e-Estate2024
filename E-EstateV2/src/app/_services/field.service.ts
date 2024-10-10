@@ -21,6 +21,10 @@ export class FieldService {
     return this.http.get<Field[]>(this.baseUrl + '/fields/GetFields')
   }
 
+  getOneFieldHistory(id: number):Observable<Field>{
+    return this.http.get<Field>( this.baseUrl + '/fields/GetOneFieldHistory/' + id)
+  }
+
   getOneField(id: number): Observable<Field> {
     return this.http.get<Field>(this.baseUrl + '/fields/GetOneField/' + id)
   }
@@ -57,6 +61,19 @@ export class FieldService {
       fieldGrants: fieldGrants
     };
     return this.http.post<any>(this.baseUrl + '/fields/updateFieldWithDetails', payload);
+  }
+
+  addFieldAttachments(fieldGrantId: number, files: File[], userId:string): Observable<any> {
+    const formData = new FormData();
+    files.forEach(file => {
+      if (file) {
+        formData.append('files', file, file.name);
+      }
+    });
+    formData.append('fieldGrantId', fieldGrantId.toString());
+    formData.append('userId', userId.toString());
+  
+    return this.http.post<any>(this.baseUrl + '/fields/addFieldAttachments', formData);
   }
 
 }

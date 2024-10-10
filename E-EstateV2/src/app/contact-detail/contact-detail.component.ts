@@ -6,6 +6,7 @@ import { SharedService } from '../_services/shared.service';
 import { CompanyContact } from '../_interface/company-contact';
 import { EstateContact } from '../_interface/estate-contact';
 import { EstateContactService } from '../_services/estate-contact.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class ContactDetailComponent implements OnInit {
     private companyContactService: CompanyContactService,
     private estateContactService: EstateContactService,
     private sharedService: SharedService,
+    private spinnerService:SpinnerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.companyContact = data.contact;
     this.estateContact = data.contact
@@ -56,6 +58,7 @@ export class ContactDetailComponent implements OnInit {
         text: 'Please fill up the form',
       });
     } else {
+      this.spinnerService.requestStarted()
       this.companyContact.createdBy = this.sharedService.userId
       this.companyContact.companyId = this.companyId
       this.companyContact.isActive = true
@@ -64,9 +67,10 @@ export class ContactDetailComponent implements OnInit {
       this.companyContactService.addCompanyContact(filteredContact)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
-              text: 'Contact successfully submitted!',
+              text: 'Contact successfully added!',
               icon: 'success',
               showConfirmButton: false,
               timer: 1000
@@ -78,6 +82,7 @@ export class ContactDetailComponent implements OnInit {
   }
 
   addEstateContact() {
+    this.spinnerService.requestStarted()
     if (this.estateContact.name == '') {
       swal.fire({
         icon: 'error',
@@ -93,9 +98,10 @@ export class ContactDetailComponent implements OnInit {
       this.estateContactService.addEstateContact(filteredContact)
         .subscribe(
           Response => {
+            this.spinnerService.requestEnded()
             swal.fire({
               title: 'Done!',
-              text: 'Contact successfully submitted!',
+              text: 'Contact successfully added!',
               icon: 'success',
               showConfirmButton: false,
               timer: 1000
@@ -111,11 +117,13 @@ export class ContactDetailComponent implements OnInit {
   }
 
   updateCompanyContact() {
+    this.spinnerService.requestStarted()
     this.companyContact.updatedBy = this.sharedService.userId.toString()
     this.companyContact.updatedDate = new Date()
     this.companyContactService.updateCompanyContact(this.companyContact)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Contact successfully updated!',
@@ -129,11 +137,13 @@ export class ContactDetailComponent implements OnInit {
   }
 
   updateEstateContact() {
+    this.spinnerService.requestStarted()
     this.estateContact.updatedBy = this.sharedService.userId.toString()
     this.estateContact.updatedDate = new Date()
     this.estateContactService.updateEstateContact(this.estateContact)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Contact successfully updated!',

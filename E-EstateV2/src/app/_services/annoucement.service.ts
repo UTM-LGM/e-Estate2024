@@ -19,6 +19,7 @@ export class AnnoucementService {
     formData.append('tittle', announcement.tittle.toUpperCase())
     formData.append('createdBy', announcement.createdBy)
     formData.append('isActive', announcement.isActive.toString())
+    formData.append('hierarchy', announcement.hierarchy.toString())
     return this.http.post<Announcement>(this.baseUrl + '/announcements/AddAnnouncement', formData)
   }
 

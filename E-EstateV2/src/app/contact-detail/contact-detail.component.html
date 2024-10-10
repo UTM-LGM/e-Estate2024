@@ -10,7 +10,7 @@
       <input type="text" name="position" [(ngModel)]="companyContact.position" />
     </div>
     <div style="columns: 2">
-      <label>Phone No <span style="color: red;">*</span> :</label>
+      <label>Phone No (xxx-xxxxxxx / xx-xxxxxxxx) <span style="color: red;">*</span> :</label>
       <input type="text" name="phoneNo" [(ngModel)]="companyContact.phoneNo"
         (change)="validatePhoneNo(companyContact.phoneNo)" placeholder="xxx-xxxxxxx / xx-xxxxxxxx" />
       <label>Email <span style="color: red;">*</span> :</label>
@@ -48,7 +48,7 @@
       </mat-select>
     </div>
     <div style="columns: 2">
-      <label>Phone No <span style="color: red;">*</span> :</label>
+      <label>Phone No (xxx-xxxxxxx / xx-xxxxxxxx) <span style="color: red;">*</span> :</label>
       <input type="text" name="phoneNo" [(ngModel)]="estateContact.phoneNo"
         (change)="validatePhoneNo(estateContact.phoneNo)" placeholder="xxx-xxxxxxx / xx-xxxxxxxx" />
       <label>Email <span style="color: red;">*</span>:</label>
@@ -73,3 +73,5 @@
   </div>
 
 </div>
+
+<app-spinner></app-spinner>

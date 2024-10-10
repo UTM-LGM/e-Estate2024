@@ -8,4 +8,5 @@ export interface Announcement {
     updatedBy: string
     updatedDate: Date
     filePath: string
+    hierarchy:number
 }

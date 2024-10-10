@@ -88,4 +88,8 @@ export class UserService {
     };
     return this.http.post<any>(this.baseUrl + '/applicationusers/SendWelcomeEmail', email, httpOptions)
   }
+
+  deactiveAccount(user:User):Observable<any>{
+    return this.http.put<User>(this.baseUrl + '/applicationusers/DeactiveAccount', user)
+  }
 }

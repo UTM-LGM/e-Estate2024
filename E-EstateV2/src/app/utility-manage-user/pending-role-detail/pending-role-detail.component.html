@@ -14,15 +14,20 @@
                 <td><span>:</span></td>
                 <td>{{ user.email }}</td>
               </tr>
-              <tr>
-                <td>Estate Name</td>
+              <tr>                
+                <td>License No</td>
                 <td><span>:</span></td>
-                <td>{{ result.premiseName }}</td>
+                <td>{{ result.licenseNo }}</td>
               </tr>
               <tr>                
                 <td>Company Name</td>
                 <td><span>:</span></td>
                 <td>{{ result.companyName }}</td>
+              </tr>
+              <tr>
+                <td>Estate Name</td>
+                <td><span>:</span></td>
+                <td>{{ result.premiseName }}, {{result.premiseAdd1}}</td>
               </tr>
               <tr>
                 <td>Company Phone No</td>
@@ -48,10 +53,15 @@
 
     </div>
   
-    <div style="padding-right: 10px">
-      <button style="float: right" class="btn-update" type="submit" (click)="update()">
+    <div style="padding-right: 10px"  style="float: right">
+      
+      <button class="btn-update" type="submit" (click)="update()">
         Update &nbsp; <i class="fa fa-pencil"></i>
+      </button>&nbsp;
+      <button class="btn-del" type="submit" (click)="deactive()">
+        Deactive Account &nbsp; <i class="fa fa-trash"></i>
       </button>
+      
     </div>
     <div style="padding-left: 10px">
       <button class="btn-back" (click)="back()">
@@ -60,3 +70,5 @@
     </div>
   
   </div>
+
+  <app-spinner></app-spinner>

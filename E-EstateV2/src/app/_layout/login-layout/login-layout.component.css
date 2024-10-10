@@ -16,3 +16,12 @@ span {
   margin-top: -35px;
   cursor: pointer;
 }
+
+img{
+  width: 240px;
+}
+
+::ng-deep .mat-mdc-menu-panel.mat-mdc-menu-panel{
+  margin-top: 7px !important;
+  margin-right: 17px;
+}

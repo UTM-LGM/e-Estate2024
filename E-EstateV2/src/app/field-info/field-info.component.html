@@ -37,11 +37,12 @@
           <td colspan="11" style="color: red;">No Field</td>
         </tr>
 
+        <ng-container *ngIf="!isLoading">
         <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
           <tr class="list" style="cursor:default;">
             <td>{{ calculateIndex(i) }}</td>
             <td style="cursor: pointer;" routerLink="/field-detail/{{ field.id }}">
-              <a [ngStyle]="{'color': (field.fieldGrants && field.fieldGrants.length === 0) ? 'red' : 'blue'}">{{ field.fieldName }}</a>
+              <a [ngStyle]="{'color': getFieldColor(field)}">{{ field.fieldName }}</a>
             </td>                     
             <td>{{ field.rubberArea | number:'1.2-2' }}</td>
             <td>{{ field.isMature == true ? "MATURE" : "IMMATURE" }}</td>
@@ -94,6 +95,8 @@
             <td style="width: 100%; background-color: antiquewhite;" colspan="11" style="color: red;">No field conversion data found</td>
           <tr>
         </tbody>
+      </ng-container>
+
       </table>
 
       <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>

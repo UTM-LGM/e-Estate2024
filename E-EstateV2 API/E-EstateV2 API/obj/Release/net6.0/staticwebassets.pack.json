@@ -1,6 +1,50 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\CASH BILL nasi lemak.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\CASH BILL nasi lemak.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\CASH BILL-mihunTelur.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\CASH BILL-mihunTelur.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\LGM E-mel 2024.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\LGM E-mel 2024.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\Observation Estate.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\Observation Estate.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\PT123.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\PT123.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\RECEIPT MINUM.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\RECEIPT MINUM.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\RESIT PISANG GORENG.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\RESIT PISANG GORENG.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Files\\air-bill.pdf",
+      "PackagePath": "staticwebassets\\api\\Files\\air-bill.pdf"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\123.png",
+      "PackagePath": "staticwebassets\\api\\Images\\123.png"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 1.png",
+      "PackagePath": "staticwebassets\\api\\Images\\ANNOUCEMENT 1.png"
+    },
+    {
+      "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\ANNOUCEMENT 2.png",
+      "PackagePath": "staticwebassets\\api\\Images\\ANNOUCEMENT 2.png"
+    },
+    {
       "Id": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024-Manual-SIgn-In-\\E-EstateV2 API\\E-EstateV2 API\\wwwroot\\api\\Images\\TRY.png",
       "PackagePath": "staticwebassets\\api\\Images\\TRY.png"
     },

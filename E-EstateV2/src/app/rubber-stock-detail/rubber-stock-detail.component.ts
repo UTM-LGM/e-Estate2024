@@ -10,6 +10,7 @@ import { RubberSale } from '../_interface/rubberSale';
 import { SubscriptionService } from '../_services/subscription.service';
 import { FieldProductionService } from '../_services/field-production.service';
 import { FieldProduction } from '../_interface/fieldProduction';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-rubber-stock-detail',
@@ -56,6 +57,7 @@ export class RubberStockDetailComponent implements OnInit {
     private rubberSaleService: RubberSaleService,
     private subscriptionService:SubscriptionService,
     private changeDetectorRef: ChangeDetectorRef,
+    private spinnerService:SpinnerService,
     private fieldProductionService: FieldProductionService,
   ) {
     this.estate = data.estate;
@@ -146,9 +148,11 @@ export class RubberStockDetailComponent implements OnInit {
     else if(this.stock.rubberType == 'LATEX'){
       this.stock.totalProduction = this.totalLatexDry
     }
+    this.spinnerService.requestStarted()
     this.rubberStockService.updateRubberStock(this.stock)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Stock successfully updated!',

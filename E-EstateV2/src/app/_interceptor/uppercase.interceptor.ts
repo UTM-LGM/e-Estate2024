@@ -16,6 +16,7 @@ export class UpperCaseInterceptor implements HttpInterceptor {
        request.url.includes('/SendEmailVerification') ||
        request.url.includes('/AddUserRole') ||
        request.url.includes('/AddUser') ||
+       request.url.includes('/Register') ||
        request.url.includes('/ResetPassword'))) {
     return next.handle(request);
   }
@@ -39,7 +40,7 @@ export class UpperCaseInterceptor implements HttpInterceptor {
     if (body && typeof body === 'object') {
       for (const key in body) {
         if (body.hasOwnProperty(key)) {
-          if (key !== 'createdBy' && key !== 'updatedBy' && key !== 'token' && typeof body[key] === 'string') {
+          if (key !== 'createdBy' && key !== 'updatedBy' && key !== 'token' && key !== 'password' && typeof body[key] === 'string') {
             body[key] = body[key].toUpperCase();
           } else if (typeof body[key] === 'object') {
             body[key] = this.convertBodyToUppercase(body[key]); // Recursively process nested objects

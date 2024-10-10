@@ -72,8 +72,21 @@ namespace E_EstateV2_API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUserRole(DTO_User user)
         {
-            var userRole = await _userRepository.AddUserRole(user);
-            return Ok(userRole);
+            try
+            {
+                var userRole = await _userRepository.AddUserRole(user);
+                return Ok(userRole);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Return 400 BadRequest with a custom error message
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Return 500 Internal Server Error with a custom error message
+                return StatusCode(500, new { message = "An error occurred while adding the user role.", details = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -89,6 +102,14 @@ namespace E_EstateV2_API.Controllers
                 return BadRequest("Failed to send email: " + ex.Message);
             }
         }
+
+        [HttpPut]
+        public async Task<IActionResult> DeactiveAccount([FromBody] DTO_User user)
+        {
+            var rejectAccount = await _userRepository.DeactiveAccount(user);
+            return Ok(rejectAccount);
+        }
+
 
         [HttpGet]
         [Route("{licenseNo}")]

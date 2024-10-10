@@ -11,8 +11,6 @@ namespace E_EstateV2_API.Models
         public string grantTitle { get; set; }
         public float grantArea { get; set; }
         public float grantRubberArea { get; set; }
-        public string fileName { get; set; }
-        public string filePath { get; set; }
         public bool isActive { get; set; }
         public string createdBy { get; set; }
         public DateTime createdDate { get; set; }

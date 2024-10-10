@@ -2,7 +2,7 @@ mat-sidenav {
   margin: 5px;
   width: 170px;
   border-right: none;
-  background: #002b5c;
+  background: #43675f;
   color: white;
   border-radius: 10px;
   padding: 5px;
@@ -32,7 +32,7 @@ mat-toolbar {
 }
 
 .homelink:hover {
-  color: rgb(84, 84, 218);
+  color: #1ba183
 }
 
 .btn-danger {
@@ -62,4 +62,9 @@ mat-toolbar {
   padding-top: 0px;
   padding-left: 7px;
   padding-right: 7px;
+}
+
+img{
+  width: 240px;
+  margin-left: -30px;
 }

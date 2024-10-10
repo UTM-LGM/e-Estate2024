@@ -147,6 +147,11 @@ export class ReportRubberSaleComponent implements OnInit {
     XLSX.writeFile(wb, formattedFileName);
   }
 
+  printReceipt(sale:RubberSale){
+    const url = 'generate-receipt/' + sale.id;
+    window.open(url, '_blank');
+  }
+
 
 
 }

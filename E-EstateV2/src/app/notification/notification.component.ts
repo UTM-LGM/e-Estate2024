@@ -23,7 +23,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   showAlertField = false
   showAlertProduction = false
-  showEmptyMessage = false
+  showEmptyMessage = true
   yearNow = 0
   estateId = 0
   sumTotalDryPreviousMonthYear = 0
@@ -58,10 +58,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.yearNow = new Date().getFullYear()
     this.estateId = this.sharedService.estateId
-    this.checkProduction()
-    // this.getFieldInfoYearly()
     this.getProductionDrafted()
-    // this.getCostDrafted()
     this.getGrantTitle()
   }
 
@@ -77,6 +74,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
           {
             
             this.warningProductionDrafted = true
+            this.showEmptyMessage = false
             this.updateBadge()
           }
       }
@@ -90,86 +88,15 @@ export class NotificationComponent implements OnInit, OnDestroy {
       Response =>{
         const field = Response.filter(x=>x.estateId == this.sharedService.estateId)
         field.forEach(field =>{
-          if(field.fieldGrants && field.fieldGrants.length == 0){
+          if(field.fieldGrants && field.fieldGrants.length == 0 || field.fieldGrants.some((g:any) => g.isActive === false)){
             this.warningGrantTitle = true
-            // this.showEmptyMessage = false
+            this.showEmptyMessage = false
             this.updateBadge()
           }
         })
       }
     )
-  }
-
-  // getCostDrafted(){
-  //   const getCostAmount = this.costInformationService.getCostAmount()
-  //   .subscribe(
-  //     Response =>{
-  //       const cost = Response.filter(x=>x.estateId == this.estateId && x.status == "Draft" && x.monthYear == new Date().getFullYear())
-  //       if(cost.length > 0){
-  //         this.warningCostDrafted = true
-  //         this.updateBadge()
-  //       }
-  //     }
-  //   )
-  //   this.subscriptionService.add(getCostAmount);
-
-  // }
-
-  checkProduction() {
-    const currentDate = new Date().getFullYear()
-    const getProductivity = this.reportService.getEstateProductivityByField(currentDate.toString())
-      .subscribe(
-        (Response: any) => {
-          const production = Response.production
-          const previousMonthYear = Response.monthYear
-          this.responsePreviousMonthYear = previousMonthYear.filter((x: any) => x.estateId == this.estateId)
-          const filterProduction = production.filter((x: { estateId: number; }) => x.estateId == this.estateId)
-          const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
-          this.sumTotalDryPreviousMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0)
-
-          const getEstateProductivity = this.reportService.getEstateProductivityByField(currentDate.toString())
-            .subscribe(
-              (Response: any) => {
-                const production = Response.production
-                const currentMonthYear = Response.monthYear
-                this.responseCurrentMonthYear = currentMonthYear.filter((x: any) => x.estateId == this.estateId)
-                const filterProduction = production.filter((x: { estateId: number; }) => x.estateId == this.estateId)
-                const totalDry = filterProduction.map((x: any) => x.cuplumpDry + x.latexDry + x.ussDry + x.othersDry)
-                this.sumTotalDryCurrentMonthYear = totalDry.reduce((acc: number, value: number) => acc + value, 0);
-
-                const getComparison = this.productionComparisonService.getProductionComparison()
-                  .subscribe(
-                    Response => {
-                      const production = Response
-                      this.filterProduction = production.filter(x => x.estateId == this.estateId)
-                      const today = new Date()
-                      const isNovember = today.getMonth() === 1
-                      if (this.responsePreviousMonthYear.some((item) => item.monthYear.includes('Dec')) &&
-                        this.responseCurrentMonthYear.some((item) => item.monthYear.includes('Dec')) && this.filterProduction.length == 0 
-                        && isNovember) {
-                        if (this.sumTotalDryCurrentMonthYear < this.sumTotalDryPreviousMonthYear) {
-                          this.message = 'lower'
-                        }
-                        else if (this.sumTotalDryCurrentMonthYear > this.sumTotalDryPreviousMonthYear) {
-                          this.message = 'higher'
-                        }
-                        this.showAlertProduction = true
-                        this.updateBadge()
-                      }
-                      this.updateBadge()
-                    }
-                  )
-                this.subscriptionService.add(getComparison);
-
-              }
-            )
-          this.subscriptionService.add(getEstateProductivity);
-
-        }
-      )
-    this.subscriptionService.add(getProductivity);
-
-  }
+  }  
 
   updateBadge() {
     const badgeCount = (this.showAlertField ? 1 : 0) + (this.showAlertProduction ? 1 : 0) + (this.warningProductionDrafted ? 1 : 0) + (this.warningCostDrafted ? 1:0)

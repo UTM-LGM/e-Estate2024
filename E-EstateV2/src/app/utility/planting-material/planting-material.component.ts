@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlantingMaterial } from 'src/app/_interface/planting-material';
 import { PlantingMaterialService } from 'src/app/_services/planting-material.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -10,7 +11,7 @@ import swal from 'sweetalert2';
   templateUrl: './planting-material.component.html',
   styleUrls: ['./planting-material.component.css']
 })
-export class PlantingMaterialComponent implements OnInit ,OnDestroy {
+export class PlantingMaterialComponent implements OnInit, OnDestroy {
 
   term = ''
   pageNumber = 1
@@ -30,7 +31,9 @@ export class PlantingMaterialComponent implements OnInit ,OnDestroy {
   constructor(
     private sharedService: SharedService,
     private plantingMaterialService: PlantingMaterialService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService,
+
   ) { }
 
   ngOnInit(): void {
@@ -64,6 +67,7 @@ export class PlantingMaterialComponent implements OnInit ,OnDestroy {
         icon: 'error'
       });
     } else {
+      this.spinnerService.requestStarted()
       this.plantingMaterial.isActive = true
       this.plantingMaterial.createdBy = this.sharedService.userId.toString()
       this.plantingMaterial.createdDate = new Date()
@@ -79,6 +83,7 @@ export class PlantingMaterialComponent implements OnInit ,OnDestroy {
             });
             this.reset()
             this.ngOnInit()
+            this.spinnerService.requestEnded()
           }
         )
     }

@@ -47,6 +47,8 @@
   </div>
 </div>
 
+<app-spinner></app-spinner>
+
 <div *ngIf="filterMatureDirectCostAmount.length != 0">
   <mat-tab-group>
     <mat-tab *ngIf="draftFilterMatureDirectCostAmount.length != 0">
@@ -65,7 +67,7 @@
               <td><b>Amount (RM)</b></td>
             </tr>
 
-            <tr *ngFor="let amount of draftFilterMatureDirectCostAmount; let i = index">
+            <tr *ngFor="let amount of draftFilterMatureDirectCostAmount; let i = index; trackBy: trackByFn">
               <td class="td"
                 *ngIf="i == 0 || amount.costSubcategory1 != draftFilterMatureDirectCostAmount[i-1].costSubcategory1"
                 [attr.rowspan]="getRowCount(amount.costSubcategory1)">{{amount.costSubcategory1 }}</td>
@@ -135,3 +137,5 @@
 
   </mat-tab-group>
 </div>
+
+<app-spinner></app-spinner>

@@ -108,6 +108,7 @@
         <td colspan="13" style="color: red;">No Field Infected</td>
       </tr>
 
+      <ng-container *ngIf="!isLoading">
       <tbody
         *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
         <tr class="list" style="cursor: default;">
@@ -137,10 +138,12 @@
           </td>
         </tr>
       </tbody>
+      </ng-container>
     </table>
+    
 
     <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
-
-
   </div>
 </div><br />
+
+<app-spinner></app-spinner>

@@ -15,6 +15,7 @@ import { FieldInfectedStatusComponent } from '../field-infected-status/field-inf
 import { SubscriptionService } from '../_services/subscription.service';
 import { DiseaseCategoryService } from '../_services/disease-category.service';
 import { DiseaseCategory } from '../_interface/diseaseCategory';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-field-infected',
@@ -70,11 +71,13 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     private fieldInfectedService: FieldInfectedService,
     private dialog: MatDialog,
     private subscriptionService: SubscriptionService,
-    private diseaseCategoryService: DiseaseCategoryService
+    private diseaseCategoryService: DiseaseCategoryService,
+    private spinnerService: SpinnerService,
   ) { }
 
 
   ngOnInit(): void {
+    this.isLoading = true
     this.getEstate()
     this.getField()
     this.getFieldDisease()
@@ -91,7 +94,6 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
               Response => {
                 this.estate = Response
                 this.getFieldInfected(routerParams['id'])
-                this.isLoading = false
               })
           this.subscriptionService.add(getOneEstate);
         }
@@ -104,6 +106,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.fieldInfecteds = Response
+          this.isLoading = false
         }
       )
     this.subscriptionService.add(getFieldInfected);
@@ -169,6 +172,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
     } else {
+      this.spinnerService.requestStarted()
       this.fieldInfected.isActive = true;
       this.fieldInfected.createdBy = this.sharedService.userId;
       this.isSubmit = true;
@@ -184,6 +188,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
             });
             this.fieldInfected = {};
             this.ngOnInit();  // Reinitialize the component state if needed
+            this.spinnerService.requestEnded();
           },
           error: (error) => {
             swal.fire({
@@ -284,7 +289,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     }
   }
 
-  levelChange(){
+  levelChange() {
     this.fieldInfected.areaInfectedPercentage = null
     this.fieldInfected.areaInfected = null
   }

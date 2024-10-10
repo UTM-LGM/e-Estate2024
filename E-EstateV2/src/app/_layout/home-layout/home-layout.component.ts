@@ -51,7 +51,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     this.username = this.sharedService.userName
     this.success(this.username)
     this.role = this.sharedService.role
-    if (this.role != 'Admin' && this.role != 'Management') {
+    if (this.role =='EstateClerk' ) {
       const userSubscribe = this.userService.getUser(this.username)
         .subscribe(
           Response => {
@@ -101,8 +101,9 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
 
   logOutStaff() {
     this.msalService.logoutRedirect({
-      postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
-      //postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/e-Estate'
+       postLogoutRedirectUri: 'https://www5.lgm.gov.my/RRIMestet'
+      //postLogoutRedirectUri: 'https://www5.lgm.gov.my/trainingE-estate'
+      // postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/RRIMestet'
 
     });
     localStorage.clear();
@@ -123,8 +124,8 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  downloadFile() {
-    const fileName = 'assets/User Manual e-Estate.pdf' // Path to the file in the assets folder
+  downloadFileAdmin() {
+    const fileName = 'assets/User Manual CompanyAdmin RRIMestet.pdf' // Path to the file in the assets folder
 
     // Load the file using Angular's DomSanitizer
     this.sanitizer.bypassSecurityTrustResourceUrl(fileName)
@@ -133,7 +134,23 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     const a = document.createElement('a')
     a.href = fileName;
     a.target = '_blank'; // Opens the link in a new tab
-    a.download = 'User Manual e-Estate.pdf' // Set the desired filename
+    a.download = 'User Manual Company Admin RRIMestet.pdf' // Set the desired filename
+
+    // Trigger a click event on the anchor element
+    a.click()
+  }
+
+  downloadFileClerk(){
+    const fileName = 'assets/User Manual EstateClerk RRIMestet.pdf' // Path to the file in the assets folder
+
+    // Load the file using Angular's DomSanitizer
+    this.sanitizer.bypassSecurityTrustResourceUrl(fileName)
+
+    // Create an anchor element to trigger the download
+    const a = document.createElement('a')
+    a.href = fileName;
+    a.target = '_blank'; // Opens the link in a new tab
+    a.download = 'User Manual Estate Clerk RRIMestet.pdf' // Set the desired filename
 
     // Trigger a click event on the anchor element
     a.click()

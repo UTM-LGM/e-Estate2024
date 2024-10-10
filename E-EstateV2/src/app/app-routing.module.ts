@@ -75,10 +75,12 @@ import { ReportRubberSaleComponent } from './report-rubber-sale/report-rubber-sa
 import { StateDetailComponent } from './report-by-state/state-detail/state-detail.component';
 import { EstateByCloneComponent } from './report-rubber-area-by-clone/estate-by-clone/estate-by-clone.component';
 import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clone/area-by-clone.component';
+import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: 'generate-form-1/:id', component: GenerateForm1Component },
+  { path: 'generate-receipt/:id', component: GenerateReceiptComponent},
   {
     path: 'login',
     component: LoginLayoutComponent,

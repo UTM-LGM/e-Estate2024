@@ -5,11 +5,11 @@ export interface RubberSale {
     saleDateTime: Date
     rubberType: string
     letterOfConsentNo: string
-    // receiptNo: string
+    receiptNo: string
     wetWeight: number
     drc: number
     unitPrice: number
-    //total:string
+    total:string
     isActive: boolean
     buyerId: number
     buyer: Buyer[]
@@ -28,4 +28,9 @@ export interface RubberSale {
     remark:string
     deliveryAgent:string
     driverIc:string
+    receiptNoDate:Date
+    weightSlipNo:string
+    buyerDRC:number
+    buyerWetWeight:number
+    licenseNoTrace:string
 }

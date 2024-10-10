@@ -134,9 +134,9 @@ namespace E_EstateV2_API.Data
         private static async Task AddOtherCrop(ApplicationDbContext context)
         {
             // Seed otherCrop
-            if (!context.otherCrops.Any(ps => ps.otherCrop == "PALM OIL"))
+            if (!context.otherCrops.Any(ps => ps.otherCrop == "OIL PALM"))
             {
-                context.otherCrops.Add(new OtherCrop { otherCrop = "PALM OIL", isActive = true, createdBy = "SYSTEM GENERATED" });
+                context.otherCrops.Add(new OtherCrop { otherCrop = "OIL PALM", isActive = true, createdBy = "SYSTEM GENERATED" });
             }
 
             if (!context.otherCrops.Any(ps => ps.otherCrop == "DURIAN"))

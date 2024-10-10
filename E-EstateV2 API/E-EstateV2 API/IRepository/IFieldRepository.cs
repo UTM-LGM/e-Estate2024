@@ -9,6 +9,7 @@ namespace E_EstateV2_API.IRepository
         Task<List<DTO_Field>> GetFields();
         Task<List<DTO_Field>> GetFieldDescStatus();
         Task<DTO_Field> GetFieldById(int id);
+        Task<FieldHistory> GetOneFieldHistory(int id);
         Task<Field> UpdateField(Field field);
         Task<FieldClone> AddFieldClone(FieldClone clone);
         Task<FieldClone> GetFieldCloneById(int cloneId, int fieldId);

@@ -19,14 +19,14 @@
             </thead>
 
             <tr *ngIf="isLoading">
-                <td colspan="9">
+                <td colspan="10">
                     <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
                     </ngx-skeleton-loader>
                 </td>
             </tr>
 
             <tr *ngIf="users.length == 0 && !isLoading">
-                <td colspan="9" style="color: red;">No new user</td>
+                <td colspan="10" style="color: red;">No new user</td>
             </tr>
 
             <ng-container >
@@ -35,6 +35,7 @@
                     <td>{{ calculateIndex(i) }}</td>
                     <td>{{user.fullName}}</td>
                     <td>{{user.email}}</td>
+                    <td>{{user.licenseNo}}</td>
                     <td>{{result[user.licenseNo]?.companyName}}</td>
                     <td>{{result[user.licenseNo]?.premiseName + ", " + result[user.licenseNo]?.premiseAdd1.slice(0,-1)
                         }}</td>

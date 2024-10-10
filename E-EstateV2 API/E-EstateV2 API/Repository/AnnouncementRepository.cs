@@ -48,7 +48,7 @@ namespace E_EstateV2_API.Repository
         
         public async Task<List<Announcement>> GetAnnouncements()
         {
-            var announcements = await _context.announcements.ToListAsync();
+            var announcements = await _context.announcements.OrderBy(a => a.hierarchy).ToListAsync();
             return announcements;
         }
 
@@ -60,6 +60,8 @@ namespace E_EstateV2_API.Repository
                 existingAnnouncement.isActive = announcement.isActive;
                 existingAnnouncement.updatedDate = DateTime.Now;
                 existingAnnouncement.updatedBy = announcement.updatedBy;
+                existingAnnouncement.tittle = announcement.tittle;
+                existingAnnouncement.hierarchy = announcement.hierarchy;
                 await _context.SaveChangesAsync();
                 return existingAnnouncement;
             }

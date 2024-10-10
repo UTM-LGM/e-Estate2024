@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Field } from '../_interface/field';
 import { DatePipe } from '@angular/common';
@@ -23,6 +23,9 @@ import { OtherCropService } from '../_services/other-crop.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import { FieldGrantService } from '../_services/field-grant.service';
 import { FieldGrant } from '../_interface/fieldGrant';
+import { SpinnerService } from '../_services/spinner.service';
+import { FieldGrantAttachmentComponent } from '../field-grant-attachment/field-grant-attachment.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-field-detail',
@@ -30,6 +33,9 @@ import { FieldGrant } from '../_interface/fieldGrant';
   styleUrls: ['./field-detail.component.css'],
 })
 export class FieldDetailComponent implements OnInit, OnDestroy {
+
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
   field: Field = {} as Field
   filteredFields: any = {}
 
@@ -55,6 +61,11 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
 
   filterFieldInfected: FieldInfected[] = []
 
+  selectedFile: File[] = []
+  selectedFiles: File[] = []
+
+
+
   fieldSick = false
   dataRows: any[] = [{ year: null, currentTreeStand: null }]
 
@@ -73,6 +84,10 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   itemsPerPage = 2
   term = ''
   rubberArea = ''
+  fieldId = 0
+
+  fieldHistory = {} as any
+  isHistory = false
 
 
   otherCrops: OtherCrop[] = []
@@ -105,14 +120,16 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     private fieldInfectedService: FieldInfectedService,
     private otherCropService: OtherCropService,
     private subscriptionService: SubscriptionService,
-    private fieldGrantService: FieldGrantService
+    private fieldGrantService: FieldGrantService,
+    private spinnerService: SpinnerService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
     this.onInit = true
     this.getOneField()
     this.getFieldDisease()
-    this.getField()
+    this.getOneFieldHistory()
     this.getOtherCrop()
   }
 
@@ -128,8 +145,9 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
 
   getOneField() {
     this.route.params.subscribe((routeParams) => {
-      if (routeParams['id'] != null) {
-        const getOneField = this.fieldService.getOneField(routeParams['id'])
+      this.fieldId = routeParams['id']
+      if (this.fieldId != null) {
+        const getOneField = this.fieldService.getOneField(this.fieldId)
           .subscribe(
             Response => {
               this.field = Response
@@ -175,12 +193,14 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
 
   }
 
-  getField() {
-    const getField = this.fieldService.getField()
+  getOneFieldHistory() {
+    const getField = this.fieldService.getOneFieldHistory(this.fieldId)
       .subscribe(
         Response => {
-          const fields = Response
-          this.fields = fields.filter(x => x.estateId == this.sharedService.estateId)
+          this.fieldHistory = Response
+          if (this.fieldHistory) {
+            this.isHistory = true
+          }
         }
       )
     this.subscriptionService.add(getField);
@@ -278,25 +298,72 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
       }));
 
       // Perform the update operation
+      this.spinnerService.requestStarted()
       this.fieldService.updateFieldWithDetails(updatedField, updatedClones, updatedGrants)
-        .subscribe(
-          () => {
-            swal.fire({
-              title: 'Done!',
-              text: 'Field successfully updated!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.ngOnInit(); // Refresh data as needed
-          },
-          error => {
-            swal.fire({
-              text: 'Error updating field',
-              icon: 'error'
-            });
+        .subscribe({
+          next: (response: any) => {
+            const fieldGrantIds = response.fieldGrantIds;
+            console.log(fieldGrantIds, this.selectedFiles, this.sharedService.userId)
+            if (this.selectedFiles.length > 0) {
+              this.fieldService.addFieldAttachments(fieldGrantIds, this.selectedFiles, this.sharedService.userId).subscribe({
+                next: () => {
+                  swal.fire({
+                    title: 'Done!',
+                    text: 'Field and attachments successfully submitted!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                  });
+                  this.selectedValues = [];
+                  this.fieldGrants = [];
+                  this.field = {} as Field;
+                  this.ngOnInit();
+                  this.rubberArea = '';
+                  this.spinnerService.requestEnded();
+                },
+                error: (err: any) => {
+                  swal.fire({
+                    text: 'Failed to upload attachments',
+                    icon: 'error'
+                  });
+                  this.spinnerService.requestEnded();
+                }
+              });
+            } else {
+              swal.fire({
+                title: 'Done!',
+                text: 'Field successfully submitted!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+              this.selectedValues = [];
+              this.fieldGrants = [];
+              this.field = {} as Field;
+              this.ngOnInit();
+              this.rubberArea = '';
+              this.spinnerService.requestEnded();
+            }
           }
-        );
+        })
+      //   () => {
+      //     swal.fire({
+      //       title: 'Done!',
+      //       text: 'Field successfully updated!',
+      //       icon: 'success',
+      //       showConfirmButton: false,
+      //       timer: 1000
+      //     });
+      //     this.ngOnInit(); // Refresh data as needed
+      //     this.spinnerService.requestEnded()
+      //   },
+      //   error => {
+      //     swal.fire({
+      //       text: 'Error updating field',
+      //       icon: 'error'
+      //     });
+      //   }
+      // );
     }
   }
 
@@ -377,8 +444,14 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     field.updatedBy = this.sharedService.userId.toString()
     field.updatedDate = new Date()
     field.isActive = !field.isActive
-    const { fieldStatus, ...newFields } = this.field
-    this.filteredFields = newFields
+    if (field.dateOpenTapping == "") {
+      const { fieldStatus, dateOpenTapping, ...newFields } = this.field
+      this.filteredFields = newFields
+    }
+    else {
+      const { fieldStatus, ...newFields } = this.field
+      this.filteredFields = newFields
+    }
     this.fieldService.updateField(this.filteredFields)
       .subscribe(
         Response => {
@@ -688,9 +761,14 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
           grantRubberArea: fieldGrant.grantRubberArea, // Assuming field.id is the current field's ID
           isActive: true, // Set default values as needed
           createdBy: this.sharedService.userId.toString(),
-          createdDate: new Date()
+          createdDate: new Date(),
+          files: this.selectedFile
         };
         this.fieldGrants.push(newGrant)
+        this.selectedFile.forEach(file => {
+          this.selectedFiles.push(file); // Ensure each file is added to the array
+        });
+        
         swal.fire({
           title: 'Done!',
           text: 'Grant successfully added!',
@@ -701,26 +779,8 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         this.fieldGrant.grantTitle = ''
         this.fieldGrant.grantArea = null
         this.fieldGrant.grantRubberArea = null
+        this.fileInput.nativeElement.value = '';
       }
-      //   fieldGrant.fieldId = this.field.id
-      //   fieldGrant.createdBy = this.sharedService.userId.toString()
-      //   fieldGrant.createdDate = new Date()
-      //   this.fieldGrantService.addFieldGrant(fieldGrant)
-      //     .subscribe(
-      //       Response => {
-      //         swal.fire({
-      //           title: 'Done!',
-      //           text: 'Grant successfully added!',
-      //           icon: 'success',
-      //           showConfirmButton: false,
-      //           timer: 1000
-      //         });
-      //         this.ngOnInit()
-      //         this.fieldGrant.grantTitle = ''
-      //         this.fieldGrant.grantArea = null
-      //         this.fieldGrant.grantRubberArea = null
-      //       }
-      //     )
     }
   }
 
@@ -749,8 +809,35 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         this.field.sinceYear = 0
       }
     }
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = Array.from(event.target.files);
+  }
+
+  viewDocuments(files: any[], fieldGrantId: number) {
+    const dialogRef = this.dialog.open(FieldGrantAttachmentComponent, {
+      width: '80%',
+      data: { files, fieldGrantId, isUpdating: true }  // Pass fieldGrantId to fetch existing attachments
+    });
+
+    dialogRef.componentInstance.filesUpdated.subscribe((updatedFiles: File[]) => {
+      this.updateGrantFiles(updatedFiles); // Callback to update files
+    });
+  }
 
 
+  updateGrantFiles(updatedFiles: File[]): void {
+    // Find the index of the grant in the addedGrant array
+    const index = this.fieldGrants.findIndex(grant => grant.files === this.selectedFile);
+
+    if (index !== -1) {
+      // Update the files for the specific grant
+      this.fieldGrants[index].files = updatedFiles;
+    }
+
+    // Also update the selectedFile if needed
+    this.selectedFiles = updatedFiles;
   }
 
 

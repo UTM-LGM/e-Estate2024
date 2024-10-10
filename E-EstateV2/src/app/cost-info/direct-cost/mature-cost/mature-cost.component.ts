@@ -4,6 +4,7 @@ import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { CostService } from 'src/app/_services/cost.service';
 import { SharedService } from 'src/app/_services/shared.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
@@ -42,7 +43,8 @@ export class MatureCostComponent implements OnInit, OnDestroy {
     private costService: CostService,
     private costAmountService: CostAmountService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService:SubscriptionService,
+    private spinnerService:SpinnerService
   ) { }
 
   ngOnInit() {
@@ -133,10 +135,12 @@ export class MatureCostComponent implements OnInit, OnDestroy {
     this.subCategories1 = newArray
     this.costMatureAmount = this.subCategories1.map(({ amount, id, monthYear, estateId, status, createdBy, createdDate }) => ({ amount, costID: id, monthYear, estateId: estateId, status, createdBy, createdDate })) as unknown as CostAmount[]
     if (this.costMatureAmount.length != 0) {
+      this.spinnerService.requestStarted()
       this.costAmountService.addCostAmount(this.costMatureAmount)
         .subscribe(
           {
             next: (Response) => {
+              this.spinnerService.requestEnded()
               swal.fire({
                 title: 'Done!',
                 text: 'Cost amount successfully saved!',
@@ -147,6 +151,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
               this.getMatureDirectCost();
             },
             error: (err) => {
+              this.spinnerService.requestEnded()
               swal.fire({
                 text: 'Please fil up the form',
                 icon: 'error'
@@ -164,9 +169,11 @@ export class MatureCostComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    this.spinnerService.requestStarted()
     this.costAmountService.updateCostAmount(this.draftFilterMatureDirectCostAmount)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Cost amount successfully saved!',
@@ -174,7 +181,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
             showConfirmButton: false,
             timer: 1000
           })
-          this.getMatureDirectCost();
+          this.ngOnInit();
         }
       )
   }
@@ -195,9 +202,11 @@ export class MatureCostComponent implements OnInit, OnDestroy {
     })
       .then((result) => {
         if (result.isConfirmed) {
+          this.spinnerService.requestStarted()
           this.costAmountService.updateCostAmount(updatedArray)
             .subscribe(
               Response => {
+                this.spinnerService.requestEnded()
                 swal.fire({
                   title: 'Done!',
                   text: 'Cost Amount successfully submitted!',
@@ -228,6 +237,12 @@ export class MatureCostComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  trackByFn(index: number, item: any): number | string {
+    // Return the item's unique identifier (e.g., id) or the index
+    return item.id || index;
+  }
+
 
 
 

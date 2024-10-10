@@ -1,5 +1,5 @@
 .active {
-  background-color: rgb(84, 84, 218);
+  background-color: #1ba183
 }
 
 ::ng-deep.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs

@@ -11,6 +11,7 @@ import { SharedService } from '../_services/shared.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import { DiseaseCategoryService } from '../_services/disease-category.service';
 import { DiseaseCategory } from '../_interface/diseaseCategory';
+import { SpinnerService } from '../_services/spinner.service';
 
 
 @Component({
@@ -35,8 +36,8 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
     private sharedService: SharedService,
     private subscriptionService:SubscriptionService,
-    private diseaseCategoryService:DiseaseCategoryService
-
+    private diseaseCategoryService:DiseaseCategoryService,
+    private spinnerService:SpinnerService
 
   ) { }
 
@@ -90,11 +91,13 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
   }
 
   update() {
+    this.spinnerService.requestStarted()
     this.fieldInfected.updatedBy = this.sharedService.userId
     this.fieldInfected.updatedDate = new Date()
     this.fieldInfectedService.updateFieldInfected(this.fieldInfected)
       .subscribe(
         Response => {
+          this.spinnerService.requestEnded()
           swal.fire({
             title: 'Done!',
             text: 'Field Infected successfully updated!',

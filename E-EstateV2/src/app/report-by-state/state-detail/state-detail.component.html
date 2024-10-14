@@ -1,0 +1,54 @@
+<div class="box-container">
+    <h1>{{ estates[0]?.state }}</h1>
+<hr/>
+
+<div style="columns: 4;">
+    <label>Start Month Year : </label>
+    <input type="text" disabled [value]="startMonth" />
+    <label>End Month Year : </label>
+    <input type="text" disabled [value]="endMonth" />
+  </div>
+
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(stateTotalAreasArray, 'Estate Rubber Area By State Report')">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div><br/><br/>
+
+  <span style="font-weight: bold;">Total Rubber Area (Ha) : {{totalArea}}</span>
+<div style="overflow-x: auto">
+    <table style="width: 100%">
+      <tr>
+        <th *ngFor="let column of sortableColumns" scope="col" [appSort]="stateTotalAreasArray" [attr.data-order]="order"
+          [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+          {{ column.displayText }}
+        </th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="10">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <ng-container *ngIf="!isLoading">
+      <tbody *ngFor="let estate of stateTotalAreasArray | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index" >
+        <tr class="list" style="cursor:default;">
+        <td>{{ (pageNumber - 1) * itemsPerPage + i + 1}}</td>
+          <td>{{estate.estateName + ' (' + estate.estateLicenseNo + ')'}}</td>
+          <td>{{ estate.totalArea | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </ng-container>
+    </table>
+    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+</div>
+
+<div style="margin-top: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+
+</div>

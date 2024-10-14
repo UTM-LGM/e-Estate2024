@@ -1,0 +1,75 @@
+label {
+  font-size: 12px;
+}
+
+input {
+  font-size: 12px;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  width: 60%;
+  margin: 0 10px;
+}
+
+.columnTable {
+  width: 25%;
+  margin: 0 10px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.btn-detail {
+  border-radius: 0px;
+}
+
+mat-select {
+  width: 100%;
+  padding: 6px 7px;
+  margin: 7px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: white;
+  height: 36px;
+  font-family: auto;
+  font-size: 14px;
+}
+
+::ng-deep
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above)
+  .mdc-menu-surface.mat-mdc-select-panel {
+  border-radius: 10px;
+}
+
+mat-option {
+  font-size: 12px;
+}
+
+.clone {
+  width: 140%;
+}
+
+.active-btn {
+  border-radius: 0px;
+}
+
+.inactive-btn {
+  border-radius: 0px;
+}
+
+.btn-doc{
+  border: none;
+    background-color: blue;
+    padding: 5px 13px;
+    cursor: pointer;
+    border-radius: 15px;
+    color: white;
+    font-size: 11px;
+}

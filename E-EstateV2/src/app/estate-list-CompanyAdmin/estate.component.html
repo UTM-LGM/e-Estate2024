@@ -1,0 +1,49 @@
+<div class="box-container">
+  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>{{company.name}}</h1> -->
+  <h1>List of estates</h1>
+  <hr />
+
+  <div class="box-container">
+
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Estates" />
+
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="company.premises" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+            </th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="8">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr *ngIf="company.premises?.length == 0 && !isLoading">
+          <td colspan="8" style="color: red;">No Estate</td>
+        </tr>
+
+        <tr class="list"
+          *ngFor="let estate of company.premises | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index"
+          routerLink="/estate-detail/{{ estate.id }}">
+           <td>{{ (pageNumber - 1) * itemsPerPage + i + 1}}</td>
+          <td><a>{{estate.name + ' (' + estate.licenseNo + ')' }}</a></td>
+          <td>{{estate.state}}</td>
+          <td> {{estate.town }} </td>
+          <td>{{ estate.email }}</td>
+        </tr>
+      </table>
+
+      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+    </div>
+  </div>
+</div>

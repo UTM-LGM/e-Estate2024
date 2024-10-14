@@ -1,0 +1,73 @@
+<div class="box-container">
+  <h1>Rubber Area by State and Maturity </h1>
+
+  <div style="columns:4">
+    <label>Start Month Year : </label>
+    <input type="month" [(ngModel)]="startMonth" (input)="chageStartMonth()" />
+    <label>End Month Year : </label>
+    <input type="month" [(ngModel)]="endMonth" (input)="monthChange()" [disabled]="startMonth == ''"/>
+  </div>
+
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(stateTotalsArray, 'Rubber Area By Maturity Report')">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div>
+
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter State" />
+  <div style="overflow-x: auto;">
+    <table style="width: 100%">
+      <tr [appSort]="estateWithFields">
+        <th width="30px">No</th>
+        <th>State</th>
+        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Immature</th>
+        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Mature</th>
+        <th>Total Rubber Area (Ha)</th>
+      </tr>
+
+      <tr>
+        <th></th>
+        <th></th>
+        <th>New Planting</th>
+        <th>Replanting</th>
+        <th>Tapped Area</th>
+        <th>Abandoned</th>
+        <th></th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="8">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && stateTotalsArray.length == 0">
+        <td colspan="10" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
+      </tr>
+
+      <ng-container *ngFor="let state of stateTotalsArray; let i = index">
+        <tr *ngIf="!isLoading">
+          <td>{{ i + 1 }}</td>
+          <td>{{ state.state }}</td>
+          <td>{{ state.totalNewPlantingArea }}</td>
+          <td>{{ state.totalReplantingArea }}</td>
+          <td>{{ state.totalTappedArea }}</td>
+          <td>{{ state.totalAbandonedArea }}</td>
+          <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea}}</td>
+        </tr>
+      </ng-container>
+
+      <tr  *ngIf="!isLoading">
+        <th colspan="2">Total rubber area :</th>
+        <th>{{calculateNewPlanting()}}</th>
+        <th>{{calculateReplanting()}}</th>
+        <th>{{calculateTappedArea()}}</th>
+        <th>{{calculateAbandonedArea()}}</th>
+        <th>{{ calculateTotal()}}</th>
+
+      </tr>
+
+    </table>
+  </div>
+</div>

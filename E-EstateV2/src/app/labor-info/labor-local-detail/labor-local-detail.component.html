@@ -1,0 +1,30 @@
+<br />
+<div style="padding: 15px;">
+  <h1>Local Labor Information</h1>
+  <hr />
+
+  <table class="table">
+    <tr>
+      <td><b>Local Labor Type</b></td>
+      <td><b>Amount Worker</b></td>
+    </tr>
+
+    <tr>
+      <td>{{ labor.laborType }}</td>
+      <td><input type="number" name="totalworker" [(ngModel)]="labor.totalWorker" /></td>
+    </tr>
+
+  </table><br />
+
+  <div style="padding-right: 10px">
+    <button style="float: right" class="btn-update" type="submit" (click)="update()">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+  <div style="padding-left: 10px">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>
+
+</div>

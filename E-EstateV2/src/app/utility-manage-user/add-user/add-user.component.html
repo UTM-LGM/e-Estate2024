@@ -1,0 +1,44 @@
+<div class="box-container">
+    <h1>User Information</h1>
+    <hr />
+  
+    <div style="columns: 2" class="column">
+        <label>Full Name :</label>
+        <input type="text" name="fullName" [(ngModel)]="register.fullName" />
+        <label>Role :</label>
+        <mat-select name="roleName" placeholder="Please Choose" [(ngModel)]="register.roleId" >
+            <mat-option *ngFor="let role of roles" [value]="role.id">
+              {{role.name}}
+            </mat-option>
+          </mat-select>
+    </div>
+    <div style="columns: 2">
+        <label>Email :</label>
+        <input type="email" name="email" [(ngModel)]="register.email" />
+        <label>Position :</label>
+        <input type="text" name="position" [(ngModel)]="register.position" />
+    </div>
+    <div style="columns: 2">
+        <label>Username :</label>
+        <input type="text" name="username" [(ngModel)]="register.userName" (change)="checkUsername($event)" />
+        <label>Password :</label>
+        <div class="password-toggle">
+          <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
+          <span (click)="togglePasswordVisibility()">
+            <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+          </span>
+        </div>
+    </div>
+
+    <div style="padding-right: 10px">
+        <button style="float: right" class="btn-add" type="submit" (click)="addUser()">
+          Add User &nbsp; <i class="fa fa-plus"></i>
+        </button>
+      </div>
+      <div style="padding-left: 10px">
+        <button class="btn-back" (click)="back()">
+          <i class="fa fa-arrow-left"></i> &nbsp; Back
+        </button>
+      </div>
+
+  </div>

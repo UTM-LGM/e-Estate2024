@@ -1,0 +1,67 @@
+<div style="columns:2">
+    <label>Estate Status : </label>
+    <mat-select name="estateStatus" placeholder="Please Choose" [(ngModel)]="status"
+        (selectionChange)="statusSelected(status)">
+        <mat-option [value]="true">Active</mat-option>
+        <mat-option [value]="false">Inactive</mat-option>
+    </mat-select>
+</div>
+
+<div *ngIf="isLoading">
+    <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'150px'}"> </ngx-skeleton-loader>
+</div>
+
+<div *ngIf="isActiveChoosen">
+    <h1>Estate Status Report</h1>
+
+    <div class="box-container">
+        <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Report" />
+        <div style="overflow-x: auto">
+            <table class="table">
+                <tr>
+                    <th> Company Name </th>
+                    <th> Estate Name </th>
+                    <th> Address </th>
+                    <th> Postcode </th>
+                    <th> License No </th>
+                    <th> Email </th>
+                    <th> Total Area (Ha) </th>
+                    <th> Financial Year Range </th>
+                    <th> Establishment Name </th>
+                    <th> Phone No </th>
+                    <th> Membership Type </th>
+                    <th> Fax No </th>
+                    <th> Latitude-Longitude </th>
+                    <th> Manager Name </th>
+                    <th> Status </th>
+                </tr>
+                <tr
+                    *ngFor="let estate of estates | filter : term | paginate: { itemsPerPage: 12, currentPage: pageNumber }; let i = index">
+                    <td> {{ estate.companyName }} </td>
+                    <td> {{ estate.estateName }} </td>
+                    <td> {{ estate.address1 }}, {{ estate.address2 }}, {{ estate.address3 }} </td>
+                    <td> {{ estate.postcode }}, {{ estate.town }}, {{ estate.state }} </td>
+                    <td> {{ estate.licenseNo }} </td>
+                    <td> {{ estate.email }} </td>
+                    <td> {{ estate.totalArea }} </td>
+                    <td> {{ estate.financialYear }} </td>
+                    <td> {{ estate.establishment }} </td>
+                    <td> {{ estate.phone }} </td>
+                    <td> {{ estate.membership }} </td>
+                    <td> {{ estate.fax }} </td>
+                    <td> {{ estate.latitudeLongitude }} </td>
+                    <td> {{ estate.managerName }} </td>
+                    <td>
+                        <button style="cursor: default;border-radius: 0;" [ngClass]="{
+                          'active-btn': estate.isActive == true,
+                          'inactive-btn': estate.isActive == false
+                        }">
+                            {{ estate.isActive == true ? "Active" : "Inactive" }}
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+        </div>
+    </div>
+</div>

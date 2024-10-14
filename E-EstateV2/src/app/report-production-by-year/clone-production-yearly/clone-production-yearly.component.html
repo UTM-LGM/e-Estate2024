@@ -1,0 +1,46 @@
+<div class="box-container">
+  <h1>Clone Production</h1>
+
+  <div style="columns: 3;">
+    <label>Please choose year : </label>
+    <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+  </div>
+
+  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+    <button class="btn-add" (click)="exportToExcel(cloneProductionData, 'Clone Production Report')">
+      Export Excel &nbsp; <i class="fa fa-file"></i>
+    </button>
+  </div><br /><br />
+
+  <div style="overflow-x: auto;">
+    <table style="width: 100%">
+      <tr>
+        <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="cloneProductionData"
+          [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+          {{ column.displayText }}
+        </th>
+      </tr>
+
+      <tr *ngIf="isLoading">
+        <td colspan="6">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && cloneProductionData.length == 0 && (role == 'Admin' || role == 'Management')">
+        <td colspan="4" style="color: red; text-align: center;">No data found. Please choose year</td>
+      </tr>
+
+      <ng-container *ngIf="!isLoading">
+        <tr *ngFor="let data of cloneProductionData; let i = index">
+          <td>{{ i + 1}}</td>
+          <td>{{ data.cloneName }}</td>
+          <td>{{ data.totalProduction | number:'1.2-2' }}</td>
+        </tr>
+      </ng-container>
+
+    </table>
+  </div>
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+</div>

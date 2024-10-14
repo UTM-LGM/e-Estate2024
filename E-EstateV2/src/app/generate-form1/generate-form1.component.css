@@ -1,0 +1,90 @@
+@media print {
+  body > *:not(.box-container) {
+    display: none;
+  }
+  .box-container * {
+    display: block;
+  }
+}
+
+.box-container {
+  margin-top: 34px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+td {
+  border-bottom: none;
+}
+
+table {
+  width: 100%;
+}
+
+.myTable {
+  background-color: #ffffff;
+  border-collapse: collapse;
+  width: 100%;
+}
+.myTable td,
+.myTable th {
+  padding: 3px;
+  border: 1px solid #000000;
+}
+
+.bg {
+  height: 100%;
+  width: 100%;
+  z-index: -100;
+}
+#heading {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.table1 {
+  background: transparent !important;
+  width: 100%;
+}
+.table0 {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  font-size: 12px;
+  height: auto;
+  width: 100%;
+}
+
+div {
+  width: 90%;
+  margin: auto;
+}
+
+@media print {
+  .print {
+    display: block;
+  }
+  .btn-print {
+    display: none;
+  }
+  .box-container {
+    display: block;
+  }
+}
+
+.btn-print {
+  border: none;
+  background-color: blue;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+  margin: 12px;
+}
+
+.print {
+  background-color: white;
+  margin-top: 35px;
+  margin-bottom: 20px;
+  overflow: auto;
+  height: -webkit-fill-available;
+}

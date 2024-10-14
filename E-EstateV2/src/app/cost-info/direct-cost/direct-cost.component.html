@@ -1,0 +1,11 @@
+<br />
+
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab label="Mature">
+    <app-mature-cost [selectedMonthYear]="selectedMonthYear" [costTypeId]="clickedCostTypeId"></app-mature-cost>
+  </mat-tab>
+
+  <mat-tab label="Immature">
+    <app-immature-cost [selectedMonthYear]="selectedMonthYear" [costTypeId]="clickedCostTypeId"></app-immature-cost>
+  </mat-tab>
+</mat-tab-group>

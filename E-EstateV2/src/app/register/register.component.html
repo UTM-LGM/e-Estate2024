@@ -1,0 +1,65 @@
+<div class="cont">
+  <div class="container">
+    <div class="form-container">
+      <h1>Create New Account</h1>
+      <hr>
+      <form>
+        <div class="column">
+          <label>Full Name <span style="color: red;">*</span> :</label>
+          <input type="text" name="fullName" [(ngModel)]="register.fullName" />
+          <label>License No <span style="color: red;">*</span> :</label>
+          <input type="text" name="licenseNo" [(ngModel)]="register.licenseNo" (change)="checkLicenseNo($event)" />
+        </div>
+
+        <div class="column">
+          <label>Company Name :</label>
+          <input type="text" name="companyName" [(ngModel)]="result.companyName" disabled>
+          <label>Estate Name :</label>
+          <input type="text" name="estateName" [(ngModel)]="result.premiseAdd1" disabled />
+        </div>
+
+        <div class="column">
+          <label>Email <span style="color: red;">*</span> :</label>
+          <input type="email" name="email" [(ngModel)]="register.email" />
+          <label>Position <span style="color: red;">*</span> :</label>
+          <mat-select  placeholder="Please Choose" name="position" [(ngModel)]="register.position">
+            <mat-option value="MANAGER">MANAGER</mat-option>
+            <mat-option value="ASSISTANT MANAGER">ASSISTANT MANAGER</mat-option>
+            <mat-option value="SUPERVISOR">SUPERVISOR</mat-option>
+            <mat-option value="CLERK">CLERK</mat-option>
+            <mat-option value="COMPANY ADMIN(HQ)">COMPANY ADMIN (HQ)</mat-option>
+          </mat-select>
+        </div>
+
+        <hr/>
+
+        <div class="column">
+          <label>Username <span style="color: red;">*</span> :</label>
+          <input type="text" name="username" [(ngModel)]="register.userName" (change)="checkUsername($event)" />
+        </div>
+
+        <div class="column">
+          <label>Password <span style="color: red;">*</span> :</label>
+          <div class="password-toggle">
+            <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
+            <span (click)="togglePasswordVisibility()">
+              <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+            </span>
+          </div>
+          <label>Confirm Password <span style="color: red;">*</span> :</label>
+          <div class="password-toggle">
+            <input type="{{ showPassword ? 'text' : 'password' }}" name="confirmPassword" [(ngModel)]="register.confirmPassword" (change)="checkingPassword()" />
+            <span (click)="togglePasswordVisibility()">
+              <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
+            </span>
+          </div>
+        </div>
+      </form>
+      <br />
+
+      <button (click)="submitRegister()">Sign Up</button><br />
+      <span>Already have account ? <a routerLink="/login">Log in</a></span>
+    </div>
+  </div>
+
+  <app-spinner></app-spinner>

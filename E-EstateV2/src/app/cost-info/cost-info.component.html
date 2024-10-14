@@ -1,0 +1,35 @@
+<div class="box-container">
+  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>{{estate.name}}</h1> -->
+  <h1>Cost Information</h1>
+
+  <hr />
+
+  <form style="margin-top: 10px;">
+    <div style="display: flex; width: 60%; align-items: center; justify-content: space-between;">
+      <div style="width: 40%; margin-right: 10px;">
+        <label>Month and Year :</label>
+        <!-- <input type="number" style="text-align: center;" placeholder="yyyy" name="selectedYear"
+          [(ngModel)]="selectedYear" (change)="yearSelected()" /> -->
+        <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
+      </div>
+
+      <div style="width: 60%; display: flex; flex-wrap: wrap; align-items: center;">
+        <label style="width: 100%;">Cost Type :</label>
+        <button *ngFor="let costType of costType" class="btn" (click)="buttonClicked(costType.costType, costType.id)"
+          [ngClass]="{ 'active': activeButton === costType.costType }" style="margin-bottom: 5px;">
+          {{costType.costType}}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="activeButton =='DIRECT' || activeButton == 'DIRECT COST' ">
+    <app-direct-cost [costTypeId]="clickedCostTypeId" [selectedMonthYear]="date"></app-direct-cost>
+  </div>
+
+  <div *ngIf="activeButton == 'INDIRECT' || activeButton == 'INDIRECT COST'">
+    <app-indirect-cost [costTypeId]="clickedCostTypeId" [selectedMonthYear]="date"></app-indirect-cost>
+  </div>
+</div>

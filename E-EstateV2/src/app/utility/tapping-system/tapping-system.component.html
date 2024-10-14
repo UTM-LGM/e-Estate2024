@@ -1,0 +1,53 @@
+<br />
+<h1>Tapping system Utility</h1>
+<form>
+  <label>Tapping system : </label>
+  <input type="text" name="tappingsystem" [(ngModel)]="tappingSystem.tappingSystem" />
+</form>
+
+<button style="float: right" class="btn-add" (click)="submit()">
+  Add &nbsp; <i class="fa fa-plus"></i>
+</button>
+
+<br /><br />
+<hr />
+
+<h1>List of Tapping System</h1>
+<div class="box-container">
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Tapping System" />
+  <table style="width: 100%">
+    <tr>
+      <th width="30px">No</th>
+      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="tappingSystems"
+        [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+        {{ column.displayText }}
+      </th>
+      <th width="90px">Action</th>
+    </tr>
+
+    <tr *ngIf="isLoading">
+      <td colspan="3">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+        </ngx-skeleton-loader>
+      </td>
+    </tr>
+
+    <tr
+      *ngFor="let tappingSystem of tappingSystems | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+      <td>{{ calculateIndex(i) }}</td>
+      <td>{{ tappingSystem.tappingSystem }}</td>
+      <td>
+        <button (click)="status(tappingSystem)" [ngClass]="{
+            'active-btn': tappingSystem.isActive == true,
+            'inactive-btn': tappingSystem.isActive == false
+          }">
+          {{ tappingSystem.isActive == true ? "Active" : "Inactive" }}
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
+
+</div>

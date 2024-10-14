@@ -1,0 +1,14 @@
+label {
+  font-size: 15px;
+  flex-basis: 130px;
+}
+
+form {
+  columns: 3;
+  align-items: center;
+}
+
+input[type="file"] {
+  padding-top: 5px;
+  padding-bottom: 8px;
+}

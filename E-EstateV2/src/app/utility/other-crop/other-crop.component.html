@@ -1,0 +1,54 @@
+<br />
+<h1>Other Crop Utility</h1>
+<form>
+  <label>Other Crop : </label>
+  <input type="text" name="otherCrop" [(ngModel)]="otherCrop.otherCrop" />
+</form>
+
+<button style="float: right" class="btn-add" (click)="submit()">
+  Add &nbsp; <i class="fa fa-plus"></i>
+</button>
+
+<br /><br />
+<hr />
+
+<h1>List of Other Crop</h1>
+<div class="box-container">
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Other Crop" />
+  <table style="width: 100%">
+    <tr>
+      <th width="30px">No</th>
+      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="otherCrops" [attr.data-order]="order"
+        [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+        {{ column.displayText }}
+      </th>
+      <th width="90px">Action</th>
+    </tr>
+
+    <tr *ngIf="isLoading">
+      <td colspan="3">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+        </ngx-skeleton-loader>
+      </td>
+    </tr>
+
+    <tr
+      *ngFor="let otherCrop of otherCrops | filter : term | paginate: { itemsPerPage: itemsPerPageOther, currentPage: pageNumber }; let i = index">
+      <td>{{ (pageNumber - 1) * itemsPerPageOther + i + 1 }}</td>
+      <td>{{ otherCrop.otherCrop }}</td>
+      <td>
+        <button (click)="status(otherCrop)" [ngClass]="{
+            'active-btn': otherCrop.isActive == true,
+            'inactive-btn': otherCrop.isActive == false
+          }">
+          {{ otherCrop.isActive == true ? "Active" : "Inactive" }}
+        </button>
+      </td>
+    </tr>
+  </table>
+
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+</div>
+
+<app-spinner></app-spinner>

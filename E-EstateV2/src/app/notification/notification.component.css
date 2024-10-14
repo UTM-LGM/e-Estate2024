@@ -1,0 +1,13 @@
+.alert {
+  background-color: #dc4c64;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.alert a {
+  font-size: 14px !important;
+  text-decoration: underline;
+  cursor: pointer;
+}

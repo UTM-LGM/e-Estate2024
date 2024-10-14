@@ -1,0 +1,13 @@
+<div class="box-container">
+    <div style="columns:4">
+
+        <button class="btn" routerLink="clone-productivity-yearly" routerLinkActive="active"
+            [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+            Clone Productivity
+        </button>
+    </div>
+    <br />
+    <hr />
+
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,20 @@
+::ng-deep.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs
+  > .mat-mdc-tab-header
+  .mat-mdc-tab {
+  flex-grow: 0 !important ;
+}
+
+.monthYear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="month"] {
+  width: 20%;
+  padding: 10px 7px;
+  margin: 7px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,36 @@
+<div class="box-container">
+  <h1>List of Companies</h1>
+  <hr />
+
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Company" />
+
+  <div *ngIf="isLoading">
+    <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>
+  </div>
+
+  <div class="column" *ngIf="showDefault">
+    <div class="box-container list"
+      *ngFor="let company of companies | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }"
+      routerLink="/company-profile/{{ company.id }}">
+      <h3>
+        <a>{{company.name}}</a>
+      </h3>
+      <table>
+        <tr>
+          <td>Address</td>
+          <td><span>:</span></td>
+          <td>{{ company.add }} {{ company.add2 }} {{ company.add3 }}</td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td><span>:</span></td>
+          <td>{{ company.postcode }} {{ company.town }} {{ company.state }}</td>
+        </tr>
+      </table>
+      <br />
+    </div>
+  </div>
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+</div>

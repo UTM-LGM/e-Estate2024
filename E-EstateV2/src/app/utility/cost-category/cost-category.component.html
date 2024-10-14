@@ -1,0 +1,247 @@
+<div class="box">
+  <div class="column">
+    <div>
+      <label>Cost Category : </label>
+      <input type="text" name="costCat" [(ngModel)]="costCategory.costCategory" />
+      <span style="color: blue;">Example: Tapping and Collection</span><br />
+      <span style="color: #DC4C64;">*Must be in order</span>
+      <button style="float: right" class="btn-add" (click)="submitCategory()">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="box-container columnTable">
+    <h1>List of Cost Category</h1>
+    <hr />
+    <input type="text" [(ngModel)]="term"  placeholder="Filter Cost Category" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <tr>
+          <th width="30px">No</th>
+          <th style="cursor: pointer;" *ngFor="let column of sortableColumns1" scope="col" [appSort]="costCategories"
+            [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Action</th>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="3">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr
+          *ngFor="let cat of costCategories | filter : term | paginate: { id:'pagination1', itemsPerPage: 5, currentPage: pageNumber1 }; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ cat.costCategory }}</td>
+          <td>
+            <button (click)="statusCostCategory(cat)" [ngClass]="{
+                'active-btn': cat.isActive == true,
+                'inactive-btn': cat.isActive == false
+              }">
+              {{ cat.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <pagination-controls id="pagination1" (pageChange)="pageNumber1 = $event"></pagination-controls>
+
+    </div>
+  </div>
+</div>
+<br />
+<hr />
+<br />
+
+<div style="columns: 2">
+  <div class="box-container">
+    <form style="display: block">
+      <label>Cost Subcategory 1 : </label>
+      <input type="text" name="costSubCat1" [(ngModel)]="costSubcategory1.costSubcategory1" />
+      <span style="color: blue;">Example: Manuring</span>
+      <button style="float: right" class="btn-add" (click)="submitSub1()">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </form>
+    <br />
+    <br />
+  </div>
+  <div class="box-container">
+    <form style="display: block">
+      <label>Cost Subcategory 2 : </label>
+      <input type="text" name="costSubCat2" [(ngModel)]="costSubcategory2.costSubcategory2" />
+      <span style="color: blue;">Example: Material</span>
+      <button style="float: right" class="btn-add" (click)="submitSub2()">
+        Add &nbsp; <i class="fa fa-plus"></i>
+      </button>
+    </form>
+    <br />
+    <br />
+  </div>
+</div>
+<br />
+
+<div class="column1">
+  <div class="box-container">
+    <h1>List of Cost Subcategory 1</h1>
+    <hr />
+    <input type="text" [(ngModel)]="term"  placeholder="Filter Cost Subcategory 1" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <tr>
+          <th width="30px">No</th>
+          <th style="cursor: pointer;" *ngFor="let column of sortableColumns2" scope="col"
+            [appSort]="costSubCategories1" [attr.data-order]="order" [attr.data-name]="column.columnName"
+            (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Action</th>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="3">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr
+          *ngFor="let cat of costSubCategories1 | filter : term | paginate: { id:'pagination2', itemsPerPage: 10, currentPage: pageNumber2 }; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ cat.costSubcategory1 }}</td>
+          <td>
+            <button (click)="statusCostSub1(cat)" [ngClass]="{
+                'active-btn': cat.isActive == true,
+                'inactive-btn': cat.isActive == false
+              }">
+              {{ cat.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <pagination-controls id="pagination2" (pageChange)="pageNumber2 = $event"></pagination-controls>
+
+    </div>
+  </div>
+  <br />
+  <div class="box-container">
+    <h1>List of Cost Subcategory 2</h1>
+    <hr />
+    <input type="text" [(ngModel)]="term" placeholder="Filter Cost Subcategory 2" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <tr>
+          <th width="30px">No</th>
+          <th style="cursor: pointer;" *ngFor="let column of sortableColumns3" scope="col"
+            [appSort]="costSubCategories2" [attr.data-order]="order" [attr.data-name]="column.columnName"
+            (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Action</th>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="3">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr
+          *ngFor="let cat of costSubCategories2 | filter : term | paginate: { id:'pagination3', itemsPerPage: 10, currentPage: pageNumber3 } ; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ cat.costSubcategory2 }}</td>
+          <td>
+            <button (click)="statusCostSub2(cat)" [ngClass]="{
+                'active-btn': cat.isActive == true,
+                'inactive-btn': cat.isActive == false
+              }">
+              {{ cat.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <pagination-controls id="pagination3" (pageChange)="pageNumber3 = $event"></pagination-controls>
+
+    </div>
+  </div>
+</div>
+
+<!--<div style="columns: 2;">
+        <div class="box-container">
+            <form style="display:inline-block">
+                <label>Category Type : </label>
+                <select name="categoryName1" [(ngModel)]="categoryType.costCategoryId">
+                    <option value="" disabled selected>Please Choose</option>
+                    <option *ngFor="let cat of filterStatus" value="{{cat.id}}">{{cat.categoryName}}</option>
+                </select>
+                <label>Category Name : </label>
+                <input type="text" name="categoryType" [(ngModel)]="categoryType.typeCategoryName" />
+                <button style="float: right;" class="btn-add" (click)="submitType()" >Add <i class="fa fa-plus"></i></button>
+            </form>
+        </div>
+        <div class="box-container">
+            <form style="display:block">
+                <label>Category Item : </label>
+                <input type="text" name="categoryItem" [(ngModel)]="item.itemCategoryName"/>
+                <button style="float: right;" class="btn-add" (click)="submitItem()" >Add <i class="fa fa-plus"></i></button>
+            </form>
+            <br>
+            <br>
+        </div>
+      </div>
+      <br>
+    
+      <div style="columns: 2;">
+        <div class="box-container">
+            <h1>List of Cost Category</h1>
+            <hr>
+            <input type="text" [(ngModel)]="term" placeholder="Filter Cost Category"/>
+            <div style="overflow-x: auto;">
+            <table style="width: 100%">
+                <tr>
+                <th>No</th>
+                <th>Category Type</th>
+                <th>Category Name</th>
+                <th>Action</th>
+                </tr>
+                <tr *ngFor="let cat of categoryTypes | filter:term, let i=index">
+                    <td>{{i+1}}</td>                
+                    <td>{{cat.categoryName}}</td>
+                    <td>{{cat.typeCategoryName}}</td>
+                    <td><button [ngClass]="{'active-btn': cat.isActive== true, 'inactive-btn':cat.isActive== false}">
+                        {{cat.isActive == true ? 'Active':'inActive'}}</button></td>
+                </tr>
+            </table>
+        </div>
+        </div>
+        <div class="box-container">
+            <h1>List of Category Item</h1>
+            <hr>
+            <input type="text" [(ngModel)]="term" placeholder="Filter Category Item"/>
+            <div style="overflow-x: auto;">
+            <table style="width: 100%">
+                <tr>
+                <th>No</th>
+                <th>Cost Item</th>
+                <th>Action</th>
+                </tr>
+                <tr *ngFor="let item of categoryItems | filter:term, let i=index">
+                    <td>{{i+1}}</td>                
+                    <td>{{item.itemCategoryName}}</td>
+                    <td><button [ngClass]="{'active-btn': item.isActive== true, 'inactive-btn':item.isActive== false}">
+                        {{item.isActive == true ? 'Active':'inActive'}}</button></td>
+                </tr>
+            </table>
+        </div>
+        </div>
+      </div>
+    
+    
+     -->

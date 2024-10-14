@@ -1,0 +1,125 @@
+<br />
+
+<div class="center-div">
+  <div class="box-container" *ngIf="filterIndirectCostAmount.length == 0">
+    <h1>Indirect Cost</h1>
+    <hr>
+    <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+      [theme]="{height:'50px', width:'100%'}"> </ngx-skeleton-loader>
+    <table class="table" *ngIf="!isLoading">
+      <tr>
+        <td><b>Category Item</b></td>
+        <td><b>Amount(RM)</b></td>
+      </tr>
+
+      <tr *ngFor="let cost of indirectCosts; let i = index">
+        <td class="td">{{ cost.costSubcategory2 }}</td>
+        <td class="td"><input class="amount" type="number" placeholder="0.00" [(ngModel)]="indirectCosts[i].amount"
+            (input)="calculateTotalAmount()" /></td>
+      </tr>
+
+      <tr>
+        <td><b>Total Amount for Indirect Cost</b></td>
+        <td><input class="amount" type="text" [value]="totalAmount | number:'1.2-2'" disabled /></td>
+      </tr>
+    </table>
+    <br />
+    <div *ngIf="!isLoading">
+      <button (click)="add()" style="float: right" class="btn-add" type="submit" [disabled]="isDisable">
+        Save &nbsp; <i class="fa fa-plus"></i>
+      </button>
+      <br />
+    </div>
+  </div>
+</div>
+
+<app-spinner></app-spinner>
+
+<div *ngIf="filterIndirectCostAmount.length != 0">
+  <mat-tab-group>
+    <mat-tab *ngIf="draftFilterIndirectCostAmount.length != 0">
+      <ng-template mat-tab-label>
+        <i class="fa fa-pencil"></i> Draft
+      </ng-template><br />
+
+      <div class="center-div">
+        <div class="box-container" *ngIf="draftFilterIndirectCostAmount.length != 0">
+          <h1>Indirect Cost</h1>
+          <hr>
+          <table class="table">
+            <tr>
+              <td><b>Category Item</b></td>
+              <td><b>Amount(RM)</b></td>
+            </tr>
+
+            <tr *ngFor="let amount of draftFilterIndirectCostAmount; let i = index">
+              <td class="td">{{amount.costSubcategory2}}</td>
+              <td class="td"><input class="amount" type="number" [(ngModel)]="amount.amount" name="amount"
+                  (change)="calculateDraftAmount()"></td>
+            </tr>
+
+            <tr>
+              <td><b>Total Amount for Indirect Cost</b></td>
+              <td><input class="total" class="amount" type="text" [value]="totalCostAmount | number:'1.2-2'" disabled />
+              </td>
+            </tr>
+          </table>
+
+          <br />
+          <div>
+            <div *ngIf="draftFilterIndirectCostAmount.length != 0">
+              <button (click)="submitIndirectCost()" style="float: right" class="btn-add" type="submit">
+                Submit &nbsp; <i class="fa fa-plus"></i>
+              </button>
+            </div>
+
+            <div *ngIf="draftFilterIndirectCostAmount.length != 0">
+              <button (click)="save()" style="float: right; background-color:  #CAE00D; margin-right:10px"
+                class="btn-add" type="submit" [disabled]="isDisable">
+                Save &nbsp; <i class="fa fa-check"></i>
+              </button>
+            </div>
+          </div>
+          <br />
+        </div>
+      </div>
+
+      <br />
+      <br />
+    </mat-tab>
+
+    <mat-tab *ngIf="submitFilterIndirectCostAmount.length != 0">
+      <ng-template mat-tab-label>
+        <i class="fa fa-check"></i> Submitted
+      </ng-template><br />
+
+      <div class="center-div">
+        <div class="box-container">
+          <h1>Indirect Cost</h1>
+          <hr>
+          <table class="table">
+            <tr>
+              <td><b>Category Item</b></td>
+              <td style="text-align: right !important;"><b>Amount (RM)</b></td>
+            </tr>
+
+            <tr *ngFor="let amount of submitFilterIndirectCostAmount; let i = index">
+              <td>{{amount.costSubcategory2}}</td>
+              <td style="text-align: right !important;">{{amount.amount | number: '1.2-2'}}</td>
+            </tr>
+
+            <tr>
+              <td><b>Total Amount for Indirect Cost </b></td>
+              <td style="text-align: right !important;"><b>{{ totalCostAmount | number: '1.2-2' }}</b></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+
+<app-spinner></app-spinner>

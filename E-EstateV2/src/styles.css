@@ -1,0 +1,399 @@
+
+mat-toolbar {
+  background: #43675f !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  height: 0px;
+}
+
+body {
+  background-image: url("../src/assets/Images/getah-bg.png");
+  background-color: rgba(0, 0, 0, 0.145);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100% !important;
+}
+
+.cont {
+  padding: 14px;
+}
+
+.btn-danger {
+  border: none;
+  background-color: #f32521;
+  padding: 5px 20px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn-filterStatus {
+  border: none;
+  background-color: aliceblue;
+  padding: 5px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: black;
+}
+
+mat-sidenav-container {
+  height: calc(100vh - 65px);
+  background-image: url("../src/assets/Images/getah1.jpg");
+}
+
+.mat-sidenav-content {
+  height: 90% !important;
+}
+
+html,
+body {
+  height: 102% !important;
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  display: unset;
+}
+
+.active-btn {
+  border: none;
+  background-color: #2196f3;
+  padding: 3px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.inactive-btn {
+  border: none;
+  background-color: #DC4C64;
+  padding: 3px 15px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.side-btn {
+  border: none;
+  background-color: transparent;
+  padding: 2px 20px;
+  cursor: pointer;
+  color: white;
+  width: 100%;
+  font-size: 11px;
+}
+
+.btn-back {
+  border: none;
+  background-color: grey;
+  padding: 7px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn-update {
+  border: none;
+  background-color: blue;
+  padding: 7px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+  font-size: 11px;
+}
+
+.btn-del {
+  border: none;
+  background-color: #DC4C64ed;
+  padding: 5px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+}
+
+.btn {
+  border: none;
+  background-color: #43675f;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+  display: block;
+  width: 100%;
+  margin-top: 2px;
+}
+
+.btn-add {
+  border: none;
+  background-color: #0b810f;
+  padding: 7px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: white;
+  font-size: 11px;
+}
+
+.btn-reset {
+  border: none;
+  background-color: yellowgreen;
+  padding: 10px 13px;
+  cursor: pointer;
+  border-radius: 15px;
+  color: black;
+}
+
+.container {
+  margin: 9px;
+  border-radius: 10px;
+  margin-left: 14px;
+  margin-top: 5px;
+}
+
+.box-container {
+  padding: 18px;
+  border-radius: 10px;
+  background-color: ghostwhite;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+.box-container-outer {
+  padding: 13px;
+  border-radius: 10px;
+  background-color: ghostwhite;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.box-container > hr {
+  margin-top: -10px;
+}
+
+h1 {
+  font-weight: bold !important;
+  font-size: 15px !important;
+}
+
+a {
+  color: #43675f;
+  font-size: 11px !important;
+  margin-bottom: 0px !important;
+}
+
+a {
+  color: #43675f;
+}
+
+.mat-drawer-backdrop {
+  position: fixed !important;
+}
+
+.mat-drawer-inner-container {
+  overflow: hidden !important;
+}
+
+input[type="text"],
+select,
+input[type="date"],
+input[type="month"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="file"],
+textarea {
+  width: 100%;
+  padding: 10px 7px;
+  margin: 7px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+
+.mat-toolbar-multiple-rows {
+  min-height: 50px !important;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid rgb(233, 228, 228);
+  font-size: 11px;
+}
+
+th {
+  border-right: 1px solid rgb(233, 228, 228);
+  background-color: #43675f;
+  color: white;
+  padding: 10px;
+  font-size: 11px;
+}
+
+.list {
+  padding: 15px;
+  margin-bottom: 13px;
+  cursor: pointer;
+}
+
+.list:hover {
+  background-color: lightsteelblue;
+}
+
+pagination-controls {
+  text-align: center;
+}
+
+.mat-h3,
+.mat-subtitle-1,
+.mat-typography .mat-h3,
+.mat-typography .mat-subtitle-1,
+.mat-typography h3 {
+  margin: 0 0 0px !important;
+}
+
+.mat-drawer-content {
+  overflow-x: hidden !important;
+}
+
+label {
+  font-size: 12px !important;
+}
+
+button {
+  font-size: 11px;
+}
+
+.table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+a {
+  color: blue;
+}
+
+.center-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.password-toggle {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle input {
+  padding-right: 30px;
+}
+
+.password-toggle span {
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 26px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 22px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.show-all-text {
+  display: inline-block; 
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-top: 4px;
+}
+
+.span-word {
+  margin-top: 10px;
+}
+
+.ngx-pagination {
+  font-size: 11px;
+}
+
+button:disabled {
+  color: white;
+  cursor: not-allowed;
+}
+
+/* .mat-sidenav-content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.mat-sidenav-content::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px white; 
+}
+ 
+.mat-sidenav-content::-webkit-scrollbar-thumb {
+  background: #43675f; 
+} */
+
+
+
+

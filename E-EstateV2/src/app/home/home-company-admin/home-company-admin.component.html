@@ -1,0 +1,120 @@
+<h1 class="tittle">Dashboard Company :
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;font-size: 20px;">{{company.name}}</span>
+  <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
+      [theme]="{'height':'30px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
+</h1>
+
+<hr />
+
+<div style="columns:2">
+    <div class="box">
+      <div class="column box-container color1">
+        <div class="span-word">
+          <span style="font-weight: bold;" > Total Estate</span><br />
+          <span *ngIf="!isLoadingEstate">{{totalEstate}}</span>
+        </div>
+        <div *ngIf="isLoadingEstate">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+  <br />
+
+    <div class="box">
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span style="font-weight: bold;">Tapped Rubber Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{tappedArea  | number:'1.2-2' }}</span>
+        </div>
+        <div *ngIf="isLoadingTapped">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+<div class="box-container-outer">
+  <span style="font-size: 14px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
+  <div class="box">
+    <div class="column box-container color3">
+      <div class="span-word">
+        <span style="font-weight: bold;">Cuplump</span><br />
+        <div *ngIf="!isLoadingProduction">
+          <span>{{totalCuplumpDry | number: '1.2-2'}}</span>
+        </div>
+      </div>
+      <div *ngIf="isLoadingProduction">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+
+    <div class="column box-container color4">
+      <div class="span-word">
+        <span style="font-weight: bold;">Latex</span><br />
+        <div *ngIf="!isLoadingProduction">
+          <span>{{totalLatexDry | number: '1.2-2'}}</span> 
+        </div>
+      </div>
+      <div *ngIf="isLoadingProduction">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+
+    <div class="column box-container color1">
+      <div class="span-word">
+        <span style="font-weight: bold;">Total</span><br />
+        <span *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number:
+          '1.2-2' }}</span>
+      </div>
+      <div *ngIf="isLoadingProduction">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+
+<div class="box-container-outer">
+  <span style="font-size: 14px;font-weight: bold;">Productivity (Kg/Ha) </span>
+  <div class="box">
+    <div class="column box-container color3">
+      <div class="span-word">
+        <span style="font-weight: bold;">Malaysia</span><br />
+        <div *ngIf="!isLoadingMalaysia">
+          <span *ngFor="let cuplumpProductivity of productivityByYear">
+            {{
+              (cuplumpProductivity.totalRubberDry !== null && cuplumpProductivity.totalRubberDry !== undefined &&
+               cuplumpProductivity.totalArea !== null && cuplumpProductivity.totalArea !== undefined)
+                ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2')
+                : 0
+            }}
+          </span>
+        </div>
+      </div>
+      
+      <div *ngIf="isLoadingMalaysia">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+
+    <div class="column box-container color4">
+      <div class="span-word">
+        <span style="font-weight: bold;">Company</span><br />
+        <div *ngIf="!isLoadingCompany">
+          <span>{{ (tappedArea > 0 ? (totalCuplumpDry + totalLatexDry) / tappedArea : 0) | number: '1.2-2' }}</span>
+        </div>
+      </div>
+      <div *ngIf="isLoadingCompany">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>

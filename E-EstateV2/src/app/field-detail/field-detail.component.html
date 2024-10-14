@@ -1,0 +1,342 @@
+<div class="box-container">
+  <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
+    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
+  <h1>
+    {{ field.fieldName }}
+    <button *ngIf="!fieldInfectedStatus" style="float: right; border-radius: 10px;" (click)="status(field)" [ngClass]="{
+        'active-btn': field.isActive == true,
+        'inactive-btn': field.isActive == false
+      }">
+      {{ field.isActive == true ? "Active" : "Inactive" }}
+    </button>
+
+    <div *ngIf="fieldInfectedStatus">
+      <button style="float: right;margin-top: -30px; cursor: not-allowed;" class="inactive-btn">Infected</button>
+    </div>
+
+  </h1>
+  <hr />
+
+  <div class="box">
+    <div class="column">
+      <div>
+        <div style="columns: 2">
+          <label>Field / Block <span style="color: red;">*</span> :</label>
+          <input type="text" name="fieldname" [(ngModel)]="field.fieldName" (change)="checkFieldName()" />
+          <label>Maturity <span style="color: red;">*</span> :</label>
+          <mat-select name="isMature" placeholder="Please Choose" name="maturity" [(ngModel)]="field.isMature"
+            (selectionChange)="getcategory(field)">
+            <mat-option [value]="true">MATURE</mat-option>
+            <mat-option [value]="false">IMMATURE</mat-option>
+          </mat-select>
+        </div>
+
+        <div style="columns: 2">
+          <label>Field Status <span style="color: red;">*</span> :</label>
+          <mat-select name="fieldStatus" placeholder="Please Choose" name="cropCat" [(ngModel)]="field.fieldStatusId"
+            (selectionChange)="changeFieldStatus($event)">
+            <mat-option *ngFor="let category of filterFieldStatus" [value]="category.id">
+              {{ category.fieldStatus }}
+            </mat-option>
+          </mat-select>
+
+          <label>Field Area (Ha) <span style="color: red;">*</span> :</label>
+          <input type="number" name="area" [(ngModel)]="field.area" (change)="rubberAreaInput()" />
+        </div>
+
+        <div style="columns: 2">
+          <label>Rubber area same as Field area ? <span style="color: red;">*</span> : </label><br />
+          <div class="radio-container">
+            <label>
+              <input type="radio" name="choice" value="yes" [(ngModel)]="rubberArea" (change)="onRadioChange()"> Yes
+            </label>
+            <label>
+              <input type="radio" name="choice" value="no" [(ngModel)]="rubberArea" (change)="onRadioChange()"> No
+            </label>
+          </div>
+
+          <div>
+            <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="rubberArea" [(ngModel)]="field.rubberArea" (change)="areaRemark()"
+              [disabled]="rubberArea === 'yes'" />
+          </div>
+        </div>
+
+        <div style="columns: 1">
+          <div *ngIf="rubberArea == 'no'">
+            <label>Remark extra area <span style="color: red;">*</span> :</label>
+            <textarea name="rubberArea" [(ngModel)]="field.remark"></textarea>
+          </div>
+        </div>
+
+        <div *ngIf="conversion">
+          <div style="columns: 2;">
+            <label>Conversion Crop Name <span style="color: red;">*</span> :</label>
+            <mat-select name="otherCrop" placeholder="Please Choose" name="otherCrop" [(ngModel)]="field.otherCropId">
+              <mat-option *ngFor="let otherCrop of otherCrops" [value]="otherCrop.id">
+                {{ otherCrop.otherCrop }}
+              </mat-option>
+            </mat-select>
+
+            <label>Since year <span style="color: red;">*</span> :</label>
+            <input type="number" name="year" [(ngModel)]="field.sinceYear" (change)="yearSelected()" />
+          </div>
+        </div>
+
+        <div *ngIf="!conversion && !fieldSick">
+          <div style="columns: 2">
+            <label>Year Planted <span style="color: red;">*</span> :</label>
+            <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
+            <label>Initial Tree Stand per Ha <span style="color: red;">*</span> :</label>
+            <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
+          </div>
+
+          <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick">
+            <label>Current tree stand <span style="color: red;">*</span> :</label>
+            <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
+
+            <label>Date Open Tapping <span style="color: red;">*</span> :</label>
+            <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted "
+              (change)="checkDOT()" />
+          </div>
+
+          <div style="columns: 2" *ngIf="field.isMature == true">
+            <label>Total task <span style="color: red;">*</span> :</label>
+            <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
+          </div>
+        </div>
+        <hr />
+
+        <div class="box-container">
+          <h1>Land Title</h1>
+          <hr />
+          <div style="columns: 2;">
+            <label>No <span style="color: red;">*</span> : </label>
+            <input type="text" name="grantTitle" [(ngModel)]="fieldGrant.grantTitle" />
+            <label>Total Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantArea" [(ngModel)]="fieldGrant.grantArea" />
+          </div>
+
+          <div style="columns: 2;">
+            <label>Rubber Area (Ha) <span style="color: red;">*</span> :</label>
+            <input type="number" name="grantRubberArea" [(ngModel)]="fieldGrant.grantRubberArea" />
+            <label>Land Title / Other related documents (pdf only) <span style="color: red;">*</span> : </label>
+            <input type="file" #fileInput name="file" accept=".pdf" multiple (change)="onFileSelected($event)" />
+          </div>
+
+          <div style="float: right;">
+            <button class="btn-add" (click)="addGrant(fieldGrant)">
+              Add Land Title &nbsp; <i class="fa fa-plus"></i>
+            </button>
+          </div><br /><br />
+
+          <div class="box-container">
+            <h1>List of Land title</h1>
+            <hr />
+            <div style="overflow-x: auto; overflow-y: auto">
+              <table style="width: 100%">
+                <tr>
+                  <th width="30px">No</th>
+                  <th>Land title</th>
+                  <th>Total Area (Ha)</th>
+                  <th>Rubber Area (Ha)</th>
+                  <th>Document</th>
+                  <th width="90px">Action</th>
+                </tr>
+
+                <tr *ngIf="fieldGrants.length == 0">
+                  <td colspan="6" style="color: red;">No Land Title</td>
+                </tr>
+
+                <tr
+                  *ngFor="let value of fieldGrants | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                  <td>{{ calculateIndex(i) }}</td>
+                  <td>{{ value.grantTitle }}</td>
+                  <td>{{ value.grantArea }}</td>
+                  <td>{{ value.grantRubberArea }}</td>
+                  <td> <button class="btn-doc" (click)="viewDocuments(value.files, value.id)">
+                      <i class="fa fa-folder"></i> <!-- Document icon -->
+                    </button> </td>
+                  <td>
+                    <button class="btn-del" (click)="deleteGrant(i)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
+            </div>
+          </div><br />
+
+        </div>
+        <br />
+      </div>
+    </div>
+
+    <div>
+      <div style="columns: 2">
+        <label>Clone <span style="color: red;">*</span> :</label>
+        <mat-select name="clone" class="clone" placeholder="Please Choose" [(ngModel)]="field.cloneId">
+          <mat-option *ngFor="let clone of availableClones" [value]="clone.id">
+            {{ clone.cloneName }}
+          </mat-option>
+        </mat-select>
+        <div>
+          <button [disabled]="conversion" style="margin-top: 28px; margin-left: 60px" class="btn-add"
+            (click)="addClone(field)" disabled="{{disableInput}}">
+            Add Clone &nbsp; <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="box-container">
+        <h1>Clones planted</h1>
+        <hr />
+        <div style="overflow-x: auto; overflow-y: auto">
+          <table style="width: 100%">
+            <tr>
+              <th>No</th>
+              <th>Clone Name</th>
+              <th>Action</th>
+            </tr>
+
+            <tr *ngIf="fieldClones.length == 0">
+              <td colspan="3" style="color: red;">No Clone</td>
+            </tr>
+
+            <tr *ngFor="let clone of fieldClones, let i=index">
+              <td>{{i+1}}</td>
+              <td>{{clone.cloneName}}</td>
+              <td><button class="btn-del" [disabled]="conversion || disableInput" (click)="delete(i)"><i
+                    class="fa fa-trash"></i></button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="margin-top: 10px">
+    <button *ngIf="!conversion && !fieldSick" style="float: right;" class="btn-update" type="submit"
+      (click)="updateField(field)">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+    <button *ngIf="conversionButton" style="float: right; margin-right:10px; background-color: rgb(220, 220, 63);"
+      class="btn-update" type="submit" (click)="convertField(field)">
+      Convert &nbsp; <i class="fa fa-rotate-left"></i>
+    </button>
+    <button *ngIf="fieldSick" style="float: right; margin-right:10px;padding: 10px 13px;" class="btn-del" type="submit"
+      (click)="fieldInfected(field)">
+      Infected &nbsp; <i class="fa fa-rotate-right"></i>
+    </button>
+    <button *ngIf="updateConversionBtn && conversion"
+      style="float: right; margin-right:10px; background-color: rgb(63, 220, 97);" class="btn-update" type="submit"
+      (click)="updateConversion(field)">
+      Update Conversion &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div><br />
+
+  <div class="box-container" *ngIf="isHistory">
+    <h1>Initial Field Information</h1>
+    <hr />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <tr>
+          <th>Field / Block</th>
+          <th>Rubber Area (Ha) </th>
+          <th>Maturity</th>
+          <th>Field Status</th>
+          <th>Year Planted</th>
+          <th>Date Open Tapping</th>
+          <th>Initial Tree Stand</th>
+          <th>Total Task</th>
+          <th>Status</th>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="12">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr class="list" style="pointer-events: none">
+          <td>{{ fieldHistory.fieldName }}</td>
+          <td>{{ fieldHistory.area }}</td>
+          <td>{{ fieldHistory.isMature == true ? "MATURE" : "IMMATURE" }}</td>
+          <td>{{ fieldHistory.fieldStatus.fieldStatus }}</td>
+          <td>{{ fieldHistory.yearPlanted }}</td>
+          <td>{{ fieldHistory.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+          <td>{{ fieldHistory.initialTreeStand }}</td>
+          <td>{{ fieldHistory.totalTask }}</td>
+          <td>
+            <button class="btn-detail" [ngClass]="{
+                  'active-btn': fieldHistory.isActive == true,
+                  'inactive-btn': fieldHistory.isActive == false
+                }">
+              {{ fieldHistory.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="box-container" style="overflow-x: auto" *ngIf="fieldInfecteds">
+    <h1>List of Field Disease</h1>
+    <hr>
+    <table style="width: 100%">
+      <thead>
+        <tr>
+          <th *ngFor="let column of sortableColumn" scope="col" [appSort]="filterFieldInfected"
+            [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Status</th>
+        </tr>
+      </thead>
+
+      <tr *ngIf="isLoading">
+        <td colspan="11">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+          </ngx-skeleton-loader>
+        </td>
+      </tr>
+      <tbody
+        *ngFor="let field of filterFieldInfected | filter : term | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+        <tr class="list" style="cursor: default;">
+          <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
+          <td style="cursor: pointer;">{{field.fieldName}}</td>
+          <td>{{ field.area }}</td>
+          <td>{{ field.areaInfected}}</td>
+          <td>{{ field.diseaseName }}</td>
+          <td>{{ field.severityLevel }}</td>
+          <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
+          <td>{{ field.remark }}</td>
+          <td>
+            <button style="cursor: default;" [ngClass]="{
+              'active-btn': field.isActive == true,
+              'inactive-btn': field.isActive == false
+            }">
+              {{ field.isActive == true ? "Active" : "Inactive" }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+  </div>
+
+</div>
+
+<app-spinner></app-spinner>

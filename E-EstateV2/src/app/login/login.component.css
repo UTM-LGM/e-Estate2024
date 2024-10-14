@@ -1,0 +1,101 @@
+.container {
+  background-color: #fff;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 65%;
+  height: 380px;
+}
+
+.form-container {
+  padding: 18px;
+  position: absolute;
+  height: 94%;
+  width: 28%;
+  background-color: ghostwhite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+button {
+  border-radius: 20px;
+  border: 1px solid white;
+  background-color: #43675f;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 7px 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+  cursor: pointer;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 31%;
+  width: 70%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+  background: #43675f;
+}
+
+.overlay-panel {
+  display: block;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.cont {
+  text-align: -webkit-center;
+}
+
+.contact {
+  color: black;
+  background-color: ghostwhite;
+  border: none;
+  margin-top: 3px;
+}
+
+.contact-menu {
+  color: black;
+  background-color: white;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 5px 10px;
+  cursor: default;
+  font-weight: 100;
+}
+
+/* @media (max-width: 1350px) {
+  .form-container {
+    width: 25%;
+  }
+} */
+
+a {
+  cursor: pointer;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="text"], input[type="password"]{
+  padding: 6px 9px;
+}
+
+/* @media (max-width: 768px) {
+  .overlay-container {
+    display: none;
+  }
+} */

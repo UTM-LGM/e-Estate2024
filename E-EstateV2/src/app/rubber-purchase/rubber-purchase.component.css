@@ -1,0 +1,19 @@
+.list {
+  cursor: default;
+}
+
+.btn-update {
+  padding: 4px 13px;
+}
+
+.loading-cursor {
+  cursor: wait;
+}
+
+th {
+  cursor: pointer;
+}
+
+.box-container {
+  box-shadow: none;
+}

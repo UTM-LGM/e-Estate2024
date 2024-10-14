@@ -1,0 +1,14 @@
+.file-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+
+  .btn-update{
+    padding: 5px 13px;
+  }
+  
+
+  

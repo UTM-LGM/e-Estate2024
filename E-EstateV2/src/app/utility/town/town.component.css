@@ -1,0 +1,32 @@
+label {
+  font-size: 15px;
+  flex-basis: 130px;
+}
+
+form {
+  columns: 2;
+  align-items: center;
+}
+
+mat-select {
+  width: 100%;
+  padding: 6px 7px;
+  margin: 7px 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: white;
+  height: 36px;
+  font-family: auto;
+  font-size: 14px;
+}
+
+::ng-deep
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above)
+  .mdc-menu-surface.mat-mdc-select-panel {
+  border-radius: 10px;
+}
+
+mat-option {
+  font-size: 12px;
+}

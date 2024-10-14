@@ -1,0 +1,24 @@
+<mat-toolbar>
+  <mat-toolbar-row routerLink="/login" style="cursor: pointer;">
+    <!-- <span class="span"><img width="40px" style="padding: 5px;"
+        src="assets/Images/LGM-logo.png" /></span> -->
+    <span class="span"><img style="padding: 5px;" src="assets/Images/RRIMestet-Logo1.png" /></span>
+    <!-- <span style="font-size: 20px; margin-top:-12px">RRIMestet</span> <br /> -->
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="manual">
+  <span [matMenuTriggerFor]="manual"> User Manual &nbsp; <i class="fa fa-book"></i> &nbsp; &nbsp;</span>
+</div>
+
+<mat-menu #manual="matMenu">
+  <div style="padding: 12px;">
+    <span style="cursor: pointer; font-size: 12px;" (click)="downloadFileAdmin()">Company Admin <i class="fa fa-download"></i></span><br />
+    <hr />
+    <span style="cursor:pointer; font-size: 12px;" (click)="downloadFileClerk()">Estate Clerk <i class="fa fa-download"></i></span><br />
+  </div>
+
+</mat-menu>
+
+
+<router-outlet></router-outlet>

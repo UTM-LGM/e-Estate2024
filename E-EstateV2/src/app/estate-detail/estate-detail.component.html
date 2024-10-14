@@ -1,0 +1,320 @@
+<div *ngIf="isLoading">
+  <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}"> </ngx-skeleton-loader>
+</div>
+
+<div class="box-container" *ngIf="!isLoading">
+  <h1>Estate Profile</h1>
+  <hr />
+
+  <!-- <h1>Estate Profile</h1> -->
+
+  <div style="float:right;" *ngIf="userRole != 'Management'">
+    <button class="btn-update" (click)="openDialog(estate,estateDetail)">
+      Update &nbsp; <i class="fa fa-pencil"></i>
+    </button>
+  </div>
+
+  <div style="overflow-x: auto; ">
+    <table class="detailAdmin">
+      <tr>
+        <td>Estate Name</td>
+        <td><span>:</span></td>
+        <td>{{estate.name}}</td>
+
+        <td style="width: 70px;"></td>
+
+        <td>Company Name</td>
+        <td><span>:</span></td>
+        <td>{{estate.company}}</td>
+
+      </tr>
+
+      <tr>
+        <td>License No</td>
+        <td><span>:</span></td>
+        <td>{{estate.licenseNo}}</td>
+
+        <td></td>
+
+        <td>Area (Ha)</td>
+        <td><span>:</span></td>
+        <td>{{estate.area}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Address</td>
+        <td><span>:</span></td>
+        <td>{{estate.add1}} {{estate.add2}} {{estate.add3}}</td>
+
+        <td></td>
+
+
+        <td>District</td>
+        <td><span>:</span></td>
+        <td>{{estate.district}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Postcode</td>
+        <td><span>:</span></td>
+        <td>{{estate.postcode}}</td>
+
+        <td></td>
+
+
+        <td>Parliment</td>
+        <td><span>:</span></td>
+        <td>{{estate.parliament}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>State</td>
+        <td><span>:</span></td>
+        <td>{{estate.state}}</td>
+
+        <td></td>
+
+
+        <td>Dun</td>
+        <td><span>:</span></td>
+        <td>{{estate.dun}}</td>
+
+      </tr>
+
+      <tr>
+        <td>Town</td>
+        <td><span>:</span></td>
+        <td>{{estate.town}}</td>
+
+        <td></td>
+
+
+        <td>Latitude</td>
+        <td><span>:</span></td>
+        <td>{{estate.latitude}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Person in charge</td>
+        <td><span>:</span></td>
+        <td>{{estate.personInCharge}}</td>
+
+        <td></td>
+
+
+        <td>Longitude</td>
+        <td><span>:</span></td>
+        <td>{{estate.longitude}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Contact No</td>
+        <td><span>:</span></td>
+        <td>{{estate.mobileCode}} {{estate.mobileNo}}</td>
+
+        <td></td>
+
+
+        <td>Email</td>
+        <td><span>:</span></td>
+        <td>{{estate.email}}</td>
+
+      </tr>
+
+      <tr>
+
+        <td>Estate Phone No</td>
+        <td><span>:</span></td>
+        <td>{{estate.phoneCode}} {{estate.phoneNo}}</td>
+
+        <td></td>
+
+        <td>Planting Material</td>
+        <td><span>:</span></td>
+        <td *ngIf="estateDetail.plantingMaterial == null " class="detail" style="color: red;">Please update profile</td>
+        <td *ngIf="estateDetail.plantingMaterial != null ">{{estateDetail.plantingMaterial}}</td>
+
+        <!-- <td>Land tittle (Grant No)</td>
+        <td><span>:</span></td>
+        <td>{{estateDetail.grantNo}}</td> -->
+
+      </tr>
+
+    </table>
+  </div>
+  <br />
+  <hr />
+
+  <div>
+    <h1>List of Additional Contact</h1>
+    <button *ngIf="userRole != 'Management'" style="margin-bottom: 10px" class="btn-add" (click)="openDialogContact(contacts, estate)">
+      Add New Contact &nbsp; <i class="fa fa-plus"></i>
+    </button>
+
+    <input type="text" [(ngModel)]="termContact" placeholder="Filter Contact" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumnContacts" scope="col" [appSort]="contacts" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+            </th>
+            <th width="90px">Status</th>
+            <th width="30px" *ngIf="userRole != 'Management'">Action</th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="6">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr *ngIf="contacts.length == 0 && userRole != 'Management'">
+          <td colspan="7" style="color: red;">No Additional Contact</td>
+        </tr>
+
+        <tr *ngIf="contacts.length == 0 && userRole == 'Management'">
+          <td colspan="6" style="color: red;">No Additional Contact</td>
+        </tr>
+
+        <tbody
+          *ngFor="let contact of contacts | filter : termContact | paginate: { itemsPerPage: itemsPerPageContact, currentPage: contactsPageNumber, id: 'contacts' }; let i = index">
+          <tr class="list" style="cursor: default;">
+            <td>{{ (contactsPageNumber - 1) * itemsPerPageContact + i + 1 }}</td>
+            <td style="cursor: pointer;">{{contact.name}}</td>
+            <td>{{ contact.position }}</td>
+            <td>{{ contact.phoneNo }}</td>
+            <td>{{ contact.email }} </td>
+            <td >
+              <button [disabled]="userRole == 'Management'" style="cursor: pointer;" (click)="statusContact(contact)" [ngClass]="{
+                'active-btn': contact.isActive == true,
+                'inactive-btn': contact.isActive == false
+              }">
+                {{ contact.isActive == true ? "Active" : "Inactive" }}
+              </button>
+            </td>
+            <td *ngIf="userRole != 'Management'">
+              <button class="btn-update" style="padding: 3px 15px;" (click)="openDialogContact(contact, estate)">
+                <i class="fa fa fa-pencil"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <pagination-controls (pageChange)="contactsPageNumber = $event" id="contacts"></pagination-controls>
+
+    </div>
+  </div><br />
+
+  <div class="box-container" *ngIf="userRole !== 'EstateClerk'">
+    <h1>List of Fields</h1>
+    <hr />
+    <button *ngIf="userRole != 'Management'" style="margin-bottom: 10px" class="btn-add" routerLink="/add-field/{{estate.id}}">
+      Add New Field &nbsp; <i class="fa fa-plus"></i>
+    </button>
+    <br />
+    <input type="text" [(ngModel)]="termField" placeholder="Filter Field" />
+
+    <label><b>Total Area : {{ total | number: '1.2-2' }} Ha</b></label>
+    <div style="overflow-x: auto; width: 100%;">
+      <table style="width: 100%;">
+        <tr>
+          <th class="th" *ngFor="let column of sortableColumns" scope="col" [appSort]="fields"
+            [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th class="th" width="90px">Status</th>
+          <th class="th" width="30px">Action</th>
+        </tr>
+
+        <tr *ngIf="fields.length == 0">
+          <td colspan="12" style="color: red;">No Field</td>
+        </tr>
+
+        <tbody *ngFor="let field of fields | filter : termField | paginate: { itemsPerPage: itemsPerPageField, currentPage: fieldsPageNumber, id: 'fields' }; let i = index">
+          <tr class="list" style="cursor:default;">
+            <td>{{ (fieldsPageNumber - 1) * itemsPerPageField + i + 1 }}</td>
+            <td *ngIf="userRole != 'Management'" class="td" style="cursor: pointer;"  routerLink="/field-detail/{{ field.id }}"><a>{{
+                field.fieldName }}</a></td>
+            <td *ngIf="userRole == 'Management'">{{field.fieldName}}</td>
+            <td class="td">{{ field.area }}</td>
+            <td class="td">
+              {{ field.isMature == true ? "Mature" : "Immature" }}
+            </td>
+            <td class="td">{{field.fieldStatus}}</td>
+            <td class="td">{{ field.yearPlanted }}</td>
+            <td class="td">{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+            <td class="td">{{ field.initialTreeStand }}</td>
+            <td class="td">{{field.totalTask}}</td>
+            <td *ngIf="result[field.id]?.length == 0 ">
+              <button style="border-radius: 0px !important; cursor: default;" [ngClass]="{
+                'active-btn': field.isActive == true,
+                'inactive-btn': field.isActive == false
+              }">
+                {{ field.isActive == true ? "Active" : "Inactive" }}
+              </button>
+            </td>
+
+            <td *ngIf="result[field.id] && result[field.id]?.length > 0">
+              <button style="border-radius: 0px !important; cursor: default;" class="inactive-btn">
+                Infected
+              </button>
+            </td>
+
+            <td class="td" *ngIf="selectedField !== field"><i class="fa fa-chevron-down" style="cursor:pointer"
+                (click)="toggleSelectedField(field)"></i></td>
+            <td class="td" *ngIf="selectedField === field"><i class="fa fa-chevron-up" style="cursor:pointer"
+                (click)="toggleSelectedField(field)"></i></td>
+          </tr>
+
+          <tr *ngIf="selectedField === field && conversionField.length !=0 ">
+            <td colspan="11">
+              <table style="width: 100%; background-color: antiquewhite;">
+                <tr>
+                  <th>Field/Block Name</th>
+                  <th>Other Crop Conversion Name</th>
+                  <th>Since Year</th>
+                </tr>
+
+                <tr *ngFor="let conversion of conversionField">
+                  <td>{{conversion.fieldName}}</td>
+                  <td>{{conversion.conversionCropName}}</td>
+                  <td>{{conversion.sinceYear}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+          <tr *ngIf="selectedField === field && conversionField.length ==0">
+            <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;">No field conversion data found</td>
+          <tr>
+
+        </tbody>
+      </table>
+
+      <pagination-controls (pageChange)="fieldsPageNumber = $event" id="fields"></pagination-controls>
+
+    </div>
+  </div>
+  <br />
+
+  <div *ngIf="userRole !== 'EstateClerk'">
+    <button class="btn-back" (click)="back()">
+      <i class="fa fa-arrow-left"></i> &nbsp; Back
+    </button>
+  </div>

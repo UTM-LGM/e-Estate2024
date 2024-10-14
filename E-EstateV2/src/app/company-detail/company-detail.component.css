@@ -1,0 +1,15 @@
+.detail {
+  border-bottom: none;
+  text-align: left;
+  padding: 3px;
+  font-size: 11px;
+}
+
+th {
+  font-size: 12px;
+}
+
+button:disabled{
+  border-radius: 0px;
+  cursor: default;
+}

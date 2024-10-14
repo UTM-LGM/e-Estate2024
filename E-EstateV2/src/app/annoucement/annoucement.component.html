@@ -1,8 +1,0 @@
-<ng-container *ngIf="announcements.length >= 1">
-  <swiper-container navigation="true" pagination="true" autoplay="true" speed="3000">
-    <swiper-slide *ngFor="let announcement of announcements">
-      <img style="width: 100%; height: 100%;" [src]="baseUrl + '/Images/' + announcement.filePath" />
-    </swiper-slide>
-  </swiper-container>
-</ng-container>
-

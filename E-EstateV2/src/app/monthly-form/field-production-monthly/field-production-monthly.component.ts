@@ -72,7 +72,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     private fieldProductionService: FieldProductionService,
     private dialog: MatDialog,
     private subscriptionService: SubscriptionService,
-    private spinnerService:SpinnerService
+    private spinnerService: SpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -300,6 +300,29 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
           this.productions = Response
           this.filterProductions = this.productions.filter(e => e.monthYear == this.date.toUpperCase() && Fields.some(field => field.id === e.fieldId))
           this.draftFilterProductions = this.filterProductions.filter(e => e.status === "DRAFT")
+          const fieldsWithoutProduction = Fields.filter(field =>
+            !this.draftFilterProductions.some(prod => prod.fieldId === field.id)
+          );
+          if (this.draftFilterProductions.length != 0) {
+            // Create a production entry for fields without any existing production data
+            fieldsWithoutProduction.forEach(field => {
+              let newDraft: any = {
+                cuplump: 0,
+                cuplumpDRC: 0,
+                latex: 0,
+                latexDRC: 0,
+                noTaskTap: 0,
+                noTaskUntap: 0,
+                fieldId: field.id,
+                fieldName: field.fieldName,  // Adding fieldName for display
+                monthYear: this.date.toUpperCase(),
+                status: "DRAFT",
+                createdBy: this.sharedService.userId.toString(),
+                createdDate: new Date()
+              };
+              this.draftFilterProductions.push(newDraft);
+            });
+          }
           this.submitFilterProductions = this.filterProductions.filter(e => e.status == "SUBMITTED")
           this.calculateCuplumpDry(this.filterProductions, this.cuplumpDry)
           this.calculateLatexDry(this.filterProductions, this.latexDry)
@@ -312,7 +335,6 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         });
     this.isLoading = false
     this.subscriptionService.add(getProduction);
-
   }
 
   TotalCuplump() {
@@ -393,54 +415,136 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   }
 
   submitProduction() {
-    this.spinnerService.requestStarted()
-    const updatedBy = this.sharedService.userId.toString()
-    const date = new Date()
-    const updatedArray = this.draftFilterProductions.map(obj => {
-      return { ...obj, status: 'SUBMITTED', updatedBy: updatedBy, updatedDate: date }
-    });
-    this.isSubmit = true
-    this.fieldProductionService.updateProductionDraft(updatedArray)
-      .subscribe({
-        next: (response) => {
-          this.spinnerService.requestEnded()
+    this.spinnerService.requestStarted();
+  
+    const updatedBy = this.sharedService.userId.toString();
+    const date = new Date();
+    
+    // Filter the draft based on whether it already exists or is new
+    const updates = this.draftFilterProductions
+      .filter(prod => prod.id != null)
+      .map(obj => ({
+        ...obj,
+        status: 'SUBMITTED', // Mark as submitted
+        updatedBy: updatedBy,
+        updatedDate: date
+      }));
+    
+    const inserts = this.draftFilterProductions
+      .filter(prod => prod.id == null)
+      .map(obj => ({
+        ...obj,
+        status: 'SUBMITTED', // Mark as submitted
+        updatedBy: updatedBy,
+        updatedDate: date
+      }));
+  
+    // Flag to disable the form submission
+    this.isSubmit = true;
+  
+    // Handle updates if there are any
+    if (updates.length > 0) {
+      this.fieldProductionService.updateProductionDraft(updates).subscribe(
+        response => {
           swal.fire({
             title: 'Done!',
-            text: 'Field Production information successfully submitted!',
+            text: 'Updated existing Field Production information!',
             icon: 'success',
             showConfirmButton: false,
             timer: 1000
           });
-          this.getEstate()
+          this.getEstate(); // Refresh the data
         },
-        error: (error) => {
+        error => {
           swal.fire({
             title: 'Error!',
-            text: 'Failed to submit Field Production!',
+            text: 'Failed to update the draft!',
             icon: 'error',
             showConfirmButton: true
           });
-          this.isSubmit = false;
+          this.isSubmit = false; // Re-enable the form submission
         }
-      })
-  }
-
-  save() {
-    this.spinnerService.requestStarted()
-    this.fieldProductionService.updateProductionDraft(this.draftFilterProductions)
-      .subscribe(
-        Response => {
-          this.spinnerService.requestEnded()
+      );
+    }
+  
+    // Handle inserts if there are any
+    if (inserts.length > 0) {
+      this.fieldProductionService.addProduction(inserts).subscribe(
+        response => {
           swal.fire({
             title: 'Done!',
-            text: 'Field Production information successfully saved!',
+            text: 'New Field Production information successfully submitted!',
             icon: 'success',
             showConfirmButton: false,
             timer: 1000
           });
-          this.getEstate()
+          this.getEstate(); // Refresh the data
+        },
+        error => {
+          swal.fire({
+            title: 'Error!',
+            text: 'Failed to submit new Field Production!',
+            icon: 'error',
+            showConfirmButton: true
+          });
+          this.isSubmit = false; // Re-enable the form submission
         }
-      )
+      );
+    }
+  
+    // Ensure the spinner is stopped at the end
+    this.spinnerService.requestEnded();
+  }
+  
+
+  save() {
+    this.spinnerService.requestStarted()
+
+    const updates = this.draftFilterProductions.filter(prod => prod.id != null);
+    const inserts = this.draftFilterProductions.filter(prod => prod.id == null);
+
+    if (updates.length > 0) {
+      this.fieldProductionService.updateProductionDraft(updates).subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'Updated existing Field Production information!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.getEstate();
+        },
+        error => {
+          swal.fire({
+            text: 'Failed to update the draft',
+            icon: 'error'
+          });
+        }
+      );
+    }
+
+    if (inserts.length > 0) {
+      this.fieldProductionService.addProduction(inserts).subscribe(
+        Response => {
+          swal.fire({
+            title: 'Done!',
+            text: 'New Field Production information successfully saved!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.getEstate();
+        },
+        error => {
+          swal.fire({
+            text: 'Failed to save new draft',
+            icon: 'error'
+          });
+        }
+      );
+    }
+    this.spinnerService.requestEnded();
   }
 
   ngOnDestroy(): void {

@@ -77,12 +77,12 @@
     <hr />
   </div>
 
-  <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showGeneral}">
+  <!-- <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' || !showGeneral}">
     <button class="side-btn" routerLink="/polygon/{{estateId}}" routerLinkActive="active">
       Polygon
     </button>
     <hr />
-  </div>
+  </div> -->
 
   <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management'}">
     <button class="side-btn fixed" (click)="toggleOthers()">

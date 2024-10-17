@@ -11,7 +11,7 @@ import { SubscriptionService } from '../_services/subscription.service';
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.css'],
 })
-export class SidenavComponent implements OnInit , OnDestroy{
+export class SidenavComponent implements OnInit, OnDestroy {
   user: User = {} as User
   estate: any = {} as any
   company: any = {} as any
@@ -33,29 +33,29 @@ export class SidenavComponent implements OnInit , OnDestroy{
     private userService: UserService,
     public notificationComponent: NotificationComponent,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
     this.role = this.sharedService.role
     this.getUser()
-    if(this.role == 'EstateClerk')
-      {
-        this.getEstate()
-      }
-    else if(this.role == 'CompanyAdmin')
-      {
-        this.getCompany()
-      }
+    if (this.role == 'EstateClerk') {
+      this.estateId = this.sharedService.estateId
+      this.getEstate()
+    }
+    else if (this.role == 'CompanyAdmin') {
+      this.companyId = this.sharedService.companyId
+      this.getCompany()
+    }
   }
 
   getEstate() {
     const getOneEstate = this.myLesenService.getOneEstate(this.sharedService.estateId)
-    .subscribe(
-      Response => {
-        this.estate = Response
-        this.estate.add1 = this.estate.add1.slice(0, -1) 
-      })
+      .subscribe(
+        Response => {
+          this.estate = Response
+          this.estate.add1 = this.estate.add1.slice(0, -1)
+        })
     this.subscriptionService.add(getOneEstate);
   }
 
@@ -97,7 +97,7 @@ export class SidenavComponent implements OnInit , OnDestroy{
 
   getUser() {
     this.username = this.sharedService.userName
-    if (this.role =='EstateClerk' ) {
+    if (this.role == 'EstateClerk') {
       const getUser = this.userService.getUser(this.username)
         .subscribe(
           Response => {
@@ -107,14 +107,14 @@ export class SidenavComponent implements OnInit , OnDestroy{
             this.estateId = this.user.estateId
           }
         )
-    this.subscriptionService.add(getUser);
+      this.subscriptionService.add(getUser);
 
     }
-    
+
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }

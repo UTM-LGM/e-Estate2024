@@ -30,7 +30,7 @@ export class MyLesenIntegrationService {
   }
 
   getLicenseNo(licenseNo:string):Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/estate/GetDetailByAllLicense/' + licenseNo)
+    return this.http.get<any[]>(this.baseUrl + '/estate/GetDetailByLicense/' + licenseNo)
   }
 
   getOneEstate(id:number):Observable<any>{

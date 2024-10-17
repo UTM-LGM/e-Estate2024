@@ -51,20 +51,20 @@
           <td>{{ i + 1 }}</td>
           <td>{{ state.state }}</td>
           <td>{{ state.totalNewPlantingArea }}</td>
-          <td>{{ state.totalReplantingArea }}</td>
-          <td>{{ state.totalTappedArea }}</td>
-          <td>{{ state.totalAbandonedArea }}</td>
-          <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea}}</td>
+          <td>{{ state.totalReplantingArea | number:'1.2-2' }}</td>
+          <td>{{ state.totalTappedArea | number:'1.2-2'}}</td>
+          <td>{{ state.totalAbandonedArea | number:'1.2-2'}}</td>
+          <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea | number:'1.2-2'}}</td>
         </tr>
       </ng-container>
 
       <tr  *ngIf="!isLoading">
         <th colspan="2">Total rubber area :</th>
-        <th>{{calculateNewPlanting()}}</th>
-        <th>{{calculateReplanting()}}</th>
-        <th>{{calculateTappedArea()}}</th>
-        <th>{{calculateAbandonedArea()}}</th>
-        <th>{{ calculateTotal()}}</th>
+        <th>{{calculateNewPlanting() | number:'1.2-2'}}</th>
+        <th>{{calculateReplanting() | number:'1.2-2'}}</th>
+        <th>{{calculateTappedArea() | number:'1.2-2'}}</th>
+        <th>{{calculateAbandonedArea() | number:'1.2-2'}}</th>
+        <th>{{ calculateTotal() | number:'1.2-2'}}</th>
 
       </tr>
 

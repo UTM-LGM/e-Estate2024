@@ -43,12 +43,12 @@
           <td>{{ i + 1 }}</td>
           <td style="cursor: pointer;"  [routerLink]="['/report-by-state/state-detail', town.stateId]"  [queryParams]="{startMonth:startMonth, endMonth:endMonth}" ><a>{{ town.state }}</a></td>
           <td>{{ town.estateNo }}</td>
-          <td>{{ town.totalArea }}</td>
+          <td>{{ town.totalArea | number:'1.2-2' }}</td>
         </tr>
         <tr>
           <th colspan="2">Total :</th>
           <th>{{calculateEstate()}}</th>
-          <th>{{calculateTotal()}}</th>
+          <th>{{calculateTotal() | number:'1.2-2'}}</th>
         </tr>
       </ng-container>
 

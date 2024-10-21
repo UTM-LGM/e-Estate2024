@@ -350,7 +350,7 @@ namespace E_EstateV2_API.Repository
 
         public async Task<object> GetCurrentField(int year)
         {
-            var field = await _context.fields.Where(x => x.createdDate.Year == year).Select(x => new
+            var field = await _context.fields.Select(x => new
             {
                 id = x.Id,
                 fieldName = x.fieldName,

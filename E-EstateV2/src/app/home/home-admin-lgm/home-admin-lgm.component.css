@@ -12,7 +12,7 @@
 }
 
 .color1 {
-  background-color: #a6cbd8; 
+  background-color: #a6cbd8;
   height: 65px;
 }
 
@@ -26,12 +26,10 @@
   height: 65px;
 }
 
-
 .color4 {
   background-color: #59788e96;
   height: 65px;
 }
-
 
 .color5 {
   background-color: #48aaad91;
@@ -71,6 +69,32 @@
   }
 }
 
-span{
+span {
   font-size: 13px;
 }
+
+@media print {
+  #print {
+    margin-left: 20px;
+    margin-right: 20px;
+    page-break-inside: avoid;
+  }
+
+  button {
+    display: none; /* Hide the print button */
+  }
+
+  .box {
+    padding: 10px;
+  }
+
+  .print {
+    padding: 10px;
+  }
+
+  @page {
+    size: A4 landscape; /* This sets the page to A4 size in landscape orientation */
+    margin-top: 5px;          /* Adjust the margin as needed */
+  }
+}
+

@@ -1,5 +1,11 @@
+<div id="print" style="padding: 10px;">
 <h1 class="tittle">Estate Sector Dashboard</h1>
 <hr />
+
+<div style="float: right;">
+  <button class="btn-update" (click)="print()">Print <i class="fa fa-print"></i></button>
+</div>
+<br/><br/>
 
 <div style="columns:2">
     <div class="box">
@@ -24,6 +30,18 @@
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
         </div>
       </div>
+
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span style="font-weight: bold;">Total Registered Estate</span><br />
+          <span  *ngIf="!isLoadingEstate">{{totalRegistered}}</span>
+        </div>
+        <div *ngIf="isLoadingEstate">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+
     </div>
   <br />
 
@@ -39,9 +57,10 @@
         </div>
       </div>
     </div>
+    
 </div>
 
-<div style="columns:2">
+<div style="columns:2" class="print">
   <div class="box-container-outer">
     <span style="font-size: 14px;font-weight: bold;">Tapper Worker for {{yearNow}}</span>
     <div class="box">
@@ -126,7 +145,7 @@
 </div>
 <br />
 
-<div style="columns:2">
+<div style="columns:2" class="print">
   <div class="box-container-outer">
     <span style="font-size: 14px;font-weight: bold;">Rubber Production (100% DRC) (Kg/Yr) for {{yearNow}}</span>
     <div class="box">
@@ -188,10 +207,10 @@
 <br/>
 </div>
 
-<div class="box-container-outer">
+<div class="box-container-outer" style="width: 47%;" class="print">
   <span style="font-size: 14px;font-weight: bold;">Rubber Productivity (Kg/Ha/Yr) for {{yearNow}}</span>
   <div class="box">
-    <div class="column box-container color4">
+    <!-- <div class="column box-container color4">
       <div class="span-word">
         <span style="font-weight: bold;">Cuplump</span><br />
         <div *ngIf="!isLoadingProduction">
@@ -203,9 +222,9 @@
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
       </div>
-    </div>
+    </div> -->
 
-    <div class="column box-container color1">
+    <!-- <div class="column box-container color1">
       <div class="span-word">
         <span style="font-weight: bold;">Latex</span><br />
         <div *ngIf="!isLoadingProduction">
@@ -217,12 +236,12 @@
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
       </div>
-    </div>
+    </div> -->
 
     <div class="column box-container color2">
       <div class="span-word">
         <span style="font-weight: bold;">Total</span><br />
-        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
+        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / tappedArea | number: '1.2-2') : 0 }}
         </span>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -231,7 +250,8 @@
       </div>
     </div>
   </div>
-</div><br/>
+</div>
+<br/>
 
 <!-- <div class="box" style="justify-content: left;">
   <div class="column box-container" style="color:black;margin: none;">
@@ -241,3 +261,4 @@
     </div>
   </div>
 </div> -->
+</div>

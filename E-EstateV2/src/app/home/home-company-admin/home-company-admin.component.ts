@@ -26,7 +26,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   totalCuplumpDry = 0
   totalCuplumpDryMalaysia = 0
   totalLatexDryMalaysia = 0
-
+  malaysiaTappedArea = 0
 
   totalCompanyProductivity = 0
 
@@ -78,7 +78,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
     const getCurrentField = this.reportService.getCurrentField(new Date().getFullYear().toString())
       .subscribe(
         (Response: any[]) => {
-          const filteredFields = Response.filter(x => x.fieldStatus?.toLowerCase().includes('tapped area'));
+          const filteredFields = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'));
           if (filteredFields.length == 0) {
             this.tappedArea = 0
             this.tappedAreaMalaysia = 0

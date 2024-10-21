@@ -159,7 +159,7 @@
 <div class="box-container-outer">
   <span style="font-size: 14px;font-weight: bold;">Current Rubber Productivity (Kg/Ha)</span>
   <div class="box">
-    <div class="column box-container color4">
+    <!-- <div class="column box-container color4">
       <div class="span-word">
         <span style="font-weight: bold;">Cuplump</span><br />
         <div *ngIf="!isLoadingProduction">
@@ -170,9 +170,9 @@
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
       </div>
-    </div>
+    </div> -->
 
-    <div class="column box-container color1">
+    <!-- <div class="column box-container color1">
       <div class="span-word">
         <span style="font-weight: bold;">Latex</span><br />
         <div *ngIf="!isLoadingProduction">
@@ -184,12 +184,12 @@
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
       </div>
-    </div>
+    </div> -->
 
     <div class="column box-container color2">
       <div class="span-word">
         <span style="font-weight: bold;">Total</span><br />
-        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}</span>
+        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / tappedArea | number: '1.2-2') : 0 }}</span>
       </div>
       <div *ngIf="isLoadingProduction">
         <ngx-skeleton-loader appearance="line" animation="progress-dark"

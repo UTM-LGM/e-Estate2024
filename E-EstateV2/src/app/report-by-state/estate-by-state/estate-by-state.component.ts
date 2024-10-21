@@ -29,6 +29,7 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   sortableColumns = [
     { columnName: 'state', displayText: 'State' },
     { columnName: 'estateNo', displayText: 'No of Estate' },
+    { columnName: 'currentEstate', displayText : 'Registered estate in RRIMestet'},
     { columnName: 'rubberArea', displayText: 'Total Rubber Area (Ha)' },
   ];
 
@@ -95,11 +96,20 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
       results.forEach(result => {
         const totalArea = result.fields.reduce((acc, curr) => acc + curr.area, 0);
 
+        const registeredEstateCount = result.fields.length != 0;
+
+
         if (!this.stateTotalAreas[result.state]) {
-          this.stateTotalAreas[result.state] = { count: 1, totalArea: totalArea,stateId:result.stateId };
+          this.stateTotalAreas[result.state] = { 
+            count: 1, 
+            totalArea: totalArea, 
+            registeredEstates: registeredEstateCount,
+            stateId: result.stateId 
+          };
         } else {
           this.stateTotalAreas[result.state].count++;
           this.stateTotalAreas[result.state].totalArea += totalArea;
+          this.stateTotalAreas[result.state].registeredEstates += registeredEstateCount;
         }
       });
 
@@ -108,10 +118,13 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
         state: key,
         estateNo: this.stateTotalAreas[key].count,
         totalArea: this.stateTotalAreas[key].totalArea,
-        stateId:this.stateTotalAreas[key].stateId
+        stateId:this.stateTotalAreas[key].stateId,
+        registeredEstates: this.stateTotalAreas[key].registeredEstates,
       }));
-      this.isLoading = false;
+
     });
+    this.isLoading = false;
+
   }
 
   yearSelected() {
@@ -173,6 +186,10 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   calculateEstate(){
     return this.stateTotalAreasArray.reduce((total, item) => total + item.estateNo, 0)
+  }
+
+  calculateRegisteredEstate(){
+    return this.stateTotalAreasArray.reduce((total, item) => total + item.registeredEstates, 0)
   }
 
   onFilterChange(term: string): void {

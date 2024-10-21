@@ -28,11 +28,11 @@
       </tr>
 
       <tr *ngIf="!isLoading && stateTotalAreasArray.length == 0">
-        <td colspan="4" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
+        <td colspan="5" style="color: red; text-align: center;">No data found. Please choose start and end month year</td>
       </tr>
 
       <tr *ngIf="isLoading">
-        <td colspan="4">
+        <td colspan="5">
           <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
           </ngx-skeleton-loader>
         </td>
@@ -43,11 +43,13 @@
           <td>{{ i + 1 }}</td>
           <td style="cursor: pointer;"  [routerLink]="['/report-by-state/state-detail', town.stateId]"  [queryParams]="{startMonth:startMonth, endMonth:endMonth}" ><a>{{ town.state }}</a></td>
           <td>{{ town.estateNo }}</td>
+          <td>{{ town.registeredEstates }}</td>
           <td>{{ town.totalArea | number:'1.2-2' }}</td>
         </tr>
         <tr>
           <th colspan="2">Total :</th>
           <th>{{calculateEstate()}}</th>
+          <th>{{calculateRegisteredEstate()}}</th>
           <th>{{calculateTotal() | number:'1.2-2'}}</th>
         </tr>
       </ng-container>

@@ -81,7 +81,7 @@
 <br />
 
 <div class="box-container-outer">
-  <span style="font-size: 14px;font-weight: bold;">Productivity (Kg/Ha) </span>
+  <span style="font-size: 14px;font-weight: bold;">Rubber Productivity (Kg/Ha) </span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
@@ -91,7 +91,7 @@
             {{
               (cuplumpProductivity.totalRubberDry !== null && cuplumpProductivity.totalRubberDry !== undefined &&
                cuplumpProductivity.totalArea !== null && cuplumpProductivity.totalArea !== undefined)
-                ? (cuplumpProductivity.totalRubberDry / cuplumpProductivity.totalArea | number: '1.2-2')
+                ? (cuplumpProductivity.totalRubberDry / tappedAreaMalaysia | number: '1.2-2')
                 : 0
             }}
           </span>

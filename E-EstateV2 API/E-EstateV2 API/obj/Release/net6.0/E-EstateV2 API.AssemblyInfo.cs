@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("E-EstateV2 API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+832c0d00bdc5c5e2181cec374d9c04917ff84a36")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e792f9dce5d779a351ca03464444d98e9bae3477")]
 [assembly: System.Reflection.AssemblyProductAttribute("E-EstateV2 API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("E-EstateV2 API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

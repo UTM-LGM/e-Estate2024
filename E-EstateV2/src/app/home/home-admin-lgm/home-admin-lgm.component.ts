@@ -3,6 +3,7 @@ import { Chart } from 'chart.js/auto';
 import { forkJoin, map } from 'rxjs';
 import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
+import { Field } from 'src/app/_interface/field';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
@@ -61,6 +62,10 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   fieldShortage = 0
   tappedArea = 0
   costAmount = 0
+  totalRegistered = 0
+  fields: Field[] = []
+  validFields: any[] = []
+
 
 
   constructor(
@@ -103,6 +108,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
       .subscribe(
         Response => {
+          this.fields = Response
           const field = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'))
           this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
           this.isLoadingTapped = false
@@ -210,6 +216,22 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         Response => {
           this.filterEstates = Response
           this.totalEstate = this.filterEstates.length
+          let totalValidFieldsCount = 0;
+
+          this.filterEstates.forEach(estate => {
+            // Filter fields by matching licenseNo and ensuring the area is not null and greater than 0
+            this.validFields = this.fields.filter((field: any) =>
+              field.estateId === estate.id &&
+              field.isActive === true &&
+              !field.fieldStatus?.toLowerCase().includes('abandoned') &&
+              !field.fieldStatus?.toLowerCase().includes('government') &&
+              !field.fieldStatus?.toLowerCase().includes('conversion to other crop'))
+
+            if (this.validFields.length > 0) {
+              this.totalRegistered ++
+            } 
+          });
+
           this.isLoadingEstate = false
         }
       )
@@ -361,7 +383,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     if (this.totalCuplumpDry == 0 || this.totalLatexDry == 0 || this.costAmount == 0) {
       return 0
     } else {
-      const value = (this.totalCuplumpDry + this.totalLatexDry) / this.costAmount;
+      const value = this.costAmount / (this.totalCuplumpDry + this.totalLatexDry);
       return isNaN(value) ? 0 : value;
     }
   }
@@ -369,5 +391,25 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
+
+  print() {
+    const printContents = document.getElementById('print')?.innerHTML;
+    const originalContents = document.body.innerHTML;
+  
+    if (printContents) {
+      // Temporarily replace the body content with the print content
+      document.body.innerHTML = printContents;
+  
+      // Use a timeout to allow the print dialog to open before restoring the original content
+      window.print();
+  
+      // Restore the original content after the print dialog is closed or cancelled
+      setTimeout(() => {
+        document.body.innerHTML = originalContents;
+        location.reload();
+      }, 100);
+    }
+  }
+  
 
 }

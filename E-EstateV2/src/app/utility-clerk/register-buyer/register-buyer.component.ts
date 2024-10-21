@@ -138,7 +138,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   checkLicenseNo(event: any) {
     this.spinnerService.requestStarted()
     setTimeout(() => {
-      const getLicenseNo = this.myLesenService.getLicenseNo(event.target.value.toString())
+      const getLicenseNo = this.myLesenService.getAllByLicenseNo(event.target.value.toString())
         .subscribe(
           {
             next: (Response) => {
@@ -165,6 +165,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
 
             },
             error: (Error) => {
+              this.spinnerService.requestEnded();
               swal.fire({
                 icon: 'error',
                 title: 'Error! License No does not exist',

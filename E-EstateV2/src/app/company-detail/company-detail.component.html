@@ -204,7 +204,7 @@
           *ngFor="let estate of company.premises | filter : termEstate | paginate: { itemsPerPage: itemsPerPageEstate, currentPage: estatesPageNumber, id: 'estates' }; let i = index">
           <tr class="list" style="cursor: default;">
             <td>{{ (estatesPageNumber - 1) * itemsPerPageEstate + i + 1 }}</td>
-            <td style="cursor: pointer;" routerLink="/estate-detail/{{ estate.licenseNo }}">
+            <td style="cursor: pointer;" routerLink="/estate-detail/{{ estate.id }}">
               <a>{{estate.name + ' (' + estate.licenseNo + ')' }}</a>
             </td>
             <td>{{ estate.state }}</td>

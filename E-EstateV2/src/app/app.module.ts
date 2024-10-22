@@ -324,7 +324,6 @@ register()
             "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
           redirectUri: "https://www5.lgm.gov.my/RRIMestet/home", // This is your redirect URI
           //redirectUri: "http://localhost:4300", // This is your redirect URI
-
         },
         cache: {
           cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -340,8 +339,6 @@ register()
         //    //redirectUri: "https://lgm20.lgm.gov.my/RRIMestet", // This is your redirect URI
         //    redirectUri: "https://www5.lgm.gov.my/trainingE-estate", // This is your redirect URI
         //   // redirectUri: "http://localhost:4200", // This is your redirect URI
-
-
         // },
         // cache: {
         //   cacheLocation: BrowserCacheLocation.LocalStorage,

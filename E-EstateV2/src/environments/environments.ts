@@ -5,7 +5,7 @@
 
 export const MyLesenEnv = {
   production:false,
-  apiUrl: 'https://api02.lgm.gov.my/ApiMyLesenAdmin/api'
+  apiUrl: 'https://api02.lgm.gov.my/Api_MyLesen/api'
 }
 
 export const RRIMGeoRubber = {

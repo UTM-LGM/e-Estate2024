@@ -225,7 +225,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
 
   onSubmit() {
-    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null) {
+    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null || this.field.dateOpenTapping == null) {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'

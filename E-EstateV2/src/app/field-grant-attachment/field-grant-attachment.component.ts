@@ -41,6 +41,7 @@ export class FieldGrantAttachmentComponent implements OnInit {
     this.files = data.files;
     this.isUpdating = data.isUpdating;
     this.fieldGrantId = data.fieldGrantId;
+    console.log(data)
   }
 
   ngOnInit(): void {
@@ -53,7 +54,7 @@ export class FieldGrantAttachmentComponent implements OnInit {
 
 
   getFieldAttachments() {
-    if (this.fieldGrantId != 0) {
+    if (this.fieldGrantId != undefined && this.fieldGrantId != 0) {
       this.fieldAttachmentService.getFieldAttachment().subscribe(response => {
         // Filter active files for the current fieldGrantId
         const existingFiles = response.filter(x => x.isActive == true && x.fieldGrantId === this.fieldGrantId);

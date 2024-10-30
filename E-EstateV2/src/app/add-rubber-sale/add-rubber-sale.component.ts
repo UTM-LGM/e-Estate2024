@@ -145,11 +145,10 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     const dateToCompare = new Date(date);
     dateToCompare.setHours(0, 0, 0, 0);
 
-    if (dateToCompare >= today) {
-      return true;
-    } else {
-      return false;
-    }
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    return dateToCompare >= yesterday;
   }
 
 

@@ -12,7 +12,7 @@
   position: absolute;
   height: 94%;
   width: 28%;
-  background-color: ghostwhite;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@ button {
 
 .contact {
   color: black;
-  background-color: ghostwhite;
+  background-color: white;
   border: none;
   margin-top: 3px;
 }
@@ -99,3 +99,14 @@ input[type="text"], input[type="password"]{
     display: none;
   }
 } */
+
+
+@media only screen and (max-width: 768px) {
+  .overlay-container{
+    display: none;
+  }
+  .form-container{
+    position: unset;
+    width: auto;
+  }
+}

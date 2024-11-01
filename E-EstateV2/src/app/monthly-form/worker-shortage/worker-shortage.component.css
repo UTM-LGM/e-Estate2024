@@ -52,3 +52,10 @@ td {
 /* .btn-update{
     padding: 6px 13px;
   } */
+
+
+  @media only screen and (max-width: 768px) {
+    .box-container{
+      width: 70%;
+    }
+  }

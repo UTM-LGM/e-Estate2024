@@ -1,5 +1,5 @@
 <h1 class="tittle">Dashboard Company :
-  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;font-size: 20px;">{{company.name}}</span>
+  <span *ngIf="!isLoadingEstateName" style="color: #DC4C64;">{{company.name}}</span>
   <span><ngx-skeleton-loader *ngIf="isLoadingEstateName" appearance="line" animation="progress-dark"
       [theme]="{'height':'30px', 'width':'35%', 'margin-bottom':'-5px'}"></ngx-skeleton-loader></span>
 </h1>
@@ -37,7 +37,7 @@
 </div>
 
 <div class="box-container-outer">
-  <span style="font-size: 14px;font-weight: bold;">Current Rubber Dry Production (Kg)</span>
+  <span class="title2">Current Rubber Dry Production (Kg)</span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
@@ -81,7 +81,7 @@
 <br />
 
 <div class="box-container-outer">
-  <span style="font-size: 14px;font-weight: bold;">Rubber Productivity (Kg/Ha) </span>
+  <span  class="title2">Rubber Productivity (Kg/Ha) </span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">

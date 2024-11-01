@@ -17,11 +17,26 @@ span {
   cursor: pointer;
 }
 
-img{
+img {
   width: 240px;
 }
 
-::ng-deep .mat-mdc-menu-panel.mat-mdc-menu-panel{
+::ng-deep .mat-mdc-menu-panel.mat-mdc-menu-panel {
   margin-top: 7px !important;
   margin-right: 17px;
+}
+
+@media only screen and (max-width: 768px) {
+  img {
+    width: 186px;
+    margin-top: 5px;
+  }
+
+  .manual{
+    margin-top: -32px;
+  }
+
+  span{
+    font-size: 12px;
+  }
 }

@@ -67,4 +67,11 @@ button:disabled {
   cursor: not-allowed;
 }
 
+@media only screen and (max-width: 768px) {
+  .center-div{
+    width: max-content;
+    padding-bottom: 10px;
+  }
+}
+
 

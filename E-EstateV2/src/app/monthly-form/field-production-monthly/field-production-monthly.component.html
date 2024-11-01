@@ -30,27 +30,29 @@
           <td colspan="13" style="color: red;">No Field. Please insert field in Field Information</td>
         </tr>
 
-      <ng-container *ngIf="filterFields.length != 0 && !isLoading ">
-        <tr *ngFor="let field of filterFields; let i = index">
-          <td>{{products[i].monthYear}}</td>
-          <td class="td">{{ field.fieldName }}</td>
-          <td class="td"><input type="number" name="cuplump" [(ngModel)]="products[i].cuplump" placeholder="0.00"
-              (input)="initialZeroCuplump(products[i].cuplump, i)" /></td>
-          <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0" (change)="validateCuplumpDRC($event, i)" /></td>
-          <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00"
-              (input)="initialZeroLatex(products[i].latex, i)" /></td>
-          <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0" (change)="validateLatexDRC($event, i)" /></td>
-          <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="products[i].noTaskTap" placeholder="0"
-              (change)="taskTap(products[i].noTaskTap, field.totalTask, i)" /></td>
-          <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
-              [(ngModel)]="products[i].noTaskUntap" /></td>
-          <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="products[i].remarkUntap" /></td>
-        </tr>
-      </ng-container>
+        <ng-container *ngIf="filterFields.length != 0 && !isLoading ">
+          <tr *ngFor="let field of filterFields; let i = index">
+            <td>{{products[i].monthYear}}</td>
+            <td class="td">{{ field.fieldName }}</td>
+            <td class="td"><input type="number" name="cuplump" [(ngModel)]="products[i].cuplump" placeholder="0.00"
+                (input)="initialZeroCuplump(products[i].cuplump, i)" /></td>
+            <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="products[i].cuplumpDRC" placeholder="0"
+                (change)="validateCuplumpDRC($event, i)" /></td>
+            <td class="td"><input type="number" name="latex" [(ngModel)]="products[i].latex" placeholder="0.00"
+                (input)="initialZeroLatex(products[i].latex, i)" /></td>
+            <td class="td"><input type="number" name="latexDRC" [(ngModel)]="products[i].latexDRC" placeholder="0"
+                (change)="validateLatexDRC($event, i)" /></td>
+            <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="products[i].noTaskTap" placeholder="0"
+                (change)="taskTap(products[i].noTaskTap, field.totalTask, i)" /></td>
+            <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
+                [(ngModel)]="products[i].noTaskUntap" /></td>
+            <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="products[i].remarkUntap" /></td>
+          </tr>
+        </ng-container>
 
       </table>
     </div>
-  </div><br/>
+  </div><br />
 
   <div *ngIf="filterProductions.length == 0 && !isLoading">
     <div *ngIf="products.length > 0 ">
@@ -60,7 +62,7 @@
 
       <button style="float: right; background-color:  #CAE00D;margin-right: 10px;" class="btn-add" (click)="add()">
         Save &nbsp; <i class="fa fa-plus"></i>
-      </button> 
+      </button>
     </div>
   </div>
 
@@ -74,45 +76,48 @@
         </ng-template><br />
 
         <span style="color: red;">*Make sure field completed before submit</span>
+        <div style="overflow-x: auto" >
+          <table style="width: 100%">
+            <tr>
+              <th>Month and Year</th>
+              <th>Field / Block</th>
+              <th>Cuplump (Kg) <span style="color: red;">*</span></th>
+              <th>Cuplump DRC (%) <span style="color: red;">*</span></th>
+              <th>Latex (Kg) <span style="color: red;">*</span></th>
+              <th>Latex DRC (%) <span style="color: red;">*</span></th>
+              <th>No of Task Tap <span style="color: red;">*</span></th>
+              <th>No of Task UnTap <span style="color: red;">*</span></th>
+              <th>Remark Task UnTap</th>
+            </tr>
 
-        <table style="width: 100%">
-          <tr>
-            <th>Month and Year</th>
-            <th>Field / Block</th>
-            <th>Cuplump (Kg) <span style="color: red;">*</span></th>
-            <th>Cuplump DRC (%) <span style="color: red;">*</span></th>
-            <th>Latex (Kg) <span style="color: red;">*</span></th>
-            <th>Latex DRC (%) <span style="color: red;">*</span></th>
-            <th>No of Task Tap <span style="color: red;">*</span></th>
-            <th>No of Task UnTap <span style="color: red;">*</span></th>
-            <th>Remark Task UnTap</th>
-          </tr>
+            <tr *ngIf="isLoading">
+              <td colspan="13">
+                <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+                </ngx-skeleton-loader>
+              </td>
+            </tr>
 
-          <tr *ngIf="isLoading">
-            <td colspan="13">
-              <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-              </ngx-skeleton-loader>
-            </td>
-          </tr>
-
-          <ng-container *ngIf="!isLoading">
-          <tr *ngFor="let field of draftFilterProductions; let i = index">
-            <td>{{field.monthYear}}</td>
-            <td class="td">{{ field.fieldName }}</td>
-            <td class="td"><input type="number" name="cuplump" [(ngModel)]="field.cuplump" placeholder="0.00"
-                (input)="initialZeroCuplump(field.cuplump, i)" /></td>
-            <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="field.cuplumpDRC" placeholder="0" (change)="validateCuplumpDRC($event, i)" /></td>
-            <td class="td"><input type="number" name="latex" [(ngModel)]="field.latex" placeholder="0.00"
-                (input)="initialZeroLatex(field.latex, i)" /></td>
-            <td class="td"><input type="number" name="latexDRC" [(ngModel)]="field.latexDRC" placeholder="0" (change)="validateLatexDRC($event, i)" /></td>
-            <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="field.noTaskTap" placeholder="0"
-                (change)="taskTap(field.noTaskTap, field.totalTask, i)" /></td>
-            <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
-                [(ngModel)]="field.noTaskUntap" /></td>
-            <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="field.remarkUntap" /></td>
-          </tr>
-        </ng-container>
-        </table><br />
+            <ng-container *ngIf="!isLoading">
+              <tr *ngFor="let field of draftFilterProductions; let i = index">
+                <td>{{field.monthYear}}</td>
+                <td class="td">{{ field.fieldName }}</td>
+                <td class="td"><input type="number" name="cuplump" [(ngModel)]="field.cuplump" placeholder="0.00"
+                    (input)="initialZeroCuplump(field.cuplump, i)" /></td>
+                <td class="td"><input type="number" name="cuplumpDRC" [(ngModel)]="field.cuplumpDRC" placeholder="0"
+                    (change)="validateCuplumpDRC($event, i)" /></td>
+                <td class="td"><input type="number" name="latex" [(ngModel)]="field.latex" placeholder="0.00"
+                    (input)="initialZeroLatex(field.latex, i)" /></td>
+                <td class="td"><input type="number" name="latexDRC" [(ngModel)]="field.latexDRC" placeholder="0"
+                    (change)="validateLatexDRC($event, i)" /></td>
+                <td class="td"><input type="number" name="noTaskTap" [(ngModel)]="field.noTaskTap" placeholder="0"
+                    (change)="taskTap(field.noTaskTap, field.totalTask, i)" /></td>
+                <td class="td"><input type="number" disabled name="noTaskUntap" placeholder="0"
+                    [(ngModel)]="field.noTaskUntap" /></td>
+                <td class="td"><input type="text" name="remarkUntap" [(ngModel)]="field.remarkUntap" /></td>
+              </tr>
+            </ng-container>
+          </table>
+        </div><br />
 
         <div>
           <div *ngIf="draftFilterProductions.length != 0">
@@ -120,17 +125,16 @@
               Next &nbsp; <i class="fa fa-arrow-right"></i>
             </button> -->
 
-            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit" [disabled]="isSubmit">
+            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit"
+              [disabled]="isSubmit">
               Submit &nbsp; <i class="fa fa-plus"></i>
             </button>
-          </div>
 
-          <div *ngIf="draftFilterProductions.length != 0">
             <button style="float: right; margin-right: 10px; background-color:  #CAE00D;" class="btn-add"
               (click)="save()">
               Save &nbsp; <i class="fa fa-check"></i>
             </button>
-            
+
           </div>
         </div>
 
@@ -212,6 +216,4 @@
       </div>-->
     </div>
 
-  <app-spinner></app-spinner>
-
-
+    <app-spinner></app-spinner>

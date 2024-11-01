@@ -20,3 +20,9 @@ mat-select {
 mat-option {
   font-size: 12px;
 }
+
+@media only screen and (max-width: 768px) {
+  .box-container{
+    margin-top: -34px;
+  }
+}

@@ -32,3 +32,14 @@ mat-option {
   border-bottom: none;
   padding-right: 15px;
 }
+
+.column{
+  columns: 2;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .column{
+    columns: 1;
+  }
+}

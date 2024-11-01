@@ -112,3 +112,20 @@ th {
 .box-container {
   box-shadow: none;
 }
+
+@media only screen and (max-width: 768px) {
+  .box{
+    padding: 0;
+  }
+  .column{
+    height: 74px;
+    span{
+      font-size: 12px;
+    }
+  }
+
+  b{
+    font-size: 12px;
+  }
+
+}

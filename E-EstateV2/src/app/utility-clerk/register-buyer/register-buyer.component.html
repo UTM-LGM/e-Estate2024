@@ -19,6 +19,7 @@
 <h1>List of Buyer</h1>
 <div class="box-container">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Buyer" />
+  <div style="overflow-x: auto">
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
@@ -64,6 +65,7 @@
       </tr>
     </ng-container>
   </table>
+</div>
 
   <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
 

@@ -403,7 +403,6 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   openDialog(product: FieldProduction): void {
     const dialogRef = this.dialog.open(FieldProductionDetailComponent, {
-      height: '276px',
       data: { data: product },
     });
 

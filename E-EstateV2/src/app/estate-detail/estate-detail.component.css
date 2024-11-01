@@ -31,3 +31,14 @@ button:disabled{
   border-radius: 0px;
   cursor: default !important;
 }
+
+
+@media only screen and (max-width: 768px) {
+  .title2{
+    font-size: 12px;
+  }
+
+  .tittle{
+    font-size: 17px !important;
+  }
+}

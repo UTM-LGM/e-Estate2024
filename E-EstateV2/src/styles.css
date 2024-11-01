@@ -260,6 +260,7 @@ pagination-controls {
 
 .mat-drawer-content {
   overflow-x: hidden !important;
+  position: none !important;
 }
 
 label {
@@ -393,6 +394,13 @@ button:disabled {
 .mat-sidenav-content::-webkit-scrollbar-thumb {
   background: #43675f; 
 } */
+
+
+@media only screen and (max-width: 768px) {
+  .ngx-pagination{
+    text-align: end;
+  }
+}
 
 
 

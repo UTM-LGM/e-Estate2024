@@ -98,3 +98,31 @@ span {
   }
 }
 
+.box1{
+  columns: 2;
+}
+
+.title2{
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .box1{
+    columns: 1;
+    padding-bottom: 25px;
+  }
+
+  .title2{
+    font-size: 12px;
+  }
+
+  .tittle{
+    font-size: 17px !important;
+  }
+}
+
+
+
+

@@ -49,3 +49,11 @@ mat-select {
 mat-option {
   font-size: 12px;
 }
+
+
+@media only screen and (max-width: 768px) {
+  .column{
+    font-size: 12px;
+    height: 88px;
+  }
+}

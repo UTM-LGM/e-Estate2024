@@ -36,7 +36,8 @@
               "base64-js",
               "html2canvas",
               "jspdf",
-              "angularx-qrcode"
+              "angularx-qrcode",
+              "qrcode"
             ]
           },
           "configurations": {

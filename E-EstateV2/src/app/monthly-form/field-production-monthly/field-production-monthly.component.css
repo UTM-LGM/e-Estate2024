@@ -114,18 +114,20 @@ th {
 }
 
 @media only screen and (max-width: 768px) {
-  .box{
+  .box {
     padding: 0;
   }
-  .column{
+  
+  .column {
     height: 74px;
-    span{
-      font-size: 12px;
-    }
   }
-
-  b{
+  
+  .column span {
     font-size: 12px;
   }
 
+  b {
+    font-size: 12px;
+  }
 }
+

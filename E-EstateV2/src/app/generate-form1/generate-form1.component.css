@@ -94,20 +94,21 @@ div {
 
 .footer {
   width: 100%;
-  td{
-    text-align: start;
-  }
 }
 
+.footer td {
+  text-align: start;
+}
 
 @media only screen and (max-width: 768px) {
   .footer {
     margin: 0;
     width: 100%;
-    td{
-      text-align: start;
-      font-size: 8px;
-      padding: 0;
-    }
+  }
+  
+  .footer td {
+    text-align: start;
+    font-size: 8px;
+    padding: 0;
   }
 }

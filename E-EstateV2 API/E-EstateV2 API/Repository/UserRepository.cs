@@ -16,6 +16,7 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
 using System.ComponentModel.Design;
 using System.Numerics;
+using System.Text;
 
 
 namespace E_EstateV2_API.Repository
@@ -226,81 +227,67 @@ namespace E_EstateV2_API.Repository
         }
 
 
-        public async Task<String> LoginUser(Login login)
+        public async Task<string> LoginUser(Login login)
         {
             var user = await _usermanager.FindByNameAsync(login.username);
 
-            if (user != null && await _usermanager.CheckPasswordAsync(user, login.password) && user.isEmailVerified == true && user.isActive == true)
+            if (user != null && await _usermanager.CheckPasswordAsync(user, login.password)
+                && user.isEmailVerified == true && user.isActive == true)
             {
                 var role = await _usermanager.GetRolesAsync(user);
 
-                if(role.FirstOrDefault() != "Admin")
+                // Retrieve the secret key from configuration (ensure it's securely stored)
+                var base64Key = _config["Jwt:Key"];
+                var key = Convert.FromBase64String(base64Key); // Decode the Base64 string
+
+                var claims = new List<Claim>
                 {
-                    var estateIDClaim = (await _usermanager.GetClaimsAsync(user)).Where(x => x.Type == "EstateId").FirstOrDefault();
-                    string estateID = estateIDClaim.Value;
+                    new Claim("userName", user.UserName),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault()),
+                };
 
-                    var companyIDClaim = (await _usermanager.GetClaimsAsync(user)).Where(x => x.Type == "CompanyId").FirstOrDefault();
-                    string companyID = companyIDClaim.Value;
+                if (role.FirstOrDefault() != "Admin")
+                {
+                    var estateIDClaim = (await _usermanager.GetClaimsAsync(user))
+                        .FirstOrDefault(x => x.Type == "EstateId");
+                    string estateID = estateIDClaim?.Value;
 
-                    // Generate keyBytesx
-                    byte[] keyBytes = new byte[32];
-                    using (var rng = new RNGCryptoServiceProvider())
-                    {
-                        rng.GetBytes(keyBytes);
-                    }
+                    var companyIDClaim = (await _usermanager.GetClaimsAsync(user))
+                        .FirstOrDefault(x => x.Type == "CompanyId");
+                    string companyID = companyIDClaim?.Value;
 
-                    IdentityOptions _options = new();
-                    var tokenDesc = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                        new Claim("userName", user.UserName.ToString()),
-                        new Claim(_options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault()),
-                        new Claim("estateId", estateID),
-                        new Claim ("companyId", companyID)
-                        }),
-                        Expires = DateTime.UtcNow.AddHours(2),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
-                    };
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var securityToken = tokenHandler.CreateToken(tokenDesc);
-                    var token = tokenHandler.WriteToken(securityToken);
-                    return token;
+                    // Add additional claims
+                    claims.Add(new Claim("estateId", estateID));
+                    claims.Add(new Claim("companyId", companyID));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/trainingE-estate"));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/trainingE-estateApi"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/RRIMestet"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/RRIMestetApi"));
+
                 }
 
-                else
+                IdentityOptions _options = new();
+                var tokenDesc = new SecurityTokenDescriptor
                 {
-                    // Generate keyBytesx
-                    byte[] keyBytes = new byte[32];
-                    using (var rng = new RNGCryptoServiceProvider())
-                    {
-                        rng.GetBytes(keyBytes);
-                    }
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = role.FirstOrDefault() != "Admin"
+                        ? DateTime.UtcNow.AddHours(2)
+                        : DateTime.UtcNow.AddDays(1), // Adjust token expiry based on role
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
+                };
 
-                    IdentityOptions _options = new();
-                    var tokenDesc = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                        new Claim("userName", user.UserName.ToString()),
-                        new Claim(_options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault()),
-                        }),
-                        Expires = DateTime.UtcNow.AddDays(1),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
-                    };
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var securityToken = tokenHandler.CreateToken(tokenDesc);
-                    var token = tokenHandler.WriteToken(securityToken);
-                    return token;
-                }
-
-                
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityToken = tokenHandler.CreateToken(tokenDesc);
+                var token = tokenHandler.WriteToken(securityToken);
+                return token;
             }
             else
             {
-                return null;
+                return null; // Or throw an exception, depending on your error handling strategy
             }
         }
+
 
         public Task<object> CheckLicenseNo(string licenseNo)
         {

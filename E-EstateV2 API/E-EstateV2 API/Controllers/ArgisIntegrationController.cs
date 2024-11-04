@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]/[action]")]
     [ApiController]
     //[Authorize("ClientIdPolicy")]

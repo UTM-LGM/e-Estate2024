@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,47 +87,54 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 3;
 });
 
-//JWT Authentication
-byte[] key = (byte[])GenerateRandomKey();
 
-
-object GenerateRandomKey()
+builder.Services.AddAuthentication(options =>
 {
-    byte[] keyBytes = new byte[32];
-    using (var rng = new RNGCryptoServiceProvider())
-    {
-        rng.GetBytes(keyBytes);
-    }
-    return keyBytes;
-}
-
-
-builder.Services.AddAuthentication(AzureADDefaults.BearerAuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, jwtBearerOptions =>
-    {
-        jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    })
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAD"), AzureADDefaults.BearerAuthenticationScheme);
-
-
-// Add authorization policies
-builder.Services.AddAuthorization(config =>
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; // Default scheme for non-Azure clients
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer("CustomJwt",options =>
 {
-    /*config.AddPolicy("AdminPolicy", policyBuilder =>
-        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAD:Scopes" }));*/
-    config.AddPolicy("ClientIdPolicy", policy =>
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        policy.RequireClaim("client_id");
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["Jwt:Key"])), // Decode the key
+        ValidateIssuer = true,
+        ValidIssuer = "https://www5.lgm.gov.my/trainingE-estate",
+        ValidAudience = "https://api02.lgm.gov.my/trainingE-estateApi",
+        ValidateAudience = true,
+        //ValidIssuer = "https://www5.lgm.gov.my/RRIMestet",
+        //ValidAudience = "https://api02.lgm.gov.my/RRIMestetApi",
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+})
+.AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAD"), "AzureAD");
+
+// Optionally set up authorization policies for each scheme
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("AzureADPolicy", policy =>
+//    {
+//        policy.AuthenticationSchemes.Add("AzureAD");
+//        policy.RequireAuthenticatedUser();
+//    });
+
+//    options.AddPolicy("CustomJwtPolicy", policy =>
+//    {
+//        policy.AuthenticationSchemes.Add("CustomJwt");
+//        policy.RequireAuthenticatedUser();
+//    });
+//});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes("CustomJwt", "AzureAD")
+        .RequireAuthenticatedUser()
+        .Build()));
 });
+
 
 builder.Services.AddCors(options =>
 {
@@ -136,36 +145,35 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
 
-    // Include security requirement (client ID) in Swagger UI
-    c.AddSecurityDefinition("ClientIdSecurity", new OpenApiSecurityScheme
-    {
-        Type = SecuritySchemeType.ApiKey,
-        Name = "Client-ID",
-        In = ParameterLocation.Header,
-        Description = "Please enter your client ID.",
-    });
+//    // Include security requirement (client ID) in Swagger UI
+//    c.AddSecurityDefinition("ClientIdSecurity", new OpenApiSecurityScheme
+//    {
+//        Type = SecuritySchemeType.ApiKey,
+//        Name = "Client-ID",
+//        In = ParameterLocation.Header,
+//        Description = "Please enter your client ID.",
+//    });
 
-    // Apply security requirement (client ID) globally to all endpoints
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "ClientIdSecurity"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
-
+//    // Apply security requirement (client ID) globally to all endpoints
+//    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+//    {
+//        {
+//            new OpenApiSecurityScheme
+//            {
+//                Reference = new OpenApiReference
+//                {
+//                    Type = ReferenceType.SecurityScheme,
+//                    Id = "ClientIdSecurity"
+//                }
+//            },
+//            new string[] {}
+//        }
+//    });
+//});
 
 
 var app = builder.Build();
@@ -181,41 +189,41 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 app.UseStaticFiles();
 
 // Middleware to validate client ID in incoming requests
-app.Use(async (context, next) =>
-{
-    var endpoint = context.GetEndpoint();
+//app.Use(async (context, next) =>
+//{
+//    var endpoint = context.GetEndpoint();
 
-    // Only enforce client ID check if the endpoint has [Authorize] attribute
-    if (endpoint?.Metadata?.GetMetadata<AuthorizeAttribute>() != null)
-    {
-        string clientId = context.Request.Headers["Client-ID"].FirstOrDefault();
+//    // Only enforce client ID check if the endpoint has [Authorize] attribute
+//    if (endpoint?.Metadata?.GetMetadata<AuthorizeAttribute>() != null)
+//    {
+//        string clientId = context.Request.Headers["Client-ID"].FirstOrDefault();
 
-        var registeredClients = new Dictionary<string, string>
-        {
-            { "ceced9cc-f6b2-4cae-8b60-1c7b67dc70db", "" }, // No client secret required
-            // Add other registered clients...
-        };
+//        var registeredClients = new Dictionary<string, string>
+//        {
+//            { "ceced9cc-f6b2-4cae-8b60-1c7b67dc70db", "" }, // No client secret required
+//            // Add other registered clients...
+//        };
 
-        if (!string.IsNullOrEmpty(clientId) && registeredClients.ContainsKey(clientId))
-        {
-            // Add the client_id claim for the authorization policy to work
-            var claims = new List<Claim> { new Claim("client_id", clientId) };
-            var identity = new ClaimsIdentity(claims);
-            context.User.AddIdentity(identity);
+//        if (!string.IsNullOrEmpty(clientId) && registeredClients.ContainsKey(clientId))
+//        {
+//            // Add the client_id claim for the authorization policy to work
+//            var claims = new List<Claim> { new Claim("client_id", clientId) };
+//            var identity = new ClaimsIdentity(claims);
+//            context.User.AddIdentity(identity);
 
-            await next();
-        }
-        else
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsync("Unauthorized. Invalid client ID.");
-        }
-    }
-    else
-    {
-        await next();
-    }
-});
+//            await next();
+//        }
+//        else
+//        {
+//            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+//            await context.Response.WriteAsync("Unauthorized. Invalid client ID.");
+//        }
+//    }
+//    else
+//    {
+//        await next();
+//    }
+//});
 
 
 app.UseCors("CorsPolicy");

@@ -3,12 +3,14 @@ using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MimeKit.Text;
 
 namespace E_EstateV2_API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class EmailsController : ControllerBase

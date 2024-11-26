@@ -12,5 +12,7 @@
         public string fullName { get; set; }
         public string licenseNo { get; set; }
         public string position { get; set; }
+        public bool isActive { get; set; }
+        public bool isEmailVerified { get; set; }
     }
 }

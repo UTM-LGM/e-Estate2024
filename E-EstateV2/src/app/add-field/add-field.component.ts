@@ -225,13 +225,20 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
 
   onSubmit() {
-    if (this.field.fieldName == '' || (this.field.remark == null && this.rubberArea == 'no') || this.field.rubberArea == null || this.field.dateOpenTapping == null) {
+    if (
+      !this.field.fieldName ||  // Checks if fieldName is empty, null, or undefined
+      !this.field.isMature && this.field.isMature !== false ||  // Checks if isMature is undefined or false
+      !this.field.fieldStatusId ||  // Checks if fieldStatusId is undefined, null, or empty
+      (!this.field.remark && this.rubberArea === 'no') ||  // Checks if remark is undefined or empty and rubberArea is 'no'
+      !this.field.rubberArea // Checks if rubberArea is undefined or empty
+    ) {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
       });
-      this.isSubmit = false;
+      this.isSubmit = false;    
     } else {
+      this.isSubmit = true
       this.spinnerService.requestStarted();
       this.field.estateId = this.estate.id;
       this.field.isActive = true;

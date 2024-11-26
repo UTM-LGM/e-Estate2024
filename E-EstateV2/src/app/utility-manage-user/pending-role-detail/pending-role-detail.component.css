@@ -29,3 +29,8 @@ mat-select {
   .btn-del{
     padding: 7px 13px;
   }
+
+  .box-container{
+    max-height: 500px;
+    overflow: auto;
+  }

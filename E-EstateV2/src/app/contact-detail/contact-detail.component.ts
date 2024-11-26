@@ -29,7 +29,7 @@ export class ContactDetailComponent implements OnInit {
     private companyContactService: CompanyContactService,
     private estateContactService: EstateContactService,
     private sharedService: SharedService,
-    private spinnerService:SpinnerService,
+    private spinnerService: SpinnerService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.companyContact = data.contact;
     this.estateContact = data.contact
@@ -82,7 +82,6 @@ export class ContactDetailComponent implements OnInit {
   }
 
   addEstateContact() {
-    this.spinnerService.requestStarted()
     if (this.estateContact.name == '') {
       swal.fire({
         icon: 'error',
@@ -90,6 +89,7 @@ export class ContactDetailComponent implements OnInit {
         text: 'Please fill up the form',
       });
     } else {
+      this.spinnerService.requestStarted()
       this.estateContact.createdBy = this.sharedService.userId
       this.estateContact.estateId = this.estateId
       this.estateContact.isActive = true
@@ -156,10 +156,10 @@ export class ContactDetailComponent implements OnInit {
       )
   }
 
-  validatePhoneNo(phoneNo:string) {
+  validatePhoneNo(phoneNo: string) {
     const phonePattern = /^\d{3}-\d+$/;
     const companyPhone = /^\d{2}-\d+$/;
-    
+
     if (!phonePattern.test(phoneNo) && !companyPhone.test(phoneNo)) {
       swal.fire({
         icon: 'error',
@@ -169,5 +169,5 @@ export class ContactDetailComponent implements OnInit {
       this.companyContact.phoneNo = '';
     }
   }
-  
+
 }

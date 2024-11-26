@@ -26,3 +26,8 @@ mat-option {
     margin-top: -34px;
   }
 }
+
+.box-container{
+  max-height: 500px;
+  overflow: auto;
+}

@@ -11,9 +11,6 @@ import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol';
 import { SpinnerService } from '../_services/spinner.service';
 
-
-
-
 @Component({
   selector: 'app-polygon',
   templateUrl: './polygon.component.html',
@@ -24,6 +21,9 @@ export class PolygonComponent implements OnInit {
   @Input() location!: [number, number];
 
   licenseNo = 'B/01/15730'
+
+  // licenseNo = 'B/08/15438'
+
   // licenseNo = 'C/01/15701'
 
 
@@ -41,6 +41,9 @@ export class PolygonComponent implements OnInit {
     },
 
   };
+
+  polygonArea:number [] = []
+  polygonTotalArea = 0
 
   constructor(
     private rrimGeoRubberService: RrimgeorubberIntegrationService,
@@ -88,17 +91,22 @@ export class PolygonComponent implements OnInit {
         Response => {
           var features = Response.features;
 
+          console.log(features)
+
           features.forEach((feature: any) => {
             let geometry = feature.geometry;
+            let properties = feature.properties
             // Check if the geometry is of type 'Polygon' or 'MultiPolygon'
             if (geometry.type === 'Polygon') {
               geometry.coordinates.forEach((coordinateSet: any) => {
                 this.addLayerGeojson(coordinateSet);
+                this.polygonArea.push(properties.hectarage_of_marked_polygon);
               });
             } else if (geometry.type === 'MultiPolygon') {
               geometry.coordinates.forEach((polygonCoordinates: any) => {
                 polygonCoordinates.forEach((coordinateSet: any) => {
                   this.addLayerGeojson(coordinateSet);
+                  this.polygonArea.push(properties.hectarage_of_marked_polygon);
                 });
               });
             }
@@ -106,6 +114,8 @@ export class PolygonComponent implements OnInit {
           });
 
           this.initializeMap()
+
+          this.polygonTotalArea = this.polygonArea.reduce((acc, currentValue) => acc + currentValue, 0);
 
           this.view.when(() => {
             if (this.graphicLayer.graphics.length > 0) {
@@ -163,6 +173,18 @@ export class PolygonComponent implements OnInit {
         width: 2
       })
     });
+  }
+
+  zoomIn() {
+    if (this.view) {
+      this.view.zoom += 1; // Zoom in
+    }
+  }
+  
+  zoomOut() {
+    if (this.view) {
+      this.view.zoom -= 1; // Zoom out
+    }
   }
 
 }

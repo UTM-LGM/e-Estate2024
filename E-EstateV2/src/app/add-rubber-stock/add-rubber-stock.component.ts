@@ -78,8 +78,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
     private rubberStockService: RubberStockService,
-    private subscriptionService:SubscriptionService,
-    private spinnerService:SpinnerService,
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.estate = data.estate;
@@ -94,21 +94,21 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.previousDate = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')?.toUpperCase()
   }
 
-  chooseRubberType(){
+  chooseRubberType() {
     this.stock.previousStock = 0
     this.getAllProduction()
     this.getSales()
     this.getStock()
-    
+
   }
 
-  calculateStockCuplump(){
-    var stockCuplump = ((this.totalCuplumpDry + this.stock.previousStock) - this.stock.totalSale)-1
+  calculateStockCuplump() {
+    var stockCuplump = ((this.totalCuplumpDry + this.stock.previousStock) - this.stock.totalSale) - 1
     this.stock.currentStock = stockCuplump
   }
 
-  calculateStockLatx(){
-    var stockLatex = ((this.totalLatexDry + this.stock.previousStock)- this.stock.totalSale)-1
+  calculateStockLatx() {
+    var stockLatex = ((this.totalLatexDry + this.stock.previousStock) - this.stock.totalSale) - 1
     this.stock.currentStock = stockLatex
   }
 
@@ -122,7 +122,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
             this.stock.previousStock = latestItem.currentStock;
             this.isPreviousStock = true
-            
+
           }
         }
       )
@@ -151,43 +151,70 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   addStock() {
-    const existingMonth = this.allRubberStock.filter(e=>e.monthYear == this.date.toUpperCase() && e.rubberType == this.stock.rubberType && e.estateId == this.sharedService.estateId)
-    if(existingMonth.length != 0 ){
+    const existingMonth = this.allRubberStock.filter(e =>
+      e.monthYear == this.date.toUpperCase() &&
+      e.rubberType == this.stock.rubberType &&
+      e.estateId == this.sharedService.estateId
+    );
+
+    if (existingMonth.length != 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Month already exist',
+        text: 'Month already exists',
       });
-    }else{
-      this.spinnerService.requestStarted()
-      this.stock.estateId = this.estate.id
-      this.stock.monthYear = this.date
-      this.stock.createdBy = this.sharedService.userId
-      this.stock.isActive = true
-      this.stock.weightLoss = parseFloat(this.stock.weightLoss.toFixed(2))
-      if(this.stock.rubberType == 'CUPLUMP'){
-        this.stock.totalProduction = this.totalCuplumpDry
+    } else if (this.stock.rubberType == null) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please fill up the form',
+      });
+    } else {
+      this.spinnerService.requestStarted();
+      this.stock.estateId = this.estate.id;
+      this.stock.monthYear = this.date;
+      this.stock.createdBy = this.sharedService.userId;
+      this.stock.isActive = true;
+
+      // Check if weightLoss has a valid number before calling toFixed
+      if (this.stock.weightLoss != null && !isNaN(this.stock.weightLoss)) {
+        this.stock.weightLoss = parseFloat(this.stock.weightLoss.toFixed(2));
+      } else {
+        this.stock.weightLoss = 0; // Set a default value if it's undefined or not a number
       }
-      else if(this.stock.rubberType == 'LATEX'){
-        this.stock.totalProduction = this.totalLatexDry
+
+      if (this.stock.rubberType == 'CUPLUMP') {
+        this.stock.totalProduction = this.totalCuplumpDry;
+      } else if (this.stock.rubberType == 'LATEX') {
+        this.stock.totalProduction = this.totalLatexDry;
       }
-      this.rubberStockService.addRubberStock(this.stock)
-        .subscribe(
-          Response => {
-            this.spinnerService.requestEnded()
-            swal.fire({
-              title: 'Done!',
-              text: 'Stock successfully submitted!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.dialogRef.close()
-          }
-        )
+
+      this.rubberStockService.addRubberStock(this.stock).subscribe({
+        next: (response) => {
+          this.spinnerService.requestEnded();
+          swal.fire({
+            title: 'Done!',
+            text: 'Stock successfully submitted!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+          this.dialogRef.close();
+        },
+        error: (err) => {
+          this.spinnerService.requestEnded();
+          swal.fire({
+            title: 'Error!',
+            text: 'Please fill up the form!',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }
+      });
     }
-    // 
   }
+
 
   getAllProduction() {
     const getAllProduction = this.fieldProductionService.getProduction()
@@ -195,11 +222,11 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         Response => {
           const productions = Response
 
-          this.filterProductions = productions.filter(e =>e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear == this.date.toUpperCase())
-          if(this.stock.rubberType == 'CUPLUMP'){
+          this.filterProductions = productions.filter(e => e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear == this.date.toUpperCase())
+          if (this.stock.rubberType == 'CUPLUMP') {
             this.TotalCuplump()
           }
-          else if(this.stock.rubberType == 'LATEX'){
+          else if (this.stock.rubberType == 'LATEX') {
             this.TotalLatex()
           }
           // this.calculateTotal()
@@ -234,16 +261,16 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   calculateWaterDepletion() {
-    if(this.stock.rubberType == 'CUPLUMP'){
+    if (this.stock.rubberType == 'CUPLUMP') {
       const production = this.totalCuplumpDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
-      this.stock.weightLoss = ((production - stock) / production) * 100 
-    }else if(this.stock.rubberType == 'LATEX'){
+      this.stock.weightLoss = ((production - stock) / production) * 100
+    } else if (this.stock.rubberType == 'LATEX') {
       const production = this.totalLatexDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
-    if(this.stock.weightLoss <= 0){
+    if (this.stock.weightLoss <= 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -252,7 +279,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       this.stock.weightLoss = 0
       this.stock.currentStock = 0
     }
-    else if(this.stock.weightLoss >= 15){
+    else if (this.stock.weightLoss >= 15) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -272,7 +299,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           const date = new Date(this.date)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive ==true;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() + 1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
           });
 
           this.calculateSale()

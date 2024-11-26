@@ -158,6 +158,7 @@ import { FieldGrantAttachmentComponent } from './field-grant-attachment/field-gr
 import { EditHierarchyComponent } from './utility/announcement/edit-hierarchy/edit-hierarchy.component';
 import { EditBuyerComponent } from './utility-clerk/edit-buyer/edit-buyer.component';
 import { PolygonComponent } from './polygon/polygon.component';
+import { VerifyEmailUserComponent } from './utility-manage-user/verify-email-user/verify-email-user.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -288,6 +289,7 @@ register()
     EditHierarchyComponent,
     EditBuyerComponent,
     PolygonComponent,
+    VerifyEmailUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -350,7 +352,8 @@ register()
       {
         interactionType: InteractionType.Redirect, // MSAL Guard Configuration
         authRequest: {
-          scopes: ["api://e-EstateAPI/.default"],
+          // scopes: ["api://e-EstateAPI/.default"],
+          scopes: ["api://20a4baea-c344-4683-bf3f-f201302aeb41/Admin.Read"]
           // scopes: ["https://lgmb2cgovmy.onmicrosoft.com/e-EstateB2CApi/Guest.Read"]
 
         },

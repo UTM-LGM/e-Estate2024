@@ -88,7 +88,6 @@ export class ManageUserComponent implements OnInit, OnDestroy {
   openDialog(user:User){
     const dialogRef = this.dialog.open(PendingRoleDetailComponent, {
       data : {data:user},
-      width: '40%'
     });
     dialogRef.afterClosed()
       .subscribe(

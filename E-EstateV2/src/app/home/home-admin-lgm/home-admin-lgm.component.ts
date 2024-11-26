@@ -5,6 +5,7 @@ import { Company } from 'src/app/_interface/company';
 import { Estate } from 'src/app/_interface/estate';
 import { Field } from 'src/app/_interface/field';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
+import { EstateDetailService } from 'src/app/_services/estate-detail.service';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
@@ -72,19 +73,21 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
     private fieldService: FieldService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private estateDetailService:EstateDetailService
 
   ) { }
 
   ngOnInit() {
     this.getCompany()
+    this.getField()
     this.getEstate()
     this.getProduction()
     this.yearNow = new Date().getFullYear()
     this.getWorker()
     this.getWorkerShortage()
-    this.getField()
     this.getCostInformation()
+    this.getEstateDetails()
   }
 
   ngAfterViewInit() {
@@ -101,7 +104,16 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         }
       )
     this.subscriptionService.add(getCostInformation);
+  }
 
+  getEstateDetails(){
+    const getEstateDetails = this.estateDetailService.getEstateDetails()
+    .subscribe(
+      Response =>{
+        this.totalRegistered = Response.length
+        console.log(this.totalRegistered)
+      }
+    )
   }
 
   getField() {
@@ -115,7 +127,6 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         }
       )
     this.subscriptionService.add(getCurrentField);
-
   }
 
   getWorkerShortage() {
@@ -216,8 +227,6 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         Response => {
           this.filterEstates = Response
           this.totalEstate = this.filterEstates.length
-          let totalValidFieldsCount = 0;
-
           this.filterEstates.forEach(estate => {
             // Filter fields by matching licenseNo and ensuring the area is not null and greater than 0
             this.validFields = this.fields.filter((field: any) =>
@@ -226,17 +235,11 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
               !field.fieldStatus?.toLowerCase().includes('abandoned') &&
               !field.fieldStatus?.toLowerCase().includes('government') &&
               !field.fieldStatus?.toLowerCase().includes('conversion to other crop'))
-
-            if (this.validFields.length > 0) {
-              this.totalRegistered ++
-            } 
           });
-
           this.isLoadingEstate = false
         }
       )
     this.subscriptionService.add(getAllEstate);
-
   }
 
   getProduction() {

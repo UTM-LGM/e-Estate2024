@@ -128,7 +128,9 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
             };
             this.productivity.push(product);
           } else {
+            const targetYear = new Date().getFullYear();
             this.productivityByYear = this.groupByYear(this.productivity);
+            this.productivityByYear = this.productivityByYear.filter( (x:any) =>x.year == targetYear )
             // this.createProductivityChart(); // Call chart creation after data is processed
           }
           this.isLoadingProduction = false;

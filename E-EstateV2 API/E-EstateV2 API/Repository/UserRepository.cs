@@ -139,6 +139,8 @@ namespace E_EstateV2_API.Repository
                 existingUser.position = user.position;
                 existingUser.UserName = user.userName;
                 existingUser.Email = user.email;
+                existingUser.isActive = user.isActive;
+                existingUser.isEmailVerified = user.isEmailVerified;
                 await _usermanager.UpdateAsync(existingUser);
 
                 if (licenseNoChanged)
@@ -259,10 +261,14 @@ namespace E_EstateV2_API.Repository
                     // Add additional claims
                     claims.Add(new Claim("estateId", estateID));
                     claims.Add(new Claim("companyId", companyID));
-                    claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/trainingE-estate"));
-                    claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/trainingE-estateApi"));
-                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/RRIMestet"));
-                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/RRIMestetApi"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/trainingE-estate"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/trainingE-estateApi"));
+
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://www5.lgm.gov.my/RRIMestet"));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://api02.lgm.gov.my/RRIMestetApi"));
+
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://lgm20.lgm.gov.my/RRIMestet"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://lgm20.lgm.gov.my/RRIMestetApi"));
 
                 }
 
@@ -331,14 +337,14 @@ namespace E_EstateV2_API.Repository
             }
 
             // Check if the old password matches before changing
-            bool isOldPasswordCorrect = await CheckOldPassword(user.id, user.OldPassword.ToLower());
+            bool isOldPasswordCorrect = await CheckOldPassword(user.id, user.OldPassword);
             if (!isOldPasswordCorrect)
             {
                 throw new ApplicationException("Old password is incorrect.");
             }
 
             // Change the password
-            var result = await _usermanager.ChangePasswordAsync(applicationUser, user.OldPassword.ToLower(), user.NewPassword.ToLower());
+            var result = await _usermanager.ChangePasswordAsync(applicationUser, user.OldPassword, user.NewPassword);
 
             if (result.Succeeded)
             {
@@ -506,9 +512,9 @@ namespace E_EstateV2_API.Repository
                 "<br>" +
                 "Thank you for registering with RRIMestet. " +
                 "Your account have been verified ! " +
-                //"Please click <a href = 'https://www5.lgm.gov.my/RRIMestet" + "'>Login RRIMestet</a><br>" +
+                "Please click <a href = 'https://www5.lgm.gov.my/RRIMestet" + "'>Login RRIMestet</a><br>" +
                 //"Please click <a href = 'https://lgm20.lgm.gov.my/RRIMestet" + "'>Login RRIMestet</a><br>" +
-                "Please click <a href = 'https://www5.lgm.gov.my/trainingE-estate" + "'>Login RRIMestet</a><br>" +
+                //"Please click <a href = 'https://www5.lgm.gov.my/trainingE-estate" + "'>Login RRIMestet</a><br>" +
                 "<br>" +
                 "Thank you," +
                 "<br>" +
@@ -560,7 +566,7 @@ namespace E_EstateV2_API.Repository
                     <p>
                         To whom it may concern,<br/><br/>
                         Your account has been deactivated due to an existing account found! 
-                        Please click <a href='https://www5.lgm.gov.my/trainingE-estate'>RRIMestet</a> 
+                        Please click <a href='https://www5.lgm.gov.my/RRIMestet'>RRIMestet</a> 
                         and click on 'Contact Us' for any enquiries.<br/><br/>
                         Thank you,<br/>
                         RRIMestet Admin<br/><br/>

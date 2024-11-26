@@ -862,7 +862,7 @@ namespace E_EstateV2_API.Repository
             DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
                                           .AddMonths(1).AddDays(-1);
 
-            var sales = await _context.rubberSales.Where(x=>x.paymentStatusId == 3 && x.saleDateTime >= startDate && x.saleDateTime <= endDate).Select(x => new DTO_RubberSale
+            var sales = await _context.rubberSales.Where(x=>x.paymentStatusId == 3 && x.saleDateTime >= startDate && x.saleDateTime <= endDate || x.letterOfConsentNo == "").Select(x => new DTO_RubberSale
             {
                 id = x.Id,
                 saleDateTime = x.saleDateTime,

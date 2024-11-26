@@ -39,18 +39,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.getRole()
+    // this.getRole()
   }
 
-  getRole() {
-    const getRole = this.roleService.getRole()
-      .subscribe(
-        Response => {
-          this.roles = Response;
-        }
-      )
-    this.subscriptionService.add(getRole);
-  }
+  // getRole() {
+  //   const getRole = this.roleService.getRole()
+  //     .subscribe(
+  //       Response => {
+  //         this.roles = Response;
+  //       }
+  //     )
+  //   this.subscriptionService.add(getRole);
+  // }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddRoleComponent, {

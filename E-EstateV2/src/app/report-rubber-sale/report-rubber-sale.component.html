@@ -19,6 +19,21 @@
     </button>
   </div><br /><br />
 
+  <div *ngIf="radioButton">
+    <label>Cost Type : </label>
+    <label>
+      <input type="radio" name="all" value="all" [(ngModel)]="category" (change)="OnRadioChange()"> All
+    </label>
+    <label>
+      <input type="radio" name="history" value="history" [(ngModel)]="category" (change)="OnRadioChange()"> 
+      History
+    </label>
+    <label>
+      <input type="radio" name="complete" value="complete" [(ngModel)]="category" (change)="OnRadioChange()"> 
+      Complete
+    </label>
+  </div>
+
   <div style="overflow-x: auto">
     <table style="width: 100%">
       <thead>
@@ -62,10 +77,10 @@
             <td>{{sale.unitPrice || null | number : "1.2-2"}}</td>
             <td>{{sale.total || null | number : "1.2-2"}}</td>
             <td>{{sale.remark}}</td>
-            <td
-              [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">
+            <td *ngIf="sale.letterOfConsentNo" [ngClass]="{ 'complete-row': sale.paymentStatusId === 3, 'in-progress-row': sale.paymentStatusId !== 3 }">
               {{ sale.paymentStatusId === 3 ? 'Complete' : 'In Process' }}
             </td>
+            <td *ngIf="!sale.letterOfConsentNo">History</td>
             <td><button class="btn-update" (click)="printReceipt(sale)" title="Print Receipt">
                 <i class="fa fa-print"></i>
               </button> &nbsp;

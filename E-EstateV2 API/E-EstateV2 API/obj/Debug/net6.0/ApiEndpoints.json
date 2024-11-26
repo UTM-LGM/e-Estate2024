@@ -1144,6 +1144,16 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
+    "Method": "GetEstateDetails",
+    "RelativePath": "api/EstateDetails/GetEstateDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
     "Method": "UpdateEstateDetail",
     "RelativePath": "api/EstateDetails/UpdateEstateDetail",
     "HttpMethod": "PUT",

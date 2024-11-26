@@ -1,5 +1,15 @@
 <div class="box-container">
+    <div style="padding-bottom: 12px;">
+        <label>Polygon Total Area (Ha) : {{polygonTotalArea | number:'1.2-2' }}</label><br />
+    </div>
+
+    <div class="button">
+        <button (click)="zoomIn()"><i class="fa fa-search-plus"></i></button>
+        <button (click)="zoomOut()"><i class="fa fa-search-minus"></i></button>
+    </div>
+
     <div id="viewDiv" style="height: 500px; width: 100%;"></div>
+
 </div>
 
 <app-spinner></app-spinner>

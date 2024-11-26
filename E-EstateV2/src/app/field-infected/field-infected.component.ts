@@ -172,10 +172,10 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
     } else {
+      this.isSubmit = true
       this.spinnerService.requestStarted()
       this.fieldInfected.isActive = true;
       this.fieldInfected.createdBy = this.sharedService.userId;
-      this.isSubmit = true;
       this.fieldInfectedService.addFieldInfected(this.fieldInfected)
         .subscribe({
           next: (response) => {
@@ -188,6 +188,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
             });
             this.fieldInfected = {};
             this.ngOnInit();  // Reinitialize the component state if needed
+            this.isSubmit = false
             this.spinnerService.requestEnded();
           },
           error: (error) => {
@@ -199,7 +200,6 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
             });
           }
         });
-      this.isSubmit = false;
     }
   }
 
@@ -303,6 +303,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         text: 'Percentage should be greater than 50% for HIGH severity level.'
       });
       this.fieldInfected.areaInfectedPercentage = null
+      this.fieldInfected.areaInfected = null
     }
   }
 
@@ -315,6 +316,8 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         text: 'Percentage should be between 16% - 49% for MEDIUM severity level.'
       });
       this.fieldInfected.areaInfectedPercentage = null
+      this.fieldInfected.areaInfected = null
+
     }
 
   }
@@ -328,6 +331,8 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
         text: 'Percentage should be between 1% - 15% for LOW severity level.'
       });
       this.fieldInfected.areaInfectedPercentage = null
+      this.fieldInfected.areaInfected = null
+
 
     }
   }

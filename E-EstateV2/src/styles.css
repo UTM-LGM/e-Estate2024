@@ -396,11 +396,6 @@ button:disabled {
 } */
 
 
-@media only screen and (max-width: 768px) {
-  .ngx-pagination{
-    text-align: end;
-  }
-}
 
 
 

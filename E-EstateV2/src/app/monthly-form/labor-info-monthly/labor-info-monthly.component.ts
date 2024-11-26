@@ -261,6 +261,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
               text: 'Please fil up the form',
               icon: 'error'
             });
+            this.isSubmit = false
           }
         });
   }

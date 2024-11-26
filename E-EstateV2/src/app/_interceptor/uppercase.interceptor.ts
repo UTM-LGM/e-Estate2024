@@ -17,7 +17,8 @@ export class UpperCaseInterceptor implements HttpInterceptor {
        request.url.includes('/AddUserRole') ||
        request.url.includes('/AddUser') ||
        request.url.includes('/Register') ||
-       request.url.includes('/ResetPassword'))) {
+       request.url.includes('/ResetPassword') ||
+       request.url.includes('/ChangePassword'))) {
     return next.handle(request);
   }
 

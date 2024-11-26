@@ -100,11 +100,17 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["Jwt:Key"])), // Decode the key
         ValidateIssuer = true,
-        ValidIssuer = "https://www5.lgm.gov.my/trainingE-estate",
-        ValidAudience = "https://api02.lgm.gov.my/trainingE-estateApi",
         ValidateAudience = true,
-        //ValidIssuer = "https://www5.lgm.gov.my/RRIMestet",
-        //ValidAudience = "https://api02.lgm.gov.my/RRIMestetApi",
+
+        //ValidIssuer = "https://www5.lgm.gov.my/trainingE-estate",
+        //ValidAudience = "https://api02.lgm.gov.my/trainingE-estateApi",
+
+        //ValidIssuer = "https://lgm20.lgm.gov.my/RRIMestet",
+        //ValidAudience = "https://lgm20.lgm.gov.my/RRIMestetApi",
+
+        ValidIssuer = "https://www5.lgm.gov.my/RRIMestet",
+        ValidAudience = "https://api02.lgm.gov.my/RRIMestetApi",
+
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };

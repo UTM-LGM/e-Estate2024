@@ -1,7 +1,9 @@
 <div class="box-container">  
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Pending User Role">
-        <app-pending-role></app-pending-role>
+        <ng-template matTabContent>
+          <app-pending-role></app-pending-role>
+        </ng-template>
       </mat-tab>
         <mat-tab label="Manage Role">
           <ng-template matTabContent>
@@ -11,6 +13,11 @@
         <mat-tab label="User List">
           <ng-template matTabContent>
             <app-user-list></app-user-list>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="Verify Email">
+          <ng-template matTabContent>
+            <app-verify-email-user></app-verify-email-user>
           </ng-template>
         </mat-tab>
     </mat-tab-group>

@@ -26,8 +26,14 @@ export class ReportRubberSaleComponent implements OnInit {
   isLoading = true
 
   filterSales: RubberSale[] = []
+  sales:RubberSale[]=[]
 
   estate: any = {} as any
+  radioButton = false
+
+  category = 'all'
+
+
 
   sortableColumns = [
     { columnName: 'date', displayText: 'Date' },
@@ -77,6 +83,7 @@ export class ReportRubberSaleComponent implements OnInit {
   monthChange() {
     this.isLoading = true
     this.getSale()
+    this.radioButton = true
   }
 
   chageStartMonth() {
@@ -90,7 +97,8 @@ export class ReportRubberSaleComponent implements OnInit {
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true)
+            this.sales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true)
+            this.filterSales = this.sales
             this.isLoading = false
           })
       this.subscriptionService.add(getSale);
@@ -147,9 +155,21 @@ export class ReportRubberSaleComponent implements OnInit {
     XLSX.writeFile(wb, formattedFileName);
   }
 
-  printReceipt(sale:RubberSale){
+  printReceipt(sale: RubberSale) {
     const url = 'generate-receipt/' + sale.id;
     window.open(url, '_blank');
+  }
+
+
+  OnRadioChange() {
+    if (this.category === 'all') {
+      this.filterSales = this.sales
+    } else if (this.category === 'history') {
+      this.filterSales = this.sales.filter(x=>x.letterOfConsentNo == '')
+    } else if (this.category === 'complete') {
+      this.filterSales = this.sales.filter(x => x.letterOfConsentNo != '' );
+    } 
+    
   }
 
 

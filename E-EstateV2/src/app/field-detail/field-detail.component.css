@@ -73,3 +73,9 @@ mat-option {
     color: white;
     font-size: 11px;
 }
+
+@media only screen and (max-width: 768px) {
+  .box{
+    justify-content: unset;
+  }
+}

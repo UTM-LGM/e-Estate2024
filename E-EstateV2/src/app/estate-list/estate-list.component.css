@@ -24,3 +24,13 @@ td {
 .list {
   height: 148px;
 }
+
+
+@media only screen and (max-width: 768px) {
+  .list{
+    height: unset;
+  }
+}
+
+
+

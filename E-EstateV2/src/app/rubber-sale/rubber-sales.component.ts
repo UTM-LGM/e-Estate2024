@@ -84,7 +84,7 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true && e.paymentStatusId != 3)
+            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true && e.paymentStatusId != 3 && e.letterOfConsentNo != '')
             this.isLoading = false
           })
       this.subscriptionService.add(getSale);

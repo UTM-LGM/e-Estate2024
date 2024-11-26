@@ -8,5 +8,6 @@ namespace E_EstateV2_API.IRepository
         Task<DTO_EstateDetail> GetEstateDetailbyEstateId(int estateId);
         Task<EstateDetail> AddEstateDetail(EstateDetail estate);
         Task<EstateDetail> UpdateEstateDetail(EstateDetail estate);
+        Task<List<DTO_EstateDetail>> GetEstateDetails();
     }
 }

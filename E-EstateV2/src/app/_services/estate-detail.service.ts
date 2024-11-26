@@ -24,5 +24,9 @@ export class EstateDetailService {
   updateEstateDetail(estate:EstateDetail):Observable<EstateDetail>{
     return this.http.put<EstateDetail>(this.baseUrl + '/estateDetails/UpdateEstateDetail', estate)
   }
+
+  getEstateDetails():Observable<EstateDetail[]>{
+    return this.http.get<EstateDetail[]>(this.baseUrl + '/estateDetails/GetEstateDetails')
+  }
   
 }

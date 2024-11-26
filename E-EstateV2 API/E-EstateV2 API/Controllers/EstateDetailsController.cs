@@ -27,6 +27,13 @@ namespace E_EstateV2_API.Controllers
             return Ok(estate);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetEstateDetails()
+        {
+            var estateDetails = await _estateRepository.GetEstateDetails();
+            return Ok(estateDetails);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddEstateDetail([FromBody] EstateDetail estate)
         {

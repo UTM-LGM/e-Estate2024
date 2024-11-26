@@ -303,7 +303,6 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response: any) => {
             const fieldGrantIds = response.fieldGrantIds;
-            console.log(fieldGrantIds, this.selectedFiles, this.sharedService.userId)
             if (this.selectedFiles.length > 0) {
               this.fieldService.addFieldAttachments(fieldGrantIds, this.selectedFiles, this.sharedService.userId).subscribe({
                 next: () => {

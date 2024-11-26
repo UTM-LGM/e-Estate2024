@@ -101,7 +101,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
     .subscribe(
       Response =>{
-        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area'))
+        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area') && x.isActive == true)
         this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
         this.isLoadingTappedArea = false
       }

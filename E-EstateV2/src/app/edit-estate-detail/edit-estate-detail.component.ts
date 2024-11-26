@@ -152,17 +152,21 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
   }
 
   update() {
-    this.spinnerService.requestStarted()
+    this.spinnerService.requestStarted();
+  
     if (this.estateDetail.id == undefined) {
-      this.estateDetail.estateId = this.estate.id
-      this.estateDetail.grantNo = this.estateDetail.grantNo
-      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
-      this.estateDetail.createdBy = this.sharedService.userId.toString()
-      this.estateDetail.createdDate = new Date()
+      // Preparing data for a new estate detail
+      this.estateDetail.estateId = this.estate.id;
+      this.estateDetail.grantNo = this.estateDetail.grantNo;
+      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
+      this.estateDetail.createdBy = this.sharedService.userId.toString();
+      this.estateDetail.createdDate = new Date();
+  
+      // Calling service to add estate detail
       this.estateDetailService.addEstateDetail(this.estateDetail)
-        .subscribe(
-          Response => {
-            this.spinnerService.requestEnded()
+        .subscribe({
+          next: (response) => {
+            this.spinnerService.requestEnded();
             swal.fire({
               title: 'Done!',
               text: 'Estate successfully updated!',
@@ -170,19 +174,33 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
               showConfirmButton: false,
               timer: 1000
             });
-            this.dialog.close()
-          })
+            this.dialog.close();
+          },
+          error: (err) => {
+            this.spinnerService.requestEnded();
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please fill up the form',
+            });
+          }
+        });
+  
     } else {
-      this.estateDetail.grantNo = this.estateDetail.grantNo
-      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId
-      this.estateDetail.updatedBy = this.sharedService.userId.toString()
-      this.estateDetail.updatedDate = new Date()
-      const { plantingMaterial, ...newObj } = this.estateDetail
-      this.filteredEstate = newObj
+      // Preparing data for updating estate detail
+      this.estateDetail.grantNo = this.estateDetail.grantNo;
+      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
+      this.estateDetail.updatedBy = this.sharedService.userId.toString();
+      this.estateDetail.updatedDate = new Date();
+  
+      const { plantingMaterial, ...newObj } = this.estateDetail;
+      this.filteredEstate = newObj;
+  
+      // Calling service to update estate detail
       this.estateDetailService.updateEstateDetail(this.filteredEstate)
-        .subscribe(
-          Response => {
-            this.spinnerService.requestEnded()
+        .subscribe({
+          next: (response) => {
+            this.spinnerService.requestEnded();
             swal.fire({
               title: 'Done!',
               text: 'Estate successfully updated!',
@@ -190,10 +208,20 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
               showConfirmButton: false,
               timer: 1000
             });
-            this.dialog.close()
-          })
+            this.dialog.close();
+          },
+          error: (err) => {
+            this.spinnerService.requestEnded();
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please fill up the form',
+            });
+          }
+        });
     }
   }
+  
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();

@@ -28,6 +28,16 @@ namespace E_EstateV2_API.Repository
             return estate;
         }
 
+
+        public async Task<List<DTO_EstateDetail>> GetEstateDetails()
+        {
+            var estateDetails = await _context.estateDetails.GroupBy(e => e.estateId).Select(g => new DTO_EstateDetail
+            {
+                estateId = g.Key,
+            }).ToListAsync();
+            return estateDetails;
+        }
+
         public async Task<EstateDetail> AddEstateDetail(EstateDetail estate)
         {
             estate.createdDate = DateTime.Now;

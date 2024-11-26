@@ -94,7 +94,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-    } else {
+    } else if (this.rubberSale.transportPlateNo?.trim()) {
       this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
       if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
         this.generateLetterOfConsetnNo();
@@ -125,6 +125,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
               this.location.back()
             },
             error: (err) => {
+              this.spinnerService.requestEnded();
               swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -133,6 +134,15 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
               this.isSubmit = false
             }
           })
+    }
+    else {
+      this.spinnerService.requestEnded();
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please fill up the form',
+      });
+      this.isSubmit = false
     }
   }
 
@@ -231,6 +241,11 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
       this.rubberSale.drc = 0
     }
 
+  }
+
+  deliveryRemark(){
+    this.rubberSale.remark = ''
+    this.rubberSale.deliveryAgent = ''
   }
 
 }

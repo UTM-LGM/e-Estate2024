@@ -60,7 +60,7 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
   }
 
   getBuyerDetail() {
-    const getLicenseNo = this.myLesenService.getLicenseNo(this.rubberSale.buyerLicenseNo)
+    const getLicenseNo = this.myLesenService.getAllByLicenseNo(this.rubberSale.buyerLicenseNo)
       .subscribe(
         Response => {
           this.buyer = Response

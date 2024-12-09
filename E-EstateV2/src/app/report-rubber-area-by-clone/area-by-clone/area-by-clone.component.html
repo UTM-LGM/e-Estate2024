@@ -39,7 +39,7 @@
           <tr *ngFor="let data of cloneArea | paginate: { itemsPerPage: itemsPerPageClone, currentPage: pageNumber }; let i = index">
             <td>{{ (pageNumber - 1) * itemsPerPageClone + i + 1 }}</td>
             <td style="cursor: pointer;" [routerLink]="['/report-rubber-area-by-clone/clone-detail']" [queryParams]="{id:data.cloneId, startMonth:startMonth, endMonth:endMonth}"><a>{{ data.cloneName }}</a></td>
-            <td>{{ data.totalArea }}</td>
+            <td>{{ data.totalArea | number:'1.2-2'  }}</td>
           </tr>
         </ng-container>
       </table>

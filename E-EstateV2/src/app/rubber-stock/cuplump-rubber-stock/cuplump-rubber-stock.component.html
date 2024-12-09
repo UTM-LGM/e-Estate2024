@@ -34,9 +34,9 @@
                 <td>{{stock.currentStock | number:'1.2-2'}}</td>
                 <td [style.color]="stock.weightLoss > 15 ? 'red' : 'inherit'">{{stock.weightLoss | number:'1.2-2' }}
                 </td>
+                 <!-- [disabled]="isLastMonth(stock.monthYear)" -->
                 <td>
-                    <button class="btn-update" (click)="openDialogEdit(stock,estate)"
-                        [disabled]="isLastMonth(stock.monthYear)">
+                    <button class="btn-update" (click)="openDialogEdit(stock,estate)">
                         <i class="fa fa-pencil"></i>
                     </button>
                 </td>

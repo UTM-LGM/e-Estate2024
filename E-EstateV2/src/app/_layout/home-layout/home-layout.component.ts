@@ -51,7 +51,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
     this.username = this.sharedService.userName
     this.success(this.username)
     this.role = this.sharedService.role
-    if (this.role =='EstateClerk' ) {
+    if (this.role =='EstateClerk' || this.role == 'CompanyAdmin') {
       const userSubscribe = this.userService.getUser(this.username)
         .subscribe(
           Response => {
@@ -59,6 +59,7 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
             this.email = Response.email
             this.fullName = Response.fullName
             this.position = Response.position
+            this.sharedService.position = Response.position
           }
         )
         this.subscriptionService.add(userSubscribe);
@@ -101,8 +102,8 @@ export class HomeLayoutComponent implements OnInit, OnDestroy {
 
   logOutStaff() {
     this.msalService.logoutRedirect({
-      //  postLogoutRedirectUri: 'https://www5.lgm.gov.my/RRIMestet'
-      postLogoutRedirectUri: 'https://www5.lgm.gov.my/trainingE-estate'
+       postLogoutRedirectUri: 'https://www5.lgm.gov.my/RRIMestet'
+      // postLogoutRedirectUri: 'https://www5.lgm.gov.my/trainingE-estate'
       // postLogoutRedirectUri: 'https://lgm20.lgm.gov.my/RRIMestet'
 
     });

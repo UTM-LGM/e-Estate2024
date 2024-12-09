@@ -33,6 +33,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   totalImmatureAmount = 0
   isLoading = true
   isDisable = true
+  position = ''
 
 
   constructor(
@@ -44,6 +45,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.position = this.sharedService.position
     this.immatureMonthYear = this.selectedMonthYear
     if (this.immatureMonthYear != '') {
       this.isDisable = false

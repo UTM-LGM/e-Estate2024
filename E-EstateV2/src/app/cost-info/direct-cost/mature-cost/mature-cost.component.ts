@@ -38,6 +38,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
   totalMatureAmount = 0
   isLoading = true
   isDisable = true
+  position = ''
 
   constructor(
     private costService: CostService,
@@ -48,6 +49,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.position = this.sharedService.position
     this.matureMonthYear = this.selectedMonthYear
     if (this.matureMonthYear != '') {
       this.isDisable = false

@@ -668,7 +668,7 @@ namespace E_EstateV2_API.Repository
 
         public async Task<object> GetAllTapperAndFieldWorker(string start, string end)
         {
-            // Convert start and end to a comparable format (yyyy-mm-01)
+            // Convert start and end to a comparable format (yyyy-MM-01)
             string startDate = $"{start}-01";
             string endDate = $"{end}-01";
 
@@ -678,7 +678,6 @@ namespace E_EstateV2_API.Repository
             // Helper method to check if monthYear is within the specified range
             bool IsWithinRange(string monthYear)
             {
-                // Convert monthYear to comparable format (mmm-yyyy to yyyy-mm-01)
                 string[] parts = monthYear.Split('-');
                 if (parts.Length != 2)
                     return false;
@@ -686,26 +685,23 @@ namespace E_EstateV2_API.Repository
                 string year = parts[1].Trim();
                 string month = parts[0].Trim();
 
-                // Convert month to a numeric format (1-based index)
                 string[] monthNames = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
-                string numericMonth = (Array.IndexOf(monthNames, month) + 1).ToString();
-                if (numericMonth.Length == 1)
-                    numericMonth = "0" + numericMonth;
+                string numericMonth = (Array.IndexOf(monthNames, month) + 1).ToString().PadLeft(2, '0');
 
                 string comparableFormat = $"{year}-{numericMonth}-01";
 
-                // Perform comparison
                 return comparableFormat.CompareTo(startDate) >= 0 && comparableFormat.CompareTo(endDate) <= 0;
             }
 
-            // Filter allLaborInfos to only include entries that match the specified year range
+            // Filter laborInfos by date range
             var filteredLaborInfos = allLaborInfos.Where(x => IsWithinRange(x.monthYear)).ToList();
 
-            // Fetch the necessary data for isLocal before the LINQ query
+            // Fetch country-local mapping
             var countryIsLocalMap = _context.countries.ToDictionary(y => y.Id, y => y.isLocal);
 
-            var latestMonthYearsForEachEstate = filteredLaborInfos
-                .GroupBy(x => new { x.estateId, IsLocal = countryIsLocalMap.ContainsKey(x.countryId) ? countryIsLocalMap[x.countryId] : false }) // Group by estateId and isLocal
+            // Find the latest monthYear for each estate and isLocal combination
+            var latestMonthYears = filteredLaborInfos
+                .GroupBy(x => new { x.estateId, IsLocal = countryIsLocalMap.ContainsKey(x.countryId) ? countryIsLocalMap[x.countryId] : false })
                 .Select(group => new
                 {
                     group.Key.estateId,
@@ -714,29 +710,33 @@ namespace E_EstateV2_API.Repository
                 })
                 .ToList();
 
-            var workerForEachEstate = new List<object>();
+            // Collect data for the latest month only
+            var workerData = new List<object>();
 
-            foreach (var latestMonthYearForEstate in latestMonthYearsForEachEstate)
+            foreach (var latest in latestMonthYears)
             {
-                var worker = filteredLaborInfos
-                    .Where(x => x.estateId == latestMonthYearForEstate.estateId
-                             && x.monthYear == latestMonthYearForEstate.LatestMonthYear
-                             && countryIsLocalMap.ContainsKey(x.countryId) && countryIsLocalMap[x.countryId] == latestMonthYearForEstate.IsLocal)
-                    .Select(x => new
+                var workers = filteredLaborInfos
+                    .Where(x => x.estateId == latest.estateId
+                             && x.monthYear == latest.LatestMonthYear
+                             && countryIsLocalMap.ContainsKey(x.countryId) && countryIsLocalMap[x.countryId] == latest.IsLocal)
+                    .GroupBy(x => x.estateId)
+                    .Select(group => new
                     {
-                        estateId = x.estateId,
-                        isLocal = countryIsLocalMap[x.countryId],
-                        tapperWorker = x.tapperCheckrole + x.tapperContractor,
-                        fieldWorker = x.fieldCheckrole + x.fieldContractor,
+                        estateId = group.Key,
+                        isLocal = latest.IsLocal,
+                        tapperWorker = group.Sum(y => y.tapperCheckrole + y.tapperContractor),
+                        fieldWorker = group.Sum(y => y.fieldCheckrole + y.fieldContractor)
                     })
                     .FirstOrDefault();
 
-                workerForEachEstate.Add(worker);
+                if (workers != null)
+                {
+                    workerData.Add(workers);
+                }
             }
 
-            // Group by isLocal and calculate totals
-            var groupedData = workerForEachEstate
-                .Where(x => x != null)
+            // Group by isLocal and aggregate totals
+            var result = workerData
                 .GroupBy(x => new { EstateId = x.GetType().GetProperty("estateId").GetValue(x, null), IsLocal = x.GetType().GetProperty("isLocal").GetValue(x, null) })
                 .Select(group => new
                 {
@@ -747,8 +747,9 @@ namespace E_EstateV2_API.Repository
                 })
                 .ToList();
 
-            return groupedData;
+            return result;
         }
+
 
 
 
@@ -849,7 +850,8 @@ namespace E_EstateV2_API.Repository
                 costSubcategories1 = _context.costSubcategories1.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costSubcategory1Id).FirstOrDefault())).Select(y => y.costSubcategory1).FirstOrDefault(),
                 costSubcategories2 = _context.costSubcategories2.Where(y => y.Id == (_context.costs.Where(z => z.Id == x.costId).Select(z => z.costSubcategory2Id).FirstOrDefault())).Select(y => y.costSubcategory2).FirstOrDefault(),
                 estateId = x.estateId,
-                costId = x.costId
+                costId = x.costId,
+                id= x.Id
 
             }).ToListAsync();
             return cost;

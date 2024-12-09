@@ -48,7 +48,7 @@ export class ReportFieldInformationComponent implements OnInit, OnDestroy {
 
   sortableColumns = [
     { columnName: 'fieldName', displayText: 'Field / Block' },
-    { columnName: 'area', displayText: 'Field Area (Ha)' },
+    { columnName: 'area', displayText: 'Rubber Area (Ha)' },
     { columnName: 'isMature', displayText: 'Maturity' },
     { columnName: 'fieldStatus', displayText: 'Field Status' },
     { columnName: 'yearPlanted', displayText: 'Year Planted' },
@@ -224,7 +224,7 @@ export class ReportFieldInformationComponent implements OnInit, OnDestroy {
     const filteredData = data.map(row =>({
       No:bilCounter++,
       Field:row.fieldName,
-      FieldArea: row.area,
+      FieldArea: row.rubberArea,
       Maturity: row.isMature ? "Mature" : "Immature",
       FieldStatus:row.fieldStatus,
       YearPlanted:row.yearPlanted,

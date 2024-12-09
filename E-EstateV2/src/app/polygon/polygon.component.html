@@ -1,11 +1,54 @@
 <div class="box-container">
+    <div style="columns:3"
+        [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+        <label>Company : </label>
+        <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
+            (selectionChange)="companySelected()">
+            <mat-option *ngFor="let company of companies" [value]="company.id">
+                {{company.name}}
+            </mat-option>
+        </mat-select>
+
+        <label>Estate : </label>
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.licenseNo"
+            (selectionChange)="estateSelected()">
+            <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.licenseNo">
+                {{estate.name + ', ' + estate.add1}}
+            </mat-option>
+        </mat-select>
+    </div>
+
+    <div style="columns:3"
+        [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' }">
+        <div>
+            <label>Company</label>
+            <input type="text" [value]="company.name" disabled />
+        </div>
+        <label>Estate : </label>
+        <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.licenseNo"
+            (selectionChange)="estateSelected()">
+            <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.licenseNo">
+                {{estate.name + ', ' + estate.add1}}
+            </mat-option>
+        </mat-select>
+    </div>
+
+    <div [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' }"
+        style="columns: 2;">
+        <label>Estate : </label>
+        <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
+    </div>
+
+
+
+
     <div style="padding-bottom: 12px;">
         <label>Polygon Total Area (Ha) : {{polygonTotalArea | number:'1.2-2' }}</label><br />
     </div>
 
     <div class="button">
-        <button (click)="zoomIn()"><i class="fa fa-search-plus"></i></button>
-        <button (click)="zoomOut()"><i class="fa fa-search-minus"></i></button>
+        <button (click)="zoomIn()" title="Zoom In"><i class="fa fa-search-plus"></i></button>
+        <button (click)="zoomOut()" title="Zoom Out"><i class="fa fa-search-minus"></i></button>
     </div>
 
     <div id="viewDiv" style="height: 500px; width: 100%;"></div>

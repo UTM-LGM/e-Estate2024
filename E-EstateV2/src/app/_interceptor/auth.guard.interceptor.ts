@@ -37,6 +37,7 @@ export class AuthGuard implements CanActivate {
       this.sharedService.userName = decodedToken.userName
       this.sharedService.estateId = decodedToken.estateId
       this.sharedService.companyId = decodedToken.companyId
+      this.getUser(decodedToken.estateId, decodedToken.companyId)
 
       //check jwt expired time
       const currentTime = new Date().getTime()
@@ -78,10 +79,10 @@ export class AuthGuard implements CanActivate {
     await this.msalService.instance.initialize();
 
     // Entra Id-Production
-    // const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
+    const clientId = '4c278748-3ef9-49f9-94ec-9591a665a4b7'; // Your client ID
 
     //STaging
-    const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
+    // const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
     
     const tokenInfoString = localStorage.getItem(`msal.token.keys.${clientId}`)
 
@@ -246,6 +247,8 @@ export class AuthGuard implements CanActivate {
           this.user = Response
           this.sharedService.userId = this.user.id
           this.sharedService.email = this.user.email
+          this.sharedService.position = this.user.position
+          this.sharedService.fullName = this.user.fullName
           if (this.sharedService.role != "Admin" && this.sharedService.role != "Management") {
             if (this.user.estateId == estateId && this.user.companyId == companyId) {
               this.sharedService.companyId = this.user.companyId

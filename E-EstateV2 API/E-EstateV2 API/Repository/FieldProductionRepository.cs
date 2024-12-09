@@ -40,14 +40,29 @@ namespace E_EstateV2_API.Repository
 
         public async Task<IEnumerable<FieldProduction>> AddFieldProduction(FieldProduction[] fieldProduction)
         {
-            foreach (var item in fieldProduction)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                item.createdDate = DateTime.Now;
-                await _context.AddAsync(item);
+                var addedProductions = new List<FieldProduction>();
+
+                foreach (var item in fieldProduction)
+                {
+                    bool exists = await _context.fieldProductions
+                        .AnyAsync(fp => fp.fieldId == item.fieldId && fp.createdDate.Date == DateTime.Now.Date);
+
+                    if (!exists)
+                    {
+                        item.createdDate = DateTime.Now;
+                        await _context.AddAsync(item);
+                        addedProductions.Add(item);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return addedProductions;
             }
-            return fieldProduction;
         }
+
 
         public async Task<IEnumerable<FieldProduction>> UpdateFieldProductionDraft(FieldProduction[] fieldProduction)
         {

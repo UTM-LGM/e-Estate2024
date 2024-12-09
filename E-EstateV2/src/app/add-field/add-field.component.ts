@@ -237,7 +237,22 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
       this.isSubmit = false;    
-    } else {
+    } else if(this.field.isMature == true && !this.field.dateOpenTapping)
+    {
+      swal.fire({
+        text: 'Please fill up date open tapping',
+        icon: 'error'
+      });
+    }
+    
+    else if(this.selectedValues.length == 0){
+      swal.fire({
+        text: 'Please insert at least 1 clone',
+        icon: 'error'
+      });
+    } 
+    
+    else {
       this.isSubmit = true
       this.spinnerService.requestStarted();
       this.field.estateId = this.estate.id;

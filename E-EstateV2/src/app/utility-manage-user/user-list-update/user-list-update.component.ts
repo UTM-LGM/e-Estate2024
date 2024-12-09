@@ -18,6 +18,8 @@ export class UserListUpdateComponent implements OnInit, OnDestroy {
 
   user: User = {} as User
   result = {} as any
+  username = ''
+
 
   constructor(
     private location: Location,
@@ -121,6 +123,35 @@ export class UserListUpdateComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+
+  checkUsername(event: any) {
+    const username = event.target.value.toString();
+
+    if (username.includes(' ')) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error! Username cannot contain spaces!',
+      });
+      this.user.userName = '';
+    } else {
+      this.userService.checkUsername(username)
+        .subscribe(
+          {
+            next: (response: any) => {
+              this.username = response;
+            },
+            error: (error) => {
+              swal.fire({
+                icon: 'error',
+                title: 'Error! ' + error.error + '!',
+              });
+              this.user.userName = '';
+            }
+          }
+        );
+    }
   }
 
 }

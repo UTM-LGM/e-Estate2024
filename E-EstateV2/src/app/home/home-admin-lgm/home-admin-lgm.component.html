@@ -34,9 +34,9 @@
       <div class="column box-container color2">
         <div class="span-word">
           <span style="font-weight: bold;">Total Registered Estate</span><br />
-          <span  *ngIf="!isLoadingEstate">{{totalRegistered}}</span>
+          <span  *ngIf="!isLoadingEstateDetail">{{totalRegistered}}</span>
         </div>
-        <div *ngIf="isLoadingEstate">
+        <div *ngIf="isLoadingEstateDetail">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
             [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
         </div>

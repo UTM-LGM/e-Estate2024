@@ -19,6 +19,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   role = ''
   username = ''
+  position = ''
   companyId = 0
   estateId = 0
   showMonthly = false
@@ -105,6 +106,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
             this.sharedService.userId = this.user.id
             this.companyId = this.user.companyId
             this.estateId = this.user.estateId
+            this.position = this.user.position
           }
         )
       this.subscriptionService.add(getUser);

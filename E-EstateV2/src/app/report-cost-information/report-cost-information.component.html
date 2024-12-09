@@ -120,6 +120,7 @@
           (click)="toggleSort(column.columnName)" [ngStyle]="getColumnStyle(column.columnName)">
           {{ column.displayText }}
         </th>
+        <th style="width: 10px;" *ngIf="startMonth == endMonth && endMonth != '' && !showAll"> Action </th>
       </tr>
 
       <tr *ngIf="isLoading">
@@ -147,21 +148,27 @@
 
       <ng-container *ngIf="!isLoading && !showAll">
         <tr
-          *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index ">
+          *ngFor="let cost of filteredCostInformation | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index"
+        >
           <td>{{ calculateIndex(i) }}</td>
           <td>{{ cost.costType }}</td>
-          <td>{{ cost.isMature == true ? "MATURE" : (cost.isMature == false ? "IMMATURE" : 'N/A') }}</td>
+          <td>{{ cost.isMature == true ? 'MATURE' : (cost.isMature == false ? 'IMMATURE' : 'N/A') }}</td>
           <td>{{ cost.costCategory }}</td>
           <td>{{ cost.costSubcategories1 }}</td>
           <td>{{ cost.costSubcategories2 }}</td>
           <td>{{ cost.amount }}</td>
+          <td *ngIf="startMonth == endMonth && endMonth != '' && !showAll">
+            <button class="btn-update" (click)="draftCost(cost)"> Draft </button>
+          </td>
         </tr>
-
+      
         <tr *ngIf="filteredCostInformation.length > 0">
           <th colspan="6" style="font-weight: bold;">Total Cost</th>
           <th>{{ totalAmount }}</th>
+          <th colspan="1" *ngIf="startMonth == endMonth && endMonth != '' && !showAll"></th>
         </tr>
       </ng-container>
+      
 
       <ng-container *ngIf="!isLoading && showAll">
         <tr

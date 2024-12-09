@@ -173,10 +173,11 @@ export class RubberStockDetailComponent implements OnInit {
           const date = new Date(this.stock.monthYear)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
+
             return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
           });
           this.calculateSale()
-          // this.calculateWaterDepletion()
+          this.calculateWaterDepletion()
           this.isLoadingSale = false
         })
     this.subscriptionService.add(getSale);

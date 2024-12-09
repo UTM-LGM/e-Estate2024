@@ -68,8 +68,11 @@
           <br />
           <div>
             <div *ngIf="draftFilterIndirectCostAmount.length != 0">
-              <button (click)="submitIndirectCost()" style="float: right" class="btn-add" type="submit">
+              <button (click)="submitIndirectCost()" *ngIf="position != 'MANAGER'" style="float: right" class="btn-add" type="submit">
                 Submit &nbsp; <i class="fa fa-plus"></i>
+              </button>
+              <button (click)="submitIndirectCost()" *ngIf="position == 'MANAGER'" style="float: right" class="btn-add" type="submit">
+                Approved & Submit &nbsp; <i class="fa fa-plus"></i>
               </button>
             </div>
 

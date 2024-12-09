@@ -1,10 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
 import { ReportService } from '../_services/report.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import * as XLSX from 'xlsx';
+import { CostAmount } from '../_interface/costAmount';
+import { CostAmountService } from '../_services/cost-amount.service';
 
 @Component({
   selector: 'app-report-cost-information',
@@ -41,6 +43,7 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
   filteredCostInformation: any[] = []
 
   showAll = false
+  selectedCost: any = null;
 
   sortableColumns = [
     { columnName: 'no', displayText: 'No' },
@@ -56,7 +59,9 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
     private reportService: ReportService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private costAmountService: CostAmountService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -195,7 +200,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
                     costSubcategories1: obj.costSubcategories1,
                     costSubcategories2: obj.costSubcategories2,
                     costType: obj.costType,
-                    isMature: obj.isMature
+                    isMature: obj.isMature,
+                    id: obj.id
                   });
                 }
                 return acc;
@@ -218,7 +224,8 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
                     costSubcategories2: obj.costSubcategories2,
                     costType: obj.costType,
                     isMature: obj.isMature,
-                    estateId: obj.estateId
+                    estateId: obj.estateId,
+                    id: obj.id
                   });
                 }
                 return acc
@@ -473,6 +480,48 @@ export class ReportCostInformationComponent implements OnInit, OnDestroy {
     } else {
       this.pageNumber = newPageNumber;
     }
+  }
+
+
+  draftCost(cost: any) {  
+    // Update the cost with status 'DRAFT'
+    const updatedCostArray = [{ ...cost, status: 'DRAFT' }];
+    
+    // Call the service to update the cost
+    this.costAmountService.updateCostAmount(updatedCostArray)
+      .subscribe(
+        response => {
+          // Success message
+          swal.fire({
+            title: 'Done!',
+            text: 'Cost amount successfully drafted!',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1000
+          });
+  
+          // Remove the row from filteredCostInformation after successful update
+          this.filteredCostInformation = this.filteredCostInformation.filter(item => item !== cost);
+  
+          // Recalculate totalAmount
+          this.totalAmount = this.filteredCostInformation.reduce((total, cost) => {
+            // Ensure 'cost.totalAmount' exists and is a number before adding to the total
+            return total + (cost.amount || 0);
+          }, 0);
+  
+          // Detect changes after updating the table and totalAmount
+          this.cdr.detectChanges();
+        },
+        error => {
+          // Handle error case if needed
+          swal.fire({
+            title: 'Error',
+            text: 'There was an error updating the cost amount.',
+            icon: 'error',
+            showConfirmButton: true
+          });
+        }
+      );
   }
 
 }

@@ -125,9 +125,14 @@
               Next &nbsp; <i class="fa fa-arrow-right"></i>
             </button> -->
 
-            <button (click)="submitProduction()" style="float: right; margin-right: 10px;" class="btn-add" type="submit"
+            <button (click)="submitProduction()" *ngIf="position != 'MANAGER'" style="float: right; margin-right: 10px;" class="btn-add" type="submit"
               [disabled]="isSubmit">
               Submit &nbsp; <i class="fa fa-plus"></i>
+            </button>
+
+            <button (click)="submitProduction()" *ngIf="position == 'MANAGER'" style="float: right; margin-right: 10px;" class="btn-add" type="submit"
+              [disabled]="isSubmit">
+              Approve & Submit &nbsp; <i class="fa fa-plus"></i>
             </button>
 
             <button style="float: right; margin-right: 10px; background-color:  #CAE00D;" class="btn-add"

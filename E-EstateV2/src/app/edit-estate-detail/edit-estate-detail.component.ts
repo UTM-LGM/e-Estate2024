@@ -157,7 +157,8 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
     if (this.estateDetail.id == undefined) {
       // Preparing data for a new estate detail
       this.estateDetail.estateId = this.estate.id;
-      this.estateDetail.grantNo = this.estateDetail.grantNo;
+      this.estateDetail.estateIdOld = this.estate.id;
+      this.estateDetail.licenseNo = this.estate.licenseNo;
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
       this.estateDetail.createdBy = this.sharedService.userId.toString();
       this.estateDetail.createdDate = new Date();
@@ -188,7 +189,6 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
   
     } else {
       // Preparing data for updating estate detail
-      this.estateDetail.grantNo = this.estateDetail.grantNo;
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
       this.estateDetail.updatedBy = this.sharedService.userId.toString();
       this.estateDetail.updatedDate = new Date();

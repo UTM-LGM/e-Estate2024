@@ -21,7 +21,6 @@ namespace E_EstateV2_API.Repository
             {
                 id = x.Id,
                 estateId = x.estateId,
-                grantNo = x.grantNo,
                 plantingMaterialId = x.plantingMaterialId,
                 plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(y => y.plantingMaterial).FirstOrDefault()
             }).FirstOrDefaultAsync();
@@ -53,7 +52,6 @@ namespace E_EstateV2_API.Repository
             {
                 existingEstateDetail.updatedBy = estate.updatedBy;
                 existingEstateDetail.updatedDate = DateTime.Now;
-                existingEstateDetail.grantNo = estate.grantNo;
                 existingEstateDetail.plantingMaterialId = estate.plantingMaterialId;
                 await _context.SaveChangesAsync();
                 return existingEstateDetail;

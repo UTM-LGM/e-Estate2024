@@ -1,7 +1,8 @@
 export interface EstateDetail {
     id:number
     estateId:number
-    grantNo:string
+    estateIdOld:number
+    licenseNo:string
     plantingMaterialId:number
     plantingMaterial:string
     createdBy: string

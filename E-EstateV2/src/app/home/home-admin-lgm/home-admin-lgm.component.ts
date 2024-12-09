@@ -53,6 +53,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   isLoadingFieldShortage = true
   isLoadingTapped = true
   isLoadingCop = true
+  isLoadingEstateDetail = true
 
   chart: any
   productivityByYear: any
@@ -87,12 +88,11 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     this.getWorker()
     this.getWorkerShortage()
     this.getCostInformation()
-    this.getEstateDetails()
   }
 
   ngAfterViewInit() {
     this.getProductivity()
-
+    this.getEstateDetails()
   }
 
   getCostInformation() {
@@ -111,9 +111,10 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     .subscribe(
       Response =>{
         this.totalRegistered = Response.length
-        console.log(this.totalRegistered)
+        this.isLoadingEstateDetail = false
       }
     )
+    this.subscriptionService.add(getEstateDetails);
   }
 
   getField() {
@@ -284,7 +285,9 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
             };
             this.productivity.push(product);
           } else {
+            const targetYear = new Date().getFullYear();
             this.productivityByYear = this.groupByYear(this.productivity);
+            this.productivityByYear = this.productivityByYear.filter( (x:any) =>x.year == targetYear )
             // this.createProductivityChart(); // Call chart creation after data is processed
           }
           this.isLoadingProduction = false;

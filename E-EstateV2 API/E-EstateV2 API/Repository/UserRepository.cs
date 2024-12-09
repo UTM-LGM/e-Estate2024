@@ -412,7 +412,7 @@ namespace E_EstateV2_API.Repository
                 var companyAdminCount = usersWithSameLicenseRoles.Count(ur =>
                     ur.RoleId == companyAdminRole.Id);
 
-                if (companyAdminCount >= 1)
+                if (companyAdminCount > 1)
                 {
                     throw new InvalidOperationException("This license already has a Company Admin.");
                 }
@@ -424,7 +424,7 @@ namespace E_EstateV2_API.Repository
                 var estateClerkCount = usersWithSameLicenseRoles.Count(ur =>
                     ur.RoleId == estateClerkRole.Id);
 
-                if (estateClerkCount >= 2)
+                if (estateClerkCount > 4)
                 {
                     throw new InvalidOperationException("This license already has the maximum number of Estate Clerks.");
                 }

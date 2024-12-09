@@ -6,7 +6,7 @@
       <label>User Fullname :</label>
       <input type="text" name="fullname" [(ngModel)]="user.fullName"/>
       <label>License No :</label>
-      <input type="text" name="fullname" [(ngModel)]="user.licenseNo" (change)="checkLicenseNo($event)"/>
+      <input type="text" name="licenseNo" [(ngModel)]="user.licenseNo" (change)="checkLicenseNo($event)"/>
     </div>
 
     <div style="columns:2">
@@ -26,12 +26,12 @@
         <mat-option value="COMPANY ADMIN(HQ)">COMPANY ADMIN (HQ)</mat-option>
       </mat-select>
       <label>Username :</label>
-      <input type="text" name="fullname" [(ngModel)]="user.userName"/>
+      <input type="text" name="username" [(ngModel)]="user.userName"  (change)="checkUsername($event)"/>
     </div>
 
     <div style="columns: 2" class="column">
       <label>Email :</label>
-      <input type="text" name="fullname" [(ngModel)]="user.email"/>
+      <input type="text" name="email" [(ngModel)]="user.email"/>
     </div>
     <br/>
   

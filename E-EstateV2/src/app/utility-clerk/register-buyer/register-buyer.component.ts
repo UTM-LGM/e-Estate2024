@@ -54,7 +54,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    if (this.buyer.licenseNo == '' && this.result.premiseName == '') {
+    if (this.buyer.licenseNo == '' && this.result.premiseName == '' || this.buyer.renameBuyer == null) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -160,6 +160,7 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
                   title: 'Error! License No does not exist',
                 });
                 this.buyer.licenseNo = ''
+                this.buyer.renameBuyer = ''
                 this.result = {}
               }
 

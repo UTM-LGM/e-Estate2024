@@ -38,6 +38,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
 
   isLoading = true
   isDisable = true
+  position = ''
 
   constructor(
     private costService: CostService,
@@ -48,6 +49,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.position = this.sharedService.position
     if (this.selectedMonthYear != '') {
       this.isDisable = false
     }

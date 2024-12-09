@@ -49,6 +49,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   totalLatexDry = 0
   totalUSSDry = 0
   totalOthersDry = 0
+  position = ''
 
   totalCuplump: any[] = []
   totalLatex: any[] = []
@@ -81,6 +82,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
     // this.date = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')
     this.date = this.selectedMonthYear
     this.getEstate()
+    this.position = this.sharedService.position
   }
 
   ngOnChanges(changes: SimpleChanges) {

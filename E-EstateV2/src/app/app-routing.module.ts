@@ -139,7 +139,7 @@ const routes: Routes = [
       { path: 'notification', component: NotificationComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-info-yearly/:id', component: FieldInfoYearlyComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-infected-status/:id', component: FieldInfectedStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
-      { path: 'polygon/:id', component: PolygonComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
+      { path: 'polygon', component: PolygonComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
 
 
       {

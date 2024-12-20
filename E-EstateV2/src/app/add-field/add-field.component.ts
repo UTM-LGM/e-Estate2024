@@ -35,6 +35,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
   cropCategories: FieldStatus[] = []
   filterCropCategories: FieldStatus[] = []
+  abandoned : any []=[]
+  abandonedInput = false
 
   selectedValues: any[] = []
 
@@ -74,6 +76,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.abandonedInput = false
     this.getEstate()
     this.getClone()
     this.getCrop()
@@ -237,7 +240,8 @@ export class AddFieldComponent implements OnInit, OnDestroy {
         icon: 'error'
       });
       this.isSubmit = false;    
-    } else if(this.field.isMature == true && !this.field.dateOpenTapping)
+    } 
+    else if(this.field.isMature == true && !this.field.dateOpenTapping && this.abandonedInput == false)
     {
       swal.fire({
         text: 'Please fill up date open tapping',
@@ -245,7 +249,7 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       });
     }
     
-    else if(this.selectedValues.length == 0){
+    else if(this.selectedValues.length == 0 && this.abandonedInput == false){
       swal.fire({
         text: 'Please insert at least 1 clone',
         icon: 'error'
@@ -434,5 +438,35 @@ export class AddFieldComponent implements OnInit, OnDestroy {
 
     // Also update the selectedFile if needed
     this.selectedFile = updatedFiles;
+  }
+
+  checkStatus(){
+    this.abandoned = this.cropCategories.filter(x=>x.fieldStatus.toLowerCase().includes('abandoned') || x.fieldStatus.toLowerCase().includes('acquired'))
+    if(this.abandoned.some(category => category.id === this.field.fieldStatusId)){
+      this.abandonedInput = true
+    }
+    else{
+      this.abandonedInput = false
+    }
+  }
+
+  checkTreeInitial(){
+    if(this.field.initialTreeStand > 800){
+      swal.fire({
+        text: 'Initial Tree Stand cannot be more than 800',
+        icon: 'error'
+      });
+      this.field.initialTreeStand = 0
+    }
+  }
+
+  checkTreeCurrent(){
+    if(this.field.currentTreeStand > 800){
+      swal.fire({
+        text: 'Current Tree Stand cannot be more than 800',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = 0
+    }
   }
 }

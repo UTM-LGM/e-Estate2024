@@ -2,10 +2,20 @@
 <h1 class="tittle">Estate Sector Dashboard</h1>
 <hr />
 
-<div style="float: right;">
+<div>
+<div style="float: left;" class="year">
+  <label style="width: 57px;">Year : </label>
+  <input type="number" #yearInput [value]="yearNow" (input)="yearSelected(yearInput)"/>
+</div>
+
+<div style="float: right; margin-top: 12px;">
   <button class="btn-update" (click)="print()">Print <i class="fa fa-print"></i></button>
 </div>
-<br/><br/>
+<br/>
+</div>
+
+<br/>
+<br/>
 
 <div class="box1">
     <div class="box">
@@ -178,7 +188,7 @@
       <div class="column box-container color2">
         <div class="span-word">
           <span style="font-weight: bold;">Total</span><br />
-          <span  *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number: '1.2-2' }}</span>
+          <span  *ngIf="!isLoadingProduction">{{totalProduction | number: '1.2-2' }}</span>
         </div>
         <div *ngIf="isLoadingProduction">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"

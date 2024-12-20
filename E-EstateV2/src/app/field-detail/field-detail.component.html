@@ -92,7 +92,7 @@
             <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
           </div>
 
-          <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick">
+          <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick && !abandonedInput">
             <label>Current Tree Stand per Ha <span style="color: red;">*</span> :</label>
             <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
 
@@ -101,7 +101,7 @@
               (change)="checkDOT()" />
           </div>
 
-          <div style="columns: 2" *ngIf="field.isMature == true">
+          <div style="columns: 2" *ngIf="field.isMature == true && !abandonedInput">
             <label>Total task <span style="color: red;">*</span> :</label>
             <b><input type="number" name="totalTask" [(ngModel)]="field.totalTask" /></b>
           </div>

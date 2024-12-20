@@ -16,8 +16,8 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductionYearlyByField/' + year)
   }
 
-  getCurrentCropProduction(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl + '/reports/CurrentProductions')
+  getCurrentCropProduction(year:string): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl + '/reports/CurrentProductions/' + year)
   }
 
   getCropProductivity(): Observable<any[]> {
@@ -35,8 +35,8 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/GetFieldArea/' + year)
   }
 
-  getCurrentTapperAndFieldWorker():Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentTapperAndFieldWorker')
+  getCurrentTapperAndFieldWorker(year:string):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentTapperAndFieldWorker/'+ year)
   }
 
   getProductionYearly(year: string): Observable<any[]> {

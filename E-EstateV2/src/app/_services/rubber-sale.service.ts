@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environments';
 import { RubberSale } from '../_interface/rubberSale';
 import { Observable } from 'rxjs';
+import { RunGuardsAndResolvers } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,14 @@ export class RubberSaleService {
 
   getRubberSaleById(id:number):Observable<RubberSale>{
     return this.http.get<RubberSale>(this.baseUrl + '/rubbersales/GetRubberSaleById/'+ id)
+  }
+
+  updateWeightSlip(loc: string, rubberSale: RubberSale): Observable<RubberSale> {
+    return this.http.put<RubberSale>(`${this.baseUrl}/rubberSalesIntegration/UpdateWeightSlipNo/${loc}`, rubberSale);
+  }
+
+  updateReceiptNo(loc:string, rubberSale:RubberSale):Observable<RubberSale>{
+    return this.http.put<RubberSale>(`${this.baseUrl}/rubberSalesIntegration/UpdateReceiptNo/${loc}`, rubberSale)
   }
 
 }

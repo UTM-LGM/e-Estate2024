@@ -8,7 +8,6 @@ import { SpinnerService } from 'src/app/_services/spinner.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-mature-cost',
   templateUrl: './mature-cost.component.html',

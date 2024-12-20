@@ -26,6 +26,10 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
 
   formattedDate = ''
   deliveryAgent: string = ''
+  isComplete: string = ''
+
+  todayDateWeight = ''
+  todayDateReceipt = ''
 
 
   constructor(
@@ -36,12 +40,14 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
     private subscriptionService: SubscriptionService,
-    private spinnerService:SpinnerService
+    private spinnerService: SpinnerService
   ) { }
 
   ngOnInit() {
+    this.todayDateWeight = new Date().toISOString().substring(0, 10)
+    this.todayDateReceipt = new Date().toISOString().substring(0, 10)
     this.rubberSale = this.data.data
-    if (this.rubberSale.deliveryAgent != null) {
+    if (this.rubberSale.deliveryAgent != "") {
       this.deliveryAgent = 'yes'
     }
     else {
@@ -59,6 +65,18 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
   selectedDate(date: string) {
     if (date) {
       this.rubberSale.saleDateTime = new Date(date)
+    }
+  }
+
+  selectedDateWightSlip(date: string) {
+    if (date) {
+      this.rubberSale.weightSlipNoDate = new Date(date)
+    }
+  }
+
+  selectedDateReceiptNo(date: string) {
+    if (date) {
+      this.rubberSale.receiptNoDate = new Date(date)
     }
   }
 
@@ -86,27 +104,85 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-    } else {
+    } else if (this.deliveryAgent == 'yes' && this.rubberSale.deliveryAgent == '') {
+      swal.fire({
+        title: 'Error!',
+        text: 'Please enter the delivery agent name',
+        icon: 'error',
+        showConfirmButton: true
+      });
+    }
+    else {
       this.spinnerService.requestStarted()
-      this.rubberSale.updatedBy = this.sharedService.userId.toString()
-      this.rubberSale.updatedDate = new Date()
-      this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
-      const { paymentStatus, ...filterSale } = this.rubberSale
-      this.filterRubberSale = filterSale
-      this.rubberSaleService.updateSale(this.filterRubberSale)
-        .subscribe(
-          Response => {
-            this.spinnerService.requestEnded()
-            swal.fire({
-              title: 'Done!',
-              text: 'Rubber Sale successfully updated!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
-            this.dialogRef.close()
-          }
-        )
+      if (this.isComplete == "yes") {
+        if (this.rubberSale.weightSlipNo != null && this.rubberSale.receiptNo != null) {
+          swal.fire({
+            title: 'Are you sure to submit ? ',
+            text: 'There is no editing after submission',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'Cancel',
+          })
+            .then((result) => {
+              if (result.isConfirmed) {
+                this.rubberSale.paymentStatus = null;
+                this.rubberSaleService.updateWeightSlip(this.rubberSale.letterOfConsentNo, this.rubberSale)
+                  .subscribe(
+                    Response => {
+                      if (this.rubberSale.receiptNo != null) {
+                        this.rubberSaleService.updateReceiptNo(this.rubberSale.letterOfConsentNo, this.rubberSale)
+                          .subscribe(
+                            Response => {
+                              swal.fire({
+                                title: 'Done!',
+                                text: 'Rubber Sale successfully updated!',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 1000
+                              });
+                              this.dialogRef.close();
+                            }
+                          );
+                      }
+                    })
+              }else{
+                this.spinnerService.requestEnded()
+              }
+            }
+            );
+        }
+        else {
+          // Error case: Neither Weight Slip No nor Receipt No
+          swal.fire({
+            title: 'Error!',
+            text: 'Please fill up the form',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+          this.spinnerService.requestEnded()
+        }
+      } else {
+        this.rubberSale.updatedBy = this.sharedService.userId.toString()
+        this.rubberSale.updatedDate = new Date()
+        this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
+        const { paymentStatus, ...filterSale } = this.rubberSale
+        this.filterRubberSale = filterSale
+        this.rubberSaleService.updateSale(this.filterRubberSale)
+          .subscribe(
+            Response => {
+              this.spinnerService.requestEnded()
+              swal.fire({
+                title: 'Done!',
+                text: 'Rubber Sale successfully updated!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1000
+              });
+              this.dialogRef.close()
+            }
+          )
+      }
     }
   }
 
@@ -135,7 +211,11 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-      this.rubberSale.drc = 0
+      if (this.isComplete == 'yes') {
+        this.rubberSale.buyerDRC = 0
+      } else {
+        this.rubberSale.drc = 0
+      }
     }
   }
 
@@ -151,9 +231,36 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-      this.rubberSale.drc = 0
+      if (this.isComplete == 'yes') {
+        this.rubberSale.buyerDRC = 0
+      } else {
+        this.rubberSale.drc = 0
+      }
     }
 
+  }
+
+  checkBuyerWeight() {
+    if (this.rubberSale.buyerWetWeight > this.rubberSale.wetWeight) {
+      swal.fire({
+        title: 'Error!',
+        text: 'Buyer Wet Weight cannot more than Wet Weight',
+        icon: 'error',
+        showConfirmButton: true
+      });
+      this.rubberSale.buyerWetWeight = 0
+    }
+  }
+
+  calculateAmount() {
+    if (this.rubberSale.rubberType == "CUPLUMP") {
+      const amount = this.rubberSale.buyerWetWeight * this.rubberSale.unitPrice
+      this.rubberSale.total = amount
+    }
+    else if (this.rubberSale.rubberType == "LATEX") {
+      const amount = this.rubberSale.buyerWetWeight * (this.rubberSale.buyerDRC / 100) * this.rubberSale.unitPrice
+      this.rubberSale.total = amount
+    }
   }
 
 }

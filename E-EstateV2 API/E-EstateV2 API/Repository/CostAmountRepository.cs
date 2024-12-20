@@ -17,13 +17,25 @@ namespace E_EstateV2_API.Repository
 
         public async Task<IEnumerable<CostAmount>> AddCostAmount(CostAmount[] amount)
         {
-            foreach (var item in amount)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                item.createdDate = DateTime.Now;
-                await _context.AddAsync(item);
+                var addedCost = new List<CostAmount>();
+                foreach (var item in amount)
+                {
+                    bool exists = await _context.costAmounts
+                        .AnyAsync(cost => cost.costId == item.costId && cost.monthYear == item.monthYear && cost.estateId == item.estateId);
+                    if (!exists)
+                    {
+                        item.createdDate = DateTime.Now;
+                        await _context.AddAsync(item);
+                        addedCost.Add(item);
+                    }
+                }
+
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return addedCost;
             }
-            return amount;
         }
 
         public async Task<List<DTO_CostAmount>> GetCostAmounts()

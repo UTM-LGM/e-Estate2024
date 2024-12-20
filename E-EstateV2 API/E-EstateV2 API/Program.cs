@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Configuration;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -95,6 +96,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("CustomJwt",options =>
 {
+    var baseUrls = builder.Configuration.GetSection("BaseUrls");
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
@@ -102,14 +105,11 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
 
-        //ValidIssuer = "https://www5.lgm.gov.my/trainingE-estate",
-        //ValidAudience = "https://api02.lgm.gov.my/trainingE-estateApi",
+        ValidIssuer = baseUrls["RRIMestet"],
+        ValidAudience = baseUrls["RRIMestetApi"],
 
         //ValidIssuer = "https://lgm20.lgm.gov.my/RRIMestet",
         //ValidAudience = "https://lgm20.lgm.gov.my/RRIMestetApi",
-
-        ValidIssuer = "https://www5.lgm.gov.my/RRIMestet",
-        ValidAudience = "https://api02.lgm.gov.my/RRIMestetApi",
 
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero

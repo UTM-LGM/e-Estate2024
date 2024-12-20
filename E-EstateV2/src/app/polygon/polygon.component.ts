@@ -25,13 +25,6 @@ export class PolygonComponent implements OnInit {
 
   @Input() location!: [number, number];
 
-  // licenseNo = 'B/01/15730'
-
-  // licenseNo = 'B/08/15438'
-
-  // licenseNo = 'C/01/15701'
-
-
   graphicLayer!: GraphicsLayer
   map!: Map;
   view!: MapView
@@ -115,6 +108,8 @@ export class PolygonComponent implements OnInit {
       .subscribe(
         Response => {
           this.estate = Response
+          this.getGeoJson();
+
         }
       )
     this.subscriptionService.add(getOneEstate);
@@ -164,7 +159,7 @@ export class PolygonComponent implements OnInit {
   private initializeMap(): void {
     if (!this.view) {
       this.map = new Map({
-        basemap: 'topo-vector'
+        basemap: 'hybrid'
       });
 
       this.view = new MapView({
@@ -192,7 +187,6 @@ export class PolygonComponent implements OnInit {
         .subscribe(
           Response => {
             var features = Response.features;
-            console.log(features)
             if (features != undefined) {
               features.forEach((feature: any) => {
                 let geometry = feature.geometry;
@@ -211,9 +205,8 @@ export class PolygonComponent implements OnInit {
                     });
                   });
                 }
-
               });
-            }else{
+            } else {
               this.spinnerService.requestEnded()
               swal.fire({
                 text: 'Polygon is not listed in RRIM GeoRubber',

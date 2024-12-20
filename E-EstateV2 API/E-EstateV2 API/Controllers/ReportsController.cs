@@ -70,9 +70,10 @@ namespace E_EstateV2_API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> CurrentProductions()
+        [Route("{year:int}")]
+        public async Task<IActionResult> CurrentProductions(int year)
         {
-            var currentProduction = await _reportRepository.GetCurrentProduction();
+            var currentProduction = await _reportRepository.GetCurrentProduction(year);
             return Ok(currentProduction);
 
         }
@@ -104,9 +105,10 @@ namespace E_EstateV2_API.Controllers
 
         //LGMAdmin
         [HttpGet]
-        public async Task<IActionResult> GetCurrentTapperAndFieldWorker()
+        [Route("{year:int}")]
+        public async Task<IActionResult> GetCurrentTapperAndFieldWorker(int year)
         {
-            var worker = await _reportRepository.GetLatestMonthWorker();
+            var worker = await _reportRepository.GetLatestMonthWorker(year);
             return Ok(worker);
         }
 

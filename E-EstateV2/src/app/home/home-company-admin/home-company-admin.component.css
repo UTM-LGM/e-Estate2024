@@ -21,6 +21,12 @@
   height: 65px;
 }
 
+.year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .color3 {
   background-color: #48aaad91;
   height: 65px;

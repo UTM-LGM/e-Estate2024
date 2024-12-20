@@ -4,6 +4,7 @@ using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Reflection.PortableExecutable;
 
 namespace E_EstateV2_API.Repository
 {
@@ -46,8 +47,9 @@ namespace E_EstateV2_API.Repository
 
                 foreach (var item in fieldProduction)
                 {
+                    //.AnyAsync() is a quick way to determine if a matching record exists, without loading all data into memory.
                     bool exists = await _context.fieldProductions
-                        .AnyAsync(fp => fp.fieldId == item.fieldId && fp.createdDate.Date == DateTime.Now.Date);
+                        .AnyAsync(fp => fp.fieldId == item.fieldId && fp.monthYear == item.monthYear);
 
                     if (!exists)
                     {

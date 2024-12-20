@@ -10,6 +10,8 @@ import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
+import swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-home-admin-lgm',
@@ -20,7 +22,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
 
   totalEstate = 0
   totalCompany = 0
-  yearNow = 0
+  yearNow = ''
 
   totalCuplumpDry = 0
   totalLatexDry = 0
@@ -64,6 +66,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   fieldShortage = 0
   tappedArea = 0
   costAmount = 0
+  totalProduction = 0
   totalRegistered = 0
   fields: Field[] = []
   validFields: any[] = []
@@ -75,19 +78,42 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     private reportService: ReportService,
     private fieldService: FieldService,
     private subscriptionService: SubscriptionService,
-    private estateDetailService:EstateDetailService
+    private estateDetailService: EstateDetailService
 
   ) { }
 
   ngOnInit() {
+    this.yearNow = new Date().getFullYear().toString()
     this.getCompany()
     this.getField()
     this.getEstate()
     this.getProduction()
-    this.yearNow = new Date().getFullYear()
     this.getWorker()
     this.getWorkerShortage()
     this.getCostInformation()
+  }
+
+  yearSelected(yearInput: HTMLInputElement): void {
+    const year = yearInput.value;
+
+    if (year.length > 4) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert a correct year',
+      }).then(() => {
+        // Reset the input value to the current year after the alert
+        yearInput.value = this.yearNow;
+      });
+    } else {
+      this.yearNow = year;
+      this.getField()
+      this.getProduction()
+      this.getWorker()
+      this.getWorkerShortage()
+      this.getCostInformation()
+      this.getProductivity()
+    }
   }
 
   ngAfterViewInit() {
@@ -106,14 +132,14 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     this.subscriptionService.add(getCostInformation);
   }
 
-  getEstateDetails(){
+  getEstateDetails() {
     const getEstateDetails = this.estateDetailService.getEstateDetails()
-    .subscribe(
-      Response =>{
-        this.totalRegistered = Response.length
-        this.isLoadingEstateDetail = false
-      }
-    )
+      .subscribe(
+        Response => {
+          this.totalRegistered = Response.length
+          this.isLoadingEstateDetail = false
+        }
+      )
     this.subscriptionService.add(getEstateDetails);
   }
 
@@ -131,6 +157,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getWorkerShortage() {
+    this.tapperShortage = 0
+    this.fieldShortage = 0
     const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString()).subscribe(
       response => {
         this.workerShortages = response;
@@ -167,7 +195,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getLabor() {
-    const getLabor = this.reportService.getCurrentTapperAndFieldWorker().subscribe(
+    const getLabor = this.reportService.getCurrentTapperAndFieldWorker(this.yearNow.toString()).subscribe(
       Response => {
         const labors = Response;
         this.workerShortages.forEach(workerShortage => {
@@ -244,7 +272,10 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getProduction() {
-    const getProduction = this.reportService.getCurrentCropProduction()
+    this.totalCuplumpDry = 0
+    this.totalLatexDry = 0
+    this.totalProduction = 0
+    const getProduction = this.reportService.getCurrentCropProduction(this.yearNow.toString())
       .subscribe(
         Response => {
           this.productions = Response
@@ -262,6 +293,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
             for (const production of this.productions) {
               this.totalCuplumpDry += production.cuplumpDry || 0;
               this.totalLatexDry += production.latexDry || 0;
+              this.totalProduction = this.totalCuplumpDry + this.totalLatexDry
               this.isLoadingProduction = false
             }
           }
@@ -285,9 +317,9 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
             };
             this.productivity.push(product);
           } else {
-            const targetYear = new Date().getFullYear();
+            const targetYear = this.yearNow;
             this.productivityByYear = this.groupByYear(this.productivity);
-            this.productivityByYear = this.productivityByYear.filter( (x:any) =>x.year == targetYear )
+            this.productivityByYear = this.productivityByYear.filter((x: any) => x.year == targetYear)
             // this.createProductivityChart(); // Call chart creation after data is processed
           }
           this.isLoadingProduction = false;
@@ -356,7 +388,9 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   // }
 
   getWorker() {
-    const getCurrent = this.reportService.getCurrentTapperAndFieldWorker()
+    this.currentTotalTapper = 0;
+    this.currentTotalField = 0
+    const getCurrent = this.reportService.getCurrentTapperAndFieldWorker(this.yearNow.toString())
       .subscribe(
         Response => {
           if (Response.length === 0) {
@@ -401,14 +435,14 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   print() {
     const printContents = document.getElementById('print')?.innerHTML;
     const originalContents = document.body.innerHTML;
-  
+
     if (printContents) {
       // Temporarily replace the body content with the print content
       document.body.innerHTML = printContents;
-  
+
       // Use a timeout to allow the print dialog to open before restoring the original content
       window.print();
-  
+
       // Restore the original content after the print dialog is closed or cancelled
       setTimeout(() => {
         document.body.innerHTML = originalContents;
@@ -416,6 +450,6 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
       }, 100);
     }
   }
-  
+
 
 }

@@ -10,6 +10,8 @@ import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integratio
 import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
+import swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-home-estate-clerk',
@@ -32,7 +34,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   productivity: any[] = []
   workerShortages: any[] = []
 
-  yearNow = 0
+  yearNow = ''
   totalCuplump = 0
   totalLatex = 0
   totalLocal = 0
@@ -42,7 +44,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   currentTotalTapper = 0
   currentTotalField = 0
   tapperShortage = 0
-  fieldShortage =0
+  fieldShortage = 0
 
   productivityCuplumpDry = 0
   productivityLatexDry = 0
@@ -55,6 +57,8 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
 
   totalCuplumpDry = 0
   totalLatexDry = 0
+  totalProduction = 0
+
 
   isLoadingEstateName = true
   isLoadingProduction = true
@@ -70,18 +74,18 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   isLoadingTapperShortage = true
   isLoadingFieldShortage = true
 
-  productivityByYear:any
+  productivityByYear: any
 
   constructor(
     private reportService: ReportService,
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
     if (this.sharedService.role != "Admin") {
-      this.yearNow = new Date().getFullYear()
+      this.yearNow = new Date().getFullYear().toString()
       this.estateId = this.sharedService.estateId
       this.checkDate()
       this.getEstate()
@@ -93,43 +97,65 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     }
   }
 
+  yearSelected(yearInput: HTMLInputElement): void {
+    const year = yearInput.value;
+
+    if (year.length > 4) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert a correct year',
+      }).then(() => {
+        // Reset the input value to the current year after the alert
+        yearInput.value = this.yearNow;
+      });
+    } else {
+      this.yearNow = year;
+      this.getProductionReport()
+      this.getWorker()
+      this.getFieldArea()
+      this.getWorkerShortage()
+      this.getField()
+      this.getProductivity()
+    }
+  }
+
   ngAfterViewInit() {
     this.getProductivity()
   }
 
-  getField(){
-   const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
-    .subscribe(
-      Response =>{
-        const field = Response.filter(x=>x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area') && x.isActive == true)
-        this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
-        this.isLoadingTappedArea = false
-      }
-    )
+  getField() {
+    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
+      .subscribe(
+        Response => {
+          const field = Response.filter(x => x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area') && x.isActive == true)
+          this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
+          this.isLoadingTappedArea = false
+        }
+      )
     this.subscriptionService.add(getCurrentField);
 
   }
 
   getWorkerShortage() {
     const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString())
-    .subscribe(
-      response => {
-        this.workerShortages = response.filter(x=>x.estateId == this.sharedService.estateId);
-        if(this.workerShortages.length === 0)
-          {
+      .subscribe(
+        response => {
+          this.workerShortages = response.filter(x => x.estateId == this.sharedService.estateId);
+          if (this.workerShortages.length === 0) {
             this.tapperShortage = 0
             this.fieldShortage = 0
             this.isLoadingTapperShortage = false
             this.isLoadingFieldShortage = false
           }
-          else{
+          else {
             this.tapperShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.tapperShortage, 0)
             this.isLoadingTapperShortage = false
             this.fieldShortage = this.workerShortages.reduce((sum, workerShortage) => sum + workerShortage.fieldShortage, 0)
             this.isLoadingFieldShortage = false
           }
-      }
-    );
+        }
+      );
     this.subscriptionService.add(getWorkerShortage);
 
   }
@@ -150,12 +176,15 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
           this.isLoadingEstateName = false
         }
       )
-      this.subscriptionService.add(getEstate);
+    this.subscriptionService.add(getEstate);
 
   }
 
   getProductionReport() {
-    const getCurrentProduction = this.reportService.getCurrentCropProduction()
+    this.totalCuplumpDry = 0
+    this.totalLatexDry = 0
+    this.totalProduction = 0
+    const getCurrentProduction = this.reportService.getCurrentCropProduction(this.yearNow)
       .subscribe(
         Response => {
           const productions = Response
@@ -169,46 +198,47 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
             };
             this.filterProductions.push(product)
           }
-          else{
+          else {
             for (const production of this.filterProductions) {
               this.totalCuplumpDry += production.cuplumpDry || 0;
               this.totalLatexDry += production.latexDry || 0;
+              this.totalProduction = this.totalCuplumpDry + this.totalLatexDry
               this.isLoadingProduction = false
             }
           }
           this.isLoadingProduction = false
         }
       )
-      this.subscriptionService.add(getCurrentProduction);
+    this.subscriptionService.add(getCurrentProduction);
 
 
   }
 
   getWorker() {
-    const getCurrentWorker = this.reportService.getCurrentTapperAndFieldWorker()
+    const getCurrentWorker = this.reportService.getCurrentTapperAndFieldWorker(this.yearNow)
       .subscribe(
         Response => {
           const worker = Response.filter(x => x.estateId == this.sharedService.estateId)
-          if(worker.length === 0){
+          if (worker.length === 0) {
             this.currentTotalTapper = 0
             this.currentTotalField = 0
             this.isLoadingTapper = false
             this.isLoadingField = false
           }
-          else{
+          else {
             worker.forEach(item => {
               // Add values with "tapper" in their keys to currentTotalTapper
               this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
               this.isLoadingTapper = false
-  
+
               // Add values with "field" in their keys to currentTotalField
               this.currentTotalField += item.fieldCheckrole + item.fieldContractor;
               this.isLoadingField = false
             });
-          }  
+          }
         }
       )
-      this.subscriptionService.add(getCurrentWorker);
+    this.subscriptionService.add(getCurrentWorker);
 
   }
 
@@ -216,37 +246,39 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     const getProductivity = this.reportService.getCropProductivity()
       .subscribe(
         {
-          next:(Response)=>{
-            this.productivity = Response.filter(x=>x.estateId == this.sharedService.estateId);
+          next: (Response) => {
+            this.productivity = Response.filter(x => x.estateId == this.sharedService.estateId);
             if (this.productivity.length === 0) {
               const product: any = {
                 totalCuplumpDry: 0,
                 totalLatexDry: 0,
                 totalArea: 0,
-                totalRubberDry : 0
+                totalRubberDry: 0
               };
               this.productivity.push(product);
               this.productivityByYear = this.groupByYear(this.productivity);
+              this.productivityByYear = this.productivityByYear.filter((x: any) => x.year == this.yearNow)
             } else {
               // Call the groupByYear function to group data by year and calculate sums
               this.productivityByYear = this.groupByYear(this.productivity);
+              this.productivityByYear = this.productivityByYear.filter((x: any) => x.year == this.yearNow)
               // this.createProductivityChart(); // Call chart creation after data is processed
             }
             this.isLoadingProduction = false;
           },
-          error:(err)=>{
+          error: (err) => {
             console.error('Error fetching productivity data:', err);
             this.isLoadingProduction = false;
           }
         }
       );
-      this.subscriptionService.add(getProductivity);
+    this.subscriptionService.add(getProductivity);
 
   }
 
   // Helper function to group data by year and calculate sums
-  groupByYear(data:any) {
-    const grouped = data.reduce((acc:any, curr:any) => {
+  groupByYear(data: any) {
+    const grouped = data.reduce((acc: any, curr: any) => {
       const year = curr.year
       if (!acc[year]) {
         acc[year] = {
@@ -254,7 +286,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
           totalCuplumpDry: 0,
           totalLatexDry: 0,
           totalArea: 0,
-          totalRubberDry : 0
+          totalRubberDry: 0
         };
       }
       acc[year].totalCuplumpDry += curr.totalCuplumpDry || 0;
@@ -272,8 +304,8 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     }
 
     const years = this.productivityByYear.map((x: any) => x.year);
-    const totalRubberProductivity = this.productivityByYear.map((x:any)=> x.totalRubberDry/x.totalArea);
-  
+    const totalRubberProductivity = this.productivityByYear.map((x: any) => x.totalRubberDry / x.totalArea);
+
     this.chartEstate = new Chart("chartProductivityEstate", {
       type: 'line',
       data: {
@@ -295,7 +327,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     });
   }
 
-  getFieldArea() { 
+  getFieldArea() {
     const getFieldArea = this.reportService.getFieldArea(this.yearNow.toString())
       .subscribe(
         Response => {
@@ -309,13 +341,13 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
         }
 
       )
-      this.subscriptionService.add(getFieldArea);
+    this.subscriptionService.add(getFieldArea);
 
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }
 

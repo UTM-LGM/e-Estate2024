@@ -12,6 +12,9 @@ import { ReportService } from 'src/app/_services/report.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 
+import swal from 'sweetalert2';
+
+
 @Component({
   selector: 'app-home-company-admin',
   templateUrl: './home-company-admin.component.html',
@@ -24,6 +27,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   companyId = 0
   totalLatexDry = 0
   totalCuplumpDry = 0
+  totalProduction = 0
   totalCuplumpDryMalaysia = 0
   totalLatexDryMalaysia = 0
   malaysiaTappedArea = 0
@@ -51,6 +55,8 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   tappedAreaMalaysia = 0
 
   productivityByYear: any
+  yearNow = ''
+
 
 
   constructor(
@@ -63,6 +69,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.yearNow = new Date().getFullYear().toString()
     if (this.sharedService.role != "Admin") {
       this.companyId = this.sharedService.companyId
       this.getCompany()
@@ -70,12 +77,31 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
       this.getProduction()
       this.getField()
       this.getProductivity()
+    }
+  }
 
+  yearSelected(yearInput: HTMLInputElement): void {
+    const year = yearInput.value;
+
+    if (year.length > 4) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please insert a correct year',
+      }).then(() => {
+        // Reset the input value to the current year after the alert
+        yearInput.value = this.yearNow;
+      });
+    } else {
+      this.yearNow = year;
+      this.getProduction()
+      this.getField()
+      this.getProductivity()
     }
   }
 
   getField() {
-    const getCurrentField = this.reportService.getCurrentField(new Date().getFullYear().toString())
+    const getCurrentField = this.reportService.getCurrentField(this.yearNow)
       .subscribe(
         (Response: any[]) => {
           const filteredFields = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'));
@@ -128,9 +154,9 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
             };
             this.productivity.push(product);
           } else {
-            const targetYear = new Date().getFullYear();
+            const targetYear = this.yearNow
             this.productivityByYear = this.groupByYear(this.productivity);
-            this.productivityByYear = this.productivityByYear.filter( (x:any) =>x.year == targetYear )
+            this.productivityByYear = this.productivityByYear.filter((x: any) => x.year == targetYear)
             // this.createProductivityChart(); // Call chart creation after data is processed
           }
           this.isLoadingProduction = false;
@@ -195,7 +221,8 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   }
 
   getProduction() {
-    const getCurrentProduction = this.reportService.getCurrentCropProduction()
+    this.totalProduction = 0
+    const getCurrentProduction = this.reportService.getCurrentCropProduction(this.yearNow)
       .subscribe(
         Response => {
           const productions = Response
@@ -223,6 +250,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
                 const productionCompany = productions.filter(x => x.companyId == this.sharedService.companyId);
                 this.totalCuplumpDry = productionCompany.reduce((sum, field) => sum + field.cuplumpDry, 0);
                 this.totalLatexDry = productionCompany.reduce((sum, field) => sum + field.latexDry, 0)
+                this.totalProduction = this.totalCuplumpDry + this.totalLatexDry
                 this.isLoadingProduction = false
               }
             )

@@ -94,7 +94,15 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-    } else if (this.rubberSale.transportPlateNo?.trim()) {
+    } else if (this.rubberSale.deliveryAgent == '' && this.deliveryAgent == 'yes' ) {
+      swal.fire({
+        title: 'Error!',
+        text: 'Please enter the delivery agent name',
+        icon: 'error',
+        showConfirmButton: true
+      });
+    } 
+    else if (this.rubberSale.transportPlateNo?.trim()) {
       this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
       if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
         this.generateLetterOfConsetnNo();

@@ -63,15 +63,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   submitRegister() {
-    this.spinnerService.requestStarted()
     if (this.register.userName == '' || this.register.fullName == null || this.register.licenseNo == null || this.register.email == null || this.register.position == null || this.register.confirmPassword == null ) {
       swal.fire({
         icon: 'error',
         title: 'Error, Please fill up the form',
       })
-      this.spinnerService.requestEnded();
     }
     else {
+    this.spinnerService.requestStarted()
       this.register.isEmailVerified = false
       this.register.companyId = this.result.companyId
       this.register.estateId = this.result.premiseId
@@ -106,7 +105,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
             }
           })
     }
-    this.spinnerService.requestEnded();
   }
 
   reset() {

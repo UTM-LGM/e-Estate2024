@@ -26,8 +26,7 @@
 
   <div style="columns: 2">
     <label>Wet Weight (Kg) <span style="color: red;">*</span> :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00"
-      (input)="calculateTotalPrice()" />
+    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" placeholder="0.00" />
     <label>Estimated DRC (%) <span style="color: red;">*</span> :</label>
     <input type="number" name="DRC" [(ngModel)]="rubberSale.drc" placeholder="0.00" (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)" />
   </div><br/>
@@ -45,7 +44,7 @@
 
     <div *ngIf="deliveryAgent == 'yes'">
       <label>Delivery agent name <span style="color: red;">*</span> :</label>
-      <input type="text" name="plateNo" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()"/>
+      <input type="text" name="deliveryname" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()"/>
     </div>
 
   </div>

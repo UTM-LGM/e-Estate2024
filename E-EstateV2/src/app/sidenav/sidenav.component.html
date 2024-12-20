@@ -229,13 +229,13 @@
     <hr />
   </div>
 
-  <div
+  <!-- <div
     [ngClass]="{'display': role == 'EstateClerk' || role == 'CompanyAdmin' || role == 'Admin' || role == 'Management', 'none': !showReport}">
     <button class="side-btn" routerLink="/polygon" routerLinkActive="active">
       Polygon
     </button>
     <hr />
-  </div>
+  </div> -->
 
   <div
     [ngClass]="{'display': role == 'Admin' || role == 'EstateClerk', 'none': role == 'CompanyAdmin' || role == 'Management'  || position == 'MANAGER'}">

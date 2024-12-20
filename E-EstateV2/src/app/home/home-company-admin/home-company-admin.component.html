@@ -6,38 +6,49 @@
 
 <hr />
 
+<div>
+  <div style="float: left;" class="year">
+    <label style="width: 57px;">Year : </label>
+    <input type="number" #yearInput [value]="yearNow" (input)="yearSelected(yearInput)" />
+  </div>
+</div>
+
+<br />
+<br/>
+<br/>
+
 <div style="columns:2">
-    <div class="box">
-      <div class="column box-container color1">
-        <div class="span-word">
-          <span style="font-weight: bold;" > Total Estate</span><br />
-          <span *ngIf="!isLoadingEstate">{{totalEstate}}</span>
-        </div>
-        <div *ngIf="isLoadingEstate">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-        </div>
+  <div class="box">
+    <div class="column box-container color1">
+      <div class="span-word">
+        <span style="font-weight: bold;"> Total Estate</span><br />
+        <span *ngIf="!isLoadingEstate">{{totalEstate}}</span>
+      </div>
+      <div *ngIf="isLoadingEstate">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
       </div>
     </div>
+  </div>
   <br />
 
-    <div class="box">
-      <div class="column box-container color2">
-        <div class="span-word">
-          <span style="font-weight: bold;">Tapped Rubber Area (Ha)</span><br />
-          <span  *ngIf="!isLoadingTapped">{{tappedArea  | number:'1.2-2' }}</span>
-        </div>
-        <div *ngIf="isLoadingTapped">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-        </div>
+  <div class="box">
+    <div class="column box-container color2">
+      <div class="span-word">
+        <span style="font-weight: bold;">Tapped Rubber Area (Ha)</span><br />
+        <span *ngIf="!isLoadingTapped">{{tappedArea | number:'1.2-2' }}</span>
+      </div>
+      <div *ngIf="isLoadingTapped">
+        <ngx-skeleton-loader appearance="line" animation="progress-dark"
+          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
       </div>
     </div>
+  </div>
 
 </div>
 
 <div class="box-container-outer">
-  <span class="title2">Current Rubber Dry Production (Kg)</span>
+  <span class="title2">Rubber Dry Production (Kg) for {{yearNow}}</span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
@@ -56,7 +67,7 @@
       <div class="span-word">
         <span style="font-weight: bold;">Latex</span><br />
         <div *ngIf="!isLoadingProduction">
-          <span>{{totalLatexDry | number: '1.2-2'}}</span> 
+          <span>{{totalLatexDry | number: '1.2-2'}}</span>
         </div>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -68,7 +79,7 @@
     <div class="column box-container color1">
       <div class="span-word">
         <span style="font-weight: bold;">Total</span><br />
-        <span *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number:
+        <span *ngIf="!isLoadingProduction">{{totalProduction | number:
           '1.2-2' }}</span>
       </div>
       <div *ngIf="isLoadingProduction">
@@ -81,7 +92,7 @@
 <br />
 
 <div class="box-container-outer">
-  <span  class="title2">Rubber Productivity (Kg/Ha) </span>
+  <span class="title2">Rubber Productivity (Kg/Ha) for {{yearNow}} </span>
   <div class="box">
     <div class="column box-container color3">
       <div class="span-word">
@@ -89,15 +100,15 @@
         <div *ngIf="!isLoadingMalaysia">
           <span *ngFor="let cuplumpProductivity of productivityByYear">
             {{
-              (cuplumpProductivity.totalRubberDry !== null && cuplumpProductivity.totalRubberDry !== undefined &&
-               cuplumpProductivity.totalArea !== null && cuplumpProductivity.totalArea !== undefined)
-                ? (cuplumpProductivity.totalRubberDry / tappedAreaMalaysia | number: '1.2-2')
-                : 0
+            (cuplumpProductivity.totalRubberDry !== null && cuplumpProductivity.totalRubberDry !== undefined &&
+            cuplumpProductivity.totalArea !== null && cuplumpProductivity.totalArea !== undefined)
+            ? (cuplumpProductivity.totalRubberDry / tappedAreaMalaysia | number: '1.2-2')
+            : 0
             }}
           </span>
         </div>
       </div>
-      
+
       <div *ngIf="isLoadingMalaysia">
         <ngx-skeleton-loader appearance="line" animation="progress-dark"
           [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>

@@ -6,22 +6,22 @@
 
 <hr />
 
+<div>
+  <div style="float: left;" class="year">
+    <label style="width: 57px;">Year : </label>
+    <input type="number" #yearInput [value]="yearNow" (input)="yearSelected(yearInput)" />
+  </div>
+</div>
+
+<br />
+<br/>
+<br/>
+
 
 <div style="columns:2">
   <div class="box-container-outer">
-    <span class="title2">Current Rubber Area (Ha)</span>
+    <span class="title2">Rubber Area (Ha) </span>
     <div class="box">
-      <!-- <div class="column box-container color3">
-        <div class="span-word">
-          <span>Mature</span><br />
-          <span style="font-weight: bold;" *ngIf="!isLoadingMatureArea">{{matureArea}}</span>
-        </div>
-        <div *ngIf="isLoadingMatureArea">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-        </div>
-      </div> -->
-
       <div class="column box-container color4">
         <div class="span-word">
           <span style="font-weight: bold;">Tapped</span><br />
@@ -50,7 +50,7 @@
   <br />
 
   <div class="box-container-outer">
-    <span class="title2">Current Rubber Dry Production (Kg)</span>
+    <span class="title2">Rubber Dry Production (Kg) for {{yearNow}} </span>
     <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
@@ -81,7 +81,7 @@
       <div class="column box-container color2">
         <div class="span-word">
           <span style="font-weight: bold;">Total</span><br />
-          <span *ngIf="!isLoadingProduction">{{totalCuplumpDry + totalLatexDry | number: '1.2-2' }}</span>
+          <span *ngIf="!isLoadingProduction">{{totalProduction | number: '1.2-2' }}</span>
         </div>
         <div *ngIf="isLoadingProduction">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -95,7 +95,7 @@
 
 <div style="columns:2">
   <div class="box-container-outer">
-    <span class="title2">Tapper Worker</span>
+    <span class="title2">Tapper Worker for {{yearNow}}</span>
     <div class="box">
       <div class="column box-container color1">
         <div class="span-word">
@@ -123,7 +123,7 @@
   </div>
 
   <div class="box-container-outer">
-    <span class="title2">Field Worker</span>
+    <span class="title2">Field Worker for {{yearNow}}</span>
     <div class="box">
       
 
@@ -157,7 +157,7 @@
 <br />
 
 <div class="box-container-outer">
-  <span class="title2">Current Rubber Productivity (Kg/Ha)</span>
+  <span class="title2">Rubber Productivity (Kg/Ha/Yr) for {{yearNow}}</span>
   <div class="box">
     <!-- <div class="column box-container color4">
       <div class="span-word">

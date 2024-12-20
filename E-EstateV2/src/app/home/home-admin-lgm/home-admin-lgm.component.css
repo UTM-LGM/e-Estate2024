@@ -94,35 +94,36 @@ span {
 
   @page {
     size: A4 landscape; /* This sets the page to A4 size in landscape orientation */
-    margin-top: 5px;          /* Adjust the margin as needed */
+    margin-top: 5px; /* Adjust the margin as needed */
   }
 }
 
-.box1{
+.box1 {
   columns: 2;
 }
 
-.title2{
+.title2 {
   font-size: 14px;
   font-weight: bold;
 }
 
-
 @media only screen and (max-width: 768px) {
-  .box1{
+  .box1 {
     columns: 1;
     padding-bottom: 25px;
   }
 
-  .title2{
+  .title2 {
     font-size: 12px;
   }
 
-  .tittle{
+  .tittle {
     font-size: 17px !important;
   }
 }
 
-
-
-
+.year {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

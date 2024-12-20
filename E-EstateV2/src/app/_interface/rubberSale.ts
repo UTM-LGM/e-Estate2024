@@ -9,7 +9,7 @@ export interface RubberSale {
     wetWeight: number
     drc: number
     unitPrice: number
-    total:string
+    total:number
     isActive: boolean
     buyerId: number
     buyer: Buyer[]
@@ -30,6 +30,7 @@ export interface RubberSale {
     driverIc:string
     receiptNoDate:Date
     weightSlipNo:string
+    weightSlipNoDate:Date
     buyerDRC:number
     buyerWetWeight:number
     licenseNoTrace:string

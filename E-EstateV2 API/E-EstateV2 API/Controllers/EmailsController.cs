@@ -16,9 +16,12 @@ namespace E_EstateV2_API.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly IEmailRepository _emailRepository;
-        public EmailsController(IEmailRepository emailRepository)
+        private readonly IConfiguration _configuration;
+
+        public EmailsController(IEmailRepository emailRepository, IConfiguration configuration)
         {
             _emailRepository = emailRepository;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -56,11 +59,13 @@ namespace E_EstateV2_API.Controllers
         [Route("{encodedData}")]
         public async Task<IActionResult> VerifyEmail([FromRoute] string encodedData)
         {
+            string rrimUrl = _configuration["BaseUrls:RRIMestet"];
+            string verificationUrl = $"{rrimUrl}/verifyemail";
+
             await _emailRepository.VerifyEmailVerifiedUser(encodedData);
             await _emailRepository.VerifyEmail(encodedData);
-            return Redirect("https://www5.lgm.gov.my/RRIMestet/verifyemail");
+            return Redirect(verificationUrl);
             //return Redirect("https://lgm20.lgm.gov.my/RRIMestet/verifyemail");
-            //return Redirect("https://www5.lgm.gov.my/trainingE-estate/verifyemail");
         }
 
         [HttpPost]

@@ -22,6 +22,7 @@
         public float unitPrice { get; set; }
         public float total { get; set; }
         public string weightSlipNo { get; set; }
+        public DateTime weightSlipNoDate { get; set; } 
         public int estateId { get; set; }
 
         public bool isActive { get; set; }

@@ -89,11 +89,16 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   fieldHistory = {} as any
   isHistory = false
 
+  abandonedInput = false
+
+
 
   otherCrops: OtherCrop[] = []
 
   fieldGrants: FieldGrant[] = []
   fieldGrant = {} as FieldGrant
+  abandoned : any []=[]
+
 
   sortableColumn = [
     { columnName: 'dateInfected', displayText: 'Date Infected' },
@@ -127,6 +132,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onInit = true
+    this.abandonedInput = false
     this.getOneField()
     this.getFieldDisease()
     this.getOneFieldHistory()
@@ -232,6 +238,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
             this.fieldStatus = Response
             this.filterFieldStatus = this.fieldStatus.filter(c => c.isMature == field.isMature && c.isActive == true)
             this.checkFieldStatus()
+            this.checkAbandoned()
             this.onInit = false
           }
           else {
@@ -523,6 +530,18 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
       this.conversion = false
       this.conversionButton = false
       this.updateConversionBtn = false
+    }
+    this.checkAbandoned()
+  }
+
+  checkAbandoned(){
+    this.abandoned = this.fieldStatus.filter(x=>x.fieldStatus.toLowerCase().includes('abandoned') || x.fieldStatus.toLowerCase().includes('acquired'))
+    if(this.abandoned.some(category => category.id === this.field.fieldStatusId)){
+      this.abandonedInput = true
+      this.field.dateOpenTapping = null
+    }
+    else{
+      this.abandonedInput = false
     }
   }
 

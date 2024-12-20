@@ -2519,11 +2519,17 @@
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
     "Method": "CurrentProductions",
-    "RelativePath": "api/Reports/CurrentProductions",
+    "RelativePath": "api/Reports/CurrentProductions/{year}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -2724,11 +2730,17 @@
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
     "Method": "GetCurrentTapperAndFieldWorker",
-    "RelativePath": "api/Reports/GetCurrentTapperAndFieldWorker",
+    "RelativePath": "api/Reports/GetCurrentTapperAndFieldWorker/{year}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

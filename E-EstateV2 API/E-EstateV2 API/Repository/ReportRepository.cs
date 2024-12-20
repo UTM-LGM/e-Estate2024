@@ -19,10 +19,8 @@ namespace E_EstateV2_API.Repository
         }
 
         //LGMAdmin
-        public async Task<object> GetCurrentProduction()
+        public async Task<object> GetCurrentProduction(int year)
         {
-            int year = DateTime.Now.Year;
-
             var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
             {
                 estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
@@ -90,10 +88,8 @@ namespace E_EstateV2_API.Repository
         }
 
         //LGMAdmin
-        public async Task<object> GetLatestMonthWorker()
+        public async Task<object> GetLatestMonthWorker(int year)
         {
-            int year = DateTime.Now.Year;
-
             // Fetch all laborInfos records into memory
             var allLaborInfos = await _context.laborInfos.ToListAsync();
 

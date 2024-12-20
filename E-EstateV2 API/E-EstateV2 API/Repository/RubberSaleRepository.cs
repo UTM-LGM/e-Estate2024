@@ -52,6 +52,7 @@ namespace E_EstateV2_API.Repository
                 unitPrice = x.unitPrice,
                 total = x.total,
                 weightSlipNo = x.weightSlipNo,
+                weightSlipNoDate = x.weightSlipNoDate,
                 isActive = x.isActive,
                 buyerId = x.buyerId,
                 buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y=>y.licenseNo).FirstOrDefault(),

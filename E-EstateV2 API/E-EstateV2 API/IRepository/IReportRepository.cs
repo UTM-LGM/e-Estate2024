@@ -16,11 +16,11 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetAllLaborInformationCategory(string start, string end);
 
         Task<object> GetProductivity();
-        Task<object> GetCurrentProduction();
+        Task<object> GetCurrentProduction(int year);
 
         Task<object> GetFieldArea(int year);
         Task<object> GetStateFieldArea (string start, string end);
-        Task<object> GetLatestMonthWorker();
+        Task<object> GetLatestMonthWorker(int year);
         Task<object> GetTapperAndFieldWorker(int year);
         Task<object> GetAllTapperAndFieldWorker(string start, string end);
         Task<object> GetWorkerShortageEstate(int year);

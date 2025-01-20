@@ -16,6 +16,10 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/ProductionYearlyByField/' + year)
   }
 
+  getStateFieldAreaById(estateId:number):Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetStateFieldAreaById/' + estateId)
+  }
+
   getCurrentCropProduction(year:string): Observable<any[]> {
     return this.http.get<any[]>(this.baseUrl + '/reports/CurrentProductions/' + year)
   }
@@ -24,10 +28,11 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/GetProductivity')
   }
 
-  getStateFieldArea(start: string, end: string): Observable<any[]> {
+  getStateFieldArea(start: string, end: string, estateId:number): Observable<any[]> {
     const params = new HttpParams()
       .set('start', start)
-      .set('end', end);
+      .set('end', end)
+      .set('estateId', estateId)
     return this.http.get<any[]>(this.baseUrl + '/reports/GetStateFieldArea', {params})
   }
 

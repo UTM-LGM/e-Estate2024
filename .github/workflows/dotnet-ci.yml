@@ -1,0 +1,28 @@
+name: CI Workflow for .NET
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-dotnet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x  
+
+      - name: Restore NuGet Packages
+        run: dotnet restore "E-EstateV2 API/E-EstateV2 API/E-EstateV2 API.csproj"
+
+      - name: Build .NET project
+        run: dotnet build "E-EstateV2 API/E-EstateV2 API/E-EstateV2 API.csproj"
+
+
+        

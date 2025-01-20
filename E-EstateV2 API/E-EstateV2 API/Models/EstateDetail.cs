@@ -18,6 +18,9 @@ namespace E_EstateV2_API.Models
 
         public int estateIdOld { get; set; }
         public string licenseNo { get; set; }
+
+        public float polygonArea { get; set; }
+        public bool MSNRStatus { get; set; }
         
     }
 }

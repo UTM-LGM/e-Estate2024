@@ -5,6 +5,7 @@ using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.X9;
+using System.Globalization;
 
 namespace E_EstateV2_API.Repository
 {
@@ -50,6 +51,7 @@ namespace E_EstateV2_API.Repository
             }).OrderByDescending(c => c.yearPlanted).ToListAsync();
             return field;
         }
+
 
         public async Task<List<DTO_Field>> GetFieldDescStatus()
         {

@@ -1,7 +1,14 @@
 <div class="box-container">
-  <h1>Estate Information</h1>
+  <h1>Estate Information
+    <div style="float: right;">
+      <button class="btn" [ngStyle]="{ color: estateDetail.msnrStatus ? 'green' : 'red' }" [disabled]="true">
+        {{ estateDetail.msnrStatus ? 'MSNR' : 'Non MSNR' }}
+      </button>
+    </div>
+  </h1>
+
   <hr />
-  
+
   <table class="detailAdmin">
     <tr>
       <td>Estate Name</td>
@@ -101,6 +108,13 @@
       <td>Estate Phone No</td>
       <td><span>:</span></td>
       <td>{{estate.phoneCode}} {{estate.phoneNo}}</td>
+
+      <td>Polygon Area (Ha)</td>
+      <td><span>:</span></td>
+      <td *ngIf="estateDetail.polygonArea == 0 || !estateDetail.polygonArea" class="detail" style="color: blue;">Auto
+        update from RRIM GeoRubber</td>
+      <td *ngIf="estateDetail.polygonArea != 0 && estateDetail.polygonArea">{{estateDetail.polygonArea | number:'1.2-2'
+        }}</td>
 
     </tr>
 

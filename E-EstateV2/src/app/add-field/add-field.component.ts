@@ -458,6 +458,13 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       });
       this.field.initialTreeStand = 0
     }
+      else if (!Number.isInteger(this.field.initialTreeStand)) {
+        swal.fire({
+          text: 'Initial Tree Stand cannot have decimal points',
+          icon: 'error'
+        });
+        this.field.initialTreeStand = Math.floor(this.field.initialTreeStand); // Round down to the nearest integer
+      }
   }
 
   checkTreeCurrent(){
@@ -468,5 +475,20 @@ export class AddFieldComponent implements OnInit, OnDestroy {
       });
       this.field.currentTreeStand = 0
     }
+    else if(this.field.currentTreeStand > this.field.initialTreeStand){
+      swal.fire({
+        text: 'Current Tree Stand cannot be more than Initial Tree Stand',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = 0
+    }
+    else if (!Number.isInteger(this.field.currentTreeStand)) {
+      swal.fire({
+        text: 'Current Tree Stand cannot have decimal points',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = Math.floor(this.field.currentTreeStand); // Round down to the nearest integer
+    }
+    
   }
 }

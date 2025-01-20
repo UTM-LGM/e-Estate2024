@@ -49,6 +49,7 @@ export class IndirectCostComponent implements OnInit,OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.totalAmount = 0
     this.position = this.sharedService.position
     if (this.selectedMonthYear != '') {
       this.isDisable = false

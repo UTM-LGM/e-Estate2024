@@ -34,4 +34,6 @@ export interface RubberSale {
     buyerDRC:number
     buyerWetWeight:number
     licenseNoTrace:string
+    msnrStatus:boolean
+    polygonArea:number
 }

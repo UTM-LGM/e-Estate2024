@@ -150,6 +150,21 @@
 
       </tr>
 
+      <tr>
+
+        <td>Polygon Area (Ha) </td>
+        <td><span>:</span></td>
+        <td *ngIf="estateDetail.polygonArea == 0 || !estateDetail.polygonArea" class="detail" style="color: blue;">Auto update from RRIM GeoRubber</td>
+        <td *ngIf="estateDetail.polygonArea != 0 && estateDetail.polygonArea">{{estateDetail.polygonArea | number:'1.2-2' }}</td>
+
+        <td></td>
+
+        <td>MSNR Status</td>
+        <td><span>:</span></td>
+        <td>{{ estateDetail.msnrStatus ? 'MSNR' : 'Non MSNR' }}</td>
+
+      </tr>
+
     </table>
   </div>
   <br />

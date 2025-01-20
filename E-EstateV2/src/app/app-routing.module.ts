@@ -58,7 +58,7 @@ import { EstateByStateComponent } from './report-by-state/estate-by-state/estate
 import { RubberCropsByStateComponent } from './report-by-state/estate-by-state-maturity/rubber-crops-by-state.component';
 import { ReportByStateComponent } from './report-by-state/report-by-state.component';
 import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
-import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
+import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-by-estate/rubber-production-yearly.component';
 import { CloneProductionYearlyComponent } from './report-production-by-year/clone-production-yearly/clone-production-yearly.component';
 import { ReportFieldInformationComponent } from './report-field-information/report-field-information.component';
 import { ReportProductivityByYearComponent } from './report-productivity-by-year/report-productivity-by-year.component';
@@ -77,6 +77,7 @@ import { EstateByCloneComponent } from './report-rubber-area-by-clone/estate-by-
 import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clone/area-by-clone.component';
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
 import { PolygonComponent } from './polygon/polygon.component';
+import { RubberProductionYearComponent } from './report-production-by-year/rubber-production-year/rubber-production-year.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -211,8 +212,9 @@ const routes: Routes = [
         path: 'report-production-by-year',
         component: ReportProductionByYearComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
         children: [
-          { path: 'rubber-production-yearly', component: RubberProductionYearlyComponent },
-          { path: 'clone-production-yearly', component: CloneProductionYearlyComponent }
+          { path: 'rubber-production-by-estate', component: RubberProductionYearlyComponent },
+          { path: 'clone-production-yearly', component: CloneProductionYearlyComponent },
+          { path: 'rubber-production-yearly', component: RubberProductionYearComponent}
         ]
       },
       {

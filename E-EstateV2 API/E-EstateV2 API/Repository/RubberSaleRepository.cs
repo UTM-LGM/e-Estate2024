@@ -19,19 +19,25 @@ namespace E_EstateV2_API.Repository
 
         public async Task<RubberSales> AddSale(RubberSales sales)
         {
-            sales.createdDate = DateTime.Now;
-            await _context.rubberSales.AddAsync(sales);
-            await _context.SaveChangesAsync();
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                bool exists = await _context.rubberSales
+                    .AnyAsync(rubberSale => rubberSale.saleDateTime == sales.saleDateTime && rubberSale.buyerId == sales.buyerId &&
+                    rubberSale.rubberType == sales.rubberType && rubberSale.wetWeight == sales.wetWeight && rubberSale.DRC == sales.DRC);
+                if (!exists)
+                {
+                    sales.createdDate = DateTime.Now;
+                    // Add the sales record
+                    await _context.rubberSales.AddAsync(sales);
+                }
 
-            //var buyerCompany = new BuyerCompany
-            //{
-            //    buyerId = sales.buyerId,
-            //};
+                await _context.SaveChangesAsync();
 
-            //await _context.buyerCompanies.AddAsync(buyerCompany);
-            //await _context.SaveChangesAsync();
+                // Commit the transaction
+                await transaction.CommitAsync();
 
-            return sales;
+                return sales;
+            }
         }
 
         public async Task<List<DTO_RubberSale>> GetRubberSales()

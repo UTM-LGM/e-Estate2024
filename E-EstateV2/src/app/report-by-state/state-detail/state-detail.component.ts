@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin, map, tap } from 'rxjs';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import * as XLSX from 'xlsx';
 import { Location } from '@angular/common';
+import { FieldService } from 'src/app/_services/field.service';
+import { SpinnerService } from 'src/app/_services/spinner.service';
+import { SubscriptionService } from 'src/app/_services/subscription.service';
 
 
 @Component({
@@ -12,13 +15,14 @@ import { Location } from '@angular/common';
   templateUrl: './state-detail.component.html',
   styleUrls: ['./state-detail.component.css']
 })
-export class StateDetailComponent implements OnInit {
+export class StateDetailComponent implements OnInit, OnDestroy {
 
   startMonth = ''
   endMonth = ''
   sortableColumns = [
     { columnName: 'no', displayText: 'No' },
     { columnName: 'estateName', displayText: 'Estate Name' },
+    { columnName: 'licenseNo', displayText: 'License No' },
     { columnName: 'rubberArea', displayText: 'Rubber Area (Ha)' },
   ];
 
@@ -40,11 +44,13 @@ export class StateDetailComponent implements OnInit {
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
     private location: Location,
-
+    private fieldService: FieldService,
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit(): void {
     // Retrieve the query parameters
+    this.isLoading = true
     this.route.queryParams.subscribe(params => {
       this.startMonth = params['startMonth'];
       this.endMonth = params['endMonth'];
@@ -57,38 +63,51 @@ export class StateDetailComponent implements OnInit {
             Response => {
               this.estates = Response
               this.calculateTotalAllArea();
-              this.isLoading = false
             }
           )
+        this.subscriptionService.add(getOneState);
       }
     });
   }
 
   // Assuming this is inside your component class
   calculateTotalAllArea() {
+    const startDate = new Date(`${this.startMonth}-01`);
+    const endDate = new Date(`${this.endMonth}`);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
+
     const observables = this.estates.map((estate: any) =>
-      this.reportService.getStateFieldArea(this.startMonth, this.endMonth).pipe(
+      this.fieldService.getField().pipe(
         map((response: any) => ({
           estateName: estate.name,
           estateAdd1: estate.add1,
-          estateId:estate.id,
-          fields: response.filter((x: any) => x.estateId === estate.id && x.isActive === true &&
-            !x.fieldStatus?.toLowerCase().includes('abandoned') &&
-            !x.fieldStatus?.toLowerCase().includes('government') &&
-            !x.fieldStatus?.toLowerCase().includes('conversion to other crop'))
-        })),
-      )
-    );
+          estateId: estate.id,
+          fields: response.filter((x: any) => {
+            const createdDate = new Date(x.createdDate); // Ensure the createdDate is correctly parsed into Date
+            return (
+              x.estateId === estate.id &&
+              createdDate >= startDate &&
+              createdDate <= endDate &&
+              x.isActive === true &&
+              !x.fieldStatus?.toLowerCase().includes('abandoned') &&
+              !x.fieldStatus?.toLowerCase().includes('government') &&
+              !x.fieldStatus?.toLowerCase().includes('conversion')
+            )
+          })
+        })
+        )
+      ))
 
     forkJoin(observables).subscribe((results: any) => {
       this.stateTotalAreasArray = this.estates.map((estate: any) => {
         const result = results.find((res: any) => res.estateId === estate.id);
         if (result) {
-          const totalArea = result.fields.reduce((acc: any, curr: any) => acc + (curr.area || 0), 0);
+          const totalArea = result.fields.reduce((acc: any, curr: any) => acc + (curr.rubberArea || 0), 0);
           return {
             estateName: estate.name,
             estateAdd1: estate.add1,
-            estateLicenseNo : estate.licenseNo,
+            estateLicenseNo: estate.licenseNo,
             totalArea: totalArea,
             state: estate.state
           };
@@ -96,21 +115,20 @@ export class StateDetailComponent implements OnInit {
           return {
             estateName: estate.name,
             estateAdd1: estate.add1,
-            estateLicenseNo : estate.licenseNo,
+            estateLicenseNo: estate.licenseNo,
             totalArea: 0,
             state: estate.state
           };
         }
       });
 
-      this.calculateArea()
-      this.isLoading = false;
+      this.calculateArea();
     });
   }
 
-  calculateArea(){
+  calculateArea() {
     this.totalArea = this.stateTotalAreasArray.reduce((acc, worker) => acc + (worker.totalArea || 0), 0)
-
+    this.isLoading = false
   }
 
 
@@ -130,8 +148,9 @@ export class StateDetailComponent implements OnInit {
     const filteredData: any = data.map(row => ({
       No: bilCounter++,
       EstateName: row.estateName,
+      EstateLicenseNo : row.estateLicenseNo,
       TotalRubberArea: row.totalArea,
-      State:row.state
+      State: row.state
     }));
 
     // Add a header row with the start and end month-year values
@@ -139,7 +158,7 @@ export class StateDetailComponent implements OnInit {
       { No: 'Start Month Year:', EstateName: this.startMonth },
       { No: 'End Month Year:', EstateName: this.endMonth },
       {}, // Empty row for separation
-      { No: 'No', EstateName: 'EstateName', TotalRubberArea: 'TotalRubberArea(Ha)', State: 'State' }
+      { No: 'No', EstateName: 'EstateName', EstateLicenseNo: 'EstateLicenseNo', TotalRubberArea: 'TotalRubberArea(Ha)', State: 'State' }
     ];
 
     // Combine the header row with the filtered data
@@ -158,6 +177,11 @@ export class StateDetailComponent implements OnInit {
   back() {
     this.location.back()
   }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll();
+  }
+
 
 
 }

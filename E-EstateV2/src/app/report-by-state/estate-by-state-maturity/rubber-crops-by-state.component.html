@@ -20,8 +20,8 @@
       <tr [appSort]="estateWithFields">
         <th width="30px">No</th>
         <th>State</th>
-        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Immature</th>
-        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Mature</th>
+        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Immature (Ha)</th>
+        <th colspan="2" style="border-bottom: 1px solid rgb(233, 228, 228);">Mature (Ha)</th>
         <th>Total Rubber Area (Ha)</th>
       </tr>
 
@@ -50,21 +50,21 @@
         <tr *ngIf="!isLoading">
           <td>{{ i + 1 }}</td>
           <td>{{ state.state }}</td>
-          <td>{{ state.totalNewPlantingArea }}</td>
+          <td>{{ state.totalNewPlantingArea | number:'1.2-2'  }}</td>
           <td>{{ state.totalReplantingArea | number:'1.2-2' }}</td>
           <td>{{ state.totalTappedArea | number:'1.2-2'}}</td>
           <td>{{ state.totalAbandonedArea | number:'1.2-2'}}</td>
-          <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea | number:'1.2-2'}}</td>
+          <td>{{ state.totalNewPlantingArea + state.totalReplantingArea + state.totalTappedArea + state.totalAbandonedArea | number:'1.2-2'}}</td>
         </tr>
       </ng-container>
 
       <tr  *ngIf="!isLoading">
         <th colspan="2">Total rubber area :</th>
-        <th>{{calculateNewPlanting() | number:'1.2-2'}}</th>
-        <th>{{calculateReplanting() | number:'1.2-2'}}</th>
-        <th>{{calculateTappedArea() | number:'1.2-2'}}</th>
-        <th>{{calculateAbandonedArea() | number:'1.2-2'}}</th>
-        <th>{{ calculateTotal() | number:'1.2-2'}}</th>
+        <th>{{ totalNewPlanting | number:'1.2-2'}}</th>
+        <th>{{ totalReplanting | number:'1.2-2'}}</th>
+        <th>{{ totalTapped | number:'1.2-2'}}</th>
+        <th>{{ totalAbandoned | number:'1.2-2'}}</th>
+        <th>{{ totalArea | number:'1.2-2'}}</th>
 
       </tr>
 

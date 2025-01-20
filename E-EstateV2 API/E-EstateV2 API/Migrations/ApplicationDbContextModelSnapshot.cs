@@ -889,6 +889,9 @@ namespace E_EstateV2_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("MSNRStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("createdBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -906,6 +909,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<int>("plantingMaterialId")
                         .HasColumnType("int");
+
+                    b.Property<float>("polygonArea")
+                        .HasColumnType("real");
 
                     b.Property<string>("updatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -2149,6 +2155,9 @@ namespace E_EstateV2_API.Migrations
 
                     b.Property<int>("paymentStatusId")
                         .HasColumnType("int");
+
+                    b.Property<float>("polygonArea")
+                        .HasColumnType("real");
 
                     b.Property<string>("receiptNo")
                         .HasColumnType("nvarchar(max)");

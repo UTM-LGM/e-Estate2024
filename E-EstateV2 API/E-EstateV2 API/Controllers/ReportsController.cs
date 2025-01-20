@@ -87,11 +87,19 @@ namespace E_EstateV2_API.Controllers
             return Ok(currentProductivity);
         }
 
-        [HttpGet]
+        //[HttpGet]
 
-        public async Task<IActionResult> GetStateFieldArea(string start, string end)
+        //public async Task<IActionResult> GetStateFieldArea(string start, string end, int estateId)
+        //{
+        //    var fieldArea = await _reportRepository.GetStateFieldArea(start,end, estateId);
+        //    return Ok(fieldArea);
+        //}
+
+        [HttpGet]
+        [Route("{estateId:int}")]
+        public async Task<IActionResult> GetStateFieldAreaById(int estateId)
         {
-            var fieldArea = await _reportRepository.GetStateFieldArea(start,end);
+            var fieldArea = await _reportRepository.GetFieldsByEstateId(estateId);
             return Ok(fieldArea);
         }
 

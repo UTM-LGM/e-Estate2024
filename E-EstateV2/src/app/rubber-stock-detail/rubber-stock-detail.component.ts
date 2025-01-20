@@ -84,7 +84,7 @@ export class RubberStockDetailComponent implements OnInit {
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
-    if(this.stock.weightLoss <= 0){
+    if(this.stock.weightLoss < 0){
       swal.fire({
         icon: 'error',
         title: 'Error',

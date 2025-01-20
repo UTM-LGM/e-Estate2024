@@ -20,6 +20,7 @@ import { EstateDetail } from '../_interface/estate-detail';
 import { EstateDetailService } from '../_services/estate-detail.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import { SpinnerService } from '../_services/spinner.service';
+import { RrimgeorubberIntegrationService } from '../_services/rrimgeorubber-integration.service';
 
 @Component({
   selector: 'app-edit-estate-detail',
@@ -50,6 +51,11 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
 
   town = true
 
+  polygonArea: number[] = []
+  polygonTotalArea = 0
+  msnrStatus: boolean = false
+
+
   constructor(
     public dialog: MatDialogRef<Estate>,
     @Inject(MAT_DIALOG_DATA) public data: { data: Estate, estateDetail: EstateDetail },
@@ -63,7 +69,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
     private estateDetailService: EstateDetailService,
     private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
-
+    private rrimGeoRubberService: RrimgeorubberIntegrationService,
   ) { }
 
   ngOnInit() {
@@ -75,6 +81,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
     this.getMembership()
     this.getEstablishment()
     this.getPlantingMaterial()
+    this.getGeoJson()
   }
 
   getFinancialYear() {
@@ -153,7 +160,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
 
   update() {
     this.spinnerService.requestStarted();
-  
+    this.getGeoJson()
     if (this.estateDetail.id == undefined) {
       // Preparing data for a new estate detail
       this.estateDetail.estateId = this.estate.id;
@@ -162,7 +169,9 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
       this.estateDetail.createdBy = this.sharedService.userId.toString();
       this.estateDetail.createdDate = new Date();
-  
+      this.estateDetail.polygonArea = this.polygonTotalArea
+      this.estateDetail.msnrStatus = this.msnrStatus
+
       // Calling service to add estate detail
       this.estateDetailService.addEstateDetail(this.estateDetail)
         .subscribe({
@@ -186,16 +195,16 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
             });
           }
         });
-  
+
     } else {
       // Preparing data for updating estate detail
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
       this.estateDetail.updatedBy = this.sharedService.userId.toString();
       this.estateDetail.updatedDate = new Date();
-  
+
       const { plantingMaterial, ...newObj } = this.estateDetail;
       this.filteredEstate = newObj;
-  
+
       // Calling service to update estate detail
       this.estateDetailService.updateEstateDetail(this.filteredEstate)
         .subscribe({
@@ -221,10 +230,70 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
         });
     }
   }
-  
+
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
+  }
+
+
+  getGeoJson() {
+    if (this.estate.licenseNo != undefined) {
+      this.rrimGeoRubberService.getGeoRubber(this.estate.licenseNo)
+        .subscribe(
+          Response => {
+            var features = Response.features;
+            if (features != undefined) {
+              if (Response.msnrStatus === 'Ya') {
+                this.msnrStatus = true;
+              } else if (Response.msnrStatus === 'Tidak') {
+                this.msnrStatus = false;
+              }
+
+              features.forEach((feature: any) => {
+                let geometry = feature.geometry;
+                let properties = feature.properties
+
+                // Check if the geometry is of type 'Polygon' or 'MultiPolygon'
+                if (geometry.type === 'Polygon') {
+                  geometry.coordinates.forEach((coordinateSet: any) => {
+                    this.polygonArea.push(properties.hectarage_of_marked_polygon);
+                  });
+                } else if (geometry.type === 'MultiPolygon') {
+                  geometry.coordinates.forEach((polygonCoordinates: any) => {
+                    polygonCoordinates.forEach((coordinateSet: any) => {
+                      this.polygonArea.push(properties.hectarage_of_marked_polygon);
+                    });
+                  });
+                }
+              });
+            } else {
+              this.spinnerService.requestEnded()
+              swal.fire({
+                text: 'Estate is not listed in RRIM GeoRubber',
+                icon: 'error'
+              });
+            }
+            this.polygonTotalArea = this.polygonArea.reduce((acc, currentValue) => acc + currentValue, 0);
+          },
+          error => {
+            // Suppress console log and show a user-friendly error message
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Estate is not listed in RRIM GeoRubber',
+            });
+          }
+        )
+    }
+    else {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Cannot connect to RRIMGeoRubber',
+      });
+      this.dialog.close();
+    }
   }
 
 }

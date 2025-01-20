@@ -103,12 +103,12 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   calculateStockCuplump() {
-    var stockCuplump = ((this.totalCuplumpDry + this.stock.previousStock) - this.stock.totalSale) - 1
+    var stockCuplump = ((this.totalCuplumpDry + this.stock.previousStock) - this.stock.totalSale)
     this.stock.currentStock = stockCuplump
   }
 
   calculateStockLatx() {
-    var stockLatex = ((this.totalLatexDry + this.stock.previousStock) - this.stock.totalSale) - 1
+    var stockLatex = ((this.totalLatexDry + this.stock.previousStock) - this.stock.totalSale)
     this.stock.currentStock = stockLatex
   }
 
@@ -270,7 +270,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
-    if (this.stock.weightLoss <= 0) {
+    if (this.stock.weightLoss < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -333,11 +333,10 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           this.dialogRef.close()
         }
       )
-
   }
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-
+  
 }

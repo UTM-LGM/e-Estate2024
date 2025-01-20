@@ -2787,21 +2787,16 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
-    "Method": "GetStateFieldArea",
-    "RelativePath": "api/Reports/GetStateFieldArea",
+    "Method": "GetStateFieldAreaById",
+    "RelativePath": "api/Reports/GetStateFieldAreaById/{estateId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "start",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "end",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -1,0 +1,75 @@
+<div class="box-container">
+    <h1>Rubber Production by Year</h1>
+  
+    <div style="columns:3"
+      [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+      <label>State : </label>
+      <mat-select name="state" placeholder="Please Choose" [(ngModel)]="stateId" (selectionChange)="changeState()">
+        <mat-option *ngFor="let state of state" [value]="state.stateId">
+          {{state.state}}
+        </mat-option>
+      </mat-select>
+  
+      <label>Please choose year : </label>
+      <input type="number" style="text-align: center;" placeholder="yyyy" [(ngModel)]="year" (change)="yearSelected()" />
+    </div>
+    
+    <div style="float: left; margin-bottom: 3px; margin-top: 3px;">
+      <button class="btn-add"  (click)="exportToExcel(estateTotalProductionArray, 'Rubber Production by state Report')">
+        Export Excel &nbsp; <i class="fa fa-file"></i>
+      </button>    
+    </div><br/><br/>
+  
+
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Estate" />
+  <label><b>Total State Production : {{ total | number:'1.2-2' }} Ha</b></label>
+
+    <div style="overflow-x: auto;">
+      <table style="width: 100%">
+        <tr>
+          <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col"
+            [appSort]="estateTotalProductionArray" [attr.data-order]="order" [attr.data-name]="column.columnName"
+            (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+        </tr>
+  
+        <tr *ngIf="isLoading">
+          <td colspan="6">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+  
+        <tr *ngIf="!isLoading && estateTotalProductionArray.length == 0 && (role == 'Admin' || role == 'Management')">
+          <td colspan="6" style="color: red; text-align: center;">No data found. Please choose state and year
+          </td>
+        </tr>
+  
+  
+        <ng-container *ngIf="!isLoading">
+          <tr *ngFor="let production of estateTotalProductionArray | filter : term | paginate: { itemsPerPage: itemperpage, currentPage: pageNumber }; let i = index">
+            <td>{{production.state}}</td>
+            <td>{{production.premise.name + ',' + production.premise.add1 }}</td>
+            <td>{{production.premise.licenseNo }}</td>
+            <td>{{production.cuplumpProduction | number:'1.2-2'}}</td>
+            <td>{{production.latexProduction | number:'1.2-2'}}</td>
+            <td>{{production.totalProduction | number:'1.2-2'}} </td>
+            <!-- <td>{{production.totalDry | number:'1.2-2'}}</td> -->
+          </tr>
+  
+          <!-- <tr *ngIf="estateTotalProductionArray.length > 0">
+            <th>Total Production dry(Kg) </th>
+            <th>{{totalCuplumpDry | number:'1.2-2'}}</th>
+            <th>{{totalLatexDry | number: '1.2-2'}}</th>
+            <th>{{totalAllDry | number: '1.2-2'}}</th>
+          </tr> -->
+  
+        </ng-container>
+  
+        
+      </table>
+    </div>
+  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+  </div>

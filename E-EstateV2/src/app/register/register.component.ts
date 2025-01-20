@@ -144,7 +144,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               this.spinnerService.requestEnded();
               swal.fire({
                 icon: 'error',
-                title: 'Error! License No does not exist',
+                title: 'Error! Cannot connect to MyLesen',
               });
               this.register.licenseNo = ''
               this.result = {}

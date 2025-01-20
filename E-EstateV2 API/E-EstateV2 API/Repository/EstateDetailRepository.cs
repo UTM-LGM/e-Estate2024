@@ -22,7 +22,9 @@ namespace E_EstateV2_API.Repository
                 id = x.Id,
                 estateId = x.estateId,
                 plantingMaterialId = x.plantingMaterialId,
-                plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(y => y.plantingMaterial).FirstOrDefault()
+                plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(y => y.plantingMaterial).FirstOrDefault(),
+                MSNRStatus = x.MSNRStatus,
+                polygonArea = x.polygonArea
             }).FirstOrDefaultAsync();
             return estate;
         }
@@ -53,6 +55,8 @@ namespace E_EstateV2_API.Repository
                 existingEstateDetail.updatedBy = estate.updatedBy;
                 existingEstateDetail.updatedDate = DateTime.Now;
                 existingEstateDetail.plantingMaterialId = estate.plantingMaterialId;
+                existingEstateDetail.MSNRStatus = estate.MSNRStatus;
+                existingEstateDetail.polygonArea = estate.polygonArea;
                 await _context.SaveChangesAsync();
                 return existingEstateDetail;
             }

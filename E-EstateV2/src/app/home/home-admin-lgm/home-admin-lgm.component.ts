@@ -71,8 +71,6 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   fields: Field[] = []
   validFields: any[] = []
 
-
-
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
@@ -85,7 +83,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.yearNow = new Date().getFullYear().toString()
     this.getCompany()
-    this.getField()
+    // this.getField()
     this.getEstate()
     this.getProduction()
     this.getWorker()
@@ -144,15 +142,27 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
-      .subscribe(
-        Response => {
-          this.fields = Response
-          const field = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'))
-          this.tappedArea = field.reduce((sum, field) => sum + field.area, 0)
-          this.isLoadingTapped = false
-        }
-      )
+    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString()).subscribe(
+      Response => {
+        this.fields = Response;
+  
+        // Filter fields based on estateId from filterEstates
+        const validEstateIds = new Set(this.filterEstates.map(estate => estate.id)); // Extract valid estateIds
+        const validFields = this.fields.filter(field => 
+          validEstateIds.has(field.estateId) && 
+          field.isActive === true && 
+          field.fieldStatus?.toLowerCase().includes('tapped area')
+        );
+  
+        // Calculate tapped area
+        this.tappedArea = validFields.reduce((sum, field) => sum + field.area, 0);
+        this.isLoadingTapped = false;
+      },
+      error => {
+        console.error('Error fetching fields:', error);
+        this.isLoadingTapped = false;
+      }
+    );
     this.subscriptionService.add(getCurrentField);
   }
 
@@ -260,12 +270,10 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
             // Filter fields by matching licenseNo and ensuring the area is not null and greater than 0
             this.validFields = this.fields.filter((field: any) =>
               field.estateId === estate.id &&
-              field.isActive === true &&
-              !field.fieldStatus?.toLowerCase().includes('abandoned') &&
-              !field.fieldStatus?.toLowerCase().includes('government') &&
-              !field.fieldStatus?.toLowerCase().includes('conversion to other crop'))
+              field.isActive === true)
           });
           this.isLoadingEstate = false
+          this.getField()
         }
       )
     this.subscriptionService.add(getAllEstate);

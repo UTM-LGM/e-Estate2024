@@ -7,6 +7,8 @@
         public string grantNo { get; set; }
         public int plantingMaterialId { get; set; }
         public string plantingMaterial { get;set; }
+        public bool MSNRStatus { get; set; }
+        public float polygonArea { get; set; }
 
     }
 }

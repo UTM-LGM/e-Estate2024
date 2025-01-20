@@ -88,13 +88,13 @@
           <div style="columns: 2">
             <label>Year Planted <span style="color: red;">*</span> :</label>
             <b><input type="number" name="year" [(ngModel)]="field.yearPlanted" /></b>
-            <label>Initial Tree Stand per Ha <span style="color: red;">*</span> :</label>
-            <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" /></b>
+            <label>Initial Tree Stand per Ha (No of tree) <span style="color: red;">*</span> :</label>
+            <b><input type="number" name="treeStand" [(ngModel)]="field.initialTreeStand" (change)="checkTreeInitial()" /></b>
           </div>
 
           <div style="columns: 2" *ngIf="field.isMature == true && !fieldSick && !abandonedInput">
-            <label>Current Tree Stand per Ha <span style="color: red;">*</span> :</label>
-            <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" />
+            <label>Current Tree Stand per Ha (No of tree) <span style="color: red;">*</span> :</label>
+            <input name="currentTree" type="number" [(ngModel)]="field.currentTreeStand" (change)="checkTreeCurrent()" />
 
             <label>Date Open Tapping <span style="color: red;">*</span> :</label>
             <input name="dateopentapping" type="month" [(ngModel)]="field.dateOpenTappingFormatted "

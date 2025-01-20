@@ -43,3 +43,14 @@ mat-option {
     columns: 1;
   }
 }
+
+
+.btn{
+  border: none;
+  padding: 7px 13px;
+  border-radius: 15px;
+  color: white;
+  font-size: 13px;
+  background-color: ghostwhite;
+  cursor: default;
+}

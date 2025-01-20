@@ -48,6 +48,7 @@ export class MatureCostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.totalMatureAmount = 0
     this.position = this.sharedService.position
     this.matureMonthYear = this.selectedMonthYear
     if (this.matureMonthYear != '') {

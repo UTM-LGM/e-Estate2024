@@ -9,6 +9,7 @@ import { BuyerService } from '../_services/buyer.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import { SpinnerService } from '../_services/spinner.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-add-rubber-sale',
@@ -28,7 +29,8 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   isSubmit = false
 
   estate: any = {} as any
-
+  estateDetail: any = {} as any
+  estateDetailNull :boolean = true
 
   constructor(
     private buyerService: BuyerService,
@@ -38,6 +40,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
     private myLesenService: MyLesenIntegrationService,
+    private estateDetailService: EstateDetailService,
   ) { }
 
   ngOnInit() {
@@ -58,14 +61,39 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   getEstate() {
+    this.spinnerService.requestStarted()
     const getOneEstate = this.myLesenService.getOneEstate(this.sharedService.estateId)
       .subscribe(
         Response => {
           this.estate = Response
+          this.checkEstateDetail()
           this.rubberSale.licenseNoTrace = this.estate.licenseNoTrace
         }
       )
     this.subscriptionService.add(getOneEstate);
+  }
+
+  checkEstateDetail() {
+    this.estateDetailService.getEstateDetailbyEstateId(this.sharedService.estateId)
+      .subscribe(
+        Response => {
+          if (Response != null) {
+            this.estateDetail = Response
+            this.estateDetailNull = false
+            this.spinnerService.requestEnded()
+          }
+          else {
+            this.spinnerService.requestEnded()
+            // If the estate detail is null, show the alert
+            swal.fire({
+              icon: 'info',
+              title: 'Information',
+              text: 'Please update Estate Profile in General',
+            });
+            
+          }
+        }
+      )
   }
 
   getBuyer() {
@@ -94,14 +122,14 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
-    } else if (this.rubberSale.deliveryAgent == '' && this.deliveryAgent == 'yes' ) {
+    } else if (this.rubberSale.deliveryAgent == '' && this.deliveryAgent == 'yes') {
       swal.fire({
         title: 'Error!',
         text: 'Please enter the delivery agent name',
         icon: 'error',
         showConfirmButton: true
       });
-    } 
+    }
     else if (this.rubberSale.transportPlateNo?.trim()) {
       this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
       if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
@@ -115,6 +143,8 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
       this.rubberSale.paymentStatusId = 1
       this.rubberSale.letterOfConsentNo = this.letterOfConsentNo
       this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
+      this.rubberSale.msnrStatus = this.estateDetail.msnrStatus
+      this.rubberSale.polygonArea = this.estateDetail.polygonArea
       this.isSubmit = true
       this.rubberSaleService.addSale(this.rubberSale)
         .subscribe(
@@ -251,7 +281,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   }
 
-  deliveryRemark(){
+  deliveryRemark() {
     this.rubberSale.remark = ''
     this.rubberSale.deliveryAgent = ''
   }

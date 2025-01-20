@@ -1,0 +1,40 @@
+name: CI Workflow for Angular
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-angular:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'  
+
+      
+        #Kne buat sekali sbb klau buat dekat luar, dia akn bce file main
+      - name: Access folder E-EstateV2 and Build
+        run: |
+          # Navigate to the E-EstateV2 directory
+          cd E-EstateV2
+
+          # Install dependencies
+          npm install
+
+          # Install Angular CLI
+          npm install -g @angular/cli
+
+          # Test Karma
+          # ng test
+
+          # Build Angular project
+          ng build
+
+          

@@ -6,6 +6,7 @@ using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Globalization;
+using System.Linq;
 
 namespace E_EstateV2_API.Repository
 {
@@ -223,23 +224,30 @@ namespace E_EstateV2_API.Repository
         }
 
         //EstateClerk
-        public async Task<object> GetStateFieldArea(string start, string end)
+        public async Task<object> GetStateFieldArea(string start, string end, int estateId)
         {
             // Parse the start and end dates
             DateTime startDate = DateTime.ParseExact(start, "yyyy-MM", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
-                                          .AddMonths(1).AddDays(-1);
+                                                  .AddMonths(1).AddDays(-1);
 
             // Create the range filters
-            var excludedStatuses = new[] { "abandoned", "government" };
+            var excludedStatuses = new[] { "abandoned", "government", "conversion" };
 
-            // Filter fields based on isActive, date range, and other criteria
-            var field = await _context.fields
-                .Where(x => x.isActive && x.createdDate >= startDate && x.createdDate <= endDate)
+            // Filter fields based on isActive, date range, fieldStatus and other criteria
+            var fields = await _context.fields
+                .Where(x => x.isActive == true
+                            && x.createdDate >= startDate
+                            && x.createdDate <= endDate
+                            && x.estateId == estateId
+                            && !excludedStatuses.Contains(_context.fieldStatus
+                                .Where(y => y.Id == x.fieldStatusId)
+                                .Select(y => y.fieldStatus.ToLower())
+                                .FirstOrDefault())) // Filter based on fieldStatus (exclude unwanted statuses)
                 .Select(x => new
                 {
                     fieldId = x.Id,
-                    area = x.rubberArea,
+                    rubberArea = x.rubberArea,
                     isMature = x.isMature,
                     estateId = x.estateId,
                     isActive = x.isActive,
@@ -248,8 +256,35 @@ namespace E_EstateV2_API.Repository
                 })
                 .ToListAsync();
 
+            if (!fields.Any())
+            {
+                return Array.Empty<object>(); // Return an empty array if no fields meet the criteria
+            }
+
+            return fields;
+        }
+
+        public async Task<object> GetFieldsByEstateId(int estateId)
+        {
+            var field = await _context.fields.Where(x => x.estateId == estateId).Select(x => new
+            {
+                id = x.Id,
+                fieldName = x.fieldName,
+                isMature = x.isMature,
+                isActive = x.isActive,
+                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
+                estateId = x.estateId,
+                createdDate = x.createdDate,
+                rubberArea = x.rubberArea,
+            }).ToListAsync();
+            if (!field.Any())
+            {
+                return new object[] { }; // Return an empty array
+            }
+
             return field;
         }
+
 
         public async Task<object> GetFieldArea(int year)
         {

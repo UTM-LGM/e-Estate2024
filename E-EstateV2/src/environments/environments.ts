@@ -10,7 +10,8 @@ export const MyLesenEnv = {
 
 export const RRIMGeoRubber = {
   production:true,
-  apiUrl: 'https://localhost:44366'
+  apiUrl: 'https://api02.lgm.gov.my/API_RRIMGeoRubber/api'
+  // apiUrl: 'https://localhost:44366/api'
 }
 
 // export const environment = {

@@ -4,10 +4,12 @@ import { Chart } from 'chart.js/auto';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { LocalLabor } from 'src/app/_interface/localLabor';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
+import { EstateDetailService } from 'src/app/_services/estate-detail.service';
 import { FieldProductionService } from 'src/app/_services/field-production.service';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
+import { RrimgeorubberIntegrationService } from 'src/app/_services/rrimgeorubber-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
@@ -30,6 +32,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   chartEstate: any
 
   estate: any = {} as any
+  estateDetail: any = {} as any
 
   productivity: any[] = []
   workerShortages: any[] = []
@@ -75,12 +78,21 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   isLoadingFieldShortage = true
 
   productivityByYear: any
+  polygonArea: number[] = []
+  polygonTotalArea = 0
+
+  filteredEstate: any = {} as any
+
+  msnrStatus: boolean = false
 
   constructor(
     private reportService: ReportService,
     private myLesenService: MyLesenIntegrationService,
     private sharedService: SharedService,
-    private subscriptionService: SubscriptionService
+    private estateService: EstateDetailService,
+    private subscriptionService: SubscriptionService,
+    private estateDetailService: EstateDetailService,
+    private rrimGeoRubberService: RrimgeorubberIntegrationService,
   ) { }
 
   ngOnInit() {
@@ -173,6 +185,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.estate = Response
+          this.checkEstateDetail()
           this.isLoadingEstateName = false
         }
       )
@@ -349,5 +362,96 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
+  checkEstateDetail() {
+    this.estateService.getEstateDetailbyEstateId(this.sharedService.estateId)
+      .subscribe(
+        Response => {
+          if (Response != null) {
+            this.estateDetail = Response;
+
+            // If msnrStatus is 'false' or polygonArea is 0, or if estate detail exists, call getGeoJson
+            if (Response.msnrStatus == false || Response.polygonArea == 0) {
+              this.getGeoJson();
+            }
+            // If estate details are available, call getGeoJson
+            else {
+              this.getGeoJson();
+            }
+          } else {
+            // If the estate detail is null, show the alert
+            swal.fire({
+              icon: 'info',
+              title: 'Information',
+              text: 'Please update Estate Profile in General',
+            });
+          }
+        }
+      )
+  }
+
+  getGeoJson() {
+    if (this.estate.licenseNo != undefined) {
+      this.rrimGeoRubberService.getGeoRubber(this.estate.licenseNo)
+        .subscribe(
+          Response => {
+            var features = Response.features;
+            if (features != undefined) {
+              if (Response.msnrStatus === 'Ya') {
+                this.msnrStatus = true;
+              } else if (Response.msnrStatus === 'Tidak') {
+                this.msnrStatus = false;
+              }
+              features.forEach((feature: any) => {
+                let geometry = feature.geometry;
+                let properties = feature.properties;
+                // Check if the geometry is of type 'Polygon' or 'MultiPolygon'
+                if (geometry.type === 'Polygon') {
+                  geometry.coordinates.forEach((coordinateSet: any) => {
+                    this.polygonArea.push(properties.hectarage_of_marked_polygon);
+                  });
+                } else if (geometry.type === 'MultiPolygon') {
+                  geometry.coordinates.forEach((polygonCoordinates: any) => {
+                    polygonCoordinates.forEach((coordinateSet: any) => {
+                      this.polygonArea.push(properties.hectarage_of_marked_polygon);
+                    });
+                  });
+                }
+              });
+            } else {
+              swal.fire({
+                text: 'Estate is not listed in RRIM GeoRubber',
+                icon: 'error'
+              });
+            }
+            this.polygonTotalArea = this.polygonArea.reduce((acc, currentValue) => acc + currentValue, 0);
+            this.updateEstate();
+          },
+          error => {
+          }
+        );
+    } else {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Cannot connect to RRIMGeoRubber',
+      });
+    }
+  }
+
+
+  updateEstate() {
+    this.filteredEstate.id = this.estateDetail.id
+    this.filteredEstate.plantingMaterialId = this.estateDetail.plantingMaterialId
+    this.filteredEstate.polygonArea = this.polygonTotalArea
+    this.filteredEstate.msnrStatus = this.msnrStatus
+    this.estateDetailService.updateEstateDetail(this.filteredEstate)
+      .subscribe({
+        next: (response) => {
+          console.log('AreaUpdated')
+        },
+        error: (err) => {
+        }
+      })
+  }
 }
 

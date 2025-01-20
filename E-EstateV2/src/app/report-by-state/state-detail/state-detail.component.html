@@ -36,7 +36,8 @@
       <tbody *ngFor="let estate of stateTotalAreasArray | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index" >
         <tr class="list" style="cursor:default;">
         <td>{{ (pageNumber - 1) * itemsPerPage + i + 1}}</td>
-          <td>{{estate.estateName + ' (' + estate.estateLicenseNo + ')'}}</td>
+          <td>{{estate.estateName + ',' + estate.estateAdd1 }}</td>
+          <td>{{estate.estateLicenseNo }}</td>
           <td>{{ estate.totalArea | number:'1.2-2' }}</td>
         </tr>
       </tbody>

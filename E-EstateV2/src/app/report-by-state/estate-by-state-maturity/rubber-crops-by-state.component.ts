@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Field } from 'src/app/_interface/field';
 import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
+import { ReportService } from 'src/app/_services/report.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
 import swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
@@ -32,10 +33,17 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
   stateTotals = {} as any;
   stateTotalsArray: any[] = []
 
+  totalNewPlanting = 0
+  totalReplanting = 0
+  totalTapped = 0
+  totalAbandoned = 0
+  totalArea = 0
+
   constructor(
     private fieldService: FieldService,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private reportService:ReportService
   ) { }
 
   ngOnInit(): void {
@@ -45,8 +53,9 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
 
   monthChange() {
     this.isLoading = true
-    this.getFieldInfo()
     this.stateTotals = {}
+    this.stateTotalsArray = []
+    this.getFieldInfo()
   }
 
   chageStartMonth() {
@@ -57,7 +66,7 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
 
   getFieldInfo() {
     setTimeout(() => {
-      const getAllEstate = this.myLesenService.getAllEstate()
+      const getAllEstate = this.myLesenService.getAllActiveEstate()
         .subscribe(
           estatesResponse => {
             this.estates = estatesResponse.filter(estate => estate.state); // Filter out estates with null or undefined state
@@ -74,8 +83,7 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
                 }
 
                 if (estate.state) {
-                  this.fieldService.getField().subscribe(fieldsResponse => {
-
+                  this.reportService.getStateFieldAreaById(estate.id).subscribe(fieldsResponse => {
                     const startDate = new Date(`${this.startMonth}-01`);
                     const endDate = new Date(`${this.endMonth}`);
                     endDate.setMonth(endDate.getMonth() + 1);
@@ -84,24 +92,21 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
                     // const fields = fieldsResponse.filter(field => field.estateId == estate.id && field.createdDate >= startDate && field.createdDate < endDate);
                     const filteredFields = fieldsResponse.filter(field => {
                       const fieldCreatedDate = new Date(field.createdDate);
-                      return field.estateId === estate.id && fieldCreatedDate >= startDate && fieldCreatedDate <= endDate;
+                      return field.estateId === estate.id && fieldCreatedDate >= startDate && fieldCreatedDate <= endDate && field.isActive == true;
                     });
-                    if (filteredFields.length > 0) {
+                    if (filteredFields && filteredFields.length > 0) {
                       estate.fields = filteredFields;
                       // Calculate total areas for different statuses
                       const totalAreas = {
                         'new planting': 0,
                         'replanting': 0,
                         'tapped area': 0,
-                        'abandoned': 0
+                        'abandoned - untapped': 0
                       } as any;
 
                       estate.fields.forEach((field: any) => {
                         if (field.isActive) {
                           totalAreas[field.fieldStatus?.toLowerCase()] += field.rubberArea;
-                          if (field.fieldStatus?.toLowerCase().includes('abandoned')) {
-                            totalAreas['abandoned'] += field.rubberArea;
-                          }
                         }
                       });
 
@@ -111,7 +116,7 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
                       this.stateTotals[estate.state].totalNewPlantingArea += totalAreas['new planting'];
                       this.stateTotals[estate.state].totalReplantingArea += totalAreas['replanting'];
                       this.stateTotals[estate.state].totalTappedArea += totalAreas['tapped area'];
-                      this.stateTotals[estate.state].totalAbandonedArea += totalAreas['abandoned'];
+                      this.stateTotals[estate.state].totalAbandonedArea += totalAreas['abandoned - untapped'];
                     }
                     resolve();
                   });
@@ -129,6 +134,8 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
                 totalAbandonedArea: this.stateTotals[state].totalAbandonedArea
               }));
 
+              this.calculateArea()
+
               this.isLoading = false
             });
           });
@@ -138,22 +145,22 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
   }
 
 
-  yearSelected() {
-    this.estates = []
-    const yearAsString = this.year.toString();
-    if (yearAsString.length === 4) {
-      this.isLoading = true
-      this.stateTotals = {}
-      this.getFieldInfo()
-    } else {
-      swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please insert correct year',
-      });
-      this.year = ''
-    }
-  }
+  // yearSelected() {
+  //   this.estates = []
+  //   const yearAsString = this.year.toString();
+  //   if (yearAsString.length === 4) {
+  //     this.isLoading = true
+  //     this.stateTotals = {}
+  //     this.getFieldInfo()
+  //   } else {
+  //     swal.fire({
+  //       icon: 'error',
+  //       title: 'Error',
+  //       text: 'Please insert correct year',
+  //     });
+  //     this.year = ''
+  //   }
+  // }
 
   exportToExcel(data: any[], fileName: string) {
     let bilCounter = 1;
@@ -164,7 +171,7 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
       Replanting: row.totalReplantingArea,
       TappedArea: row.totalTappedArea,
       Abandoned: row.totalAbandonedArea,
-      TotalRubberArea: row.totalNewPlantingArea + row.totalReplantingArea + row.totalTappedArea
+      TotalRubberArea: row.totalNewPlantingArea + row.totalReplantingArea + row.totalTappedArea + row.totalAbandonedArea
     }));
 
     const headerRow = [
@@ -191,24 +198,16 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  calculateNewPlanting(){
-    return this.stateTotalsArray.reduce((total, item) => total + item.totalNewPlantingArea, 0)
-  }
-
-  calculateReplanting(){
-    return this.stateTotalsArray.reduce((total, item) => total + item.totalReplantingArea, 0)
-  }
-
-  calculateTappedArea(){
-    return this.stateTotalsArray.reduce((total, item) => total + item.totalTappedArea, 0)
-  }
-
-  calculateAbandonedArea(){
-    return this.stateTotalsArray.reduce((total, item) => total + item.totalAbandonedArea, 0)
+  calculateArea(){
+    this.totalNewPlanting = this.stateTotalsArray.reduce((total, item) => total + item.totalNewPlantingArea, 0)
+    this.totalReplanting =  this.stateTotalsArray.reduce((total, item) => total + item.totalReplantingArea, 0)
+    this.totalTapped = this.stateTotalsArray.reduce((total, item) => total + item.totalTappedArea, 0)
+    this.totalAbandoned =  this.stateTotalsArray.reduce((total, item) => total + item.totalAbandonedArea, 0)
+    this.calculateTotal()
   }
 
   calculateTotal(){
-    return this.calculateNewPlanting() + this.calculateReplanting() + this.calculateTappedArea()
+    this.totalArea = this.totalNewPlanting + this.totalReplanting + this.totalTapped + this.totalAbandoned
    }
 
    onFilterChange(term: string): void {

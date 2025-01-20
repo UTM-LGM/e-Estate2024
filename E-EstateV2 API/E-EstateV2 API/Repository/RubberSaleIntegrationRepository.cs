@@ -53,6 +53,7 @@ namespace E_EstateV2_API.Repository
                 receiptNoDate = x.receiptNoDate,
                 deliveryAgent = x.deliveryAgent,
                 msnrStatus = x.MSNRStatus,
+                polygonArea = x.polygonArea,
                 licenseNoTrace = x.licenseNoTrace,
             }).FirstOrDefaultAsync();
             return rubberSale;

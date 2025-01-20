@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { forkJoin, map } from 'rxjs';
+import { FieldService } from 'src/app/_services/field.service';
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { ReportService } from 'src/app/_services/report.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
@@ -29,13 +30,14 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   sortableColumns = [
     { columnName: 'state', displayText: 'State' },
     { columnName: 'estateNo', displayText: 'No of Estate' },
-    { columnName: 'currentEstate', displayText : 'Registered estate in RRIMestet'},
+    { columnName: 'currentEstate', displayText: 'Registered rubber area (No of Estate)' },
     { columnName: 'rubberArea', displayText: 'Total Rubber Area (Ha)' },
   ];
 
   constructor(
     private myLesenService: MyLesenIntegrationService,
     private reportService: ReportService,
+    private fieldService: FieldService,
     private subscriptionService: SubscriptionService
   ) { }
 
@@ -46,13 +48,13 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
 
   monthChange() {
     this.isLoading = true
+    this.stateTotalAreasArray = []
     this.getEstate()
-    
   }
 
   chageStartMonth() {
     this.endMonth = ''
-    this.stateTotalAreasArray =[]
+    this.stateTotalAreasArray = []
   }
 
   toggleSort(columnName: string) {
@@ -77,55 +79,81 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   }
 
   calculateTotalAllArea() {
+    const startDate = new Date(`${this.startMonth}-01`);
+    const endDate = new Date(`${this.endMonth}`);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
+  
     const observables = this.estates.map(estate =>
-      this.reportService.getStateFieldArea(this.startMonth, this.endMonth).pipe(
+      this.reportService.getStateFieldAreaById(estate.id).pipe(
         map(response => ({
-          stateId:estate.stateId,
+          stateId: estate.stateId,
           estateId: estate.id,
           state: estate.state,
-          fields: response.filter(x => x.estateId === estate.id && x.isActive === true &&
-            !x.fieldStatus?.toLowerCase().includes('abandoned') &&
-            !x.fieldStatus?.toLowerCase().includes('government') &&
-            !x.fieldStatus?.toLowerCase().includes('conversion to other crop'))
+          fields: response.filter(x => {
+            const createdDate = new Date(x.createdDate); // Ensure the createdDate is correctly parsed into Date
+            return (
+              x.estateId === estate.id &&
+              createdDate >= startDate &&
+              createdDate <= endDate &&
+              x.isActive === true &&
+              (
+                  x.fieldStatus?.toLowerCase().includes('abandoned - untapped') ||
+                  x.fieldStatus?.toLowerCase().includes('tapped area') ||
+                  // x.fieldStatus?.toLowerCase().includes('conversion other crop to rubber') ||
+                  x.fieldStatus?.toLowerCase().includes('new planting') ||
+                  x.fieldStatus?.toLowerCase().includes('replanting')
+              )
+          );
+        })
         }))
       )
     );
-
+  
     forkJoin(observables).subscribe(results => {
       this.stateTotalAreas = {};
-      results.forEach(result => {
-        const totalArea = result.fields.reduce((acc, curr) => acc + curr.area, 0);
-
-        const registeredEstateCount = result.fields.length != 0;
-
-
-        if (!this.stateTotalAreas[result.state]) {
-          this.stateTotalAreas[result.state] = { 
-            count: 1, 
-            totalArea: totalArea, 
-            registeredEstates: registeredEstateCount,
-            stateId: result.stateId 
+  
+      // Initialize `count` based on estates
+      this.estates.forEach(estate => {
+        if (!this.stateTotalAreas[estate.state]) {
+          this.stateTotalAreas[estate.state] = {
+            count: 0,
+            totalArea: 0,
+            registeredEstates: 0,
+            stateId: estate.stateId
           };
-        } else {
-          this.stateTotalAreas[result.state].count++;
-          this.stateTotalAreas[result.state].totalArea += totalArea;
-          this.stateTotalAreas[result.state].registeredEstates += registeredEstateCount;
+        }
+        this.stateTotalAreas[estate.state].count++;
+      });
+  
+      // Calculate `totalArea` and `registeredEstates`
+      results.forEach(result => {
+        if (result.fields && result.fields.length > 0) {
+          const totalArea = result.fields.reduce((acc, curr) => acc + (curr.rubberArea || 0), 0);
+  
+          const uniqueEstates = new Set(result.fields.map(field => field.estateId));
+          const registeredEstateCount = uniqueEstates.size;
+  
+          if (this.stateTotalAreas[result.state]) {
+            this.stateTotalAreas[result.state].totalArea += totalArea;
+            this.stateTotalAreas[result.state].registeredEstates += registeredEstateCount;
+          }
         }
       });
-
+  
       // Convert object to array
       this.stateTotalAreasArray = Object.keys(this.stateTotalAreas).map(key => ({
         state: key,
         estateNo: this.stateTotalAreas[key].count,
         totalArea: this.stateTotalAreas[key].totalArea,
-        stateId:this.stateTotalAreas[key].stateId,
+        stateId: this.stateTotalAreas[key].stateId,
         registeredEstates: this.stateTotalAreas[key].registeredEstates,
       }));
-
+  
+      this.isLoading = false;
     });
-    this.isLoading = false;
-
   }
+  
 
   yearSelected() {
     this.estates = []
@@ -151,15 +179,16 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
       No: bilCounter++,
       State: row.state,
       EstateNo: row.estateNo,
+      RegisteredEstate: row.registeredEstates,
       TotalRubberArea: row.totalArea
     }));
 
     // Add a header row with the start and end month-year values
     const headerRow = [
-      { No: 'Start Month Year:', State: this.startMonth},
-      { No: 'End Month Year:', State: this.endMonth},
+      { No: 'Start Month Year:', State: this.startMonth },
+      { No: 'End Month Year:', State: this.endMonth },
       {}, // Empty row for separation
-      { No: 'No', State: 'State', EstateNo: 'EstateNo', TotalRubberArea: 'TotalRubberArea(Ha)' }
+      { No: 'No', State: 'State', EstateNo: 'EstateNo', RegisteredEstate: 'RegisteredRubberArea(NoOfEstate)', TotalRubberArea: 'TotalRubberArea(Ha)' }
     ];
 
     // Combine the header row with the filtered data
@@ -179,16 +208,15 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  calculateTotal(){
+  calculateTotal() {
     return this.stateTotalAreasArray.reduce((total, item) => total + item.totalArea, 0)
-
   }
 
-  calculateEstate(){
+  calculateEstate() {
     return this.stateTotalAreasArray.reduce((total, item) => total + item.estateNo, 0)
   }
 
-  calculateRegisteredEstate(){
+  calculateRegisteredEstate() {
     return this.stateTotalAreasArray.reduce((total, item) => total + item.registeredEstates, 0)
   }
 
@@ -197,6 +225,6 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
     this.pageNumber = 1; // Reset to first page on filter change
   }
 
- 
+
 
 }

@@ -7,6 +7,7 @@ import { User } from '../_interface/user';
 import { SharedService } from '../_services/shared.service';
 import { MsalService } from '@azure/msal-angular';
 import { InteractionRequiredAuthError } from '@azure/msal-browser';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private userService: UserService,
     private sharedService: SharedService,
+    private estateService:EstateDetailService,
     private msalService: MsalService
   ) {
     const activeAccount = localStorage.getItem('activeAccount');
@@ -265,5 +267,7 @@ export class AuthGuard implements CanActivate {
         }
       )
   }
+
+  
 
 }

@@ -2,6 +2,8 @@
   <h1>Rubber Sales Information</h1>
   <hr />
 
+  <span *ngIf="estateDetailNull" style="color: red; font-size: 11px;">**Please update Estate Profile in General</span>
+
   <div style="columns: 2" class="column">
     <label>Date <span style="color: red;">*</span> :</label>
     <input type="date" #date name="date" value="{{currentDate}}" (change)="selectedDate(date.value)" />
@@ -76,7 +78,7 @@
   </div>
 
   <div style="margin-top: 10px">
-    <button style="float: right" class="btn-add" (click)="addSale()" [disabled]="isSubmit">
+    <button style="float: right" class="btn-add" (click)="addSale()" [disabled]="isSubmit || estateDetailNull">
       Add &nbsp; <i class="fa fa-plus"></i>
     </button>
   </div>

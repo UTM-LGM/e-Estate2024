@@ -26,7 +26,7 @@ import { SpinnerService } from '../_services/spinner.service';
   templateUrl: './estate-detail.component.html',
   styleUrls: ['./estate-detail.component.css'],
 })
-export class EstateDetailComponent implements OnInit,OnDestroy {
+export class EstateDetailComponent implements OnInit, OnDestroy {
   estate: any = {} as any
 
   contacts: any[] = []
@@ -85,7 +85,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
     private estateDetailService: EstateDetailService,
     private fieldService: FieldService,
     private fieldInfectedService: FieldInfectedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService
   ) { }
 
   ngOnInit() {
@@ -107,7 +107,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
               }
             )
           this.subscriptionService.add(getOneEstate);
-       
+
           const getEstateDetail = this.estateDetailService.getEstateDetailbyEstateId(routerParams['id'])
             .subscribe(
               Response => {
@@ -116,7 +116,7 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
                 }
               }
             )
-            this.subscriptionService.add(getEstateDetail);
+          this.subscriptionService.add(getEstateDetail);
         }
       });
     }, 2000)
@@ -141,19 +141,19 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
           this.sum(this.fields)
         }
       )
-      this.subscriptionService.add(getField);
+    this.subscriptionService.add(getField);
 
   }
 
   getContact() {
-    const getContact =this.estateContactService.getCompanyContact()
+    const getContact = this.estateContactService.getCompanyContact()
       .subscribe(
         Response => {
           const contacts = Response
           this.contacts = contacts.filter(x => x.estateId == this.estate.id)
         }
       )
-      this.subscriptionService.add(getContact);
+    this.subscriptionService.add(getContact);
 
   }
 
@@ -236,14 +236,14 @@ export class EstateDetailComponent implements OnInit,OnDestroy {
   }
 
   getConversion(field: Field) {
-     const getConversion = this.fieldConversionService.getConversion()
+    const getConversion = this.fieldConversionService.getConversion()
       .subscribe(
         Response => {
           const conversion = Response
           this.conversionField = conversion.filter(x => x.fieldId == field.id)
         }
       )
-      this.subscriptionService.add(getConversion);
+    this.subscriptionService.add(getConversion);
 
   }
 

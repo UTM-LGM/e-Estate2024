@@ -40,7 +40,7 @@
           <td>{{ (pageNumber - 1) * itemsPerPageClone + i + 1 }}</td>
           <td>{{ data.cloneName }}</td>
           <td>{{ data.totalProduction | number:'1.2-2' }}</td>
-          <td>{{ data.totalArea || 0 }}</td>
+          <td>{{ data.totalArea || 0 | number:'1.2-2' }}</td>
           <td>{{ (data.totalProduction / data.totalArea) || 0 | number:'1.2-2' }}</td>
         </tr>
       </ng-container>

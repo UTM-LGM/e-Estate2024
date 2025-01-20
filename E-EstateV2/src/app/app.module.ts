@@ -130,7 +130,7 @@ import { EstateByStateComponent } from './report-by-state/estate-by-state/estate
 import { RubberCropsByStateComponent } from './report-by-state/estate-by-state-maturity/rubber-crops-by-state.component';
 import { ReportByStateComponent } from './report-by-state/report-by-state.component';
 import { ReportProductionByYearComponent } from './report-production-by-year/report-production-by-year.component';
-import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-yearly/rubber-production-yearly.component';
+import { RubberProductionYearlyComponent } from './report-production-by-year/rubber-production-by-estate/rubber-production-yearly.component';
 import { CloneProductionYearlyComponent } from './report-production-by-year/clone-production-yearly/clone-production-yearly.component';
 import { ReportFieldInformationComponent } from './report-field-information/report-field-information.component';
 import { ReportProductivityByYearComponent } from './report-productivity-by-year/report-productivity-by-year.component';
@@ -159,6 +159,7 @@ import { EditHierarchyComponent } from './utility/announcement/edit-hierarchy/ed
 import { EditBuyerComponent } from './utility-clerk/edit-buyer/edit-buyer.component';
 import { PolygonComponent } from './polygon/polygon.component';
 import { VerifyEmailUserComponent } from './utility-manage-user/verify-email-user/verify-email-user.component';
+import { RubberProductionYearComponent } from './report-production-by-year/rubber-production-year/rubber-production-year.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -290,6 +291,7 @@ register()
     EditBuyerComponent,
     PolygonComponent,
     VerifyEmailUserComponent,
+    RubberProductionYearComponent,
   ],
   imports: [
     BrowserModule,

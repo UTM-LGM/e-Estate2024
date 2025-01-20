@@ -224,6 +224,15 @@ export class PolygonComponent implements OnInit {
                 this.spinnerService.requestEnded()
               }
             });
+          },
+          error => {
+            // Suppress console log and show a user-friendly error message
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Estate is not listed in RRIM GeoRubber',
+            });
+            this.spinnerService.requestEnded()
           }
         )
     }

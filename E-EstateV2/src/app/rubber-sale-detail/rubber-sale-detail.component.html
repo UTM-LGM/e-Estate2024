@@ -106,7 +106,7 @@
       </div>
 
       <div style="columns: 2">
-        <label>Unit Price/kg <span style="color: red;">*</span> :</label>
+        <label>Unit Price (RM/Kg) <span style="color: red;">*</span> :</label>
         <input type="number" placeholder="00.00" name="unitPrice" [(ngModel)]="rubberSale.unitPrice" (change)="calculateAmount()" />
         <label>Total Amount <span style="color: red;">*</span> :</label>
         <input type="text" name="amount"  [value]="rubberSale.total | number: '1.2-2'" disabled />

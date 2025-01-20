@@ -9,4 +9,6 @@ export interface EstateDetail {
     createdDate: Date
     updatedBy: string
     updatedDate: Date
+    msnrStatus:boolean
+    polygonArea:number
 }

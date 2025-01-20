@@ -45,6 +45,7 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.totalImmatureAmount = 0
     this.position = this.sharedService.position
     this.immatureMonthYear = this.selectedMonthYear
     if (this.immatureMonthYear != '') {

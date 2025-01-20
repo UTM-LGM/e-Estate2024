@@ -19,7 +19,8 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetCurrentProduction(int year);
 
         Task<object> GetFieldArea(int year);
-        Task<object> GetStateFieldArea (string start, string end);
+        Task<object> GetStateFieldArea(string start, string end, int estateId);
+        Task<object> GetFieldsByEstateId(int estateId);
         Task<object> GetLatestMonthWorker(int year);
         Task<object> GetTapperAndFieldWorker(int year);
         Task<object> GetAllTapperAndFieldWorker(string start, string end);

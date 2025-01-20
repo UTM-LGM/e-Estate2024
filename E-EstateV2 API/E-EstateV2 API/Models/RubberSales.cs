@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Routing.Constraints;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace E_EstateV2_API.Models
@@ -43,6 +44,7 @@ namespace E_EstateV2_API.Models
         public PaymentStatus paymentStatus { get; set; }
 
         public bool MSNRStatus { get; set; }
+        public float polygonArea { get; set; }
 
     }
 }

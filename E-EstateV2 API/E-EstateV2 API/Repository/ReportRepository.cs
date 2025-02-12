@@ -394,6 +394,7 @@ namespace E_EstateV2_API.Repository
                 initialTreeStand = x.initialTreeStand,
                 totalTask = x.totalTask,
                 estateId = x.estateId,
+                createdDate = x.createdDate
             }).ToListAsync();
             return field;
         }

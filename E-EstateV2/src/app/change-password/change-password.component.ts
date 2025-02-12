@@ -29,7 +29,6 @@ export class ChangePasswordComponent implements OnInit {
 
   submitNewPassword() {
     this.register.id = this.sharedService.userId, 
-    console.log(this.register)
     this.userService.changePassword(this.register)
       .subscribe(
         {

@@ -58,7 +58,7 @@
     <div class="box">
       <div class="column box-container color3">
         <div class="span-word">
-          <span style="font-weight: bold;" >Tapped Rubber Area (Ha)</span><br />
+          <span style="font-weight: bold;" >Total Tapped Rubber Area (Ha)</span><br />
           <span  *ngIf="!isLoadingTapped">{{tappedArea | number:'1.2-2'}}</span>
         </div>
         <div *ngIf="isLoadingTapped">
@@ -217,49 +217,42 @@
 <br/>
 </div>
 
-<div class="box-container-outer print" style="width: 47%;" >
-  <span class="title2">Rubber Productivity (Kg/Ha/Yr) for {{yearNow}}</span>
-  <div class="box">
-    <!-- <div class="column box-container color4">
-      <div class="span-word">
-        <span style="font-weight: bold;">Cuplump</span><br />
-        <div *ngIf="!isLoadingProduction">
-          <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalCuplumpDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalCuplumpDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
-          </span>
+<div style="columns:2" class="print">
+  <div class="box-container-outer">
+    <span class="title2">Tapped Rubber for {{yearNow}}</span>
+    <div class="box">
+      <div class="column box-container color3">
+        <div class="span-word">
+          <span style="font-weight: bold;">Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{tappedAreaByYear | number:'1.2-2'}}</span>
+        </div>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
         </div>
       </div>
-      <div *ngIf="isLoadingProduction">
-        <ngx-skeleton-loader appearance="line" animation="progress-dark"
-          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-      </div>
-    </div> -->
+    </div>
+      
+  </div>
 
-    <!-- <div class="column box-container color1">
-      <div class="span-word">
-        <span style="font-weight: bold;">Latex</span><br />
-        <div *ngIf="!isLoadingProduction">
-          <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalLatexDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalLatexDry / cuplumpProductivity.totalArea | number: '1.2-2') : 0 }}
+  <div class="box-container-outer">
+    <span class="title2">Rubber Productivity (Kg/Ha/Yr) for {{yearNow}}</span>
+    <div class="box">
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span style="font-weight: bold;">Total</span><br />
+          <span *ngFor="let cuplumpProductivity of productivityByYear">
+            {{ getProductivityValue(cuplumpProductivity) | number: '1.2-2' }}
           </span>
         </div>
-      </div>
-      <div *ngIf="isLoadingProduction">
-        <ngx-skeleton-loader appearance="line" animation="progress-dark"
-          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#0492c259'}"></ngx-skeleton-loader>
-      </div>
-    </div> -->
-
-    <div class="column box-container color2">
-      <div class="span-word">
-        <span style="font-weight: bold;">Total</span><br />
-        <span *ngFor="let cuplumpProductivity of productivityByYear">{{ (cuplumpProductivity.totalRubberDry && cuplumpProductivity.totalArea) ? (cuplumpProductivity.totalRubberDry / tappedArea | number: '1.2-2') : 0 }}
-        </span>
-      </div>
-      <div *ngIf="isLoadingProduction">
-        <ngx-skeleton-loader appearance="line" animation="progress-dark"
-          [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
       </div>
     </div>
   </div>
+<br/>
 </div>
 <br/>
 

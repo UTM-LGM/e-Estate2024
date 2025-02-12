@@ -65,6 +65,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   tapperShortage = 0
   fieldShortage = 0
   tappedArea = 0
+  tappedAreaByYear = 0
   costAmount = 0
   totalProduction = 0
   totalRegistered = 0
@@ -153,9 +154,16 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           field.isActive === true && 
           field.fieldStatus?.toLowerCase().includes('tapped area')
         );
+
+        const tappedAreaByYear = this.fields.filter(field => 
+          validEstateIds.has(field.estateId) && 
+          field.isActive === true && 
+          field.fieldStatus?.toLowerCase().includes('tapped area') && new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
+        );
   
         // Calculate tapped area
         this.tappedArea = validFields.reduce((sum, field) => sum + field.area, 0);
+        this.tappedAreaByYear = tappedAreaByYear.reduce((sum, field) => sum + field.area, 0);
         this.isLoadingTapped = false;
       },
       error => {
@@ -457,6 +465,14 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         location.reload();
       }, 100);
     }
+  }
+
+  getProductivityValue(cuplumpProductivity: any): number {
+    const tappedArea = this.tappedAreaByYear || 0; // Ensure no division by zero
+    if (!cuplumpProductivity.totalRubberDry || tappedArea === 0) {
+      return 0;
+    }
+    return cuplumpProductivity.totalRubberDry / tappedArea;
   }
 
 

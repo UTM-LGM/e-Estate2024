@@ -11,6 +11,7 @@ import { SubscriptionService } from '../_services/subscription.service';
 import { FieldProductionService } from '../_services/field-production.service';
 import { FieldProduction } from '../_interface/fieldProduction';
 import { SpinnerService } from '../_services/spinner.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-rubber-stock-detail',
@@ -28,6 +29,7 @@ export class RubberStockDetailComponent implements OnInit {
   isLoadingSale = true
 
   isPreviousStock = false
+  previousDate: any
 
   filterSales: RubberSale[] = []
 
@@ -46,7 +48,7 @@ export class RubberStockDetailComponent implements OnInit {
 
   totalCuplump: any[] = []
   totalLatex: any[] = []
-
+  allRubberStock: RubberStock[] = []
 
 
   constructor(
@@ -58,6 +60,7 @@ export class RubberStockDetailComponent implements OnInit {
     private subscriptionService:SubscriptionService,
     private changeDetectorRef: ChangeDetectorRef,
     private spinnerService:SpinnerService,
+    private datePipe: DatePipe,
     private fieldProductionService: FieldProductionService,
   ) {
     this.estate = data.estate;
@@ -71,8 +74,11 @@ export class RubberStockDetailComponent implements OnInit {
   ngOnInit(): void {
     this.getSales()
     this.getAllProduction()
+    this.getStock()
+    let monthDate = new Date(this.stock.monthYear)
+    var previousMonth = monthDate.setMonth(monthDate.getMonth() - 1);
+    this.previousDate = this.datePipe.transform(previousMonth, 'MMM-yyyy')?.toUpperCase()
   }
-
 
   calculateWaterDepletion() {
     if(this.stock.rubberType == 'CUPLUMP'){
@@ -196,4 +202,21 @@ export class RubberStockDetailComponent implements OnInit {
   back() {
     this.dialogRef.close()
   }
+
+  getStock() {
+    const getStock = this.rubberStockService.getRubberStock()
+      .subscribe(
+        Response => {
+          this.allRubberStock = Response
+          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.previousDate && e.isActive == true && e.rubberType == this.stock.rubberType)
+          if (this.rubberStocks.length != 0) {
+            let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
+            this.stock.previousStock = latestItem.currentStock;
+            this.isPreviousStock = true
+          }
+        }
+      )
+    this.subscriptionService.add(getStock);
+  }
+
 }

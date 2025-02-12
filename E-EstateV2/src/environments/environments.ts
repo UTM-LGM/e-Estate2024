@@ -19,12 +19,12 @@ export const RRIMGeoRubber = {
 //   apiUrl: 'https://lgm20.lgm.gov.my/RRIMestetApi/api'
 // };
 
-export const environment = {
-  production:true,
-  apiUrl: 'https://api02.lgm.gov.my/RRIMestetApi/api'
-}
-
 // export const environment = {
-//   production:false,
-//   apiUrl: 'https://api02.lgm.gov.my/trainingE-estateApi/api'
+//   production:true,
+//   apiUrl: 'https://api02.lgm.gov.my/RRIMestetApi/api'
 // }
+
+export const environment = {
+  production:false,
+  apiUrl: 'https://api02.lgm.gov.my/trainingE-estateApi/api'
+}

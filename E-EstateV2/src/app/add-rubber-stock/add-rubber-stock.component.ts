@@ -107,6 +107,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.stock.currentStock = stockCuplump
   }
 
+
   calculateStockLatx() {
     var stockLatex = ((this.totalLatexDry + this.stock.previousStock) - this.stock.totalSale)
     this.stock.currentStock = stockLatex
@@ -122,7 +123,6 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
             this.stock.previousStock = latestItem.currentStock;
             this.isPreviousStock = true
-
           }
         }
       )

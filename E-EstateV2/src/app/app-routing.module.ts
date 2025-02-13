@@ -83,17 +83,6 @@ const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
   { path: 'generate-form-1/:id', component: GenerateForm1Component },
   { path: 'generate-receipt/:id', component: GenerateReceiptComponent},
-  // {
-  //   path: '',
-  //   component: LoginLayoutComponent,
-  //   children: [
-  //     { path: 'login', component: LoginComponent },
-  //     { path: 'register', component: RegisterComponent },
-  //     { path: 'verifyemail', component: VerifyEmailComponent },
-  //     { path: 'forgotpassword', component: ForgotPasswordComponent },
-  //   ],
-  // },
-
   {
     path: 'login',
     component: LoginLayoutComponent,
@@ -122,8 +111,6 @@ const routes: Routes = [
       { path: '', component: ForgotPasswordComponent },
     ],
   },
-  
-  
   {
     path: '',
     component: HomeLayoutComponent, canActivate: [AuthGuard],
@@ -154,8 +141,6 @@ const routes: Routes = [
       { path: 'field-info-yearly/:id', component: FieldInfoYearlyComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'field-infected-status/:id', component: FieldInfectedStatusComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
       { path: 'polygon', component: PolygonComponent, canActivate: [AuthGuard], data: { permittedRoles: ['EstateClerk'] } },
-
-
       {
         path: 'utilities-admin',
         component: UtilityComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] },

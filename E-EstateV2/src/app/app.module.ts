@@ -349,7 +349,6 @@ register()
           //Can be set true or false
           storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
         },
-
       }),
       {
         interactionType: InteractionType.Redirect, // MSAL Guard Configuration

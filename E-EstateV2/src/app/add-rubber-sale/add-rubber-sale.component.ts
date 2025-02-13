@@ -61,7 +61,6 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   getEstate() {
-    this.spinnerService.requestStarted()
     const getOneEstate = this.myLesenService.getOneEstate(this.sharedService.estateId)
       .subscribe(
         Response => {

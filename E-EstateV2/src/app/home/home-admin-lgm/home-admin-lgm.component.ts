@@ -146,21 +146,21 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString()).subscribe(
       Response => {
         this.fields = Response;
-  
+
         // Filter fields based on estateId from filterEstates
         const validEstateIds = new Set(this.filterEstates.map(estate => estate.id)); // Extract valid estateIds
-        const validFields = this.fields.filter(field => 
-          validEstateIds.has(field.estateId) && 
-          field.isActive === true && 
+        const validFields = this.fields.filter(field =>
+          validEstateIds.has(field.estateId) &&
+          field.isActive === true &&
           field.fieldStatus?.toLowerCase().includes('tapped area')
         );
 
-        const tappedAreaByYear = this.fields.filter(field => 
-          validEstateIds.has(field.estateId) && 
-          field.isActive === true && 
+        const tappedAreaByYear = this.fields.filter(field =>
+          validEstateIds.has(field.estateId) &&
+          field.isActive === true &&
           field.fieldStatus?.toLowerCase().includes('tapped area') && new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
         );
-  
+
         // Calculate tapped area
         this.tappedArea = validFields.reduce((sum, field) => sum + field.area, 0);
         this.tappedAreaByYear = tappedAreaByYear.reduce((sum, field) => sum + field.area, 0);
@@ -275,7 +275,6 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           this.filterEstates = Response
           this.totalEstate = this.filterEstates.length
           this.filterEstates.forEach(estate => {
-            // Filter fields by matching licenseNo and ensuring the area is not null and greater than 0
             this.validFields = this.fields.filter((field: any) =>
               field.estateId === estate.id &&
               field.isActive === true)

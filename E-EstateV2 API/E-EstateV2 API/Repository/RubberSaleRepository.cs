@@ -23,7 +23,7 @@ namespace E_EstateV2_API.Repository
             {
                 bool exists = await _context.rubberSales
                     .AnyAsync(rubberSale => rubberSale.saleDateTime == sales.saleDateTime && rubberSale.buyerId == sales.buyerId &&
-                    rubberSale.rubberType == sales.rubberType && rubberSale.wetWeight == sales.wetWeight && rubberSale.DRC == sales.DRC);
+                    rubberSale.rubberType == sales.rubberType && rubberSale.wetWeight == sales.wetWeight && rubberSale.DRC == sales.DRC && rubberSale.letterOfConsentNo == sales.letterOfConsentNo);
                 if (!exists)
                 {
                     sales.createdDate = DateTime.Now;

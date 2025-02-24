@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="column box-container color2">
+      <div class="column box-container color3">
         <div class="span-word">
           <span style="font-weight: bold;">Total Registered Estate</span><br />
           <span  *ngIf="!isLoadingEstateDetail">{{totalRegistered}}</span>
@@ -56,10 +56,20 @@
   <br />
 
     <div class="box">
-      <div class="column box-container color3">
+      <div class="column box-container color4">
         <div class="span-word">
-          <span style="font-weight: bold;" >Total Tapped Rubber Area (Ha)</span><br />
+          <span style="font-weight: bold;" >Total Tapped Area (Ha)</span><br />
           <span  *ngIf="!isLoadingTapped">{{tappedArea | number:'1.2-2'}}</span>
+        </div>
+        <div *ngIf="isLoadingTapped">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="column box-container color5">
+        <div class="span-word">
+          <span style="font-weight: bold;" >Total Rubber Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{totalRubberArea | number:'1.2-2'}}</span>
         </div>
         <div *ngIf="isLoadingTapped">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -74,7 +84,7 @@
   <div class="box-container-outer">
     <span class="title2">Tapper Worker for {{yearNow}}</span>
     <div class="box">
-      <div class="column box-container color4">
+      <div class="column box-container color6">
         <div class="span-word">
           <span style="font-weight: bold;" >Current</span><br />
           <span *ngIf="!isLoadingTapper">{{currentTotalTapper}}</span>
@@ -85,7 +95,7 @@
         </div>
       </div>
 
-      <div class="column box-container color2">
+      <div class="column box-container color1">
         <div class="span-word">
           <span style="font-weight: bold;" >Shortage</span><br />
           <span  *ngIf="!isLoadingTapperShortage">{{tapperShortage}}</span>
@@ -128,7 +138,7 @@
   <div class="box-container-outer">
     <span class="title2">Field Worker for {{yearNow}}</span>
     <div class="box">
-      <div class="column box-container color3">
+      <div class="column box-container color2">
         <div class="span-word">
           <span style="font-weight: bold;" >Current</span><br />
           <span  *ngIf="!isLoadingFieldShortage">{{fieldShortage}}</span>
@@ -139,7 +149,7 @@
         </div>
       </div>
 
-      <div class="column box-container color1">
+      <div class="column box-container color3">
         <div class="span-word">
           <span style="font-weight: bold;" >Shortage</span><br />
           <span  *ngIf="!isLoadingField">{{currentTotalField}}</span>
@@ -172,7 +182,7 @@
         </div>
       </div>
 
-      <div class="column box-container color1">
+      <div class="column box-container color5">
         <div class="span-word">
           <span style="font-weight: bold;">Latex</span><br />
           <div *ngIf="!isLoadingProduction">
@@ -185,7 +195,7 @@
         </div>
       </div>
 
-      <div class="column box-container color2">
+      <div class="column box-container color6">
         <div class="span-word">
           <span style="font-weight: bold;">Total</span><br />
           <span  *ngIf="!isLoadingProduction">{{totalProduction | number: '1.2-2' }}</span>
@@ -202,7 +212,7 @@
   <div class="box-container-outer">
     <span class="title2">Cost of Production (RM/Kg/Yr) for {{yearNow}}</span>
     <div class="box">
-      <div class="column box-container color3">
+      <div class="column box-container color1">
         <div class="span-word">
           <span style="font-weight: bold;" >COP</span><br />
           <span  *ngIf="!isLoadingCop">{{ getCalculatedCop() | number: '1.2-2' }}</span>
@@ -219,12 +229,22 @@
 
 <div style="columns:2" class="print">
   <div class="box-container-outer">
-    <span class="title2">Tapped Rubber for {{yearNow}}</span>
+    <span class="title2">Total Area for {{yearNow}}</span>
     <div class="box">
+      <div class="column box-container color2">
+        <div class="span-word">
+          <span style="font-weight: bold;">Tapped Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{tappedAreaByYear | number:'1.2-2'}}</span>
+        </div>
+        <div *ngIf="isLoadingProduction">
+          <ngx-skeleton-loader appearance="line" animation="progress-dark"
+            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+        </div>
+      </div>
       <div class="column box-container color3">
         <div class="span-word">
-          <span style="font-weight: bold;">Area (Ha)</span><br />
-          <span  *ngIf="!isLoadingTapped">{{tappedAreaByYear | number:'1.2-2'}}</span>
+          <span style="font-weight: bold;">Rubber Area (Ha)</span><br />
+          <span  *ngIf="!isLoadingTapped">{{totalRubberAreaByYear | number:'1.2-2'}}</span>
         </div>
         <div *ngIf="isLoadingProduction">
           <ngx-skeleton-loader appearance="line" animation="progress-dark"
@@ -238,7 +258,7 @@
   <div class="box-container-outer">
     <span class="title2">Rubber Productivity (Kg/Ha/Yr) for {{yearNow}}</span>
     <div class="box">
-      <div class="column box-container color2">
+      <div class="column box-container color4">
         <div class="span-word">
           <span style="font-weight: bold;">Total</span><br />
           <span *ngFor="let cuplumpProductivity of productivityByYear">

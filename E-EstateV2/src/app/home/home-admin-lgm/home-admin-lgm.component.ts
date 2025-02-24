@@ -66,6 +66,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   fieldShortage = 0
   tappedArea = 0
   tappedAreaByYear = 0
+  totalRubberAreaByYear = 0
+  totalRubberArea = 0
   costAmount = 0
   totalProduction = 0
   totalRegistered = 0
@@ -155,15 +157,29 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           field.fieldStatus?.toLowerCase().includes('tapped area')
         );
 
-        const tappedAreaByYear = this.fields.filter(field =>
-          validEstateIds.has(field.estateId) &&
-          field.isActive === true &&
-          field.fieldStatus?.toLowerCase().includes('tapped area') && new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
+        const totalField = this.fields.filter(x =>
+          validEstateIds.has(x.estateId) &&
+          x.isActive === true && (
+          x.fieldStatus?.toLowerCase().includes('abandoned - untapped') ||
+          x.fieldStatus?.toLowerCase().includes('tapped area') ||
+          x.fieldStatus?.toLowerCase().includes('new planting') ||
+          x.fieldStatus?.toLowerCase().includes('replanting')
+        ))
+        
+        const totalRubberAreaByYear = totalField.filter(field =>
+          new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
+        );
+
+        const tappedAreaByYear = validFields.filter(field =>
+          new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
         );
 
         // Calculate tapped area
         this.tappedArea = validFields.reduce((sum, field) => sum + field.area, 0);
         this.tappedAreaByYear = tappedAreaByYear.reduce((sum, field) => sum + field.area, 0);
+        this.totalRubberArea = totalField.reduce((sum, field) => sum + field.area, 0);
+        this.totalRubberAreaByYear = totalRubberAreaByYear.reduce((sum, field) => sum + field.area, 0);
+
         this.isLoadingTapped = false;
       },
       error => {

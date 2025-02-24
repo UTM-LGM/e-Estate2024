@@ -32,7 +32,7 @@ jobs:
           npm install -g @angular/cli
 
           # Test Karma
-          # ng test
+          ng test
 
           # Build Angular project
           ng build

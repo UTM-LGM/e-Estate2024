@@ -133,13 +133,13 @@ builder.Services.AddAuthentication(options =>
 //    });
 //});
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder()
-        .AddAuthenticationSchemes("CustomJwt", "AzureAD")
-        .RequireAuthenticatedUser()
-        .Build()));
-});
+//builder.Services.AddControllers(options =>
+//{
+//    options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder()
+//        .AddAuthenticationSchemes("CustomJwt", "AzureAD")
+//        .RequireAuthenticatedUser()
+//        .Build()));
+//});
 
 
 builder.Services.AddCors(options =>

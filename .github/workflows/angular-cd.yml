@@ -13,6 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Build Angular App
+        run: |
+          cd E-EstateV2
+          npm install
+          ng build --configuration=production --output-path=dist/e-estate-v2
+
+
       - name: Verify Build Path
         shell: pwsh
         run: |

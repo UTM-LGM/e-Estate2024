@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Check Network Access
+        shell: cmd
+        run: |
+          ping DEVAPP02
+          net view \\DEVAPP02
+
       - name: Access folder E-EstateV2 and Build
         run: |
           # Navigate to the E-EstateV2 directory

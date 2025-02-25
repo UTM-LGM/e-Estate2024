@@ -39,6 +39,12 @@ jobs:
             exit 1 
           }
 
+      - name: Verify Network Drive
+        shell: cmd
+        run: |
+          net use Z: "${{ secrets.NET_DRIVE_PATH }}" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
+          if %ERRORLEVEL% NEQ 0 exit 1
+          
       - name: Map Network Drive and Copy Files
         shell: cmd
         run: |

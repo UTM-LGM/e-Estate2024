@@ -1,0 +1,33 @@
+name: CI/CD Workflow for Angular
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest  # Change to Windows since we need to access network drive
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'latest'  
+
+      - name: Install dependencies and build Angular
+        run: |
+          cd E-EstateV2
+          npm install
+          npm install -g @angular/cli
+          ng build --configuration=production
+
+      # 🔥 NEW: Copy build files to network drive (CD step)
+      - name: Deploy to network drive
+        run: |
+          net use Z: "${{ secrets.NET_DRIVE_PATH }}" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
+          robocopy E-EstateV2/dist/your-angular-app Z:\your-angular-app /MIR
+          net use Z: /delete

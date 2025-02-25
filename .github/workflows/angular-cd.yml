@@ -17,7 +17,7 @@ jobs:
         run: |
           cd E-EstateV2
           npm install
-          ng build --configuration=production --output-path=dist/e-estate-v2
+          ng build 
 
 
       - name: Verify Build Path

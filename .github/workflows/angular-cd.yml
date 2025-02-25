@@ -15,6 +15,6 @@ jobs:
 
       - name: Deploy to Network Drive
         run: |
-          net use Z: "${{ secrets.NET_DRIVE_PATH }}" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
-          robocopy E-EstateV2/dist/e-estate-v2 Z:\e-estate-v2 /MIR
-          net use Z: /delete
+          net use "\\DEVAPP02\trainingE-estate" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
+          robocopy "C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2\dist\e-estate-v2" "\\DEVAPP02\trainingE-estate" /MIR
+          net use "\\DEVAPP02\trainingE-estate" /delete

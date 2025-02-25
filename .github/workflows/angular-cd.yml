@@ -7,14 +7,25 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest  # Use Windows to access network drive
+    runs-on: windows-latest  # Windows required for network drive access
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy to Network Drive
+      - name: Build Angular App
         run: |
-          net use "\\DEVAPP02\trainingE-estate" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
-          robocopy "C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2\dist\e-estate-v2" "\\DEVAPP02\trainingE-estate" /MIR
-          net use "\\DEVAPP02\trainingE-estate" /delete
+          cd E-EstateV2
+          npm install
+          npm install -g @angular/cli
+          ng build
+
+      - name: Verify Build Path
+        run: |
+          if not exist "E-EstateV2\dist\e-estate-v2" exit 1
+
+      - name: Deploy to Network Location
+        run: |
+          net use Z: "\\DEVAPP02\trainingE-estate" /user:${{ secrets.NET_DRIVE_USERNAME }} ${{ secrets.NET_DRIVE_PASSWORD }}
+          robocopy E-EstateV2\dist\e-estate-v2 Z:\e-estate-v2 /MIR
+          net use Z: /delete

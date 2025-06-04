@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Cost } from 'src/app/_interface/cost';
 import { CostAmount } from 'src/app/_interface/costAmount';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
@@ -13,7 +13,7 @@ import swal from 'sweetalert2';
   templateUrl: './mature-cost.component.html',
   styleUrls: ['./mature-cost.component.css']
 })
-export class MatureCostComponent implements OnInit, OnDestroy {
+export class MatureCostComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() costTypeId: number = 0
   @Input() selectedMonthYear = ''
@@ -86,7 +86,6 @@ export class MatureCostComponent implements OnInit, OnDestroy {
           this.subCategories1.forEach(sub => sub.amount = 0);
         })
     this.subscriptionService.add(getSubCategory);
-    
   }
 
   getMatureDirectCost() {

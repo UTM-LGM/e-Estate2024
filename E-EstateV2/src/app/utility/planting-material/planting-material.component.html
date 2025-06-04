@@ -1,20 +1,27 @@
 <br />
-<h1>Planting Material Utility</h1>
-<form>
-  <label>Planting Material : </label>
-  <input type="text" name="plantingMaterial" [(ngModel)]="plantingMaterial.plantingMaterial" />
-</form>
+<div class="subsection">
+  <h1>Planting Material Utility</h1>
+</div>
 
-<button style="float: right" class="btn-add" (click)="submit()">
-  Add &nbsp; <i class="fa fa-plus"></i>
-</button>
+<div class="subsection2">
+  <form>
+    <label>Planting Material : </label>
+    <input type="text" name="plantingMaterial" [(ngModel)]="plantingMaterial.plantingMaterial" />
+  </form>
 
-<br /><br />
-<hr />
+  <button style="float: right" class="btn-add" (click)="submit()">
+    Add &nbsp; <i class="fa fa-plus"></i>
+  </button>
+</div>
+<br/><br/>
 
-<h1>List of Planting Material</h1>
-<div class="box-container">
-  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Planting Material" />
+<div class="subsection">
+  <h1>List of Planting Material</h1>
+</div>
+
+<div class="subsection2">
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)"
+    placeholder="Filter Planting Material" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

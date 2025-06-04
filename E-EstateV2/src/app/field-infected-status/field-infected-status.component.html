@@ -1,20 +1,23 @@
 <div style="padding: 20px;" class="box-container">
-  <h1>{{fieldInfected.fieldName}}</h1>
-  <hr>
-
-  <div>
-    <h1>Status : </h1>
-    <button class="active-btn"> Active </button> ->
-    <button class="inactive-btn"> Inactive </button>
-  </div><br />
-
-  <div style="columns: 2">
-    <label>Date Recovered <span style="color: red;">*</span> :</label>
-    <input type="date" name="date" [(ngModel)]="fieldInfected.dateRecovered" />
+  <div class="subsection">
+    <h1>{{fieldInfected.fieldName}}</h1>
   </div>
 
-  <label>Remark <span style="color: red;">*</span> :</label>
-  <textarea [(ngModel)]="fieldInfected.remark"></textarea><br /><br />
+  <div class="subsection2">
+    <div>
+      <h1>Status : </h1>
+      <button class="active-btn"> Active </button> ->
+      <button class="inactive-btn"> Inactive </button>
+    </div><br />
+
+    <div style="columns: 2">
+      <label>Date Recovered <span style="color: red;">*</span> :</label>
+      <input type="date" name="date" [(ngModel)]="fieldInfected.dateRecovered" />
+    </div>
+
+    <label>Remark <span style="color: red;">*</span> :</label>
+    <textarea [(ngModel)]="fieldInfected.remark"></textarea><br />
+  </div>
 
   <div>
     <button style="float: right" class="btn-update" type="submit" (click)="update()">

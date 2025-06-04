@@ -1,26 +1,29 @@
-<br />
 <div style="padding: 15px;">
-  <h1>Labor Shortage Information</h1>
-  <hr />
+  <div class="subsection">
+    <h1>Labor Shortage Information</h1>
+  </div>
 
-  <table class="table">
-    <tr>
-      <td><b>Item</b></td>
-      <td><b>No of Worker Shortage <span style="color: red;">*</span></b></td>
-    </tr>
+  <div class="subsection2">
+    <table class="table">
+      <tr>
+        <th><b>Item</b></th>
+        <th><b>No of Worker Shortage <span style="color: red;">*</span></b></th>
+      </tr>
 
-    <tr>
-      <td>Tapper worker in estate</td>
-      <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" />
-      </td>
-    </tr>
+      <tr>
+        <td>Tapper worker in estate</td>
+        <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.tapperWorkerShortage" />
+        </td>
+      </tr>
 
-    <tr>
-      <td>Field worker in estate</td>
-      <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" /></td>
-    </tr>
+      <tr>
+        <td>Field worker in estate</td>
+        <td class="td"><input class="total" type="number" placeholder="0" [(ngModel)]="worker.fieldWorkerShortage" />
+        </td>
+      </tr>
 
-  </table><br />
+    </table><br />
+  </div>
 
   <div style="padding-right: 10px">
     <button style="float: right" class="btn-update" type="submit" (click)="update()">

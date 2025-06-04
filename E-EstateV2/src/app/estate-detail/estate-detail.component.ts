@@ -19,7 +19,6 @@ import { EstateDetail } from '../_interface/estate-detail';
 import { FieldService } from '../_services/field.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { SubscriptionService } from '../_services/subscription.service';
-import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-estate-detail',
@@ -123,16 +122,15 @@ export class EstateDetailComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getField = this.fieldService.getField()
+    const getField = this.fieldService.getFieldByEstateId(this.estate.id)
       .subscribe(
         Response => {
-          const fields = Response
-          this.fields = fields.filter(x => x.estateId == this.estate.id)
+          this.fields = Response
           // Fetch all field infected data
           this.fieldInfectedService.getFieldInfected().subscribe(
             allFieldInfectedData => {
               // Filter field infected data based on field id and store in result object
-              fields.forEach(field => {
+              this.fields.forEach(field => {
                 const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
                 this.result[field.id] = filteredData;
 
@@ -146,11 +144,10 @@ export class EstateDetailComponent implements OnInit, OnDestroy {
   }
 
   getContact() {
-    const getContact = this.estateContactService.getCompanyContact()
+    const getContact = this.estateContactService.getEstateContactByEstateId(this.estate.id)
       .subscribe(
         Response => {
-          const contacts = Response
-          this.contacts = contacts.filter(x => x.estateId == this.estate.id)
+          this.contacts = Response
         }
       )
     this.subscriptionService.add(getContact);

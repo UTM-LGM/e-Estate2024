@@ -126,10 +126,10 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getField = this.fieldService.getField()
+    const getField = this.fieldService.getFieldByEstateId(this.estate.id)
       .subscribe(
         Response => {
-          const filterFields = Response.filter(x => x.estateId == this.estate.id)
+          const filterFields = Response
           this.filterFields = filterFields.filter(e => e.isMature === true && e.isActive === true && !e.fieldStatus?.toLowerCase().includes("conversion"))
           this.getProducts(this.filterFields)
           this.getAllProduction(this.filterFields)
@@ -417,10 +417,10 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   submitProduction() {
     this.spinnerService.requestStarted();
-  
+
     const updatedBy = this.sharedService.userId.toString();
     const date = new Date();
-    
+
     // Filter the draft based on whether it already exists or is new
     const updates = this.draftFilterProductions
       .filter(prod => prod.id != null)
@@ -430,7 +430,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         updatedBy: updatedBy,
         updatedDate: date
       }));
-    
+
     const inserts = this.draftFilterProductions
       .filter(prod => prod.id == null)
       .map(obj => ({
@@ -439,10 +439,10 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         updatedBy: updatedBy,
         updatedDate: date
       }));
-  
+
     // Flag to disable the form submission
     this.isSubmit = true;
-  
+
     // Handle updates if there are any
     if (updates.length > 0) {
       this.fieldProductionService.updateProductionDraft(updates).subscribe(
@@ -455,6 +455,8 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
             timer: 1000
           });
           this.getEstate(); // Refresh the data
+          this.nextTabEvent.emit();
+
         },
         error => {
           swal.fire({
@@ -467,7 +469,7 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         }
       );
     }
-  
+
     // Handle inserts if there are any
     if (inserts.length > 0) {
       this.fieldProductionService.addProduction(inserts).subscribe(
@@ -492,11 +494,11 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
         }
       );
     }
-  
+
     // Ensure the spinner is stopped at the end
     this.spinnerService.requestEnded();
   }
-  
+
 
   save() {
     this.spinnerService.requestStarted()
@@ -554,13 +556,13 @@ export class FieldProductionMonthlyComponent implements OnInit, OnDestroy {
 
   validateCuplumpDRC(drc: any, i: any) {
     const drcValue = drc.target.value
-    if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
+    if ((drcValue >= 45 && drcValue <= 100) || drc === 0) {
       return drcValue
     }
     else {
       swal.fire({
         title: 'Error!',
-        text: 'CuplumpDRC must be between 45% to 80%',
+        text: 'CuplumpDRC must be between 45% to 100%',
         icon: 'error',
         showConfirmButton: true
       });

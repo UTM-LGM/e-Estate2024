@@ -51,6 +51,33 @@ namespace E_EstateV2_API.Repository
             return labor;
         }
 
+        public async Task<List<DTO_LaborInfo>> GetLaborInfoByEstateId(int id)
+        {
+            var labor = await _context.laborInfos.Where(x=>x.estateId == id).Select(x => new DTO_LaborInfo
+            {
+                id = x.Id,
+                monthYear = x.monthYear,
+                tapperCheckrole = x.tapperCheckrole,
+                tapperContractor = x.tapperContractor,
+                fieldCheckrole = x.fieldCheckrole,
+                fieldContractor = x.fieldContractor,
+                estateId = x.estateId,
+                countryName = _context.countries.Where(y => y.Id == x.countryId).Select(y => y.country).FirstOrDefault(),
+                isLocal = _context.countries.Where(y => y.Id == x.countryId).Select(y => y.isLocal).FirstOrDefault(),
+                countryId = x.countryId,
+                laborCategory = _context.laborByCategories.Where(y => y.laborInfoId == x.Id).Select(y => new DTO_LaborByCategory
+                {
+                    id = y.Id,
+                    noOfWorker = y.noOfWorker,
+                    laborInfoId = y.laborInfoId,
+                    laborTypeId = y.laborTypeId,
+                    laborType = _context.laborTypes.Where(l => l.Id == y.laborTypeId).Select(y => y.laborType).FirstOrDefault(),
+                    estateId = _context.laborInfos.Where(l => l.Id == y.laborInfoId).Select(y => y.estateId).FirstOrDefault()
+                }).ToList()
+            }).ToListAsync();
+            return labor;
+        }
+
         public async Task<LaborInfo> UpdateLaborInfo (LaborInfo laborInfo)
         {
             var existingLabor = await _context.laborInfos.Where(x=>x.Id == laborInfo.Id).FirstOrDefaultAsync();

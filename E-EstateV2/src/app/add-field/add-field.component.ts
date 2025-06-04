@@ -7,13 +7,11 @@ import { MyLesenIntegrationService } from '../_services/my-lesen-integration.ser
 import { SubscriptionService } from '../_services/subscription.service';
 import { FieldService } from '../_services/field.service';
 import { SharedService } from '../_services/shared.service';
-import { FieldCloneService } from '../_services/field-clone.service';
 import { Clone } from '../_interface/clone';
 import { CloneService } from '../_services/clone.service';
 import { FieldStatusService } from '../_services/field-status.service';
 import { Location } from '@angular/common';
 import { FieldGrant } from '../_interface/fieldGrant';
-import { FieldGrantService } from '../_services/field-grant.service';
 import { SpinnerService } from '../_services/spinner.service';
 import { FieldGrantAttachmentComponent } from '../field-grant-attachment/field-grant-attachment.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -65,11 +63,9 @@ export class AddFieldComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionService,
     private fieldService: FieldService,
     private sharedService: SharedService,
-    private fieldCloneService: FieldCloneService,
     private cloneService: CloneService,
     private fieldStatusService: FieldStatusService,
     private location: Location,
-    private fieldGrantService: FieldGrantService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
   ) { }
@@ -135,11 +131,10 @@ export class AddFieldComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getField = this.fieldService.getField()
+    const getField = this.fieldService.getFieldByEstateId(this.estate.id)
       .subscribe(
         Response => {
-          const fields = Response
-          this.fields = fields.filter(x => x.estateId == this.estate.id)
+          this.fields = Response
         }
       )
     this.subscriptionService.add(getField);

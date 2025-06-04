@@ -205,7 +205,6 @@ export class LaborInformationYearlyComponent implements OnInit, OnDestroy {
           this.localTapperFieldWorker.push(local)
         }
         this.foreignTapperFieldWorker = Response.filter(x => x.isLocal == false && x.estateId == this.estate.id);
-        console.log(this.foreignTapperFieldWorker)
         if(this.foreignTapperFieldWorker.length == 0){
           const foreign ={
             isLocal:false,

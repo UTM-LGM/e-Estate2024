@@ -24,4 +24,7 @@ export class BuyerService {
     return this.http.put<Buyer>(this.baseUrl + '/buyers/UpdateBuyer', buyer)
   }
 
+  getBuyerByEstateId(estateId:number):Observable<Buyer[]>{
+    return this.http.get<Buyer[]>(this.baseUrl + '/buyers/GetBuyersByEstateId/' + estateId)
+  }
 }

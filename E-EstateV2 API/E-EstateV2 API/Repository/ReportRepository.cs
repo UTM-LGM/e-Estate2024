@@ -1,12 +1,10 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
-using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Globalization;
-using System.Linq;
 
 namespace E_EstateV2_API.Repository
 {
@@ -40,6 +38,64 @@ namespace E_EstateV2_API.Repository
                  .ToList();
             return groupdFieldProduction;
         }
+
+        public async Task<object> GetProduction()
+        {
+            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED").Select(x => new
+            {
+                estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
+                cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
+                latexDry = x.latex * (x.latexDRC / 100),
+                monthYear = x.monthYear
+            }).ToListAsync();
+
+            var groupdFieldProduction = fieldProduction
+                .GroupBy(x => new { x.estateId, x.monthYear })
+                 .Select(group => new
+                 {
+                     estateId = group.First().estateId,
+                     monthYear = group.Key.monthYear,
+                     cuplumpDry = group.Sum(x => x.cuplumpDry),
+                     latexDry = group.Sum(x => x.latexDry),
+                     rubberDry = group.Sum(x => x.cuplumpDry) + group.Sum(x => x.latexDry)
+                 })
+                 .ToList();
+            return groupdFieldProduction;
+        }
+
+        public async Task<object> GetSales()
+        {
+            var sales = await _context.rubberSales.Select(x => new
+            {
+                estateId = x.estateId,
+                saleDateTime = x.saleDateTime,
+                saleDry = x.wetWeight * (x.DRC / 100),
+            }).ToListAsync();
+
+            var groupedSales = sales
+                .GroupBy(x => new { x.estateId, SaleMonth = x.saleDateTime.ToString("MMM-yyyy") })
+                .Select(group => new
+                {
+                    estateId = group.Key.estateId,
+                    saleMonth = group.Key.SaleMonth.ToUpper(), // Now in "Jan-2025" format
+                    saleDry = group.Sum(x => x.saleDry)
+                }).ToList();
+            return groupedSales;
+        }
+
+        public async Task<object> GetStocks()
+        {
+            var stocks = await _context.rubberStocks.Select(x => new
+            {
+                estateId = x.estateId,
+                monthYear = x.monthYear,
+                currentStock = x.currentStock,
+                previousStock = x.previousStock
+            }).ToListAsync();
+            return stocks;
+        }
+
+
 
         //LGMAdmin
         public async Task<object> GetProductivity()
@@ -91,40 +147,48 @@ namespace E_EstateV2_API.Repository
         //LGMAdmin
         public async Task<object> GetLatestMonthWorker(int year)
         {
-            // Fetch all laborInfos records into memory
             var allLaborInfos = await _context.laborInfos.ToListAsync();
 
-            var latestMonthYearsForEachEstate = allLaborInfos
-                .Where(x => x.monthYear.Contains(year.ToString())) // Filter by year
-                .GroupBy(x => x.estateId) // Group by estateId
-                .Select(group => new
+            var groupedByEstate = allLaborInfos
+                .Where(x => x.monthYear.Contains(year.ToString()))
+                .GroupBy(x => x.estateId)
+                .Select(group =>
                 {
-                    EstateId = group.Key,
-                    LatestMonthYear = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.monthYear).FirstOrDefault()
+                    // Find latest monthYear for this estateId
+                    var latestMonth = group
+                        .OrderByDescending(x => GetMonthValue(x.monthYear))
+                        .Select(x => x.monthYear)
+                        .FirstOrDefault();
+
+                    // Get all rows for the latest monthYear
+                    var latestRows = group
+                        .Where(x => x.monthYear == latestMonth)
+                        .ToList();
+
+                    // ✅ Aggregate fields using SUM instead of MAX
+                    var tapperCheckrole = latestRows.Sum(x => x.tapperCheckrole);
+                    var tapperContractor = latestRows.Sum(x => x.tapperContractor);
+                    var fieldCheckrole = latestRows.Sum(x => x.fieldCheckrole);
+                    var fieldContractor = latestRows.Sum(x => x.fieldContractor);
+
+                    return new
+                    {
+                        estateId = group.Key,
+                        tapperCheckrole,
+                        tapperContractor,
+                        fieldCheckrole,
+                        fieldContractor,
+                        totalTapper = tapperCheckrole + tapperContractor,
+                        totalField = fieldCheckrole + fieldContractor,
+                        monthYear = latestMonth
+                    };
                 })
                 .ToList();
 
-            var workerForEachEstate = new List<object>();
-
-            foreach (var latestMonthYearForEstate in latestMonthYearsForEachEstate)
-            {
-                var worker = allLaborInfos
-                    .Where(x => x.estateId == latestMonthYearForEstate.EstateId && x.monthYear == latestMonthYearForEstate.LatestMonthYear)
-                    .Select(x => new
-                    {
-                        estateId = x.estateId,
-                        tapperCheckrole = x.tapperCheckrole,
-                        tapperContractor = x.tapperContractor,
-                        fieldCheckrole = x.fieldCheckrole,
-                        fieldContractor = x.fieldContractor
-                    })
-                    .FirstOrDefault();
-
-                workerForEachEstate.Add(worker);
-            }
-
-            return workerForEachEstate;
+            return groupedByEstate;
         }
+
+
 
 
         public async Task<object> GetProductionYearlyByField(int year)
@@ -276,6 +340,7 @@ namespace E_EstateV2_API.Repository
                 estateId = x.estateId,
                 createdDate = x.createdDate,
                 rubberArea = x.rubberArea,
+                fieldStatusId = x.fieldStatusId
             }).ToListAsync();
             if (!field.Any())
             {
@@ -296,13 +361,42 @@ namespace E_EstateV2_API.Repository
                 isMature = x.isMature,
                 estateId = x.estateId,
                 isActive = x.isActive,
-                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault()
+                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
+                createdDate = x.createdDate,
+                fieldStatusId = x.fieldStatusId
             }).ToListAsync();
 
             return field;
         }
 
+        public async Task<object> GetFieldAreaByDate(string start, string end, int estateId)
+        {
+            // Try parsing the strings into DateTime objects
+            if (!DateTime.TryParse(start, out DateTime startDate) || !DateTime.TryParse(end, out DateTime endDate))
+            {
+                throw new ArgumentException("Invalid date format. Please use 'yyyy-MM-dd'.");
+            }
 
+            // Get fields that are active and fall within the given date range
+            var fields = await _context.fields
+                .Select(x => new
+                {
+                    fieldId = x.Id,
+                    area = x.rubberArea,
+                    isMature = x.isMature,
+                    estateId = x.estateId,
+                    isActive = x.isActive,
+                    fieldStatus = _context.fieldStatus
+                                    .Where(y => y.Id == x.fieldStatusId)
+                                    .Select(y => y.fieldStatus)
+                                    .FirstOrDefault(),
+                    createdDate = x.createdDate,
+                    fieldStatusId = x.fieldStatusId
+                })
+                .ToListAsync();
+
+            return fields;
+        }
 
         public async Task<object> GetProductionYearlyByClone(int year)
         {
@@ -378,10 +472,11 @@ namespace E_EstateV2_API.Repository
             return groupedResult;
         }
 
-
-        public async Task<object> GetCurrentField(int year)
+        //problem
+        public async Task<object> GetCurrentField()
         {
-            var field = await _context.fields.Select(x => new
+            var field = await _context.fields
+            .Select(x => new
             {
                 id = x.Id,
                 fieldName = x.fieldName,
@@ -390,11 +485,15 @@ namespace E_EstateV2_API.Repository
                 isActive = x.isActive,
                 dateOpenTapping = x.dateOpenTapping,
                 yearPlanted = x.yearPlanted,
-                fieldStatus = _context.fieldStatus.Where(y => y.Id == x.fieldStatusId).Select(y => y.fieldStatus).FirstOrDefault(),
+                fieldStatus = _context.fieldStatus
+                                .Where(y => y.Id == x.fieldStatusId)
+                                .Select(y => y.fieldStatus)
+                                .FirstOrDefault(),
                 initialTreeStand = x.initialTreeStand,
                 totalTask = x.totalTask,
                 estateId = x.estateId,
-                createdDate = x.createdDate
+                createdDate = x.createdDate,
+                fieldStatusId = x.fieldStatusId
             }).ToListAsync();
             return field;
         }
@@ -788,31 +887,56 @@ namespace E_EstateV2_API.Repository
         //LGMAdmin
         public async Task<object> GetWorkerShortageEstate(int year)
         {
-            // Fetch all worker shortage records into memory
             var allWorkerShortage = await _context.workerShortages.ToListAsync();
 
-            // Helper method to check if monthYear contains the specified year
-            bool IsMatchingYear(string monthYear, int year)
-            {
-                return monthYear.Contains(year.ToString());
-            }
-
-            // Filter allWorkerShortage to only include entries that match the specified year
-            var filteredWorkerShortage = allWorkerShortage.Where(x => IsMatchingYear(x.monthYear, year)).ToList();
-
-            var latestWorkerShortageForEachEstate = filteredWorkerShortage
-                .GroupBy(x => x.estateId) // Group by estateId
-                .Select(group => new
-                {
-                    EstateId = group.Key,
-                    LatestMonthYear = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.monthYear).FirstOrDefault(),
-                    TapperShortage = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.tapperWorkerShortage).FirstOrDefault(),
-                    FieldShortage = group.OrderByDescending(x => GetMonthValue(x.monthYear)).Select(x => x.fieldWorkerShortage).FirstOrDefault()
-                })
+            // Filter by year
+            var filteredWorkerShortage = allWorkerShortage
+                .Where(x => x.monthYear.Contains(year.ToString()))
                 .ToList();
 
-            return latestWorkerShortageForEachEstate;
+            // Convert monthYear to a DateTime for proper ordering and grouping
+            DateTime ParseMonthYear(string monthYear)
+            {
+                // Assuming monthYear is like 'MMM-yyyy', e.g. 'Jan-2025'
+                return DateTime.ParseExact("01-" + monthYear, "dd-MMM-yyyy", System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            // Group by estateId and monthYear (to sum shortages per estate per month)
+            var groupedByEstateAndMonth = filteredWorkerShortage
+                .GroupBy(x => new { x.estateId, x.monthYear })
+                .Select(g => new
+                {
+                    EstateId = g.Key.estateId,
+                    MonthYear = g.Key.monthYear,
+                    MonthDate = ParseMonthYear(g.Key.monthYear),
+                    TapperShortage = g.Sum(x => x.tapperWorkerShortage),
+                    FieldShortage = g.Sum(x => x.fieldWorkerShortage)
+                });
+
+            // Now get the latest month record for each estate
+            var latestPerEstate = groupedByEstateAndMonth
+                .GroupBy(x => x.EstateId)
+                .Select(g => g.OrderByDescending(x => x.MonthDate).First())
+                .ToList();
+
+            // Calculate grand totals
+            var grandTotalTapper = latestPerEstate.Sum(x => x.TapperShortage);
+            var grandTotalField = latestPerEstate.Sum(x => x.FieldShortage);
+
+            // Add grand totals to each record for output similar to your SQL
+            var result = latestPerEstate.Select(x => new
+            {
+                estateId = x.EstateId,
+                tapperShortage = x.TapperShortage,
+                fieldShortage = x.FieldShortage,
+                latestMonthYear = x.MonthYear,
+                grandTotalTapper,
+                grandTotalField
+            }).ToList();
+
+            return result;
         }
+
 
         public async Task<object> GetAllWorkerShortageEstate(string start, string end)
         {
@@ -896,7 +1020,8 @@ namespace E_EstateV2_API.Repository
             DateTime endDate = DateTime.ParseExact(end + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture)
                                           .AddMonths(1).AddDays(-1);
 
-            var sales = await _context.rubberSales.Where(x=>x.paymentStatusId == 3 && x.saleDateTime >= startDate && x.saleDateTime <= endDate || x.letterOfConsentNo == "").Select(x => new DTO_RubberSale
+
+            var sales = await _context.rubberSales.Where(x=>x.paymentStatusId == 3 && x.saleDateTime >= startDate && x.saleDateTime <= endDate || x.letterOfConsentNo == "" || x.isActive == false).Select(x => new DTO_RubberSale
             {
                 id = x.Id,
                 saleDateTime = x.saleDateTime,

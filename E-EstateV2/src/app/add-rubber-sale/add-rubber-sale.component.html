@@ -1,12 +1,15 @@
 <div class="box-container col-md-6">
-  <h1>Rubber Sales Information</h1>
-  <hr />
+    <div class="subsection">
+    <h1>Rubber Sale Information</h1>
 
+  </div>
+
+  <div class="subsection2">
   <span *ngIf="estateDetailNull" style="color: red; font-size: 11px;">**Please update Estate Profile in General</span>
 
   <div style="columns: 2" class="column">
     <label>Date <span style="color: red;">*</span> :</label>
-    <input type="date" #date name="date" value="{{currentDate}}" (change)="selectedDate(date.value)" />
+    <input type="date" name="date" [(ngModel)]="rubberSale.saleDateTime" (change)="checkDate()" />
   </div>
 
   <div style="columns: 2">
@@ -57,15 +60,6 @@
     <label>Driver Name <span style="color: red;">*</span> :</label>
     <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" />
   </div>
-
-  <!-- <div style="columns: 2">
-    <label>Price (RM/Kg) :</label>
-    <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00"
-      (input)="calculateTotalPrice()" />
-    <label>Total Price (RM) :</label>
-    <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
-  </div> -->
-
 
   <div style="columns:2">
     <label>Driver Ic Number (xxxxxx-xx-xxxx) <span style="color: red;">*</span> :</label>

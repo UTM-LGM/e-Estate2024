@@ -63,13 +63,13 @@ export class FieldProductionDetailComponent implements OnInit {
 
   validateCuplumpDRC(drc: any) {
     const drcValue = drc.target.value
-    if ((drcValue >= 45 && drcValue <= 80) || drc === 0) {
+    if ((drcValue >= 45 && drcValue <= 100) || drc === 0) {
       return drcValue
     }
     else {
       swal.fire({
         title: 'Error!',
-        text: 'CuplumpDRC must be between 45% to 80%',
+        text: 'CuplumpDRC must be between 45% to 100%',
         icon: 'error',
         showConfirmButton: true
       });

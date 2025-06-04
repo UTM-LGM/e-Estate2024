@@ -1,9 +1,5 @@
 ﻿using E_EstateV2_API.IRepository;
-using E_EstateV2_API.Repository;
-using E_EstateV2_API.ViewModel;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Controllers
 {

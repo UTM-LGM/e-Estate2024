@@ -1,52 +1,53 @@
 <div class="box-container">
-    <h1>List of users</h1>
+    <div class="subsection">
+        <h1>List of users</h1>
+    </div>
 
-    <!-- <button class="btn-add" (click)="addUser()">
-        Add New User &nbsp; <i class="fa fa-plus"></i>
-      </button> -->
+    <div class="subsection2">
+        <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Username" />
 
-    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Username" />
+        <div style="overflow-x: auto">
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of sortableColumns" scope="col" [appSort]="users"
+                            [attr.data-order]="order" [attr.data-name]="column.columnName"
+                            (click)="toggleSort(column.columnName)">
+                            {{ column.displayText }}
+                        </th>
+                        <th width="90px">Action</th>
+                    </tr>
+                </thead>
 
-    <div style="overflow-x: auto">
-        <table style="width: 100%">
-            <thead>
-                <tr>
-                    <th *ngFor="let column of sortableColumns" scope="col" [appSort]="users" [attr.data-order]="order"
-                        [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
-                        {{ column.displayText }}
-                    </th>
-                    <th width="90px">Action</th>
+                <tr *ngIf="isLoading">
+                    <td colspan="8">
+                        <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+                        </ngx-skeleton-loader>
+                    </td>
                 </tr>
-            </thead>
 
-            <tr *ngIf="isLoading">
-                <td colspan="8">
-                    <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-                    </ngx-skeleton-loader>
-                </td>
-            </tr>
-
-            <tr *ngIf="users.length == 0 && !isLoading">
-                <td colspan="8" style="color: red;">No new user</td>
-            </tr>
-
-            <ng-container *ngIf="!isLoading">
-                <tr class="list"
-                    *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-                    <td>{{ calculateIndex(i) }}</td>
-                    <td>{{user.fullName}}</td>
-                    <td>{{user.licenseNo}}</td>
-                    <td>{{user.position}}</td>
-                    <td>{{user.userName}}</td>
-                    <td>{{user.email}}</td>
-                    <td> <button class="btn-update" (click)="openDialog(user)">
-                            <i class="fa fa fa-pencil"></i>
-                        </button></td>
+                <tr *ngIf="users.length == 0 && !isLoading">
+                    <td colspan="8" style="color: red;">No new user</td>
                 </tr>
-            </ng-container>
-        </table>
 
-        <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+                <ng-container *ngIf="!isLoading">
+                    <tr class="list"
+                        *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+                        <td>{{ calculateIndex(i) }}</td>
+                        <td>{{user.fullName}}</td>
+                        <td>{{user.licenseNo}}</td>
+                        <td>{{user.position}}</td>
+                        <td>{{user.userName}}</td>
+                        <td>{{user.email}}</td>
+                        <td> <button class="btn-update" (click)="openDialog(user)">
+                                <i class="fa fa fa-pencil"></i>
+                            </button></td>
+                    </tr>
+                </ng-container>
+            </table>
 
+            <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
+        </div>
     </div>
 </div>

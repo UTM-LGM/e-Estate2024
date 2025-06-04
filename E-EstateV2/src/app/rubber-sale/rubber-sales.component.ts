@@ -10,6 +10,7 @@ import { EstateService } from '../_services/estate.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import { SubscriptionService } from '../_services/subscription.service';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-rubber-sales',
@@ -24,6 +25,8 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
   estate: any = {} as any
 
   filterSales: RubberSale[] = []
+  estateDetail: any = {} as any
+
 
   order = ''
   currentSortedColumn = ''
@@ -38,11 +41,6 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     { columnName: 'receiptNo', displayText: 'Receipt No' },
     { columnName: 'wetWeight', displayText: 'Wet Weight (Kg)' },
     { columnName: 'drc', displayText: 'DRC (%)' },
-    { columnName: 'buyerWetWeight', displayText: 'Buyer Wet Weight (Kg)' },
-    { columnName: 'buyerDRC', displayText: 'Buyer DRC (%)' },
-    { columnName: 'buyerWeightDry', displayText: 'Buyer Weight Dry (Kg)' },
-    { columnName: 'unitPrice', displayText: 'Unit Price (RM/kg)' },
-    { columnName: 'total', displayText: 'Total Price (RM)' },
     { columnName: 'remark', displayText: 'Remark' }
 
   ];
@@ -53,7 +51,9 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private route: ActivatedRoute,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private estateService: EstateDetailService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -69,6 +69,7 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
             .subscribe(
               Response => {
                 this.estate = Response
+                this.checkEstateDetail()
                 this.isLoading = false
               })
           this.subscriptionService.add(getOneEstate);
@@ -78,13 +79,35 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     }, 2000)
   }
 
+  checkEstateDetail() {
+    this.estateService.getEstateDetailbyEstateId(this.sharedService.estateId)
+      .subscribe(
+        Response => {
+          if (Response != null) {
+            this.estateDetail = Response;
+          } else {
+            // If the estate detail is null, show the alert
+            swal.fire({
+              icon: 'info',
+              title: 'Information',
+              text: 'Please update Estate Profile in General',
+            });
+            this.router.navigateByUrl('/estate-detail/' + this.estate.id)
+          }
+        }
+      )
+  }
+
   getSales() {
     setTimeout(() => {
       const getSale = this.rubberSaleService.getSale()
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true && e.paymentStatusId != 3 && e.letterOfConsentNo != '')
+            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId 
+            && e.isActive == true 
+            && e.paymentStatusId != 3 
+            && e.letterOfConsentNo != '')
             this.isLoading = false
           })
       this.subscriptionService.add(getSale);
@@ -152,7 +175,7 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  changeStatus(sale:RubberSale){
+  changeStatus(sale: RubberSale) {
     {
       swal.fire({
         title: "Are you sure to delete ?",
@@ -161,30 +184,30 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
         confirmButtonText: 'Yes',
         denyButtonText: 'Cancel'
       })
-      .then((result)=>{
-        if(result.isConfirmed){
-          sale.isActive = false
-          // const { paymentStatus, ...obj } = sale
-          // const rubberSale:any = obj
-          sale.paymentStatus = null
-          this.rubberSaleService.updateSale(sale)
-            .subscribe(
-              Response =>{
-                swal.fire({
-                  title: 'Deleted!',
-                  text: 'Rubber sale has been deleted!',
-                  icon: 'success',
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-                this.ngOnInit()
-              }
-            )
-        }else if (result.isDenied) {
-        }
-      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            sale.isActive = false
+            // const { paymentStatus, ...obj } = sale
+            // const rubberSale:any = obj
+            sale.paymentStatus = null
+            this.rubberSaleService.updateSale(sale)
+              .subscribe(
+                Response => {
+                  swal.fire({
+                    title: 'Deleted!',
+                    text: 'Rubber sale has been deleted!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                  });
+                  this.ngOnInit()
+                }
+              )
+          } else if (result.isDenied) {
+          }
+        })
     }
-    
+
   }
 
   onFilterChange(term: string): void {

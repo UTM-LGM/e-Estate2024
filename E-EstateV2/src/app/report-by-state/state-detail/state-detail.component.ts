@@ -17,8 +17,8 @@ import { SubscriptionService } from 'src/app/_services/subscription.service';
 })
 export class StateDetailComponent implements OnInit, OnDestroy {
 
-  startMonth = ''
-  endMonth = ''
+  startDate: any
+  endDate: any
   sortableColumns = [
     { columnName: 'no', displayText: 'No' },
     { columnName: 'estateName', displayText: 'Estate Name' },
@@ -52,8 +52,12 @@ export class StateDetailComponent implements OnInit, OnDestroy {
     // Retrieve the query parameters
     this.isLoading = true
     this.route.queryParams.subscribe(params => {
-      this.startMonth = params['startMonth'];
-      this.endMonth = params['endMonth'];
+      if (params['startDate']) {
+        this.startDate = new Date(params['startDate']);
+      }
+      if (params['endDate']) {
+        this.endDate = new Date(params['endDate']);
+      }
       this.route.params.subscribe(params => {
         this.stateId = params['id'];
       });
@@ -72,62 +76,52 @@ export class StateDetailComponent implements OnInit, OnDestroy {
 
   // Assuming this is inside your component class
   calculateTotalAllArea() {
-    const startDate = new Date(`${this.startMonth}-01`);
-    const endDate = new Date(`${this.endMonth}`);
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
-
-    const observables = this.estates.map((estate: any) =>
-      this.fieldService.getField().pipe(
-        map((response: any) => ({
-          estateName: estate.name,
-          estateAdd1: estate.add1,
-          estateId: estate.id,
-          fields: response.filter((x: any) => {
-            const createdDate = new Date(x.createdDate); // Ensure the createdDate is correctly parsed into Date
-            return (
-              x.estateId === estate.id &&
-              createdDate >= startDate &&
-              createdDate <= endDate &&
-              x.isActive === true &&
-              !x.fieldStatus?.toLowerCase().includes('abandoned') &&
-              !x.fieldStatus?.toLowerCase().includes('government') &&
-              !x.fieldStatus?.toLowerCase().includes('conversion')
-            )
-          })
+  const observables = this.estates.map((estate: any) =>
+    this.fieldService.getFieldByEstateId(estate.id).pipe(
+      // tap(response => {
+      //   console.log(`Response for estate ${estate.id}:`, response);
+      // }),
+      map(response => ({
+        stateId: estate.stateId,
+        estateId: estate.id,
+        state: estate.state,
+        name: estate.name,
+        add1: estate.add1,
+        licenseNo: estate.licenseNo,
+        fields: response.filter(x => {
+          const createdDate = new Date(x.createdDate);
+          return (
+            x.estateId === estate.id &&
+            createdDate >= this.startDate &&
+            createdDate <= this.endDate &&
+            x.isActive === true &&
+            [1, 3, 5, 6].includes(x.fieldStatusId)
+          );
         })
-        )
-      ))
+      }))
+    )
+  );
 
-    forkJoin(observables).subscribe((results: any) => {
-      this.stateTotalAreasArray = this.estates.map((estate: any) => {
-        const result = results.find((res: any) => res.estateId === estate.id);
-        if (result) {
-          const totalArea = result.fields.reduce((acc: any, curr: any) => acc + (curr.rubberArea || 0), 0);
-          return {
-            estateName: estate.name,
-            estateAdd1: estate.add1,
-            estateLicenseNo: estate.licenseNo,
-            totalArea: totalArea,
-            state: estate.state
-          };
-        } else {
-          return {
-            estateName: estate.name,
-            estateAdd1: estate.add1,
-            estateLicenseNo: estate.licenseNo,
-            totalArea: 0,
-            state: estate.state
-          };
-        }
-      });
+  forkJoin(observables).subscribe((results: any) => {
+    this.stateTotalAreasArray = results.map((result: any) => {
+      const totalArea = result.fields.reduce((acc: number, curr: any) => acc + (curr.rubberArea || 0), 0);
 
-      this.calculateArea();
+      return {
+        estateName: result.name,
+        estateAdd1: result.add1,
+        estateLicenseNo: result.licenseNo,
+        totalArea: totalArea,
+        state: result.state
+      };
     });
-  }
+
+    this.calculateArea(); // ✅ Moved inside subscribe to ensure data is ready
+  });
+}
+
 
   calculateArea() {
-    this.totalArea = this.stateTotalAreasArray.reduce((acc, worker) => acc + (worker.totalArea || 0), 0)
+    this.totalArea = this.stateTotalAreasArray.reduce((acc, area) => acc + (area.totalArea || 0), 0)
     this.isLoading = false
   }
 
@@ -148,15 +142,15 @@ export class StateDetailComponent implements OnInit, OnDestroy {
     const filteredData: any = data.map(row => ({
       No: bilCounter++,
       EstateName: row.estateName,
-      EstateLicenseNo : row.estateLicenseNo,
+      EstateLicenseNo: row.estateLicenseNo,
       TotalRubberArea: row.totalArea,
       State: row.state
     }));
 
     // Add a header row with the start and end month-year values
     const headerRow = [
-      { No: 'Start Month Year:', EstateName: this.startMonth },
-      { No: 'End Month Year:', EstateName: this.endMonth },
+      { No: 'Start Month Year:', EstateName: this.startDate },
+      { No: 'End Month Year:', EstateName: this.endDate },
       {}, // Empty row for separation
       { No: 'No', EstateName: 'EstateName', EstateLicenseNo: 'EstateLicenseNo', TotalRubberArea: 'TotalRubberArea(Ha)', State: 'State' }
     ];
@@ -169,7 +163,7 @@ export class StateDetailComponent implements OnInit, OnDestroy {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
     // Format the filename to include start and end month-year
-    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+    const formattedFileName = `${fileName}_${this.startDate}_${this.endDate}.xlsx`;
 
     XLSX.writeFile(wb, formattedFileName);
   }

@@ -35,7 +35,6 @@ export class ImmatureCostComponent implements OnInit, OnDestroy {
   isDisable = true
   position = ''
 
-
   constructor(
     private costAmountService: CostAmountService,
     private costService: CostService,

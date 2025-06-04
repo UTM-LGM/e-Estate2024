@@ -1,66 +1,65 @@
 <div style="padding: 20px;" class="box-container">
-  <!-- <h1>{{estate.add1.slice(0, -1)}}</h1> -->
-   <h1>Rubber Stock Information</h1>
-  <hr>
-
-  <!-- <div class="monthYear" *ngIf="stock.id == undefined">
-    <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
-    <input type="month" value="{{ monthYear | date : 'YYY-MM' }}" disabled />
-  </div> -->
-
-  <div style="columns: 2">
-    <label>Month and Year <span style="color: red;">*</span> :</label>
-    <input type="month" #month value="{{ date | date : 'YYY-MM' }}" (input)="monthSelected(month.value)" />
-    <label>Rubber Type <span style="color: red;">*</span> :</label>
-    <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="stock.rubberType" (selectionChange)="chooseRubberType()">
-      <mat-option value="CUPLUMP">CUPLUMP</mat-option>
-      <mat-option value="LATEX">LATEX</mat-option>
-    </mat-select>
+  <div class="subsection">
+    <h1>Rubber Stock Information</h1>
   </div>
 
-  <div class="card">
-    <div class="box">
-      <div class="column box-container color1">
-        <span>Total Production 100% DRC (Kg)</span><br />
-        <!-- <span *ngIf="!isLoadingProduction"><b> {{stock.totalProduction| number: '1.2-2'}} Kg</b></span> -->
-        <span *ngIf="!isLoadingProduction && stock.rubberType == 'CUPLUMP'"><b> {{ totalCuplumpDry | number: '1.2-2'}} Kg</b></span>
-        <span *ngIf="!isLoadingProduction && stock.rubberType == 'LATEX'"><b> {{ totalLatexDry | number: '1.2-2'}} Kg</b></span>
+  <div class="subsection2">
+    <div style="columns: 2">
+      <label>Month and Year <span style="color: red;">*</span> :</label>
+      <input type="month" name="month" #month [(ngModel)]="selectedMonth" (input)="monthSelected(month.value)" />
+      <label>Rubber Type <span style="color: red;">*</span> :</label>
+      <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="stock.rubberType"
+        (selectionChange)="chooseRubberType()">
+        <mat-option value="CUPLUMP">CUPLUMP</mat-option>
+        <mat-option value="LATEX">LATEX</mat-option>
+      </mat-select>
+    </div>
 
-        <div *ngIf="isLoadingProduction">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+    <div class="card">
+      <div class="box">
+        <div class="column box-container color1">
+          <span>Total Production 100% DRC (Kg)</span><br />
+          <span *ngIf="!isLoadingProduction && stock.rubberType == 'CUPLUMP'"><b> {{ totalCuplumpDry | number: '1.2-2'}}
+              Kg</b></span>
+          <span *ngIf="!isLoadingProduction && stock.rubberType == 'LATEX'"><b> {{ totalLatexDry | number: '1.2-2'}}
+              Kg</b></span>
+
+          <div *ngIf="isLoadingProduction">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark"
+              [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+          </div>
         </div>
+
+        <div class="column box-container color2">
+          <span>Total Rubber Sale 100% DRC (Kg)</span><br />
+          <span *ngIf="!isLoadingSale"><b> {{stock.totalSale| number: '1.2-2'}} Kg</b></span>
+          <div *ngIf="isLoadingSale">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark"
+              [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
+          </div>
+        </div>
+
       </div>
+    </div>
 
-      <div class="column box-container color2">
-        <span>Total Rubber Sale 100% DRC (Kg)</span><br />
-        <span *ngIf="!isLoadingSale"><b> {{stock.totalSale| number: '1.2-2'}} Kg</b></span>
-        <div *ngIf="isLoadingSale">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark"
-            [theme]="{'height':'30px', 'width':'80px', 'background-color':'#59788e96'}"></ngx-skeleton-loader>
-        </div>
+
+
+
+    <div style="columns: 2">
+      <label>Previous Month End Stock <span style="color: red;">*</span> :</label>
+      <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
+      <label>Month End Stock <span style="color: red;">*</span> :</label>
+      <input type="number" name="currentStock" (change)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
+    </div>
+    <div>
+      <div style="columns: 2;">
+        <label>Weight Loss (%) <span style="color: red;">*</span> :</label>
+        <input type="number" name="weightLoss" disabled [value]="stock.weightLoss | number: '1.2-2'" />
       </div>
 
     </div>
+    <br />
   </div>
-
-
-
-
-  <div style="columns: 2">
-    <label>Previous Month End Stock <span style="color: red;">*</span> :</label>
-    <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
-    <label>Month End Stock <span style="color: red;">*</span> :</label>
-    <input type="number" name="currentStock" (change)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
-  </div>
-  <div>
-    <div style="columns: 2;">
-      <label>Weight Loss (%) <span style="color: red;">*</span> :</label>
-    <input type="number" name="weightLoss" disabled [value]="stock.weightLoss | number: '1.2-2'" />
-    </div>
-    
-  </div>
-  <br />
 
   <div>
     <button *ngIf="stock.id == undefined" style="float: right" class="btn-add" (click)="addStock()">

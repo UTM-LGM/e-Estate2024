@@ -5,7 +5,6 @@ import { StateService } from '../_services/state.service';
 import { TownService } from '../_services/town.service';
 import { State } from '../_interface/state';
 import { Town } from '../_interface/town';
-import { CompanyService } from '../_services/company.service';
 import { SharedService } from '../_services/shared.service';
 import swal from 'sweetalert2';
 import { CompanyDetail } from '../_interface/company-detail';
@@ -103,7 +102,6 @@ export class EditCompanyDetailComponent implements OnInit, OnDestroy {
       this.companyDetail.membershipTypeId = this.companyDetail.membershipTypeId
       this.companyDetail.createdBy = this.sharedService.userId.toString()
       this.companyDetail.createdDate = new Date()
-      // console.log(this.companyDetail)
       this.companyDetailService.addCompanyDetail(this.companyDetail)
         .subscribe(
           Response => {

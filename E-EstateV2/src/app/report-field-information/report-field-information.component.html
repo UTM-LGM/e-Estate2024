@@ -1,26 +1,30 @@
 <div class="box-container">
-  <h1>Field Information</h1>
-  <hr />
-
-  <div style="columns:3"
-    [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
-    <label>Company : </label>
-    <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
-      (selectionChange)="companySelected()">
-      <mat-option *ngFor="let company of companies" [value]="company.id">
-        {{company.name}}
-      </mat-option>
-    </mat-select>
-
-    <label>Estate : </label>
-    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
-      <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
-        {{estate.name + ', ' + estate.add1}}
-      </mat-option>
-    </mat-select>
+  <div class="subsection">
+    <h1>Field Information</h1>
   </div>
 
-  <!-- <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+  <div class="subsection2">
+    <div style="columns:3"
+      [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
+      <label>Company : </label>
+      <mat-select name="company" placeholder="Please Choose" [(ngModel)]="estate.companyId"
+        (selectionChange)="companySelected()">
+        <mat-option *ngFor="let company of companies" [value]="company.id">
+          {{company.name}}
+        </mat-option>
+      </mat-select>
+
+      <label>Estate : </label>
+      <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
+        (selectionChange)="estateSelected()">
+        <mat-option *ngFor="let estate of filterLGMAdmin" [value]="estate.id">
+          {{estate.name + ', ' + estate.add1}}
+        </mat-option>
+      </mat-select>
+    </div>
+
+
+    <!-- <div [ngClass]="{'display': role == 'Admin', 'none':role == 'EstateClerk' || role == 'CompanyAdmin'}">
   <label class="switch" >
     <input type="checkbox" [(ngModel)]="showAll" (change)="toggleShowAll()" >
     <span class="slider round"></span>
@@ -31,126 +35,131 @@
   </div>
   </div> -->
 
-  <div style="columns:3"
-    [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' }">
-    <div>
-      <label>Company</label>
-      <input type="text" [value]="company.name" disabled />
+    <div style="columns:3"
+      [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' }">
+      <div>
+        <label>Company</label>
+        <input type="text" [value]="company.name" disabled />
+      </div>
+      <label>Estate : </label>
+      <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id"
+        (selectionChange)="estateSelected()">
+        <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
+          {{estate.name + ', ' + estate.add1}}
+        </mat-option>
+      </mat-select>
     </div>
-    <label>Estate : </label>
-    <mat-select name="estate" placeholder="Please Choose" [(ngModel)]="estate.id" (selectionChange)="estateSelected()">
-      <mat-option *ngFor="let estate of filterCompanyAdmin" [value]="estate.id">
-        {{estate.name + ', ' + estate.add1}}
-      </mat-option>
-    </mat-select>
-  </div>
 
-  <div
-    [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' }" style="columns: 2;">
-    <label>Estate : </label>
-    <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
-  </div>
+    <div
+      [ngClass]="{'display': role == 'EstateClerk', 'none':role == 'CompanyAdmin' || role == 'Admin' || role == 'Management' }"
+      style="columns: 2;">
+      <label>Estate : </label>
+      <input type="text" [value]="estate.name + ', ' + estate.add1" disabled />
+    </div>
 
-  <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
-    <button class="btn-add" (click)="exportToExcel(fields, selectedEstateName +  'Field Information Report')">
-      Export Excel &nbsp; <i class="fa fa-file"></i>
-    </button>    
-  </div>
+    <div style="float: left;margin-top: 3px; margin-bottom: 3px;">
+      <button class="btn-add" (click)="exportToExcel(fields, selectedEstateName +  'Field Information Report')">
+        Export Excel &nbsp; <i class="fa fa-file"></i>
+      </button>
+    </div>
 
-  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
-  <div style="overflow-x: auto;">
-    <table style="width: 100%;">
-      <tr>
-        <th style="width: 10px;">No</th>
-        <th style="width: 90px;" *ngFor="let column of sortableColumns" scope="col" [appSort]="fields" [attr.data-order]="order"
-          [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
-          {{ column.displayText }}
-        </th>
-        <th width="90px">Status</th>
-        <th width="30px">Action</th>
-      </tr>
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
+    <div style="overflow-x: auto;">
+      <table style="width: 100%;">
+        <tr>
+          <th style="width: 10px;">No</th>
+          <th style="width: 90px;" *ngFor="let column of sortableColumns" scope="col" [appSort]="fields"
+            [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+            {{ column.displayText }}
+          </th>
+          <th width="90px">Status</th>
+          <th width="30px">Action</th>
+        </tr>
 
-      <tr *ngIf="isLoading">
-        <td colspan="11">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-          </ngx-skeleton-loader>
-        </td>
-      </tr>
-
-      <tr *ngIf="!isLoading && fields.length == 0 && (role == 'Admin' || role == 'Management') ">
-        <td colspan="11" style="color: red; text-align: center;">No data found. Please choose company and estate</td>
-      </tr>
-
-      <tr *ngIf="!isLoading && fields.length == 0 && role == 'CompanyAdmin'">
-        <td colspan="11" style="color: red; text-align: center;">No data found. Please choose estate</td>
-      </tr>
-
-      <tr *ngIf="!isLoading && fields.length == 0 && role == 'EstateClerk'">
-        <td colspan="11" style="color: red; text-align: center;">No data found.</td>
-      </tr>
-
-      <tbody *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: itemsPerPageField, currentPage: pageNumber }; let i = index">
-        <tr class="list" style="cursor:default;">
-          <td>{{ (pageNumber - 1) * itemsPerPageField + i + 1 }}</td>
-          <td>{{field.fieldName }}</td>
-          <td>{{ field.rubberArea }}</td>
-          <td>
-            {{ field.isMature == true ? "Mature" : "Immature" }}
+        <tr *ngIf="isLoading">
+          <td colspan="11">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
           </td>
-          <td>{{field.fieldStatus}}</td>
-          <td>{{ field.yearPlanted }}</td>
-          <td>{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
-          <td>{{ field.initialTreeStand }}</td>
-          <td>{{field.totalTask}}</td>
-          <td *ngIf="result[field.id]?.length == 0 ">
-            <button style="border-radius: 0px !important; cursor: default;" [ngClass]="{
+        </tr>
+
+        <tr *ngIf="!isLoading && fields.length == 0 && (role == 'Admin' || role == 'Management') ">
+          <td colspan="11" style="color: red; text-align: center;">No data found. Please choose company and estate</td>
+        </tr>
+
+        <tr *ngIf="!isLoading && fields.length == 0 && role == 'CompanyAdmin'">
+          <td colspan="11" style="color: red; text-align: center;">No data found. Please choose estate</td>
+        </tr>
+
+        <tr *ngIf="!isLoading && fields.length == 0 && role == 'EstateClerk'">
+          <td colspan="11" style="color: red; text-align: center;">No data found.</td>
+        </tr>
+
+        <tbody
+          *ngFor="let field of fields | filter : term | paginate: { itemsPerPage: itemsPerPageField, currentPage: pageNumber }; let i = index">
+          <tr class="list" style="cursor:default;">
+            <td>{{ (pageNumber - 1) * itemsPerPageField + i + 1 }}</td>
+            <td>{{field.fieldName }}</td>
+            <td>{{ field.rubberArea }}</td>
+            <td>
+              {{ field.isMature == true ? "Mature" : "Immature" }}
+            </td>
+            <td>{{field.fieldStatus}}</td>
+            <td>{{ field.yearPlanted }}</td>
+            <td>{{ field.dateOpenTapping | date : "dd/MM/YYYY" }}</td>
+            <td>{{ field.initialTreeStand }}</td>
+            <td>{{field.totalTask}}</td>
+            <td *ngIf="result[field.id]?.length == 0 ">
+              <button style="border-radius: 0px !important; cursor: default;" [ngClass]="{
                     'active-btn': field.isActive == true,
                     'inactive-btn': field.isActive == false
                   }">
-              {{ field.isActive == true ? "Active" : "Inactive" }}
-            </button>
-          </td>
+                {{ field.isActive == true ? "Active" : "Inactive" }}
+              </button>
+            </td>
 
-          <td *ngIf="result[field.id] && result[field.id]?.length > 0">
-            <button style="border-radius: 0px !important; cursor: default;" class="inactive-btn">
-              Infected
-            </button>
-          </td>
+            <td *ngIf="result[field.id] && result[field.id]?.length > 0">
+              <button style="border-radius: 0px !important; cursor: default;" class="inactive-btn">
+                Infected
+              </button>
+            </td>
 
-          <td *ngIf="selectedField !== field"><i class="fa fa-chevron-down" style="cursor:pointer"
-              (click)="toggleSelectedField(field)"></i></td>
-          <td *ngIf="selectedField === field"><i class="fa fa-chevron-up" style="cursor:pointer"
-              (click)="toggleSelectedField(field)"></i></td>
-        </tr>
+            <td *ngIf="selectedField !== field"><i class="fa fa-chevron-down" style="cursor:pointer"
+                (click)="toggleSelectedField(field)"></i></td>
+            <td *ngIf="selectedField === field"><i class="fa fa-chevron-up" style="cursor:pointer"
+                (click)="toggleSelectedField(field)"></i></td>
+          </tr>
 
-        <tr *ngIf="selectedField === field && conversionField.length !=0 ">
-          <td colspan="11">
-            <table style="width: 100%; background-color: antiquewhite;">
-              <tr>
-                <th>Field/Block Name</th>
-                <th>Other Crop Conversion Name</th>
-                <th>Since Year</th>
-              </tr>
+          <tr *ngIf="selectedField === field && conversionField.length !=0 ">
+            <td colspan="11">
+              <table style="width: 100%; background-color: antiquewhite;">
+                <tr>
+                  <th>Field/Block Name</th>
+                  <th>Other Crop Conversion Name</th>
+                  <th>Since Year</th>
+                </tr>
 
-              <tr *ngFor="let conversion of conversionField">
-                <td>{{conversion.fieldName}}</td>
-                <td>{{conversion.conversionCropName}}</td>
-                <td>{{conversion.sinceYear}}</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+                <tr *ngFor="let conversion of conversionField">
+                  <td>{{conversion.fieldName}}</td>
+                  <td>{{conversion.conversionCropName}}</td>
+                  <td>{{conversion.sinceYear}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
 
-        <tr *ngIf="selectedField === field && conversionField.length ==0">
-          <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;">No field conversion data found</td>
-        <tr>
+          <tr *ngIf="selectedField === field && conversionField.length ==0">
+            <td style="width: 100%; background-color: antiquewhite;" colspan="12" style="color: red;">No field
+              conversion
+              data found</td>
+          <tr>
 
-      </tbody>
-      
-    </table>
+        </tbody>
+
+      </table>
+    </div>
+
+    <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
   </div>
-
-  <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
-
 </div>

@@ -4,20 +4,13 @@ using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MimeKit;
 using MimeKit.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
-using System.ComponentModel.Design;
-using System.Numerics;
-using System.Text;
-
 
 namespace E_EstateV2_API.Repository
 {
@@ -245,6 +238,7 @@ namespace E_EstateV2_API.Repository
                 var claims = new List<Claim>
                 {
                     new Claim("userName", user.UserName),
+                    new Claim("licenseNo", user.licenseNo),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, role.FirstOrDefault()),
                 };
 
@@ -488,7 +482,7 @@ namespace E_EstateV2_API.Repository
         public async Task SendWelcomeEmail(string email)
         {
             var mimeEmail = new MimeMessage();
-            mimeEmail.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+            mimeEmail.From.Add(MailboxAddress.Parse("noreply-RRIMestet@lgm.gov.my"));
             //User email
             mimeEmail.To.Add(MailboxAddress.Parse(email));
             mimeEmail.Subject = "Welcome to RRIMestet system";
@@ -542,7 +536,7 @@ namespace E_EstateV2_API.Repository
         public async Task SendRejectAccount(string email)
         {
             var mimeEmail = new MimeMessage();
-            mimeEmail.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+            mimeEmail.From.Add(MailboxAddress.Parse("noreply-RRIMestet@lgm.gov.my"));
             //User email
             mimeEmail.To.Add(MailboxAddress.Parse(email));
             mimeEmail.Subject = "LGM Admin RRIMestet deactive user account";

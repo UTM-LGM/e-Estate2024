@@ -1,0 +1,8 @@
+.inactive-row {
+  color: red;
+  font-weight: bold;
+}
+
+.complete-row {
+  color: green;
+}

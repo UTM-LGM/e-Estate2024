@@ -1,7 +1,6 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_EstateV2_API.Controllers
@@ -27,6 +26,16 @@ namespace E_EstateV2_API.Controllers
             var contacts = await _genericRepository.GetAll();
             var sortedContacts = contacts.OrderByDescending(contact => contact.isActive).ToList();
             return Ok(sortedContacts);
+        }
+
+        [HttpGet]
+        [Route("{estateId:int}")]
+        public async Task<IActionResult> GetEstateContactByEstateId([FromRoute] int estateId)
+        {
+            var contacts = await _genericRepository.GetAll();
+            var sortedContact = contacts.Where(x => x.estateId == estateId)
+                .OrderByDescending(x => x.isActive).ToList();
+            return Ok(sortedContact);
         }
 
         [HttpPost]

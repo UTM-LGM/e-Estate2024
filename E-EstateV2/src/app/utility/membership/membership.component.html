@@ -1,5 +1,10 @@
 <br />
-<h1>Membership Type Utility</h1>
+
+<div class="subsection">
+  <h1>Membership Type Utility</h1>
+</div>
+
+<div class="subsection2">
 <form>
   <label>Membership Type : </label>
   <input type="text" name="membership" [(ngModel)]="membershipType.membershipType" />
@@ -9,11 +14,14 @@
   Add &nbsp; <i class="fa fa-plus"></i>
 </button>
 
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Membership Type</h1>
-<div class="box-container">
+
+<div class="subsection">
+  <h1>List of Membership Type</h1>
+</div>
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Membership Type" />
   <table style="width: 100%">
     <tr>

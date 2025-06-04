@@ -11,4 +11,5 @@ export interface EstateDetail {
     updatedDate: Date
     msnrStatus:boolean
     polygonArea:number
+    isPDPA:boolean
 }

@@ -1,20 +1,20 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeUrlService } from '../_services/safe-url.service';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environments';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { FieldService } from '../_services/field.service';
 import { SharedService } from '../_services/shared.service';
 import { FieldAttachmentService } from '../_services/field-attachment.service';
-import { FieldAttachment } from '../_interface/field-attachment';
+import { SubscriptionService } from '../_services/subscription.service';
 
 @Component({
   selector: 'app-field-grant-attachment',
   templateUrl: './field-grant-attachment.component.html',
   styleUrls: ['./field-grant-attachment.component.css']
 })
-export class FieldGrantAttachmentComponent implements OnInit {
+export class FieldGrantAttachmentComponent implements OnInit, OnDestroy {
 
   files: any[] = [];
   newFiles: File[] = [];
@@ -31,17 +31,16 @@ export class FieldGrantAttachmentComponent implements OnInit {
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private safeUrlService: SafeUrlService,
     public dialogRef: MatDialogRef<FieldGrantAttachmentComponent>,
     private sanitizer: DomSanitizer,
     private fieldService: FieldService,
     private sharedService: SharedService,
     private fieldAttachmentService: FieldAttachmentService,
+    private subscriptionService:SubscriptionService
   ) {
     this.files = data.files;
     this.isUpdating = data.isUpdating;
     this.fieldGrantId = data.fieldGrantId;
-    console.log(data)
   }
 
   ngOnInit(): void {
@@ -55,7 +54,7 @@ export class FieldGrantAttachmentComponent implements OnInit {
 
   getFieldAttachments() {
     if (this.fieldGrantId != undefined && this.fieldGrantId != 0) {
-      this.fieldAttachmentService.getFieldAttachment().subscribe(response => {
+      const getFieldAttachments = this.fieldAttachmentService.getFieldAttachment().subscribe(response => {
         // Filter active files for the current fieldGrantId
         const existingFiles = response.filter(x => x.isActive == true && x.fieldGrantId === this.fieldGrantId);
 
@@ -63,6 +62,7 @@ export class FieldGrantAttachmentComponent implements OnInit {
         this.fileAttachments = [...existingFiles];
         this.isUpdating = true
       });
+      this.subscriptionService.add(getFieldAttachments)
     } else {
       // No fieldGrantId, just show the new files
       this.fileAttachments = [...this.files];
@@ -171,7 +171,6 @@ export class FieldGrantAttachmentComponent implements OnInit {
   }
 
   saveNewFiles(): void {
-    console.log('hi')
     this.files = this.files.concat(this.newFiles);
     this.newFiles = [];
     this.filesUpdated.emit(this.files);
@@ -204,6 +203,10 @@ export class FieldGrantAttachmentComponent implements OnInit {
           this.getFieldAttachments()
         }
       })
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptionService.unsubscribeAll()
   }
 
 }

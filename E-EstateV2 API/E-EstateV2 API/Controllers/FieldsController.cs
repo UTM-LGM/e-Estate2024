@@ -3,9 +3,7 @@ using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.Repository;
-using E_EstateV2_API.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Controllers
 {
@@ -41,6 +39,16 @@ namespace E_EstateV2_API.Controllers
         {
             var fields = await _fieldRepository.GetFields();
             var sortedField = fields.OrderByDescending(field => field.isActive).ToList();
+            return Ok(sortedField);
+        }
+
+        [HttpGet]
+        [Route("{estateId:int}")]
+        public async Task<IActionResult> GetFieldsByEstateId([FromRoute] int estateId)
+        {
+            var fields = await _fieldRepository.GetFields();
+            var sortedField = fields.Where(x => x.estateId == estateId)
+                .OrderByDescending(x => x.isActive).ToList();
             return Ok(sortedField);
         }
 

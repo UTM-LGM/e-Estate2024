@@ -30,7 +30,8 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   estate: any = {} as any
   estateDetail: any = {} as any
-  estateDetailNull :boolean = true
+  estateDetailNull: boolean = true
+  todayDate = new Date().toISOString().split('T')[0];
 
   constructor(
     private buyerService: BuyerService,
@@ -46,11 +47,27 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initialForm()
     this.getBuyer()
-    this.currentDate = new Date().toISOString().substring(0, 10)
-    if (this.currentDate) {
-      this.rubberSale.saleDateTime = new Date(this.currentDate)
-    }
     this.getEstate()
+    this.rubberSale.saleDateTime = this.todayDate
+  }
+
+  checkDate() {
+    const selectedDate = new Date(this.rubberSale.saleDateTime);
+    const today = new Date(this.todayDate);
+
+    const maxAllowedDate = new Date(today);
+    maxAllowedDate.setDate(today.getDate() + 1);
+
+    if (selectedDate > maxAllowedDate) {
+      swal.fire({
+        icon: 'warning',
+        title: 'Invalid Date',
+        text: 'Date cannot be in the future!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.rubberSale.saleDateTime = this.todayDate;
+      });
+    }
   }
 
   initialForm() {
@@ -73,7 +90,7 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
   }
 
   checkEstateDetail() {
-    this.estateDetailService.getEstateDetailbyEstateId(this.sharedService.estateId)
+    const getEstateDetail = this.estateDetailService.getEstateDetailbyEstateId(this.sharedService.estateId)
       .subscribe(
         Response => {
           if (Response != null) {
@@ -89,10 +106,11 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
               title: 'Information',
               text: 'Please update Estate Profile in General',
             });
-            
+
           }
         }
       )
+    this.subscriptionService.add(getEstateDetail)
   }
 
   getBuyer() {
@@ -105,12 +123,6 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
       )
     this.subscriptionService.add(getBuyer);
 
-  }
-
-  selectedDate(date: string) {
-    if (date) {
-      this.rubberSale.saleDateTime = new Date(date)
-    }
   }
 
   addSale() {
@@ -128,12 +140,25 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
         icon: 'error',
         showConfirmButton: true
       });
+    } else if (this.rubberSale.rubberType == "0") {
+      swal.fire({
+        title: 'Error!',
+        text: 'Please choose rubber type!',
+        icon: 'error',
+        showConfirmButton: true
+      });
     }
     else if (this.rubberSale.transportPlateNo?.trim()) {
-      this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
-      if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
-        this.generateLetterOfConsetnNo();
-      }
+      // this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
+      // if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
+
+      // }
+
+      const selectedDate = new Date(this.rubberSale.saleDateTime);
+      const today = new Date(this.todayDate);
+
+      this.generateLetterOfConsetnNo();
+
       this.spinnerService.requestStarted()
       this.rubberSale.isActive = true
       this.rubberSale.createdBy = this.sharedService.userId.toString()
@@ -183,21 +208,6 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     }
   }
 
-  isTodayOrFutureDate(date: Date): boolean {
-    // Get today's date without the time component
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to zero
-
-    // Set the provided date's time component to zero for comparison
-    const dateToCompare = new Date(date);
-    dateToCompare.setHours(0, 0, 0, 0);
-
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
-    return dateToCompare >= yesterday;
-  }
-
 
   back() {
     this.location.back()
@@ -217,8 +227,20 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
     const hours = ('0' + currentDate.getHours()).slice(-2) // Ensure two digits for hours
     const minutes = ('0' + currentDate.getMinutes()).slice(-2);// Ensure two digits for minutes
     const seconds = ('0' + currentDate.getSeconds()).slice(-2)
-    //const checksum = (year + month + day + hours + minutes + seconds).slice(-2)
-    this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}${seconds}`;
+
+    const status = this.estateDetail.msnrStatus;
+    const isMsnr =
+      status === true ||
+      status === 1 ||
+      (typeof status === 'string' && ['true', '1'].includes(status.toLowerCase()));
+
+    if (isMsnr) {
+      const msnr = 'MSNR';
+      this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}${seconds}${msnr}`;
+    } else {
+      this.letterOfConsentNo = `E${year}${month}${day}${hours}${minutes}${seconds}`;
+    }
+
   }
 
   print(sale: RubberSale) {
@@ -249,13 +271,13 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   validateCuplumpDRC(drc: any) {
     const drcValue = drc.target.value
-    if (drcValue >= 45 && drcValue <= 80) {
+    if (drcValue >= 45 && drcValue <= 100) {
       return drcValue
     }
     else {
       swal.fire({
         title: 'Error!',
-        text: 'CuplumpDRC must be between 45% to 80%',
+        text: 'CuplumpDRC must be between 45% to 100%',
         icon: 'error',
         showConfirmButton: true
       });

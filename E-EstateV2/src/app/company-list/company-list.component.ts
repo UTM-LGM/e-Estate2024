@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Company } from '../_interface/company';
-import { CompanyService } from '../_services/company.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
 
@@ -24,7 +23,6 @@ export class CompanyListComponent implements OnInit, OnDestroy {
   isBtnInactive = false
 
   constructor(
-    private companyService: CompanyService,
     private mylesenService: MyLesenIntegrationService,
     private subscriptionService:SubscriptionService
 

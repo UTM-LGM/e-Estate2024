@@ -71,6 +71,14 @@ export class ReportService {
       return this.http.get<any[]>(this.baseUrl + '/reports/GetAllProductivityYearlyByClone', {params} )
   }
 
+  getFieldAreaByDate(start:string, end:string, estateId:number):Observable<any>{
+    const params = new HttpParams()
+      .set('start', start)
+      .set('end', end)
+      .set('estateId', estateId)
+      return this.http.get<any>(this.baseUrl + '/reports/GetFieldAreaByDate', {params})
+  }
+
   getLaborInformationCategory(year:string):Observable<any[]>{
     return this.http.get<any[]>(this.baseUrl + '/reports/GetLaborInformationCategory/' + year )
   }
@@ -126,8 +134,8 @@ export class ReportService {
     return this.http.get<any[]>(this.baseUrl + '/reports/GetAreaByAllClone', {params})
   }
 
-  getCurrentField(year:string):Observable<any[]>{
-    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentField/'+ year)
+  getCurrentField():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetCurrentField')
   }
 
   getAllRubberSale(start:string, end:string):Observable<any[]>{
@@ -135,6 +143,18 @@ export class ReportService {
       .set('start', start)
       .set('end', end);
     return this.http.get<any[]>(this.baseUrl + '/reports/GetAllRubberSale', {params} )
+  }
+
+  getProduction():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetProductions')
+  }
+
+  getSales():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetSales')
+  }
+
+  getStocks():Observable<any[]>{
+    return this.http.get<any[]>(this.baseUrl + '/reports/GetStocks')
   }
 
 }

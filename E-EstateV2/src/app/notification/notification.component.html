@@ -1,17 +1,33 @@
 <div class="box-container">
-    <h1>Notification </h1>
-    <hr>
-
-    <span *ngIf="showEmptyMessage" ><b>You have no new notification</b> </span>
-
-    <div class="alert" *ngIf="warningProductionDrafted" style="background-color: yellow;color: black;">
-        <i class="fa fa-exclamation"></i> &nbsp; You have rubber production in drafted, please submit <a
-        [routerLink]="['/field-production/', estateId]">here</a>
+    <div class="subsection">
+        <h1>Notification </h1>
     </div>
 
-    <div class="alert" *ngIf="warningGrantTitle" style="background-color: yellow;color: black;">
-        <i class="fa fa-exclamation"></i> &nbsp; You have field that have 0 land title, please update <a
-        [routerLink]="['/field-info/', estateId]">here</a>
+    <div class="subsection2">
+        <span *ngIf="showEmptyMessage"><b>You have no new notification</b> </span>
+
+        <div class="alert" *ngIf="warningProductionDrafted" style="background-color: yellow;color: black;">
+            <i class="fa fa-exclamation"></i> &nbsp; You have rubber production in drafted, please submit <a
+                [routerLink]="['/field-production/', estateId]">here</a>
+        </div>
+
+        <div class="alert" *ngIf="warningGrantTitle" style="background-color: yellow;color: black;">
+            <i class="fa fa-exclamation"></i> &nbsp; You have field that have 0 land title, please update <a
+                [routerLink]="['/field-info/', estateId]">here</a>
+        </div>
+
+        <div class="alert" *ngIf="warningContact" style="background-color: yellow;color: black;">
+            <i class="fa fa-exclamation"></i> &nbsp; Please update additonal contact <a
+                [routerLink]="['/estate-detail/', estateId]">here</a>
+        </div>
+
+        <ng-container *ngIf="warningStock">
+            <div *ngFor="let item of filteredResults" class="alert" style="background-color: yellow; color: black;">
+                <i class="fa fa-exclamation"></i> &nbsp; You have sales higher than production for <strong
+                    style="color: red;">{{ item.monthYear }}</strong> ,
+                please update stock <a [routerLink]="['/rubber-stock/', estateId]">here</a>
+            </div>
+        </ng-container>
     </div>
 
 </div>

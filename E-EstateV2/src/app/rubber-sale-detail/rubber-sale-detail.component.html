@@ -1,66 +1,76 @@
 <div class="box-container">
-  <h1>Rubber Sale Information</h1>
-  <hr />
-  <div style="columns: 2" class="column">
-    <label>Letter Of Consent No (Form 1) <span style="color: red;">*</span> :</label>
-    <input type="text" name="letter" [(ngModel)]="rubberSale.letterOfConsentNo" disabled />
-    <label>Date <span style="color: red;">*</span> :</label>
-    <input type="date" #date name="date" value="{{formattedDate}}" (change)="selectedDate(date.value)" [disabled]="isComplete === 'yes'"  />
+  <div class="subsection">
+    <h1>Rubber Sale Information</h1>
+
   </div>
 
-  <div style="columns: 2">
-    <label>Buyer <span style="color: red;">*</span> :</label>
-    <mat-select *ngIf="buyers.length > 0" name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId" [disabled]="isComplete === 'yes'" >
-      <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
-        {{buyer.renameBuyer}}
-      </mat-option>
-    </mat-select>
-    <label>Rubber Type <span style="color: red;">*</span> :</label>
-    <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType" [disabled]="isComplete === 'yes'" >
-      <mat-option value="CUPLUMP">CUPLUMP </mat-option>
-      <mat-option value="LATEX">LATEX </mat-option>
-    </mat-select>
-  </div>
-
-  <div style="columns: 2">
-    <label>Wet Weight (Kg) <span style="color: red;">*</span> :</label>
-    <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" (input)="calculateTotalPrice()" [disabled]="isComplete === 'yes'"  />
-    <label>Estimated DRC (%) <span style="color: red;">*</span> :</label>
-    <input type="number" name="DRC" [(ngModel)]="rubberSale.drc"
-      (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)" [disabled]="isComplete === 'yes'"  />
-  </div><br />
-
-  <div [style.columns]="deliveryAgent === 'yes' ? '2' : '1'">
-    <label>Delivery agent <span style="color: red;">*</span> : </label><br />
-    <div class="radio-container">
-      <label>
-        <input type="radio" name="choice" value="yes" [(ngModel)]="deliveryAgent"> Yes
-      </label>
-      <label>
-        <input type="radio" name="choice" value="no" [(ngModel)]="deliveryAgent"> No
-      </label>
+  <div class="subsection2">
+    <div style="columns: 2" class="column">
+      <label>Letter Of Consent No (Form 1) <span style="color: red;">*</span> :</label>
+      <input type="text" name="letter" [(ngModel)]="rubberSale.letterOfConsentNo" disabled />
+      <label>Date <span style="color: red;">*</span> :</label>
+      <input type="date" name="date" #date [(ngModel)]="rubberSale.saleDateTime" (change)="checkDate(date.value)"
+        [disabled]="isComplete === 'yes'" />
     </div>
 
-    <div *ngIf="deliveryAgent == 'yes'">
-      <label>Delivery agent name <span style="color: red;">*</span> :</label>
-      <input type="text" name="plateNo" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()" [disabled]="isComplete === 'yes'"  />
+    <div style="columns: 2">
+      <label>Buyer <span style="color: red;">*</span> :</label>
+      <mat-select *ngIf="buyers.length > 0" name="buyer" placeholder="Please Choose" [(ngModel)]="rubberSale.buyerId"
+        [disabled]="isComplete === 'yes'">
+        <mat-option *ngFor="let buyer of buyers" [value]="buyer.id">
+          {{buyer.renameBuyer}}
+        </mat-option>
+      </mat-select>
+      <label>Rubber Type <span style="color: red;">*</span> :</label>
+      <mat-select name="rubberType" placeholder="Please Choose" [(ngModel)]="rubberSale.rubberType"
+        [disabled]="isComplete === 'yes'">
+        <mat-option value="CUPLUMP">CUPLUMP </mat-option>
+        <mat-option value="LATEX">LATEX </mat-option>
+      </mat-select>
     </div>
 
-  </div><br />
+    <div style="columns: 2">
+      <label>Wet Weight (Kg) <span style="color: red;">*</span> :</label>
+      <input type="number" name="weight" [(ngModel)]="rubberSale.wetWeight" (input)="calculateTotalPrice()"
+        [disabled]="isComplete === 'yes'" />
+      <label>Estimated DRC (%) <span style="color: red;">*</span> :</label>
+      <input type="number" name="DRC" [(ngModel)]="rubberSale.drc"
+        (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)"
+        [disabled]="isComplete === 'yes'" />
+    </div><br />
 
-  <div style="columns: 2">
-    <label>Transport Plate No <span style="color: red;">*</span> :</label>
-    <input type="text" name="letter" [(ngModel)]="rubberSale.transportPlateNo" [disabled]="isComplete === 'yes'"  />
-    <label>Driver Name <span style="color: red;">*</span> :</label>
-    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" [disabled]="isComplete === 'yes'"  />
-  </div>
+    <div [style.columns]="deliveryAgent === 'yes' ? '2' : '1'">
+      <label>Delivery agent <span style="color: red;">*</span> : </label><br />
+      <div class="radio-container">
+        <label>
+          <input type="radio" name="choice" value="yes" [(ngModel)]="deliveryAgent"> Yes
+        </label>
+        <label>
+          <input type="radio" name="choice" value="no" [(ngModel)]="deliveryAgent"> No
+        </label>
+      </div>
 
-  <div style="columns: 2">
-    <label>Driver Ic Number <span style="color: red;">*</span> :</label>
-    <input type="text" name="driverName" [(ngModel)]="rubberSale.driverIc" [disabled]="isComplete === 'yes'"  />
-  </div>
+      <div *ngIf="deliveryAgent == 'yes'">
+        <label>Delivery agent name <span style="color: red;">*</span> :</label>
+        <input type="text" name="plateNo" [(ngModel)]="rubberSale.deliveryAgent" (change)="deliveryAgentRemark()"
+          [disabled]="isComplete === 'yes'" />
+      </div>
 
-  <!-- <div style="columns: 2">
+    </div><br />
+
+    <div style="columns: 2">
+      <label>Transport Plate No <span style="color: red;">*</span> :</label>
+      <input type="text" name="letter" [(ngModel)]="rubberSale.transportPlateNo" [disabled]="isComplete === 'yes'" />
+      <label>Driver Name <span style="color: red;">*</span> :</label>
+      <input type="text" name="driverName" [(ngModel)]="rubberSale.driverName" [disabled]="isComplete === 'yes'" />
+    </div>
+
+    <div style="columns: 2">
+      <label>Driver Ic Number <span style="color: red;">*</span> :</label>
+      <input type="text" name="driverName" [(ngModel)]="rubberSale.driverIc" [disabled]="isComplete === 'yes'" />
+    </div>
+
+    <!-- <div style="columns: 2">
     <label>Price (RM/Kg) :</label>
     <input type="number" name="price" [(ngModel)]="rubberSale.unitPrice" placeholder="0.00"
       (input)="calculateTotalPrice()" />
@@ -68,49 +78,53 @@
     <input type="number" name="total" [(ngModel)]="rubberSale.total" placeholder="0.00" disabled />
   </div> -->
 
-  <div>
-    <label>Remark :</label><br />
-    <!-- <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span> -->
-    <textarea name="remark" [(ngModel)]="rubberSale.remark" [disabled]="isComplete === 'yes'" ></textarea>
-  </div>
-
-  <div>
-    <div class="radio-container">
-      <label>
-        <input type="radio" name="complete" value="yes" [(ngModel)]="isComplete"> Rubber Sale Completed
-      </label>
+    <div>
+      <label>Remark :</label><br />
+      <!-- <span style="color: red; font-size: 11px;">**Please indicate the delivery agent if necessary</span> -->
+      <textarea name="remark" [(ngModel)]="rubberSale.remark" [disabled]="isComplete === 'yes'"></textarea>
     </div>
-    <hr>
-    <div *ngIf="isComplete == 'yes'">
-      <div style="columns: 2" class="column">
-        <label>Weight Slip Number<span style="color: red;">*</span> :</label>
-        <input type="text" name="weightSlipNo" [(ngModel)]="rubberSale.weightSlipNo" />
-        <label>Weight Slip Number Date <span style="color: red;">*</span> :</label>
-        <input type="date" #dateWeight name="weightSlipDate" value="{{todayDateWeight}}" (input)="selectedDateWightSlip(dateWeight.value)" />
-      </div>
 
-      <div style="columns: 2">
-        <label>Buyer Wet Weight (Kg) <span style="color: red;">*</span> :</label>
-        <input type="number" name="buyerWeight" [(ngModel)]="rubberSale.buyerWetWeight"
-          (change)="checkBuyerWeight()" />
-        <label>Buyer DRC (%) <span style="color: red;">*</span> :</label>
-        <input type="number" name="buyerDRC" [(ngModel)]="rubberSale.buyerDRC" 
-        (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)" />
+    <div>
+      <div class="radio-container">
+        <label>
+          <input type="radio" name="complete" value="yes" [(ngModel)]="isComplete"> Rubber Sale Completed
+        </label>
       </div>
+      <hr>
+      <div *ngIf="isComplete == 'yes'">
+        <div style="columns: 2" class="column">
+          <label>Weight Slip Number<span style="color: red;">*</span> :</label>
+          <input type="text" name="weightSlipNo" [(ngModel)]="rubberSale.weightSlipNo" />
+          <label>Weight Slip Number Date <span style="color: red;">*</span> :</label>
+          <input type="date" name="weightSlipDate" [(ngModel)]="rubberSale.weightSlipNoDate"
+            (change)="checkDate(rubberSale.weightSlipNoDate)" />
+        </div>
 
-      <div style="columns: 2" class="column">
-        <label>Receipt Number<span style="color: red;">*</span> :</label>
-        <input type="text" name="receipt" [(ngModel)]="rubberSale.receiptNo" />
-        <label>Receipt Date <span style="color: red;">*</span> :</label>
-        <input type="date" #dateReceipt name="receiptDate" value="{{todayDateReceipt}}" (input)="selectedDateReceiptNo(dateReceipt.value)" />
+        <div style="columns: 2">
+          <label>Buyer Wet Weight (Kg) <span style="color: red;">*</span> :</label>
+          <input type="number" name="buyerWeight" [(ngModel)]="rubberSale.buyerWetWeight"
+            (change)="checkBuyerWeight()" />
+          <label>Buyer DRC (%) <span style="color: red;">*</span> :</label>
+          <input type="number" name="buyerDRC" [(ngModel)]="rubberSale.buyerDRC"
+            (blur)="rubberSale.rubberType === 'CUPLUMP' ? validateCuplumpDRC($event) : validateLatexDRC($event)" />
+        </div>
+
+        <div style="columns: 2" class="column">
+          <label>Receipt Number<span style="color: red;">*</span> :</label>
+          <input type="text" name="receipt" [(ngModel)]="rubberSale.receiptNo" />
+          <label>Receipt Date <span style="color: red;">*</span> :</label>
+          <input type="date" name="receiptDate" [(ngModel)]="rubberSale.receiptNoDate"
+            (change)="checkDate(rubberSale.receiptNoDate)" />
+        </div>
+
+        <div style="columns: 2">
+          <label>Unit Price (RM/Kg) <span style="color: red;">*</span> :</label>
+          <input type="number" placeholder="00.00" name="unitPrice" [(ngModel)]="rubberSale.unitPrice"
+            (change)="calculateAmount()" />
+          <label>Total Amount <span style="color: red;">*</span> :</label>
+          <input type="text" name="amount" [value]="rubberSale.total | number: '1.2-2'" disabled />
+        </div><br />
       </div>
-
-      <div style="columns: 2">
-        <label>Unit Price (RM/Kg) <span style="color: red;">*</span> :</label>
-        <input type="number" placeholder="00.00" name="unitPrice" [(ngModel)]="rubberSale.unitPrice" (change)="calculateAmount()" />
-        <label>Total Amount <span style="color: red;">*</span> :</label>
-        <input type="text" name="amount"  [value]="rubberSale.total | number: '1.2-2'" disabled />
-      </div><br />
     </div>
 
     <div style="margin-top: 10px">

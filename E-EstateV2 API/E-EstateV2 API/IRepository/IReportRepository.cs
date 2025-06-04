@@ -33,10 +33,14 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetAreaByAllClone(string start, string end);
 
 
-        Task<object> GetCurrentField(int year);
+        Task<object> GetCurrentField();
 
         Task<object> GetAllRubberSale(string start, string end);
+        Task<object> GetProduction();
+        Task<object> GetSales();
+        Task<object> GetStocks();
 
+        Task<object> GetFieldAreaByDate(string start, string end, int estateId);
 
 
         //Task<List<DTO_FieldProduction>> GetProductionByYear(int year);

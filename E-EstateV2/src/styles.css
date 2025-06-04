@@ -396,6 +396,24 @@ button:disabled {
   background: #43675f; 
 } */
 
+.subsection {
+  background-color: darkslategray;
+  color: white;
+  border-radius: 4px;
+  padding: 1px;
+}
+
+.subsection h1 {
+  margin-left: 10px;
+}
+
+.subsection2{
+  padding: 10px;
+}
+
+h1{
+  margin-bottom: 0px !important;
+}
 
 
 

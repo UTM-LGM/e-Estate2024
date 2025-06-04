@@ -8,7 +8,6 @@ import { EstateContact } from '../_interface/estate-contact';
 import { EstateContactService } from '../_services/estate-contact.service';
 import { SpinnerService } from '../_services/spinner.service';
 
-
 @Component({
   selector: 'app-contact-detail',
   templateUrl: './contact-detail.component.html',
@@ -40,6 +39,9 @@ export class ContactDetailComponent implements OnInit {
   ngOnInit() {
     if (this.companyContact.id == null) {
       this.companyContact.name = ''
+      this.companyContact.position = ''
+      this.companyContact.phoneNo = ''
+      this.companyContact.email = ''
     }
     if (this.companyId !== undefined) {
       this.estateId = 0
@@ -51,7 +53,7 @@ export class ContactDetailComponent implements OnInit {
 
 
   addCompanyContact() {
-    if (this.companyContact.name == '') {
+    if (this.companyContact.name == '' || this.companyContact.position =='' || this.companyContact.email == '' || this.companyContact.phoneNo == '') {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -82,7 +84,7 @@ export class ContactDetailComponent implements OnInit {
   }
 
   addEstateContact() {
-    if (this.estateContact.name == '') {
+    if (this.estateContact.name == '' || this.estateContact.position =='' || this.estateContact.email == '' || this.estateContact.phoneNo == '') {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -117,6 +119,15 @@ export class ContactDetailComponent implements OnInit {
   }
 
   updateCompanyContact() {
+    if (this.companyContact.name == null || this.companyContact.position == null || this.companyContact.email == null || this.companyContact.phoneNo == null
+      || this.companyContact.name == '' || this.companyContact.position == '' || this.companyContact.email == '' || this.companyContact.phoneNo == ''
+    ) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please fill up the form',
+      });
+    } else {
     this.spinnerService.requestStarted()
     this.companyContact.updatedBy = this.sharedService.userId.toString()
     this.companyContact.updatedDate = new Date()
@@ -134,9 +145,19 @@ export class ContactDetailComponent implements OnInit {
           this.dialog.close()
         }
       )
+    }
   }
 
   updateEstateContact() {
+    if (this.estateContact.name == null || this.estateContact.position == null || this.estateContact.email == null || this.estateContact.phoneNo == null
+      || this.estateContact.name == '' || this.estateContact.position == '' || this.estateContact.email == '' || this.estateContact.phoneNo == ''
+    ) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please fill up the form',
+      });
+    } else {
     this.spinnerService.requestStarted()
     this.estateContact.updatedBy = this.sharedService.userId.toString()
     this.estateContact.updatedDate = new Date()
@@ -154,6 +175,7 @@ export class ContactDetailComponent implements OnInit {
           this.dialog.close()
         }
       )
+    }
   }
 
   validatePhoneNo(phoneNo: string) {

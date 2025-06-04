@@ -72,7 +72,11 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   totalProduction = 0
   totalRegistered = 0
   fields: Field[] = []
+  totalFields: Field[] = []
+
   validFields: any[] = []
+
+  listEstateId: number[] = []
 
   constructor(
     private myLesenService: MyLesenIntegrationService,
@@ -86,12 +90,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.yearNow = new Date().getFullYear().toString()
     this.getCompany()
-    // this.getField()
     this.getEstate()
-    this.getProduction()
-    this.getWorker()
-    this.getWorkerShortage()
-    this.getCostInformation()
   }
 
   yearSelected(yearInput: HTMLInputElement): void {
@@ -118,8 +117,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.getProductivity()
-    this.getEstateDetails()
+    // this.getEstateDetails()
   }
 
   getCostInformation() {
@@ -137,7 +135,9 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getEstateDetails = this.estateDetailService.getEstateDetails()
       .subscribe(
         Response => {
-          this.totalRegistered = Response.length
+          const estateIdSet = new Set(this.listEstateId);
+          const estate = Response.filter(estate => estateIdSet.has(estate.estateId));
+          this.totalRegistered = estate.length
           this.isLoadingEstateDetail = false
         }
       )
@@ -145,27 +145,22 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString()).subscribe(
+    const getCurrentField = this.reportService.getFieldArea(this.yearNow.toString()).subscribe(
       Response => {
-        this.fields = Response;
+        const estateIdSet = new Set(this.listEstateId);
+        this.fields = Response.filter(field => estateIdSet.has(field.estateId));
 
-        // Filter fields based on estateId from filterEstates
-        const validEstateIds = new Set(this.filterEstates.map(estate => estate.id)); // Extract valid estateIds
         const validFields = this.fields.filter(field =>
-          validEstateIds.has(field.estateId) &&
-          field.isActive === true &&
-          field.fieldStatus?.toLowerCase().includes('tapped area')
+          field.isActive == true &&
+          field.fieldStatusId == 1
         );
 
+
         const totalField = this.fields.filter(x =>
-          validEstateIds.has(x.estateId) &&
-          x.isActive === true && (
-          x.fieldStatus?.toLowerCase().includes('abandoned - untapped') ||
-          x.fieldStatus?.toLowerCase().includes('tapped area') ||
-          x.fieldStatus?.toLowerCase().includes('new planting') ||
-          x.fieldStatus?.toLowerCase().includes('replanting')
-        ))
-        
+          x.isActive == true && [1, 3, 5, 6].includes(x.fieldStatusId)
+        )
+
+
         const totalRubberAreaByYear = totalField.filter(field =>
           new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
         );
@@ -174,12 +169,31 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           new Date(field.createdDate).getFullYear() === parseInt(this.yearNow)
         );
 
-        // Calculate tapped area
-        this.tappedArea = validFields.reduce((sum, field) => sum + field.area, 0);
         this.tappedAreaByYear = tappedAreaByYear.reduce((sum, field) => sum + field.area, 0);
-        this.totalRubberArea = totalField.reduce((sum, field) => sum + field.area, 0);
         this.totalRubberAreaByYear = totalRubberAreaByYear.reduce((sum, field) => sum + field.area, 0);
 
+
+        const getCurrentFields = this.reportService.getCurrentField()
+          .subscribe(
+            Response => {
+              this.totalFields = Response.filter(field => estateIdSet.has(field.estateId));
+
+              const tapper = this.totalFields.filter(field =>
+                field.isActive == true &&
+                field.fieldStatusId == 1
+              );
+
+              const rubber = this.totalFields.filter(x =>
+                x.isActive === true &&
+                [1, 3, 5, 6].includes(x.fieldStatusId)
+              );
+
+
+              this.tappedArea = tapper.reduce((sum, field) => sum + field.area, 0);
+              this.totalRubberArea = rubber.reduce((sum, field) => sum + field.area, 0);
+            }
+          )
+        this.subscriptionService.add(getCurrentField)
         this.isLoadingTapped = false;
       },
       error => {
@@ -195,7 +209,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     this.fieldShortage = 0
     const getWorkerShortage = this.reportService.getWorkerShortageEstate(this.yearNow.toString()).subscribe(
       response => {
-        this.workerShortages = response;
+        const estateIdSet = new Set(this.listEstateId);
+        this.workerShortages = response.filter(worker => estateIdSet.has(worker.estateId));
         if (this.workerShortages.length === 0) {
           this.totalTapperNeeded = 0
           this.totalFieldNeeded = 0
@@ -280,14 +295,13 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
         }
       )
     this.subscriptionService.add(getCompany);
-
-
   }
 
   getEstate() {
     const getAllEstate = this.myLesenService.getAllActiveEstate()
       .subscribe(
         Response => {
+          this.listEstateId = Response.map(e => e.id);
           this.filterEstates = Response
           this.totalEstate = this.filterEstates.length
           this.filterEstates.forEach(estate => {
@@ -297,6 +311,13 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
           });
           this.isLoadingEstate = false
           this.getField()
+          this.getProduction()
+          this.getWorker()
+          this.getWorkerShortage()
+          this.getCostInformation()
+          this.getEstateDetails()
+          this.getProductivity()
+
         }
       )
     this.subscriptionService.add(getAllEstate);
@@ -309,7 +330,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getProduction = this.reportService.getCurrentCropProduction(this.yearNow.toString())
       .subscribe(
         Response => {
-          this.productions = Response
+          const estateIdSet = new Set(this.listEstateId);
+          this.productions = Response.filter(worker => estateIdSet.has(worker.estateId));
           if (this.productions.length === 0) {
             const product: any = {
               cuplumpDry: 0,
@@ -338,7 +360,8 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getProductivity = this.reportService.getCropProductivity()
       .subscribe({
         next: (Response) => {
-          this.productivity = Response;
+          const estateIdSet = new Set(this.listEstateId);
+          this.productivity = Response.filter(productivity => estateIdSet.has(productivity.estateId));
           if (this.productivity.length === 0) {
             const product: any = {
               totalCuplumpDry: 0,
@@ -424,7 +447,9 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     const getCurrent = this.reportService.getCurrentTapperAndFieldWorker(this.yearNow.toString())
       .subscribe(
         Response => {
-          if (Response.length === 0) {
+          const estateIdSet = new Set(this.listEstateId);
+          const current = Response.filter(worker => estateIdSet.has(worker.estateId));
+          if (current.length === 0) {
             this.currentTotalTapper = 0;
             this.currentTotalField = 0;
             this.isLoadingTapper = false
@@ -432,7 +457,7 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
 
 
           } else {
-            Response.forEach(item => {
+            current.forEach(item => {
               // Add values with "tapper" in their keys to currentTotalTapper
               this.currentTotalTapper += item.tapperCheckrole + item.tapperContractor;
               this.isLoadingTapper = false

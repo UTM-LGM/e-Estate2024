@@ -45,6 +45,14 @@
   </div>
 
   <div
+    [ngClass]="{'display': role == 'Admin' || role == 'Management', 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showGeneral}">
+    <button class="side-btn" routerLink="/amend-rubber-sale" routerLinkActive="active">
+      Amend Rubber Sales
+    </button>
+    <hr />
+  </div>
+
+  <div
     [ngClass]="{'display': role == 'CompanyAdmin', 'none':role == 'EstateClerk' || role == 'Admin' || role == 'Management' || !showGeneral}">
     <button class="side-btn" routerLink="/company-profile/{{ companyId }}" routerLinkActive="active">
       Company Profile
@@ -225,6 +233,22 @@
     [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
     <button class="side-btn" routerLink="/report-productivity-by-year" routerLinkActive="active">
       Productivity by Year
+    </button>
+    <hr />
+  </div>
+
+  <div
+    [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/report-rubber-sale-admin" routerLinkActive="active">
+      Rubber Sale
+    </button>
+    <hr />
+  </div>
+
+  <div
+    [ngClass]="{'display': role == 'Admin' || role == 'Management' , 'none':role == 'CompanyAdmin' || role == 'EstateClerk' || !showReport}">
+    <button class="side-btn" routerLink="/report-estate-contact" routerLinkActive="active">
+      Estate Contact
     </button>
     <hr />
   </div>

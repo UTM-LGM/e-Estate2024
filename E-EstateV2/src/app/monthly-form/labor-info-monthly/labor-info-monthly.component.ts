@@ -88,14 +88,17 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
     this.labor.fieldContractor = 0
     this.labor.tapperCheckrole = 0
     this.labor.tapperContractor = 0
-    const getLabor = this.laborInfoService.getLabor()
+    const getLabor = this.laborInfoService.getLaborByEstateId(this.sharedService.estateId)
       .subscribe(
         Response => {
           const labors = Response
           const previousMonth = this.getPreviousMonth(this.date);
           this.previousFilterLabors = labors.filter(e => e.monthYear == previousMonth.toUpperCase() && e.estateId == this.sharedService.estateId && e.countryId == this.labor.countryId)
+          console.log(this.previousFilterLabors, labors)
           if(this.previousFilterLabors.length > 0){
             this.previousWorker = true
+            this.radioSelected = "yes"
+            this.onRadioChange()
           }
           else{
             this.previousWorker = false
@@ -273,7 +276,7 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
         .subscribe(
           Response => {
             const labors = Response
-            this.filterLabors = labors.filter(e => e.monthYear == this.date.toUpperCase() && e.estateId == this.sharedService.estateId)
+            this.filterLabors = labors.filter(e => e.monthYear && this.date && e.monthYear === this.date.toUpperCase() && e.estateId == this.sharedService.estateId);
             this.getCountry()
             this.sumTable(this.filterLabors)
             this.TotalForeign()

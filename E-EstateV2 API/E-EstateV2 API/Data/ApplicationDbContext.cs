@@ -80,6 +80,7 @@ namespace E_EstateV2_API.Data
         public DbSet<EstateContactHistory> estateContactHistories { get; set; }
         public DbSet<GrantTitle> grantTitles { get; set; }
         public DbSet<FieldGrantAttachment> fieldGrantAttachments { get; set; }
+        public DbSet<License> licenses { get; set; }
     }
 
 }

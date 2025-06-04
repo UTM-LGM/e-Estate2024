@@ -45,5 +45,4 @@ export interface Estate {
     latitudeLongitude: string
     plantingMaterialId:number
     plantingMaterial:PlantingMaterial[]
-    grantNo:string
 }

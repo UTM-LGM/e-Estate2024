@@ -1,19 +1,26 @@
 <br />
-<h1>Clone Utility</h1>
-<form>
-  <label>Clone Name : </label>
-  <input type="text" name="name" [(ngModel)]="clone.cloneName" />
-</form>
+<div class="subsection">
+  <h1>Clone Utility</h1>
+</div>
 
-<button style="float: right" class="btn-add" (click)="submit()">
-  Add &nbsp; <i class="fa fa-plus"></i>
-</button>
+<div class="subsection2">
+  <form>
+    <label>Clone Name : </label>
+    <input type="text" name="name" [(ngModel)]="clone.cloneName" />
+  </form>
 
+  <button style="float: right" class="btn-add" (click)="submit()">
+    Add &nbsp; <i class="fa fa-plus"></i>
+  </button>
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Clones</h1>
-<div class="box-container">
+
+<div class="subsection">
+  <h1>List of Clones</h1>
+</div>
+
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Clone" />
   <table style="width: 100%">
     <tr>

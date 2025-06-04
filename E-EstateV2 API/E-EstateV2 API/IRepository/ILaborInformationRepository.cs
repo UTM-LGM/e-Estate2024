@@ -9,5 +9,6 @@ namespace E_EstateV2_API.IRepository
         Task<List<DTO_LaborInfo>> GetLaborInfo();
         Task<LaborInfo> UpdateLaborInfo(LaborInfo laborInfo);
         Task<LaborInfo> DeleteLaborInfo(int id);
+        Task<List<DTO_LaborInfo>> GetLaborInfoByEstateId(int id);
     }
 }

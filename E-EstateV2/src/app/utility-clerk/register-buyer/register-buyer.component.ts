@@ -17,18 +17,15 @@ import { EditBuyerComponent } from '../edit-buyer/edit-buyer.component';
 export class RegisterBuyerComponent implements OnInit, OnDestroy {
 
   buyer: Buyer = {} as Buyer
-
   buyers: Buyer[] = []
-
   isLoading = true
   term = ''
   pageNumber = 1
   order = ''
   currentSortedColumn = ''
   result = {} as any
-
   itemsPerPage = 10
-
+  licenseNo = ''
 
   sortableColumns = [
     { columnName: 'licenseNo', displayText: 'Lisence No' },
@@ -51,10 +48,11 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
     this.getBuyer()
     this.buyer.licenseNo = ''
     this.result.premiseName = ''
+    this.licenseNo = this.sharedService.licenseNo
   }
 
   submit() {
-    if (this.buyer.licenseNo == '' && this.result.premiseName == '' || this.buyer.renameBuyer == null) {
+    if (this.buyer.licenseNo == '' || this.result.premiseName == '' || this.buyer.renameBuyer == null) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -96,11 +94,11 @@ export class RegisterBuyerComponent implements OnInit, OnDestroy {
 
   getBuyer() {
     setTimeout(() => {
-      const getBuyer = this.buyerService.getBuyer()
+      this.buyer.estateId = this.sharedService.estateId
+      const getBuyer = this.buyerService.getBuyerByEstateId(this.buyer.estateId)
         .subscribe(
           Response => {
-            const buyers = Response
-            this.buyers = buyers.filter(x => x.estateId == this.sharedService.estateId)
+            this.buyers = Response
             this.isLoading = false
           });
       this.subscriptionService.add(getBuyer);

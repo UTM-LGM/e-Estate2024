@@ -24,7 +24,8 @@ namespace E_EstateV2_API.Repository
                 plantingMaterialId = x.plantingMaterialId,
                 plantingMaterial = _context.plantingMaterials.Where(y => y.Id == x.plantingMaterialId).Select(y => y.plantingMaterial).FirstOrDefault(),
                 MSNRStatus = x.MSNRStatus,
-                polygonArea = x.polygonArea
+                polygonArea = x.polygonArea,
+                isPDPA = x.isPDPA
             }).FirstOrDefaultAsync();
             return estate;
         }
@@ -57,6 +58,7 @@ namespace E_EstateV2_API.Repository
                 existingEstateDetail.plantingMaterialId = estate.plantingMaterialId;
                 existingEstateDetail.MSNRStatus = estate.MSNRStatus;
                 existingEstateDetail.polygonArea = estate.polygonArea;
+                existingEstateDetail.isPDPA = estate.isPDPA;
                 await _context.SaveChangesAsync();
                 return existingEstateDetail;
             }

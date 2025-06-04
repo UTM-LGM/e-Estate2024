@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FieldInfected } from '../_interface/fieldInfected';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FieldDiseaseService } from '../_services/field-disease.service';
@@ -19,14 +19,17 @@ import { SpinnerService } from '../_services/spinner.service';
   templateUrl: './field-infected-detail.component.html',
   styleUrls: ['./field-infected-detail.component.css']
 })
-export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
+export class FieldInfectedDetailComponent implements OnInit, OnDestroy {
 
   fieldInfected: any = {} as any
   filterFieldDisease: FieldDisease[] = []
   formattedDate = ''
   dateRecovered = ''
-  diseaseCategory : DiseaseCategory []=[]
-  diseaseName: FieldDisease []=[]
+  diseaseCategory: DiseaseCategory[] = []
+  diseaseName: FieldDisease[] = []
+
+  todayDate = new Date().toISOString().split('T')[0];
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { data: FieldInfected },
@@ -35,23 +38,48 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
     private fieldInfectedService: FieldInfectedService,
     public dialogRef: MatDialogRef<FieldInfectedComponent>,
     private sharedService: SharedService,
-    private subscriptionService:SubscriptionService,
-    private diseaseCategoryService:DiseaseCategoryService,
-    private spinnerService:SpinnerService
+    private subscriptionService: SubscriptionService,
+    private diseaseCategoryService: DiseaseCategoryService,
+    private spinnerService: SpinnerService,
+    private cd: ChangeDetectorRef
+
 
   ) { }
 
   ngOnInit() {
-    this.fieldInfected = this.data.data
+    this.fieldInfected = JSON.parse(JSON.stringify(this.data.data));
     this.formattedDate = this.datePipe.transform(this.fieldInfected.dateScreening, 'yyyy-MM-dd') || ''
     this.dateRecovered = this.datePipe.transform(this.fieldInfected.dateRecovered, 'yyyy-MM-dd') || ''
-    if (this.formattedDate) {
-      setTimeout(() => {
-        this.fieldInfected.dateScreening = new Date(this.formattedDate)
-      }, 0);
-    }
+    this.setDate()
     this.getFieldDisease()
     this.getDiseaseCategory()
+  }
+
+  setDate() {
+    const date = new Date(this.fieldInfected.dateScreening);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    this.fieldInfected.dateScreening = `${year}-${month}-${day}`;
+  }
+
+  checkDate(selectedDateString: string) {
+    const selectedDate = new Date(selectedDateString);
+    const today = new Date(this.todayDate);
+
+    if (selectedDate > today) {
+      swal.fire({
+        icon: 'warning',
+        title: 'Invalid Date',
+        text: 'Date of screening cannot be in the future!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.fieldInfected.dateScreening = this.data.data.dateScreening;
+        this.setDate();
+        this.cd.detectChanges();
+      });
+    }
   }
 
   getFieldDisease() {
@@ -62,16 +90,16 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
           this.filterFieldDisease = disease.filter(x => x.isActive == true)
         }
       )
-      this.subscriptionService.add(getFieldDisease);
+    this.subscriptionService.add(getFieldDisease);
   }
 
-  getDiseaseCategory(){
+  getDiseaseCategory() {
     this.diseaseCategoryService.getDiseaseCategory()
-    .subscribe(
-      Response =>{
-        this.diseaseCategory = Response
-      }
-    )
+      .subscribe(
+        Response => {
+          this.diseaseCategory = Response
+        }
+      )
   }
 
   back() {
@@ -114,18 +142,18 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
     this.subscriptionService.unsubscribeAll();
   }
 
-  getDiseaseName(){
+  getDiseaseName() {
     this.fieldInfected.fieldDiseaseId = null
     this.fieldDiseaseService.getFieldDisease()
-    .subscribe(
-      Response =>{
-        this.filterFieldDisease = Response.filter(y=>y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
-      }
-    )
+      .subscribe(
+        Response => {
+          this.filterFieldDisease = Response.filter(y => y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
+        }
+      )
   }
 
 
-  calculateArea(){
+  calculateArea() {
     const areaInfected = this.fieldInfected.area * (this.fieldInfected.areaInfectedPercentage / 100)
     return this.fieldInfected.areaInfected = areaInfected.toFixed(2)
   }
@@ -146,7 +174,7 @@ export class FieldInfectedDetailComponent implements OnInit,OnDestroy {
     }
   }
 
-  levelChange(){
+  levelChange() {
     this.fieldInfected.areaInfectedPercentage = null
     this.fieldInfected.areaInfected = null
   }

@@ -16,6 +16,7 @@ export class SharedService {
   userName = ''
   role = ''
   position = ''
+  licenseNo = ''
   roles: any[] = []
 
   private dialogClosedSubject = new BehaviorSubject<boolean>(false)

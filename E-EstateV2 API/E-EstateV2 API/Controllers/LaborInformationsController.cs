@@ -2,8 +2,6 @@
 using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using E_EstateV2_API.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_EstateV2_API.Controllers
@@ -44,6 +42,16 @@ namespace E_EstateV2_API.Controllers
             var foreignLabors = await _informationRepository.GetLaborInfo();
             return Ok(foreignLabors);
         }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetLaborInfoByEstateId(int id)
+        {
+            var labors = await _informationRepository.GetLaborInfoByEstateId(id);
+            return Ok(labors);
+        }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> GetLaborCategory()

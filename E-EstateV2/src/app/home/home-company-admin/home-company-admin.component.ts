@@ -101,7 +101,7 @@ export class HomeCompanyAdminComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getCurrentField = this.reportService.getCurrentField(this.yearNow)
+    const getCurrentField = this.reportService.getFieldArea(this.yearNow)
       .subscribe(
         (Response: any[]) => {
           const filteredFields = Response.filter(x => x.isActive == true && x.fieldStatus?.toLowerCase().includes('tapped area'));

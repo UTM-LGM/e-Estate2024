@@ -4,8 +4,6 @@ using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.X9;
-using System.Globalization;
 
 namespace E_EstateV2_API.Repository
 {
@@ -48,6 +46,7 @@ namespace E_EstateV2_API.Repository
                 currentTreeStand = x.currentTreeStand,
                 remark = x.remark,
                 fieldGrants = _context.fieldGrants.Where(y=>y.fieldId == x.Id).ToList(),
+                fieldStatusId = x.fieldStatusId ?? 0
             }).OrderByDescending(c => c.yearPlanted).ToListAsync();
             return field;
         }

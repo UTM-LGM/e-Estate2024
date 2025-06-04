@@ -3,8 +3,6 @@ using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using System.Reflection.PortableExecutable;
 
 namespace E_EstateV2_API.Repository
 {

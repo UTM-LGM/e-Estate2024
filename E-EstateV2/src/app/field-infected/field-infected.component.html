@@ -1,15 +1,9 @@
 <div class="box-container">
+  <div class="subsection">
+    <h1>Field Disease Information </h1>
+  </div>
 
-  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{ estate.name }}</h1> -->
-  <h1>Field Disease Information </h1>
-
-  <hr />
-
-  <div>
-    <!-- <h1>Field Disease Information </h1> -->
-
+  <div class="subsection2">
     <div style="columns: 2" class="column">
       <div>
         <label>Field / Block <span style="color: red;">*</span> : </label>
@@ -27,9 +21,10 @@
 
     <div style="columns: 2" class="column">
       <label>Date of Screening <span style="color: red;">*</span> :</label>
-      <input type="date" name="date" [(ngModel)]="fieldInfected.dateScreening" />
+      <input type="date" name="date" [(ngModel)]="fieldInfected.dateScreening" (change)="checkDate()" />
       <label>Level Infected <span style="color: red;">*</span> :</label>
-      <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel" (selectionChange)="levelChange()">
+      <mat-select name="severity" placeholder="Please Choose" [(ngModel)]="fieldInfected.severityLevel"
+        (selectionChange)="levelChange()">
         <mat-option value="HIGH">HIGH (>50%)</mat-option>
         <mat-option value="MEDIUM">MEDIUM (16%-49%)</mat-option>
         <mat-option value="LOW">LOW (1%-15%)</mat-option>
@@ -40,7 +35,8 @@
 
     <div style="columns: 2" class="column">
       <label>Disease Category <span style="color: red;">*</span> : </label>
-      <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldInfected.diseaseCategoryId" (selectionChange)="getDiseaseName()">
+      <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldInfected.diseaseCategoryId"
+        (selectionChange)="getDiseaseName()">
         <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
           {{ category.category }}
         </mat-option>
@@ -58,10 +54,10 @@
 
     <div style="columns: 2" class="column">
       <label>Area Infected Percentage (%) <span style="color: red;">*</span> : </label>
-      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage" (change)="calculateArea()" 
-      (blur)="validatePercentage()" />
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfectedPercentage"
+        (change)="calculateArea()" (blur)="validatePercentage()" />
       <label>Area Infected (Ha) <span style="color: red;">*</span> : </label>
-      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled/>
+      <input type="number" name="percentage" [(ngModel)]="fieldInfected.areaInfected" disabled />
     </div>
 
     <div>
@@ -74,75 +70,76 @@
         </ng-template>
       </button>
     </div>
-    <br /><br /><br />
-    
-
+    <br /><br />
   </div>
 
 
-  <hr />
-  <h1>List of Field Disease</h1>
+  <div class="subsection">
+    <h1>List of Field Disease</h1>
+  </div>
 
-  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
-  <div style="overflow-x: auto">
-    <table style="width: 100%">
-      <thead>
-        <tr>
-          <th *ngFor="let column of sortableColumn" scope="col" [appSort]="fieldInfecteds" [attr.data-order]="order"
-            [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
-            {{ column.displayText }}
-          </th>
-          <th width="90px">Status</th>
-          <th width="30px">Action</th>
+  <div class="subsection2">
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field" />
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumn" scope="col" [appSort]="fieldInfecteds" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+            </th>
+            <th width="90px">Status</th>
+            <th width="30px">Action</th>
+          </tr>
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="13">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
         </tr>
-      </thead>
 
-      <tr *ngIf="isLoading">
-        <td colspan="13">
-          <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-          </ngx-skeleton-loader>
-        </td>
-      </tr>
+        <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
+          <td colspan="13" style="color: red;">No Field Infected</td>
+        </tr>
 
-      <tr *ngIf="fieldInfecteds.length == 0 && !isLoading">
-        <td colspan="13" style="color: red;">No Field Infected</td>
-      </tr>
-
-      <ng-container *ngIf="!isLoading">
-      <tbody
-        *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
-        <tr class="list" style="cursor: default;">
-          <td>{{ calculateIndex(i) }}</td>
-          <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
-          <td style="cursor: pointer;">{{field.fieldName}}</td>
-          <td>{{ field.area }}</td>
-          <td>{{ field.areaInfectedPercentage }}</td>
-          <td>{{ field.areaInfected }}</td>
-          <td>{{ field.diseaseCategory }}</td>
-          <td>{{ field.diseaseName }}</td>
-          <td>{{ field.severityLevel }}</td>
-          <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
-          <td>{{ field.remark }}</td>
-          <td>
-            <button style="cursor: pointer;" [ngClass]="{
+        <ng-container *ngIf="!isLoading">
+          <tbody
+            *ngFor="let field of fieldInfecteds | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }; let i = index">
+            <tr class="list" style="cursor: default;">
+              <td>{{ calculateIndex(i) }}</td>
+              <td>{{field.dateScreening | date:'dd-MM-yyyy'}}</td>
+              <td style="cursor: pointer;">{{field.fieldName}}</td>
+              <td>{{ field.area }}</td>
+              <td>{{ field.areaInfectedPercentage }}</td>
+              <td>{{ field.areaInfected }}</td>
+              <td>{{ field.diseaseCategory }}</td>
+              <td>{{ field.diseaseName }}</td>
+              <td>{{ field.severityLevel }}</td>
+              <td>{{ field.dateRecovered | date:'dd-MM-yyyy'}}</td>
+              <td>{{ field.remark }}</td>
+              <td>
+                <button style="cursor: pointer;" [ngClass]="{
                   'active-btn': field.isActive == true,
                   'inactive-btn': field.isActive == false
                 }" [disabled]="!field.isActive" (click)="openDialogStatus(field)">
-              {{ field.isActive == true ? "Active" : "Inactive" }}
-            </button>
-          </td>
-          <td>
-            <button class="btn-update" (click)="openDialog(field)">
-              <i class="fa fa fa-pencil"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-      </ng-container>
-    </table>
-    
+                  {{ field.isActive == true ? "Active" : "Inactive" }}
+                </button>
+              </td>
+              <td>
+                <button class="btn-update" (click)="openDialog(field)">
+                  <i class="fa fa fa-pencil"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </ng-container>
+      </table>
 
-    <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+
+      <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+    </div>
   </div>
 </div><br />
 

@@ -21,6 +21,10 @@ export class FieldService {
     return this.http.get<Field[]>(this.baseUrl + '/fields/GetFields')
   }
 
+  getFieldByEstateId(estateId:number):Observable<Field[]>{
+    return this.http.get<Field[]>(this.baseUrl + '/fields/GetFieldsByEstateId/' + estateId)
+  }
+
   getOneFieldHistory(id: number):Observable<Field>{
     return this.http.get<Field>( this.baseUrl + '/fields/GetOneFieldHistory/' + id)
   }

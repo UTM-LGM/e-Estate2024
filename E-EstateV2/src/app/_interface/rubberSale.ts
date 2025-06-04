@@ -2,7 +2,7 @@ import { Buyer } from "./buyer"
 
 export interface RubberSale {
     id: number
-    saleDateTime: Date
+    saleDateTime: string
     rubberType: string
     letterOfConsentNo: string
     receiptNo: string
@@ -28,9 +28,9 @@ export interface RubberSale {
     remark:string
     deliveryAgent:string
     driverIc:string
-    receiptNoDate:Date
+    receiptNoDate:string
     weightSlipNo:string
-    weightSlipNoDate:Date
+    weightSlipNoDate:string
     buyerDRC:number
     buyerWetWeight:number
     licenseNoTrace:string

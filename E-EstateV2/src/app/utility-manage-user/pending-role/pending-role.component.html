@@ -1,32 +1,35 @@
 <div class="box-container">
+  <div class="subsection">
     <h1>List of users</h1>
-  
-      <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Users" />
-  
-      <div style="overflow-x: auto">
-        <table style="width: 100%">
-          <thead>
-            <tr>
-              <th *ngFor="let column of sortableColumns" scope="col" [appSort]="users" [attr.data-order]="order"
-                [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
-                {{ column.displayText }}
-              </th>
-              <th width="90px">Action</th>
-            </tr>
-          </thead>
-  
-          <tr *ngIf="isLoading">
-            <td colspan="10">
-              <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-              </ngx-skeleton-loader>
-            </td>
-          </tr>
+  </div>
 
-          <tr *ngIf="users.length == 0 && !isLoading">
-            <td colspan="10" style="color: red;">No new user</td>
+  <div class="subsection2">
+    <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Users" />
+
+    <div style="overflow-x: auto">
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th *ngFor="let column of sortableColumns" scope="col" [appSort]="users" [attr.data-order]="order"
+              [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+              {{ column.displayText }}
+            </th>
+            <th width="90px">Action</th>
           </tr>
-  
-          <ng-container *ngIf="!isLoading">
+        </thead>
+
+        <tr *ngIf="isLoading">
+          <td colspan="10">
+            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+            </ngx-skeleton-loader>
+          </td>
+        </tr>
+
+        <tr *ngIf="users.length == 0 && !isLoading">
+          <td colspan="10" style="color: red;">No new user</td>
+        </tr>
+
+        <ng-container *ngIf="!isLoading">
           <tr class="list"
             *ngFor="let user of users | filter : term | paginate: { itemsPerPage: itemsPerPage, currentPage: pageNumber }, let i = index">
             <td>{{ calculateIndex(i) }}</td>
@@ -45,9 +48,10 @@
           </tr>
         </ng-container>
 
-        </table>  
-        <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+      </table>
+      <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
 
-  
-      </div>
+
     </div>
+  </div>
+</div>

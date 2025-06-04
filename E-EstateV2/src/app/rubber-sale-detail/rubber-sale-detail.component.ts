@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { RubberSale } from '../_interface/rubberSale';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RubberSalesComponent } from '../rubber-sale/rubber-sales.component';
@@ -31,52 +31,59 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
   todayDateWeight = ''
   todayDateReceipt = ''
 
+  todayDate = new Date().toISOString().split('T')[0];
+
 
   constructor(
     public dialogRef: MatDialogRef<RubberSalesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { data: RubberSale },
-    private datePipe: DatePipe,
     private buyerService: BuyerService,
     private rubberSaleService: RubberSaleService,
     private sharedService: SharedService,
     private subscriptionService: SubscriptionService,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    this.todayDateWeight = new Date().toISOString().substring(0, 10)
-    this.todayDateReceipt = new Date().toISOString().substring(0, 10)
-    this.rubberSale = this.data.data
+    //This creates a deep copy — a new object with its own independent properties.
+    this.rubberSale = JSON.parse(JSON.stringify(this.data.data));
+    this.rubberSale.weightSlipNoDate = this.todayDate
+    this.rubberSale.receiptNoDate = this.todayDate
     if (this.rubberSale.deliveryAgent != "") {
       this.deliveryAgent = 'yes'
     }
     else {
       this.deliveryAgent = 'no'
     }
-    this.formattedDate = this.datePipe.transform(this.rubberSale.saleDateTime, 'yyyy-MM-dd') || ''
-    if (this.formattedDate) {
-      setTimeout(() => {
-        this.rubberSale.saleDateTime = new Date(this.formattedDate)
-      }, 0);
-    }
+    this.setDate()
     this.getBuyer();
   }
 
-  selectedDate(date: string) {
-    if (date) {
-      this.rubberSale.saleDateTime = new Date(date)
-    }
+  setDate() {
+    const date = new Date(this.rubberSale.saleDateTime);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    this.rubberSale.saleDateTime = `${year}-${month}-${day}`;
   }
 
-  selectedDateWightSlip(date: string) {
-    if (date) {
-      this.rubberSale.weightSlipNoDate = new Date(date)
-    }
-  }
+  checkDate(selectedDateString: string) {
+    const selectedDate = new Date(selectedDateString);
+    const today = new Date(this.todayDate);
 
-  selectedDateReceiptNo(date: string) {
-    if (date) {
-      this.rubberSale.receiptNoDate = new Date(date)
+    if (selectedDate > today) {
+      swal.fire({
+        icon: 'warning',
+        title: 'Invalid Date',
+        text: 'Date cannot be in the future!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.rubberSale.saleDateTime = this.data.data.saleDateTime;
+        this.setDate();
+        this.cd.detectChanges();
+      });
     }
   }
 
@@ -146,7 +153,7 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
                           );
                       }
                     })
-              }else{
+              } else {
                 this.spinnerService.requestEnded()
               }
             }
@@ -201,13 +208,13 @@ export class RubberSaleDetailComponent implements OnInit, OnDestroy {
 
   validateCuplumpDRC(drc: any) {
     const drcValue = drc.target.value
-    if (drcValue >= 45 && drcValue <= 80) {
+    if (drcValue >= 45 && drcValue <= 100) {
       return drcValue
     }
     else {
       swal.fire({
         title: 'Error!',
-        text: 'CuplumpDRC must be between 45% to 80%',
+        text: 'CuplumpDRC must be between 45% to 100%',
         icon: 'error',
         showConfirmButton: true
       });

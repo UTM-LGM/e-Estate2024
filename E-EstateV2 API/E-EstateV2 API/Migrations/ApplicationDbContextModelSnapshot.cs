@@ -904,6 +904,9 @@ namespace E_EstateV2_API.Migrations
                     b.Property<int>("estateIdOld")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isPDPA")
+                        .HasColumnType("bit");
+
                     b.Property<string>("licenseNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -1702,6 +1705,31 @@ namespace E_EstateV2_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("laborTypes");
+                });
+
+            modelBuilder.Entity("E_EstateV2_API.Models.License", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("estateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("licenseNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("licenses");
                 });
 
             modelBuilder.Entity("E_EstateV2_API.Models.MembershipType", b =>

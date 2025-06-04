@@ -1,18 +1,25 @@
 <br />
-<h1>Country Utility</h1>
-<form>
-  <label>Country Name : </label>
-  <input type="text" name="name" [(ngModel)]="country.country" />
-</form>
-<button style="float: right" class="btn-add" (click)="onSubmit()">
-  Add &nbsp; <i class="fa fa-plus"></i>
-</button>
+<div class="subsection">
+  <h1>Country Utility</h1>
+</div>
 
+<div class="subsection2">
+  <form>
+    <label>Country Name : </label>
+    <input type="text" name="name" [(ngModel)]="country.country" />
+  </form>
+  <button style="float: right" class="btn-add" (click)="onSubmit()">
+    Add &nbsp; <i class="fa fa-plus"></i>
+  </button>
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Country</h1>
-<div class="box-container">
+
+<div class="subsection">
+  <h1>List of Country</h1>
+</div>
+
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Country" />
   <table style="width: 100%">
     <tr>

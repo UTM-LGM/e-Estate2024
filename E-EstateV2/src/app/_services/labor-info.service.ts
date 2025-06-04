@@ -34,6 +34,10 @@ export class LaborInfoService {
     return this.http.get<LaborByCategory[]>(this.baseUrl + '/LaborInformations/GetLaborCategoryByLaborInfoId/'+ id)
   }
 
+  getLaborByEstateId(id:number):Observable<LaborInfo[]>{
+    return this.http.get<LaborInfo[]>(this.baseUrl + '/LaborInformations/GetLaborInfoByEstateId/'+ id)
+  }
+
   updateLaborInfo(labor: LaborInfo): Observable<LaborInfo> {
     return this.http.put<LaborInfo>(this.baseUrl + '/LaborInformations/UpdateLaborInfo', labor)
   }

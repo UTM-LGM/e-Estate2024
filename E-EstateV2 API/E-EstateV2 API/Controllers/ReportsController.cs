@@ -1,12 +1,5 @@
-﻿using E_EstateV2_API.Data;
-using E_EstateV2_API.IRepository;
-using E_EstateV2_API.ViewModel;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using E_EstateV2_API.IRepository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace E_EstateV2_API.Controllers
 {
@@ -61,10 +54,9 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        [Route("{year:int}")]
-        public async Task<IActionResult> GetCurrentField (int year)
+        public async Task<IActionResult> GetCurrentField ()
         {
-            var field = await _reportRepository.GetCurrentField(year);
+            var field = await _reportRepository.GetCurrentField();
             return Ok(field);
         }
 
@@ -75,6 +67,30 @@ namespace E_EstateV2_API.Controllers
         {
             var currentProduction = await _reportRepository.GetCurrentProduction(year);
             return Ok(currentProduction);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductions()
+        {
+            var getProductions = await _reportRepository.GetProduction();
+            return Ok(getProductions);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSales()
+        {
+            var getSales = await _reportRepository.GetSales();
+            return Ok(getSales);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStocks()
+        {
+            var getSales = await _reportRepository.GetStocks();
+            return Ok(getSales);
 
         }
 
@@ -149,6 +165,14 @@ namespace E_EstateV2_API.Controllers
         {
             var labor = await _reportRepository.GetAllLaborInformationCategory(start, end);
             return Ok(labor);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFieldAreaByDate(string start, string end, int estateId)
+        {
+            var area = await _reportRepository.GetFieldAreaByDate(start, end, estateId);
+            return Ok(area);
+
         }
 
         [HttpGet]

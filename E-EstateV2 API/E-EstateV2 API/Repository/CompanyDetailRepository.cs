@@ -2,7 +2,6 @@
 using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Repository

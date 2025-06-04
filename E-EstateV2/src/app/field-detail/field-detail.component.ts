@@ -352,24 +352,6 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
             }
           }
         })
-      //   () => {
-      //     swal.fire({
-      //       title: 'Done!',
-      //       text: 'Field successfully updated!',
-      //       icon: 'success',
-      //       showConfirmButton: false,
-      //       timer: 1000
-      //     });
-      //     this.ngOnInit(); // Refresh data as needed
-      //     this.spinnerService.requestEnded()
-      //   },
-      //   error => {
-      //     swal.fire({
-      //       text: 'Error updating field',
-      //       icon: 'error'
-      //     });
-      //   }
-      // );
     }
   }
 
@@ -567,36 +549,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   }
 
   delete(index: number) {
-    // {
-    //   swal.fire({
-    //     title: "Are you sure to delete ?",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonText: 'Yes',
-    //     denyButtonText: 'Cancel'
-    //   })
-    //     .then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.fieldService.deleteClone(cloneId, fieldId)
-    //           .subscribe(
-    //             Response => {
-    //               swal.fire({
-    //                 title: 'Deleted!',
-    //                 text: 'Clone has been deleted!',
-    //                 icon: 'success',
-    //                 showConfirmButton: false,
-    //                 timer: 1000
-    //               });
-    //               this.ngOnInit()
-    //             }
-    //           )
-    //       } else if (result.isDenied) {
-    //       }
-    //     });
-    // }
-
     this.fieldClones.splice(index, 1)
-    // console.log(this.fieldClones)
     this.updateAvailableClones();
 
     swal.fire({
@@ -610,33 +563,6 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteGrant(index: number) {
-    // {
-    //   swal.fire({
-    //     title: "Are you sure to delete ?",
-    //     icon: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonText: 'Yes',
-    //     denyButtonText: 'Cancel'
-    //   })
-    //     .then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.fieldGrantService.deleteGrant(grantId)
-    //           .subscribe(
-    //             Response => {
-    //               swal.fire({
-    //                 title: 'Deleted!',
-    //                 text: 'Grant has been deleted!',
-    //                 icon: 'success',
-    //                 showConfirmButton: false,
-    //                 timer: 1000
-    //               });
-    //               this.ngOnInit()
-    //             })
-    //       } else if (result.isDenied) {
-    //       }
-    //     });
-    // }
-
     this.fieldGrants.splice(index, 1)
     swal.fire({
       title: 'Deleted!',

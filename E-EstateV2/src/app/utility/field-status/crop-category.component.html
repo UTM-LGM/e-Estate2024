@@ -1,5 +1,9 @@
 <br />
-<h1>Field Status Utility</h1>
+<div class="subsection">
+  <h1>Field Status Utility</h1>
+</div>
+
+<div class="subsection2">
 <form>
   <label>Maturity : </label>
   <mat-select placeholder="Please Choose" name="maturity" [(ngModel)]="crop.isMature">
@@ -14,12 +18,13 @@
 <button style="float: right" class="btn-add" (click)="submit()">
   Add &nbsp; <i class="fa fa-plus"></i>
 </button>
-
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Field Status</h1>
-<div class="box-container">
+<div class="subsection">
+  <h1>List of Field Status</h1>
+</div>
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field Status" />
   <table style="width: 100%">
     <tr>

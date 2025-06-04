@@ -1,7 +1,6 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { RubberStockComponent } from '../rubber-stock/rubber-stock.component';
-import { FieldService } from '../_services/field.service';
 import { Field } from '../_interface/field';
 import { FieldProductionService } from '../_services/field-production.service';
 import { FieldProduction } from '../_interface/fieldProduction';
@@ -25,7 +24,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   estate: any = {} as any
   filterProductions: FieldProduction[] = []
   filterFields: Field[] = []
-  date: any
+  // date: any
   previousDate: any
   cuplumpDry: FieldProduction[] = []
   latexDry: FieldProduction[] = []
@@ -61,6 +60,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   isDecember: boolean | undefined
   totalProduction = 0
   filterSales: RubberSale[] = []
+  selectedMonth: any = ''
+
 
   rubberStocks: RubberStock[] = []
   allRubberStock: RubberStock[] = []
@@ -72,7 +73,6 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<RubberStockComponent>,
-    private fieldService: FieldService,
     private fieldProductionService: FieldProductionService,
     private datePipe: DatePipe,
     private rubberSaleService: RubberSaleService,
@@ -80,6 +80,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     private rubberStockService: RubberStockService,
     private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
+    private cdr: ChangeDetectorRef,
+  
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.estate = data.estate;
@@ -90,8 +92,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getDate()
-    this.date = this.datePipe.transform(this.monthYear, 'MMM-yyyy')
-    this.previousDate = this.datePipe.transform(this.previousMonth, 'MMM-yyyy')?.toUpperCase()
+    this.selectedMonth = this.datePipe.transform(this.previousMonth, 'yyyy-MM');
   }
 
   chooseRubberType() {
@@ -130,8 +131,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   getDate() {
-    this.monthYear.setMonth(this.monthYear.getMonth() - 1)
-    this.previousMonth.setMonth(this.previousMonth.getMonth() - 2)
+    this.previousMonth.setMonth(this.previousMonth.getMonth() - 1)
   }
 
   back() {
@@ -144,15 +144,27 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.isLoadingSale = true
 
     let monthDate = new Date(month)
-    this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
+    // this.date = this.datePipe.transform(monthDate, 'MMM-yyyy')
 
-    monthDate.setMonth(monthDate.getMonth() - 1);
-    this.previousDate = this.datePipe.transform(monthDate, 'MMM-yyyy')?.toUpperCase();
+    if (monthDate > this.today) {
+      swal.fire({
+        icon: 'warning',
+        title: 'Invalid Selection',
+        text: 'You cannot choose a future stock date.',
+      })
+        .then(() => {
+          this.selectedMonth = this.datePipe.transform(this.today, 'yyyy-MM');
+          this.cdr.detectChanges();
+        })
+    }
+    else {
+      this.selectedMonth = this.datePipe.transform(monthDate, 'yyyy-MM')
+    }
   }
 
   addStock() {
     const existingMonth = this.allRubberStock.filter(e =>
-      e.monthYear == this.date.toUpperCase() &&
+      e.monthYear == this.selectedMonth.toUpperCase() &&
       e.rubberType == this.stock.rubberType &&
       e.estateId == this.sharedService.estateId
     );
@@ -172,7 +184,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     } else {
       this.spinnerService.requestStarted();
       this.stock.estateId = this.estate.id;
-      this.stock.monthYear = this.date;
+      this.stock.monthYear = this.selectedMonth;
       this.stock.createdBy = this.sharedService.userId;
       this.stock.isActive = true;
 
@@ -222,7 +234,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         Response => {
           const productions = Response
 
-          this.filterProductions = productions.filter(e => e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear == this.date.toUpperCase())
+          this.filterProductions = productions.filter(e => e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear == this.selectedMonth.toUpperCase())
           if (this.stock.rubberType == 'CUPLUMP') {
             this.TotalCuplump()
           }
@@ -296,7 +308,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         Response => {
           const rubberSales = Response
 
-          const date = new Date(this.date)
+          const date = new Date(this.selectedMonth)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
             return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() + 1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
@@ -338,5 +350,5 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }

@@ -160,6 +160,9 @@ import { EditBuyerComponent } from './utility-clerk/edit-buyer/edit-buyer.compon
 import { PolygonComponent } from './polygon/polygon.component';
 import { VerifyEmailUserComponent } from './utility-manage-user/verify-email-user/verify-email-user.component';
 import { RubberProductionYearComponent } from './report-production-by-year/rubber-production-year/rubber-production-year.component';
+import { ReportRubberSaleAdminComponent } from './report-rubber-sale-admin/report-rubber-sale-admin.component';
+import { ReportEstateContactComponent } from './report-estate-contact/report-estate-contact.component';
+import { AmendRubberSaleComponent } from './amend-rubber-sale/amend-rubber-sale.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 ||
   window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -292,6 +295,9 @@ register()
     PolygonComponent,
     VerifyEmailUserComponent,
     RubberProductionYearComponent,
+    ReportRubberSaleAdminComponent,
+    ReportEstateContactComponent,
+    AmendRubberSaleComponent,
   ],
   imports: [
     BrowserModule,

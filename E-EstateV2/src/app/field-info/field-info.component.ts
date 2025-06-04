@@ -5,7 +5,7 @@ import { Clone } from '../_interface/clone';
 import { FieldClone } from '../_interface/fieldClone';
 import swal from 'sweetalert2';
 import { SharedService } from '../_services/shared.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FieldConversion } from '../_interface/fieldConversion';
 import { FieldStatusService } from '../_services/field-status.service';
 import { CloneService } from '../_services/clone.service';
@@ -19,13 +19,14 @@ import { FieldDisease } from '../_interface/fieldDisease';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { FieldInfectedService } from '../_services/field-infected.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-field-info',
   templateUrl: './field-info.component.html',
   styleUrls: ['./field-info.component.css'],
 })
-export class FieldInfoComponent implements OnInit,OnDestroy {
+export class FieldInfoComponent implements OnInit, OnDestroy {
   field: Field = {} as Field
 
   estate: any = {} as any
@@ -52,6 +53,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
   currentSortedColumn = ''
   role = ''
   fieldSick = false
+  estateDetail: any = {} as any
 
   itemsPerPage = 10
 
@@ -76,7 +78,9 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     private fieldDiseaseService: FieldDiseaseService,
     private myLesenService: MyLesenIntegrationService,
     private fieldInfectedService: FieldInfectedService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private estateService: EstateDetailService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -94,25 +98,44 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
             .subscribe(
               Response => {
                 this.estate = Response
+                this.checkEstateDetail()
                 this.getField()
               })
-        this.subscriptionService.add(getOneEstate);
+          this.subscriptionService.add(getOneEstate);
         }
       });
     }, 2000)
   }
 
-  getField() {
-    const getField = this.fieldService.getField()
+  checkEstateDetail() {
+    this.estateService.getEstateDetailbyEstateId(this.sharedService.estateId)
       .subscribe(
         Response => {
-          const fields = Response
-          this.fields = fields.filter(x => x.estateId == this.estate.id)
+          if (Response != null) {
+            this.estateDetail = Response;
+          } else {
+            // If the estate detail is null, show the alert
+            swal.fire({
+              icon: 'info',
+              title: 'Information',
+              text: 'Please update Estate Profile in General',
+            });
+            this.router.navigateByUrl('/estate-detail/' + this.estate.id)
+          }
+        }
+      )
+  }
+
+  getField() {
+    const getField = this.fieldService.getFieldByEstateId(this.estate.id)
+      .subscribe(
+        Response => {
+          this.fields = Response
           // Fetch all field infected data
           this.fieldInfectedService.getFieldInfected().subscribe(
             allFieldInfectedData => {
               // Filter field infected data based on field id and store in result object
-              fields.forEach(field => {
+              this.fields.forEach(field => {
                 const filteredData = allFieldInfectedData.filter(data => data.fieldId === field.id && data.isActive == true);
                 this.result[field.id] = filteredData;
               });
@@ -123,8 +146,8 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
 
         }
       )
-      this.subscriptionService.add(getField);
-      
+    this.subscriptionService.add(getField);
+
   }
 
   toggleSelectedField(field: Field) {
@@ -144,8 +167,8 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
           this.conversionField = conversion.filter(x => x.fieldId == field.id)
         }
       )
-      this.subscriptionService.add(getConversion);
-    
+    this.subscriptionService.add(getConversion);
+
   }
 
   toggleSort(columnName: string) {
@@ -165,7 +188,7 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
     this.field.fieldName = ''
   }
 
-  
+
   getFieldDisease() {
     const getFieldDisease = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
@@ -174,19 +197,19 @@ export class FieldInfoComponent implements OnInit,OnDestroy {
           this.filterFieldDisease = fieldDisease.filter(e => e.isActive == true)
         }
       )
-      this.subscriptionService.add(getFieldDisease);
-    
+    this.subscriptionService.add(getFieldDisease);
+
   }
 
-  
+
 
   sum(data: Field[]) {
     const filteredFields = data.filter(field => !this.result[field.id]);
     // Calculate sum excluding filtered fields
-    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus?.toLowerCase().includes('conversion to other crop') 
-    && !x.fieldStatus?.toLowerCase().includes('abandoned') && !x.fieldStatus?.toLowerCase().includes('government')
-    && x.isMature == true
-  );
+    this.value = filteredFields.filter(x => x.isActive && !x.fieldStatus?.toLowerCase().includes('conversion to other crop')
+      && !x.fieldStatus?.toLowerCase().includes('abandoned') && !x.fieldStatus?.toLowerCase().includes('government')
+      && x.isMature == true
+    );
     this.total = this.value.reduce((acc, item) => acc + (item.rubberArea ?? 0), 0);
   }
 

@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
 import { FieldProduction } from 'src/app/_interface/fieldProduction';
 import { LocalLabor } from 'src/app/_interface/localLabor';
+import { BadgeService } from 'src/app/_services/badge.service';
 import { CostAmountService } from 'src/app/_services/cost-amount.service';
 import { EstateDetailService } from 'src/app/_services/estate-detail.service';
 import { FieldProductionService } from 'src/app/_services/field-production.service';
@@ -61,6 +63,8 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
   totalCuplumpDry = 0
   totalLatexDry = 0
   totalProduction = 0
+  badgeCount = 0
+
 
 
   isLoadingEstateName = true
@@ -93,9 +97,14 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionService,
     private estateDetailService: EstateDetailService,
     private rrimGeoRubberService: RrimgeorubberIntegrationService,
+    private badgeServie: BadgeService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.badgeServie.badgeCount$.subscribe((count) => {
+      this.badgeCount = count
+    });
     if (this.sharedService.role != "Admin") {
       this.yearNow = new Date().getFullYear().toString()
       this.estateId = this.sharedService.estateId
@@ -136,8 +145,9 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     this.getProductivity()
   }
 
+
   getField() {
-    const getCurrentField = this.reportService.getCurrentField(this.yearNow.toString())
+    const getCurrentField = this.reportService.getFieldArea(this.yearNow.toString())
       .subscribe(
         Response => {
           const field = Response.filter(x => x.estateId == this.sharedService.estateId && x.fieldStatus?.toLowerCase().includes('tapped area') && x.isActive == true)
@@ -368,15 +378,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
         Response => {
           if (Response != null) {
             this.estateDetail = Response;
-
-            // If msnrStatus is 'false' or polygonArea is 0, or if estate detail exists, call getGeoJson
-            if (Response.msnrStatus == false || Response.polygonArea == 0) {
-              this.getGeoJson();
-            }
-            // If estate details are available, call getGeoJson
-            else {
-              this.getGeoJson();
-            }
+            this.checkPDPA()
           } else {
             // If the estate detail is null, show the alert
             swal.fire({
@@ -384,9 +386,65 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
               title: 'Information',
               text: 'Please update Estate Profile in General',
             });
+            this.router.navigateByUrl('/estate-detail/' + this.estate.id)
           }
         }
       )
+  }
+
+  checkPDPA() {
+    if (this.estateDetail.isPDPA == false) {
+      swal.fire({
+        title: 'PDPA Consent Required',
+        html: `
+                <div style="position: relative; height: 348px; overflow: hidden;">
+                  <iframe src="assets/PDPA-LGM.pdf" 
+                     width="100%" 
+                     height="100%" 
+                  style="border: none; pointer-events: auto;"></iframe>
+                </div>
+                    `,
+        icon: 'info',
+        confirmButtonText: 'I Agree',
+        allowOutsideClick: false, // <-- Prevent clicking outside
+        allowEscapeKey: false,// <-- Prevent pressing ESC
+        allowEnterKey: false, // <-- Optional: block ENTER key
+        width: 800,
+        didOpen: () => {
+          const titleElement = document.querySelector('.swal2-title');
+          if (titleElement) {
+            (titleElement as HTMLElement).style.marginBottom = '0';
+          }
+          // Resize the icon after the alert opens
+          const iconElement = document.querySelector('.swal2-icon');
+          if (iconElement) {
+            (iconElement as HTMLElement).style.width = '50px'; // Set desired width
+            (iconElement as HTMLElement).style.height = '50px'; // Set desired height
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.estateDetail.isPDPA = true
+          const { plantingMaterial, ...newObj } = this.estateDetail;
+          this.filteredEstate = newObj;
+          this.estateDetailService.updateEstateDetail(this.filteredEstate)
+            .subscribe(
+              Response => {
+                if (this.estateDetail.msnrStatus == false || this.estateDetail.polygonArea == 0) {
+                  this.getGeoJson();
+                }
+                else {
+                  this.getGeoJson()
+                }
+              }
+            )
+        } else {
+          this.router.navigateByUrl('/login')
+          localStorage.clear()
+        }
+      });
+    }
+
   }
 
   getGeoJson() {
@@ -447,7 +505,7 @@ export class HomeEstateClerkComponent implements OnInit, OnDestroy {
     this.estateDetailService.updateEstateDetail(this.filteredEstate)
       .subscribe({
         next: (response) => {
-          console.log('AreaUpdated')
+
         },
         error: (err) => {
         }

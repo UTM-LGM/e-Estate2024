@@ -6,7 +6,8 @@
   <div style="display: flex; flex-direction: row; justify-content: space-between;">
     <div style="flex: 1; display: flex; flex-direction: column;">
       <label>Country <span style="color: red;">*</span> :</label>
-      <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId" (selectionChange)="countrySelected()">
+      <mat-select name="country" placeholder="Please Choose" [(ngModel)]="labor.countryId"
+        (selectionChange)="countrySelected()">
         <mat-option *ngFor="let country of filterCountries" [value]="country.id">
           {{ country.country }}
         </mat-option>
@@ -59,69 +60,73 @@
   </div><br /><br />
 
   <div class="box-container">
-    <h1>List of Labor Information</h1>
-    <hr />
-    <div style="overflow-x: auto">
-      <table style="width: 100%">
-        <tr>
-          <th>Month and Year</th>
-          <th>Country</th>
-          <th>No.of Checkrole Tappers</th>
-          <th>No.of Tappers Employed by Contractors</th>
-          <th>No.of Checkrole Field Workers</th>
-          <th>No.of Field Workers Employed by Contractors</th>
-          <ng-container *ngFor="let type of filterTypes">
-            <th>No.of {{ type.laborType | titlecase }}</th>
-          </ng-container>
-          <th>Total worker by Country</th>
-          <th width="90px">Action</th>
-        </tr>
+    <div class="subsection">
+      <h1>List of Labor Information</h1>
+    </div>
 
-        <tr *ngIf="isLoading">
-          <td colspan="11">
-            <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
-            </ngx-skeleton-loader>
-          </td>
-        </tr>
+    <div class="subsection2">
+      <div style="overflow-x: auto">
+        <table style="width: 100%">
+          <tr>
+            <th>Month and Year</th>
+            <th>Country</th>
+            <th>No.of Checkrole Tappers</th>
+            <th>No.of Tappers Employed by Contractors</th>
+            <th>No.of Checkrole Field Workers</th>
+            <th>No.of Field Workers Employed by Contractors</th>
+            <ng-container *ngFor="let type of filterTypes">
+              <th>No.of {{ type.laborType | titlecase }}</th>
+            </ng-container>
+            <th>Total worker by Country</th>
+            <th width="90px">Action</th>
+          </tr>
 
-        <tr *ngIf="filterLabors.length == 0 && !isLoading">
-          <td colspan="11" style="color: red;">No Labor information</td>
-        </tr>
+          <tr *ngIf="isLoading">
+            <td colspan="11">
+              <ngx-skeleton-loader appearance="line" animation="progress-dark" [theme]="{height:'50px'}">
+              </ngx-skeleton-loader>
+            </td>
+          </tr>
 
-        <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
-          <td>{{ labor.monthYear | date : "MMM-yyyy" }}</td>
-          <td>{{ labor.countryName }}</td>
-          <td>{{ labor.tapperCheckrole }}</td>
-          <td>{{ labor.tapperContractor }}</td>
-          <td>{{ labor.fieldCheckrole }}</td>
-          <td>{{ labor.fieldContractor }}</td>
-          <ng-container *ngFor="let category of labor.laborCategory">
-            <td>{{ category.noOfWorker }}</td>
-          </ng-container>
-          <td>
-            <label>{{ labor.total }}</label>
-          </td>
+          <tr *ngIf="filterLabors.length == 0 && !isLoading">
+            <td colspan="11" style="color: red;">No Labor information</td>
+          </tr>
 
-          <td style="column-count: 2;">
-            <button class="btn-update" (click)="openDialog(labor)">
-              <i class="fa fa-pencil"></i>
-            </button>
-            <button style="float: right;" class="btn-del" (click)="delete(labor.id)">
-              <i class="fa fa-trash"></i>
-            </button>
-          </td>
+          <tr *ngFor="let labor of filterLabors | paginate: { itemsPerPage: 10, currentPage: pageNumber }">
+            <td>{{ labor.monthYear | date : "MMM-yyyy" }}</td>
+            <td>{{ labor.countryName }}</td>
+            <td>{{ labor.tapperCheckrole }}</td>
+            <td>{{ labor.tapperContractor }}</td>
+            <td>{{ labor.fieldCheckrole }}</td>
+            <td>{{ labor.fieldContractor }}</td>
+            <ng-container *ngFor="let category of labor.laborCategory">
+              <td>{{ category.noOfWorker }}</td>
+            </ng-container>
+            <td>
+              <label>{{ labor.total }}</label>
+            </td>
 
-        </tr>
+            <td style="column-count: 2;">
+              <button class="btn-update" (click)="openDialog(labor)">
+                <i class="fa fa-pencil"></i>
+              </button>
+              <button style="float: right;" class="btn-del" (click)="delete(labor.id)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
 
-        <tr>
-          <th colspan="11">Total Worker : </th>
-          <th>{{ totalForeignWorker }}</th>
-          <th></th>
-        </tr>
-      </table>
+          </tr>
 
-      <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+          <tr>
+            <th colspan="11">Total Worker : </th>
+            <th>{{ totalForeignWorker }}</th>
+            <th></th>
+          </tr>
+        </table>
 
+        <pagination-controls (pageChange)="pageNumber = $event"></pagination-controls>
+
+      </div>
     </div>
   </div><br />
 
@@ -140,4 +145,4 @@
 
   </div>
 
-<app-spinner></app-spinner>
+  <app-spinner></app-spinner>

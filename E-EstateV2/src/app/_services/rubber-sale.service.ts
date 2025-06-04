@@ -21,7 +21,7 @@ export class RubberSaleService {
     return this.http.get<RubberSale[]>(this.baseUrl + '/rubbersales/GetRubberSales')
   }
 
-  updateSale(sale: RubberSale): Observable<RubberSale> {
+  updateSale(sale: any): Observable<RubberSale> {
     return this.http.put<RubberSale>(this.baseUrl + '/rubbersales/UpdateRubberSales', sale)
   }
 

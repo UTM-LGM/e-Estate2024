@@ -8,8 +8,6 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using E_EstateV2_API.ViewModel;
-using System.Net;
-using System.Web;
 
 namespace E_EstateV2_API.Repository
 {
@@ -30,7 +28,7 @@ namespace E_EstateV2_API.Repository
             if (request.userId == null)
             {
                 //system email
-                email.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+                email.From.Add(MailboxAddress.Parse("noreply-RRIMestet@lgm.gov.my"));
                 //user email
                 email.To.Add(MailboxAddress.Parse(request.to));
                 email.Subject = "Account Verification for RRIMestet LGM";
@@ -86,7 +84,7 @@ namespace E_EstateV2_API.Repository
             if (user != null && user.isEmailVerified == false)
             {
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+                email.From.Add(MailboxAddress.Parse("noreply-RRIMestet@lgm.gov.my"));
                 //Admin email
                 email.To.Add(MailboxAddress.Parse("Embong@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse("fattah@lgm.gov.my"));
@@ -135,7 +133,7 @@ namespace E_EstateV2_API.Repository
             {
                 var token = await _usermanager.GeneratePasswordResetTokenAsync(applicationUser);
                 var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse("RRIMestet@lgm.gov.my"));
+                email.From.Add(MailboxAddress.Parse("noreply-RRIMestet@lgm.gov.my"));
                 email.To.Add(MailboxAddress.Parse(user.email));
                 email.Subject = "Password Reset for RRIMestet LGM";
                 string htmlMessageReset = GenerateHtmlResetPassword(userId, token);

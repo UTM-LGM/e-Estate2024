@@ -1,11 +1,8 @@
 ﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using E_EstateV2_API.Repository;
 using E_EstateV2_API.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Diagnostics.Contracts;
 
 namespace E_EstateV2_API.Controllers
 {

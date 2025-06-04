@@ -2,9 +2,7 @@
 using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace E_EstateV2_API.Repository
 {

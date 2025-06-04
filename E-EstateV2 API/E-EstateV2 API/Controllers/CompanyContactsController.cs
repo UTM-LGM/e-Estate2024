@@ -1,7 +1,6 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_EstateV2_API.Controllers
@@ -35,6 +34,16 @@ namespace E_EstateV2_API.Controllers
             contact.createdDate = DateTime.Now;
             var addedCompanyContact = await _genericRepository.Add(contact);
             return Ok(addedCompanyContact);
+        }
+
+        [HttpGet]
+        [Route("{companyId:int}")]
+        public async Task<IActionResult> GetCompanyContactByCompanyId([FromRoute] int companyId)
+        {
+            var contacts = await _genericRepository.GetAll();
+            var sortedContacts = contacts.Where(x => x.companyId == companyId)
+                .OrderByDescending(x => x.isActive).ToList();
+            return Ok(sortedContacts);
         }
 
         [HttpPut]

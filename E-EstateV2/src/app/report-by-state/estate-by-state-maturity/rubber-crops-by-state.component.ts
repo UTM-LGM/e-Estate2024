@@ -39,11 +39,14 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
   totalAbandoned = 0
   totalArea = 0
 
+  startDate: any
+  endDate: any
+
   constructor(
     private fieldService: FieldService,
     private myLesenService: MyLesenIntegrationService,
     private subscriptionService: SubscriptionService,
-    private reportService:ReportService
+    private reportService: ReportService
   ) { }
 
   ngOnInit(): void {
@@ -56,12 +59,23 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
     this.stateTotals = {}
     this.stateTotalsArray = []
     this.getFieldInfo()
+    if (this.endMonth) {
+      const [year, month] = this.endMonth.split('-').map(Number); // "2025-12" -> [2025, 12]
+      const endDate = new Date(year, month, 0); // Day 0 of next month = last day of current
+      endDate.setHours(23, 59, 59, 999); // Set to 23:59:59.999
+      this.endDate = endDate;
+    }
+
   }
 
   chageStartMonth() {
     this.endMonth = ''
     this.stateTotalsArray = []
     this.stateTotals = {}
+    if (this.startMonth) {
+      const [year, month] = this.startMonth.split('-').map(Number); // "2025-01" -> [2025, 1]
+      this.startDate = new Date(year, month - 1, 1, 0, 0, 0); // Set to first day of month at 00:00
+    }
   }
 
   getFieldInfo() {
@@ -70,7 +84,6 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
         .subscribe(
           estatesResponse => {
             this.estates = estatesResponse.filter(estate => estate.state); // Filter out estates with null or undefined state
-
             const promiseArray = this.estates.map(estate => {
               return new Promise<void>(resolve => {
                 if (!this.stateTotals[estate.state]) {
@@ -84,135 +97,141 @@ export class RubberCropsByStateComponent implements OnInit, OnDestroy {
 
                 if (estate.state) {
                   this.reportService.getStateFieldAreaById(estate.id).subscribe(fieldsResponse => {
-                    const startDate = new Date(`${this.startMonth}-01`);
-                    const endDate = new Date(`${this.endMonth}`);
-                    endDate.setMonth(endDate.getMonth() + 1);
-                    endDate.setDate(0); // Sets the date to the last day of the previous month
+                    // const startDate = new Date(`${this.startMonth}-01`);
+                    // const endDate = new Date(`${this.endMonth}`);
+                    // endDate.setMonth(endDate.getMonth() + 1);
+                    // endDate.setDate(0); // Sets the date to the last day of the previous month
 
                     // const fields = fieldsResponse.filter(field => field.estateId == estate.id && field.createdDate >= startDate && field.createdDate < endDate);
                     const filteredFields = fieldsResponse.filter(field => {
                       const fieldCreatedDate = new Date(field.createdDate);
-                      return field.estateId === estate.id && fieldCreatedDate >= startDate && fieldCreatedDate <= endDate && field.isActive == true;
-                    });
-                    if (filteredFields && filteredFields.length > 0) {
-                      estate.fields = filteredFields;
-                      // Calculate total areas for different statuses
-                      const totalAreas = {
-                        'new planting': 0,
-                        'replanting': 0,
-                        'tapped area': 0,
-                        'abandoned - untapped': 0
-                      } as any;
-
-                      estate.fields.forEach((field: any) => {
-                        if (field.isActive) {
-                          totalAreas[field.fieldStatus?.toLowerCase()] += field.rubberArea;
-                        }
-                      });
-
-                      estate.totalAreas = totalAreas;
-
-                      // Update state totals
-                      this.stateTotals[estate.state].totalNewPlantingArea += totalAreas['new planting'];
-                      this.stateTotals[estate.state].totalReplantingArea += totalAreas['replanting'];
-                      this.stateTotals[estate.state].totalTappedArea += totalAreas['tapped area'];
-                      this.stateTotals[estate.state].totalAbandonedArea += totalAreas['abandoned - untapped'];
-                    }
-                    resolve();
+                      return (
+                        field.estateId === estate.id &&
+                        fieldCreatedDate >= this.startDate &&
+                        fieldCreatedDate <= this.endDate &&
+                        field.isActive == true
+                      )
                   });
-                }
+                  if (filteredFields && filteredFields.length > 0) {
+                    estate.fields = filteredFields;
+                    // Calculate total areas for different statuses
+                    const totalAreas = {
+                      'new planting': 0,
+                      'replanting': 0,
+                      'tapped area': 0,
+                      'abandoned - untapped': 0
+                    } as any;
+
+                    estate.fields.forEach((field: any) => {
+                      if (field.isActive) {
+                        totalAreas[field.fieldStatus?.toLowerCase()] += field.rubberArea;
+                      }
+                    });
+
+                    estate.totalAreas = totalAreas;
+
+                    // Update state totals
+                    this.stateTotals[estate.state].totalNewPlantingArea += totalAreas['new planting'];
+                    this.stateTotals[estate.state].totalReplantingArea += totalAreas['replanting'];
+                    this.stateTotals[estate.state].totalTappedArea += totalAreas['tapped area'];
+                    this.stateTotals[estate.state].totalAbandonedArea += totalAreas['abandoned - untapped'];
+                  }
+                  resolve();
+                });
+            }
               });
-            });
+    });
 
-            //wait for all the asynchronous tasks to complete before logging the state totals array
-            Promise.all(promiseArray).then(() => {
-              this.stateTotalsArray = Object.keys(this.stateTotals).map(state => ({
-                state: state,
-                totalNewPlantingArea: this.stateTotals[state].totalNewPlantingArea,
-                totalReplantingArea: this.stateTotals[state].totalReplantingArea,
-                totalTappedArea: this.stateTotals[state].totalTappedArea,
-                totalAbandonedArea: this.stateTotals[state].totalAbandonedArea
-              }));
+    //wait for all the asynchronous tasks to complete before logging the state totals array
+    Promise.all(promiseArray).then(() => {
+      this.stateTotalsArray = Object.keys(this.stateTotals).map(state => ({
+        state: state,
+        totalNewPlantingArea: this.stateTotals[state].totalNewPlantingArea,
+        totalReplantingArea: this.stateTotals[state].totalReplantingArea,
+        totalTappedArea: this.stateTotals[state].totalTappedArea,
+        totalAbandonedArea: this.stateTotals[state].totalAbandonedArea
+      }));
 
-              this.calculateArea()
+      this.calculateArea()
 
-              this.isLoading = false
-            });
-          });
+      this.isLoading = false
+    });
+  });
       this.subscriptionService.add(getAllEstate);
 
     }, 2000);
   }
 
 
-  // yearSelected() {
-  //   this.estates = []
-  //   const yearAsString = this.year.toString();
-  //   if (yearAsString.length === 4) {
-  //     this.isLoading = true
-  //     this.stateTotals = {}
-  //     this.getFieldInfo()
-  //   } else {
-  //     swal.fire({
-  //       icon: 'error',
-  //       title: 'Error',
-  //       text: 'Please insert correct year',
-  //     });
-  //     this.year = ''
-  //   }
-  // }
+// yearSelected() {
+//   this.estates = []
+//   const yearAsString = this.year.toString();
+//   if (yearAsString.length === 4) {
+//     this.isLoading = true
+//     this.stateTotals = {}
+//     this.getFieldInfo()
+//   } else {
+//     swal.fire({
+//       icon: 'error',
+//       title: 'Error',
+//       text: 'Please insert correct year',
+//     });
+//     this.year = ''
+//   }
+// }
 
-  exportToExcel(data: any[], fileName: string) {
-    let bilCounter = 1;
-    const filteredData:any = data.map(row => ({
-      No: bilCounter++,
-      State: row.state,
-      NewPlanting: row.totalNewPlantingArea,
-      Replanting: row.totalReplantingArea,
-      TappedArea: row.totalTappedArea,
-      Abandoned: row.totalAbandonedArea,
-      TotalRubberArea: row.totalNewPlantingArea + row.totalReplantingArea + row.totalTappedArea + row.totalAbandonedArea
-    }));
+exportToExcel(data: any[], fileName: string) {
+  let bilCounter = 1;
+  const filteredData: any = data.map(row => ({
+    No: bilCounter++,
+    State: row.state,
+    NewPlanting: row.totalNewPlantingArea,
+    Replanting: row.totalReplantingArea,
+    TappedArea: row.totalTappedArea,
+    Abandoned: row.totalAbandonedArea,
+    TotalRubberArea: row.totalNewPlantingArea + row.totalReplantingArea + row.totalTappedArea + row.totalAbandonedArea
+  }));
 
-    const headerRow = [
-      { No: 'Start Month Year:', State: this.startMonth},
-      { No: 'End Month Year:', State: this.endMonth},
-      {}, // Empty row for separation
-      { No: 'No', State: 'State', NewPlanting: 'NewPlanting', Replanting: 'Replanting', 
-        TappedArea: 'TappedArea', Abandoned: 'Abandoned', TotalRubberArea: 'TotalRubberArea'
-      }
-    ];
+  const headerRow = [
+    { No: 'Start Month Year:', State: this.startMonth },
+    { No: 'End Month Year:', State: this.endMonth },
+    {}, // Empty row for separation
+    {
+      No: 'No', State: 'State', NewPlanting: 'NewPlanting', Replanting: 'Replanting',
+      TappedArea: 'TappedArea', Abandoned: 'Abandoned', TotalRubberArea: 'TotalRubberArea'
+    }
+  ];
 
-    const exportData = headerRow.concat(filteredData);
+  const exportData = headerRow.concat(filteredData);
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData, { skipHeader: true });
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  const formattedFileName = `${fileName}_${this.startMonth}_${this.endMonth}.xlsx`;
 
-    XLSX.writeFile(wb, formattedFileName);
-  }
+  XLSX.writeFile(wb, formattedFileName);
+}
 
 
-  ngOnDestroy(): void {
-    this.subscriptionService.unsubscribeAll();
-  }
+ngOnDestroy(): void {
+  this.subscriptionService.unsubscribeAll();
+}
 
-  calculateArea(){
-    this.totalNewPlanting = this.stateTotalsArray.reduce((total, item) => total + item.totalNewPlantingArea, 0)
-    this.totalReplanting =  this.stateTotalsArray.reduce((total, item) => total + item.totalReplantingArea, 0)
-    this.totalTapped = this.stateTotalsArray.reduce((total, item) => total + item.totalTappedArea, 0)
-    this.totalAbandoned =  this.stateTotalsArray.reduce((total, item) => total + item.totalAbandonedArea, 0)
-    this.calculateTotal()
-  }
+calculateArea() {
+  this.totalNewPlanting = this.stateTotalsArray.reduce((total, item) => total + item.totalNewPlantingArea, 0)
+  this.totalReplanting = this.stateTotalsArray.reduce((total, item) => total + item.totalReplantingArea, 0)
+  this.totalTapped = this.stateTotalsArray.reduce((total, item) => total + item.totalTappedArea, 0)
+  this.totalAbandoned = this.stateTotalsArray.reduce((total, item) => total + item.totalAbandonedArea, 0)
+  this.calculateTotal()
+}
 
-  calculateTotal(){
-    this.totalArea = this.totalNewPlanting + this.totalReplanting + this.totalTapped + this.totalAbandoned
-   }
+calculateTotal() {
+  this.totalArea = this.totalNewPlanting + this.totalReplanting + this.totalTapped + this.totalAbandoned
+}
 
-   onFilterChange(term: string): void {
-    this.term = term;
-    this.pageNumber = 1; // Reset to first page on filter change
-  }
+onFilterChange(term: string): void {
+  this.term = term;
+  this.pageNumber = 1; // Reset to first page on filter change
+}
 
 }

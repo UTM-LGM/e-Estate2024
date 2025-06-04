@@ -41,11 +41,20 @@
         <div class="column">
           <label>Password <span style="color: red;">*</span> :</label>
           <div class="password-toggle">
-            <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password" />
+            <input type="{{ showPassword ? 'text' : 'password' }}" name="password" [(ngModel)]="register.password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$" #password="ngModel"  />
             <span (click)="togglePasswordVisibility()">
               <i class="fa" [class.fa-eye]="showPassword" [class.fa-eye-slash]="!showPassword"></i>
             </span>
           </div>
+
+          <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="error validation">
+            <span *ngIf="password?.errors?.['required']">Kata laluan diperlukan.</span>
+            <span *ngIf="password?.errors?.['pattern']" style="color: red;">
+              Password must have 8+ characters, with upper & lower case letters, numbers, and symbols.<br/>
+            </span>
+          </div>
+
           <label>Confirm Password <span style="color: red;">*</span> :</label>
           <div class="password-toggle">
             <input type="{{ showPassword ? 'text' : 'password' }}" name="confirmPassword" [(ngModel)]="register.confirmPassword" (change)="checkingPassword()" />

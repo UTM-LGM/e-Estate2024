@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
-import { catchError, Observable, of, switchMap } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { UserService } from '../_services/user.service';
 import { User } from '../_interface/user';
 import { SharedService } from '../_services/shared.service';
 import { MsalService } from '@azure/msal-angular';
 import { InteractionRequiredAuthError } from '@azure/msal-browser';
-import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,6 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private userService: UserService,
     private sharedService: SharedService,
-    private estateService:EstateDetailService,
     private msalService: MsalService
   ) {
     const activeAccount = localStorage.getItem('activeAccount');
@@ -39,6 +37,7 @@ export class AuthGuard implements CanActivate {
       this.sharedService.userName = decodedToken.userName
       this.sharedService.estateId = decodedToken.estateId
       this.sharedService.companyId = decodedToken.companyId
+      this.sharedService.licenseNo = decodedToken.licenseNo
       this.getUser(decodedToken.estateId, decodedToken.companyId)
 
       //check jwt expired time
@@ -52,12 +51,6 @@ export class AuthGuard implements CanActivate {
     }
     else if (accounts.length > 0) {
       this.setAccessToken()
-      // let roles = next.data['permittedRoles'] as Array<string>
-      // if (roles) {
-      //   return of(this.roleMatch(roles) ? true : false);
-      // }
-      // else {
-      // }
     }
     else {
       this.router.navigateByUrl('/login')
@@ -85,7 +78,7 @@ export class AuthGuard implements CanActivate {
 
     //STaging
     // const clientId = '91409c1e-06ba-4c11-89b6-6002d296a769'
-    
+
     const tokenInfoString = localStorage.getItem(`msal.token.keys.${clientId}`)
 
     if (tokenInfoString !== null) {
@@ -155,51 +148,6 @@ export class AuthGuard implements CanActivate {
           console.log('No active account', activeAccount)
           return of(false)
         }
-
-        // if (activeAccount) {
-        //   console.log('Token expired, attempting silent token acquisition...');
-
-        //   return this.msalService.acquireTokenSilent({
-        //     scopes: ["api://e-EstateAPI/.default"],
-        //     account: activeAccount
-        //   }).pipe(
-        //     switchMap((response) => {
-        //       console.log('Silent token acquisition successful.');
-        //       localStorage.setItem('accessToken', response.accessToken);
-        //       return of(true);
-        //     }),
-        //     catchError((error) => {
-        //       console.error('Token acquisition error:', error);
-
-        //       if (error instanceof InteractionRequiredAuthError) {
-        //         console.log('Interaction required, redirecting to login...');
-        //         this.msalService.loginRedirect({
-        //           scopes: ["api://e-EstateAPI/.default"],
-        //           redirectUri: 'https://www5.lgm.gov.my/e-Estate'
-        //         });
-        //         localStorage.clear();
-        //         this.router.navigateByUrl('/login');
-        //         return of(false);
-        //       } else {
-        //         console.log('Silent token acquisition failed, logging out...');
-        //         this.msalService.logoutRedirect({
-        //           postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
-        //         });
-        //         localStorage.clear();
-        //         this.router.navigateByUrl('/login');
-        //         return of(false);
-        //       }
-        //     })
-        //   );
-        // } else {
-        //   console.log('No active account found, logging out...');
-        //   this.msalService.logoutRedirect({
-        //     postLogoutRedirectUri: 'https://www5.lgm.gov.my/e-Estate'
-        //   });
-        //   localStorage.clear();
-        //   this.router.navigateByUrl('/login');
-        //   return of(false);
-        // }
       } else {
         console.log('Token is still valid.');
         return of(true);
@@ -261,13 +209,8 @@ export class AuthGuard implements CanActivate {
             }
           }
           else {
-
           }
-
         }
       )
   }
-
-  
-
 }

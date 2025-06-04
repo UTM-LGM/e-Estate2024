@@ -1,9 +1,6 @@
-﻿using E_EstateV2_API.Data;
-using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using E_EstateV2_API.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Controllers
 {
@@ -23,6 +20,7 @@ namespace E_EstateV2_API.Controllers
             var result = await _rubberSalesRepository.AddSale(sales);
             return Ok(result);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetRubberSales()

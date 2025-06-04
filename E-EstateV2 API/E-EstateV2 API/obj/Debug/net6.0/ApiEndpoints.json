@@ -356,6 +356,22 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
+    "Method": "GetBuyersByEstateId",
+    "RelativePath": "api/Buyers/GetBuyersByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
     "Method": "UpdateBuyer",
     "RelativePath": "api/Buyers/UpdateBuyer",
     "HttpMethod": "PUT",
@@ -478,6 +494,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyContactsController",
+    "Method": "GetCompanyContactByCompanyId",
+    "RelativePath": "api/CompanyContacts/GetCompanyContactByCompanyId/{companyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -1092,6 +1124,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateContactsController",
+    "Method": "GetEstateContactByEstateId",
+    "RelativePath": "api/EstateContacts/GetEstateContactByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -1761,6 +1809,22 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetFieldsByEstateId",
+    "RelativePath": "api/Fields/GetFieldsByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
     "Method": "GetOneField",
     "RelativePath": "api/Fields/GetOneField/{id}",
     "HttpMethod": "GET",
@@ -2136,6 +2200,22 @@
     "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
     "Method": "GetLaborCategoryByLaborInfoId",
     "RelativePath": "api/LaborInformations/GetLaborCategoryByLaborInfoId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "GetLaborInfoByEstateId",
+    "RelativePath": "api/LaborInformations/GetLaborInfoByEstateId/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -2714,17 +2794,11 @@
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
     "Method": "GetCurrentField",
-    "RelativePath": "api/Reports/GetCurrentField/{year}",
+    "RelativePath": "api/Reports/GetCurrentField",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "year",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -2761,6 +2835,32 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetFieldAreaByDate",
+    "RelativePath": "api/Reports/GetFieldAreaByDate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
     "Method": "GetLaborInformationCategory",
     "RelativePath": "api/Reports/GetLaborInformationCategory/{year}",
     "HttpMethod": "GET",
@@ -2777,8 +2877,28 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetProductions",
+    "RelativePath": "api/Reports/GetProductions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
     "Method": "GetProductivity",
     "RelativePath": "api/Reports/GetProductivity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetSales",
+    "RelativePath": "api/Reports/GetSales",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -2799,6 +2919,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetStocks",
+    "RelativePath": "api/Reports/GetStocks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -3038,6 +3168,22 @@
       },
       {
         "Name": "buyerLicenseNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "GetRubberSaleByLOCUIP",
+    "RelativePath": "api/RubberSalesIntegration/GetRubberSaleByLOCUIP",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
         "Type": "System.String",
         "IsRequired": false
       }

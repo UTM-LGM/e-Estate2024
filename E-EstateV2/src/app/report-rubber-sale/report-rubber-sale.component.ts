@@ -50,7 +50,6 @@ export class ReportRubberSaleComponent implements OnInit {
     { columnName: 'unitPrice', displayText: 'Unit Price (RM/kg)' },
     { columnName: 'total', displayText: 'Total Price (RM)' },
     { columnName: 'remark', displayText: 'Remark' }
-
   ];
 
 
@@ -88,7 +87,6 @@ export class ReportRubberSaleComponent implements OnInit {
 
   chageStartMonth() {
     this.endMonth = ''
-    // this.costInformations = []
   }
 
   getSale() {
@@ -97,7 +95,7 @@ export class ReportRubberSaleComponent implements OnInit {
         .subscribe(
           Response => {
             const rubberSales = Response
-            this.sales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId && e.isActive == true)
+            this.sales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId )
             this.filterSales = this.sales
             this.isLoading = false
           })

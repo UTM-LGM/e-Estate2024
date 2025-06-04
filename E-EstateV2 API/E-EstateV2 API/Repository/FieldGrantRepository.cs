@@ -3,8 +3,6 @@ using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.X9;
-
 
 namespace E_EstateV2_API.Repository
 {

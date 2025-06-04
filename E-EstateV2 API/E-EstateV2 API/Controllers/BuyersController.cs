@@ -1,9 +1,6 @@
-﻿using E_EstateV2_API.Data;
-using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using E_EstateV2_API.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace E_EstateV2_API.Controllers
 {
@@ -40,6 +37,17 @@ namespace E_EstateV2_API.Controllers
             buyer.updatedDate = DateTime.Now;
             var updatedBuyer = await _genericRepository.Update(buyer);
             return Ok(updatedBuyer);
+        }
+
+
+        [HttpGet]
+        [Route("{estateId:int}")]
+        public async Task<IActionResult> GetBuyersByEstateId([FromRoute] int estateId)
+        {
+            var buyers = await _genericRepository.GetAll();
+            var sortedBuyer = buyers.Where(x => x.estateId == estateId)
+                .OrderByDescending(x => x.isActive).ToList();
+            return Ok(sortedBuyer);
         }
     }
 }

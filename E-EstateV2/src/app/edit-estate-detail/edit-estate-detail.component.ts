@@ -21,6 +21,7 @@ import { EstateDetailService } from '../_services/estate-detail.service';
 import { SubscriptionService } from '../_services/subscription.service';
 import { SpinnerService } from '../_services/spinner.service';
 import { RrimgeorubberIntegrationService } from '../_services/rrimgeorubber-integration.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-estate-detail',
@@ -70,6 +71,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionService,
     private spinnerService: SpinnerService,
     private rrimGeoRubberService: RrimgeorubberIntegrationService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -160,42 +162,81 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
 
   update() {
     this.spinnerService.requestStarted();
-    this.getGeoJson()
     if (this.estateDetail.id == undefined) {
-      // Preparing data for a new estate detail
-      this.estateDetail.estateId = this.estate.id;
-      this.estateDetail.estateIdOld = this.estate.id;
-      this.estateDetail.licenseNo = this.estate.licenseNo;
-      this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
-      this.estateDetail.createdBy = this.sharedService.userId.toString();
-      this.estateDetail.createdDate = new Date();
-      this.estateDetail.polygonArea = this.polygonTotalArea
-      this.estateDetail.msnrStatus = this.msnrStatus
+      if (this.estateDetail.plantingMaterialId == undefined) {
+        this.spinnerService.requestEnded();
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please fill up the form',
+        });
+      } else {
+        swal.fire({
+          title: 'PDPA Consent Required',
+          html: `
+                <div style="position: relative; height: 348px; overflow: hidden;">
+                  <iframe src="../assets/PDPA-LGM.pdf" 
+                          width="100%" 
+                          height="100%" 
+                          style="border: none; pointer-events: auto;"></iframe>
+                </div>
+              `,
+          icon: 'info',
+          confirmButtonText: 'I Agree',
+          allowOutsideClick: false, // <-- Prevent clicking outside
+          allowEscapeKey: false,// <-- Prevent pressing ESC
+          allowEnterKey: false, // <-- Optional: block ENTER key
+          width: 800,
+          didOpen: () => {
+            const titleElement = document.querySelector('.swal2-title');
+            if (titleElement) {
+              (titleElement as HTMLElement).style.marginBottom = '0';
+            }
+            // Resize the icon after the alert opens
+            const iconElement = document.querySelector('.swal2-icon');
+            if (iconElement) {
+              (iconElement as HTMLElement).style.width = '50px'; // Set desired width
+              (iconElement as HTMLElement).style.height = '50px'; // Set desired height
+            }
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.estateDetail.estateId = this.estate.id;
+            this.estateDetail.estateIdOld = this.estate.id;
+            this.estateDetail.licenseNo = this.estate.licenseNo;
+            this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;
+            this.estateDetail.createdBy = this.sharedService.userId.toString();
+            this.estateDetail.createdDate = new Date();
+            this.estateDetail.polygonArea = this.polygonTotalArea
+            this.estateDetail.msnrStatus = this.msnrStatus
+            this.estateDetail.isPDPA = true
+            const { plantingMaterial, ...newObj } = this.estateDetail;
+            this.filteredEstate = newObj;
+            this.estateDetailService.addEstateDetail(this.estateDetail)
+              .subscribe({
+                next: (response) => {
+                  this.spinnerService.requestEnded();
+                  swal.fire({
+                    title: 'Done!',
+                    text: 'Estate successfully updated!',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1000
+                  });
+                  this.dialog.close();
+                },
+                error: (err) => {
 
-      // Calling service to add estate detail
-      this.estateDetailService.addEstateDetail(this.estateDetail)
-        .subscribe({
-          next: (response) => {
+                }
+              });
+          } else {
             this.spinnerService.requestEnded();
-            swal.fire({
-              title: 'Done!',
-              text: 'Estate successfully updated!',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000
-            });
             this.dialog.close();
-          },
-          error: (err) => {
-            this.spinnerService.requestEnded();
-            swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Please fill up the form',
-            });
+            this.router.navigateByUrl('/login')
+            localStorage.clear()
           }
         });
-
+      }
     } else {
       // Preparing data for updating estate detail
       this.estateDetail.plantingMaterialId = this.estateDetail.plantingMaterialId;

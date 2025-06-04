@@ -24,4 +24,8 @@ export class CompanyContactService {
   updateCompanyContact(companyContact: CompanyContact): Observable<CompanyContact> {
     return this.http.put<CompanyContact>(this.baseUrl + '/CompanyContacts/UpdateCompanyContact', companyContact)
   }
+
+  getCompanyContactByCompanyId(companyId:number):Observable<CompanyContact[]>{
+    return this.http.get<CompanyContact[]>(this.baseUrl + '/CompanyContacts/GetCompanyContactByCompanyId/'+ companyId)
+  }
 }

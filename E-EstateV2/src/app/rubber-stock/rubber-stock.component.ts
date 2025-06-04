@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { Estate } from '../_interface/estate';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { RubberStockDetailComponent } from '../rubber-stock-detail/rubber-stock-
 import { SubscriptionService } from '../_services/subscription.service';
 import { CuplumpRubberStockComponent } from './cuplump-rubber-stock/cuplump-rubber-stock.component';
 import { LatexRubberStockComponent } from './latex-rubber-stock/latex-rubber-stock.component';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-rubber-stock',
@@ -28,7 +29,9 @@ export class RubberStockComponent implements OnInit, OnDestroy {
     private rubberStockService: RubberStockService,
     private sharedService: SharedService,
     private datePipe: DatePipe,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private estateService: EstateDetailService,
+    private router: Router
   ) {
     this.previousDate.setMonth(this.previousDate.getMonth() - 1)
   }
@@ -46,6 +49,8 @@ export class RubberStockComponent implements OnInit, OnDestroy {
   date: any
   previousDate = new Date()
   estate: any = {} as any
+  estateDetail: any = {} as any
+
 
   @ViewChild('cuplumpStock') cuplumpStock: CuplumpRubberStockComponent | undefined;
   @ViewChild('latexStock') latexStock: LatexRubberStockComponent | undefined;
@@ -62,6 +67,7 @@ export class RubberStockComponent implements OnInit, OnDestroy {
             .subscribe(
               Response => {
                 this.estate = Response
+                this.checkEstateDetail()
                 this.isLoading = false
               })
           this.subscriptionService.add(getOneEstate);
@@ -70,17 +76,37 @@ export class RubberStockComponent implements OnInit, OnDestroy {
     }, 2000)
   }
 
+  checkEstateDetail() {
+    this.estateService.getEstateDetailbyEstateId(this.sharedService.estateId)
+      .subscribe(
+        Response => {
+          if (Response != null) {
+            this.estateDetail = Response;
+          } else {
+            // If the estate detail is null, show the alert
+            swal.fire({
+              icon: 'info',
+              title: 'Information',
+              text: 'Please update Estate Profile in General',
+            });
+            this.router.navigateByUrl('/estate-detail/' + this.estate.id)
+          }
+        }
+      )
+  }
+
 
   openDialog(estate: Estate, stock: RubberStock[]) {
     const dialog = this.dialog.open(AddRubberStockComponent, {
-      data: { estate: estate, stock: stock }})
-      dialog.afterClosed()
-          .subscribe(
-            Response => {
-              this.ngOnInit()
-              this.refreshTables();
-            });
-          }
+      data: { estate: estate, stock: stock }
+    })
+    dialog.afterClosed()
+      .subscribe(
+        Response => {
+          this.ngOnInit()
+          this.refreshTables();
+        });
+  }
 
   getStock() {
     setTimeout(() => {
@@ -125,10 +151,10 @@ export class RubberStockComponent implements OnInit, OnDestroy {
   }
 
 
-  
+
 
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }

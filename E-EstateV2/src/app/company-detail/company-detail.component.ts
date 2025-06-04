@@ -7,7 +7,6 @@ import { Location } from '@angular/common';
 import { Estate } from '../_interface/estate';
 import { SharedService } from '../_services/shared.service';
 import { Field } from '../_interface/field';
-import { AuthGuard } from '../_interceptor/auth.guard.interceptor';
 import { CompanyService } from '../_services/company.service';
 import { EstateService } from '../_services/estate.service';
 import { FieldService } from '../_services/field.service';
@@ -19,7 +18,6 @@ import { CompanyContactService } from '../_services/company-contact.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { CompanyDetail } from '../_interface/company-detail';
 import { SubscriptionService } from '../_services/subscription.service';
-import { MembershipService } from '../_services/membership.service';
 import { CompanyDetailService } from '../_services/company-detail.service';
 
 @Component({
@@ -80,7 +78,6 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
     private location: Location,
     private fieldService: FieldService,
     private sharedService: SharedService,
-    private auth: AuthGuard,
     private dialog: MatDialog,
     private companyContactService: CompanyContactService,
     private myLesenService: MyLesenIntegrationService,
@@ -128,11 +125,10 @@ export class CompanyDetailComponent implements OnInit, OnDestroy {
   }
 
   getContact() {
-    const getContact = this.companyContactService.getCompanyContact()
+    const getContact = this.companyContactService.getCompanyContactByCompanyId(this.company.id)
       .subscribe(
         Response => {
-          const contacts = Response
-          this.contacts = contacts.filter(x => x.companyId == this.company.id)
+          this.contacts = Response
         }
       )
     this.subscriptionService.add(getContact);

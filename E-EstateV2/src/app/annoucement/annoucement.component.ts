@@ -17,7 +17,6 @@ export class AnnoucementComponent implements OnInit, OnDestroy {
   constructor(
     private announcementService: AnnoucementService,
     private subscriptionService:SubscriptionService
-
   ) { }
 
   ngOnInit(): void {

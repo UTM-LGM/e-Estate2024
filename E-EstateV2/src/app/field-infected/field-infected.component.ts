@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Field } from '../_interface/field';
 import { FieldDisease } from '../_interface/fieldDisease';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { FieldService } from '../_services/field.service';
 import { SharedService } from '../_services/shared.service';
@@ -16,6 +16,7 @@ import { SubscriptionService } from '../_services/subscription.service';
 import { DiseaseCategoryService } from '../_services/disease-category.service';
 import { DiseaseCategory } from '../_interface/diseaseCategory';
 import { SpinnerService } from '../_services/spinner.service';
+import { EstateDetailService } from '../_services/estate-detail.service';
 
 @Component({
   selector: 'app-field-infected',
@@ -46,7 +47,9 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
 
   diseaseCategory: DiseaseCategory[] = []
   diseaseName: FieldDisease[] = []
+  estateDetail: any = {} as any
 
+  todayDate = new Date().toISOString().split('T')[0];
 
   sortableColumn = [
     { columnName: 'no', displayText: 'No' },
@@ -73,6 +76,8 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     private subscriptionService: SubscriptionService,
     private diseaseCategoryService: DiseaseCategoryService,
     private spinnerService: SpinnerService,
+    private estateService: EstateDetailService,
+    private router: Router
   ) { }
 
 
@@ -83,6 +88,23 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     this.getFieldDisease()
     this.fieldInfected.fieldId = 0
     this.getDiseaseCategory()
+    this.fieldInfected.dateScreening = this.todayDate 
+  }
+
+  checkDate() {
+    const selectedDate = new Date(this.fieldInfected.dateScreening);
+    const today = new Date(this.todayDate);
+
+    if (selectedDate > today) {
+      swal.fire({
+        icon: 'warning',
+        title: 'Invalid Date',
+        text: 'Date of Screening cannot be in the future!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.fieldInfected.dateScreening = this.todayDate;
+      });
+    }
   }
 
   getEstate() {
@@ -93,6 +115,7 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
             .subscribe(
               Response => {
                 this.estate = Response
+                this.checkEstateDetail()
                 this.getFieldInfected(routerParams['id'])
               })
           this.subscriptionService.add(getOneEstate);
@@ -100,6 +123,25 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
       });
     }, 2000)
   }
+
+  checkEstateDetail() {
+      this.estateService.getEstateDetailbyEstateId(this.sharedService.estateId)
+        .subscribe(
+          Response => {
+            if (Response != null) {
+              this.estateDetail = Response;
+            } else {
+              // If the estate detail is null, show the alert
+              swal.fire({
+                icon: 'info',
+                title: 'Information',
+                text: 'Please update Estate Profile in General',
+              });
+              this.router.navigateByUrl('/estate-detail/' + this.estate.id)
+            }
+          }
+        )
+    }
 
   getFieldInfected(estateId: number) {
     const getFieldInfected = this.fieldInfectedService.getFieldInfectedByEstateId(estateId)
@@ -114,11 +156,11 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   }
 
   getField() {
-    const getField = this.fieldService.getField()
+    const getField = this.fieldService.getFieldByEstateId(this.sharedService.estateId)
       .subscribe(
         Response => {
           this.allField = Response
-          this.filteredFields = this.allField.filter(x => x.estateId == this.sharedService.estateId && x.isActive == true && !x.fieldStatus?.toLowerCase().includes("conversion to other crop"))
+          this.filteredFields = this.allField.filter(x => x.isActive == true && !x.fieldStatus?.toLowerCase().includes("conversion to other crop"))
         }
       )
     this.subscriptionService.add(getField);
@@ -138,21 +180,23 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
   }
 
   getDiseaseCategory() {
-    this.diseaseCategoryService.getDiseaseCategory()
+    const getDiseaseCategory = this.diseaseCategoryService.getDiseaseCategory()
       .subscribe(
         Response => {
           this.diseaseCategory = Response
         }
       )
+      this.subscriptionService.add(getDiseaseCategory)
   }
 
   getDiseaseName() {
-    this.fieldDiseaseService.getFieldDisease()
+    const getDiseaseName = this.fieldDiseaseService.getFieldDisease()
       .subscribe(
         Response => {
           this.diseaseName = Response.filter(y => y.diseaseCategoryId == this.fieldInfected.diseaseCategoryId && y.isActive == true)
         }
       )
+    this.subscriptionService.add(getDiseaseName)
   }
 
   toggleField(event: any) {
@@ -214,17 +258,6 @@ export class FieldInfectedComponent implements OnInit, OnDestroy {
     } else {
       this.currentSortedColumn = columnName;
       this.order = this.order === 'desc' ? 'asc' : 'desc'
-    }
-  }
-
-  checkFieldName() {
-    const field = this.allField.filter(x => x.estateId == this.sharedService.estateId)
-    if (field.some((s: any) => s.fieldName.toLowerCase() === this.fieldInfected.fieldName.toLowerCase())) {
-      swal.fire({
-        text: 'Field/Block Name already exists!',
-        icon: 'error'
-      });
-      this.field.fieldName = ''
     }
   }
 

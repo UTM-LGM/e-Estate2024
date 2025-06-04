@@ -8,7 +8,6 @@
     </div>
     <span class="span" style="cursor: pointer;" routerLink="/home"><img style="padding: 5px;"
         src="assets/Images/RRIMestet-Logo1.png" /></span>&nbsp;
-    <!-- <span class="homelink" routerLink="/home">Malaysian Rubber Board</span> -->
 
     <span class="flexExpand"></span>
     <span style="cursor: pointer;" [matMenuTriggerFor]="profile"><i class="fa fa-address-card"></i></span> &nbsp;
@@ -27,44 +26,56 @@
     </div>
 
     <mat-menu #profile="matMenu">
-      <div style="padding: 10px;overflow: hidden; font-size: 14px;">
-        <span><i class="fa fa-id-card"></i> Full Name: {{fullName}}</span><br />
-        <span><i class="fa fa-id-card"></i> Username: {{username}} </span><br />
-        <span><i class="fa fa-envelope"></i> Email: {{email}}</span><br />
-        <span><i class="fa fa-user"></i> Position : {{position}}</span><br />
-        <hr>
-        <div style="text-align: center;">
-          <div *ngIf="role != 'Admin' && role != 'Management'">
-            <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change Password</a><br />
-          </div>
-          <button *ngIf="role != 'Admin' && role != 'Management'" class="btn-danger" (click)="logOut()">LOGOUT</button>
-          <button *ngIf="role == 'Admin' || role == 'Management'" class="btn-danger" (click)="logOutStaff()">LogOut
-            Staff</button>
-        </div>
 
+      <div style="padding: 10px;overflow: hidden; font-size: 14px;">
+        <div class="subsection">
+          <h1>User Profile</h1>
+        </div>
+        <div class="subsection2">
+          <span><i class="fa fa-id-card"></i> Full Name: {{fullName}}</span><br />
+          <span><i class="fa fa-id-card"></i> Username: {{username}} </span><br />
+          <span><i class="fa fa-envelope"></i> Email: {{email}}</span><br />
+          <span><i class="fa fa-user"></i> Position : {{position}}</span><br />
+          <hr>
+          <div style="text-align: center;">
+            <div *ngIf="role != 'Admin' && role != 'Management'">
+              <a (click)="changePassword()" style="text-decoration: underline; cursor: pointer;">Change
+                Password</a><br />
+            </div>
+            <button *ngIf="role != 'Admin' && role != 'Management'" class="btn-danger"
+              (click)="logOut()">LOGOUT</button>
+            <button *ngIf="role == 'Admin' || role == 'Management'" class="btn-danger" (click)="logOutStaff()">LogOut
+              Staff</button>
+          </div>
+
+        </div>
       </div>
     </mat-menu>
 
     <mat-menu #info="matMenu">
       <div style="padding: 10px;overflow: hidden; font-size: 14px; text-align: center;">
         <div *ngIf="role == 'EstateClerk'">
-          <span style="font-weight: bold;">Estate Responsibility</span><br />
-          <hr />
-          <span>
-            Estate is responsible for filling in daily sales, monthly production, total workforce, stock
-            and annually rubber plantation area, production costs information.
-          </span>
-          <br />
-          <hr style="border-top: 2px dotted navy">
+          <div class="subsection">
+            <h1>Estate Responsibility</h1>
+          </div>
+          <div class="subsection2">
+            <span>
+              Estate is responsible for filling in daily sales, monthly production, total workforce, stock
+              and annually rubber plantation area, production costs information.
+            </span>
+          </div>
         </div>
 
-        <span style="font-weight: bold;">RRIMestet Info</span><br />
-        <hr />
-        <span>Data, statistics and information obtained from the implementation of the RRIMestet project are rubber
-          production data,
-          rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate
-          sector.</span>
-        <hr />
+        <div class="subsection">
+          <h1>RRIMestet Info</h1>
+        </div>
+
+        <div class="subsection2">
+          <span>Data, statistics and information obtained from the implementation of the RRIMestet project are rubber
+            production data,
+            rubber production costs, rubber productivity, rubber plantation area and the total workforce of the estate
+            sector.</span>
+        </div>
 
         <div>
           <button *ngIf="role == 'CompanyAdmin'" (click)="downloadFileAdmin()" class="btn-update">User Manual Company

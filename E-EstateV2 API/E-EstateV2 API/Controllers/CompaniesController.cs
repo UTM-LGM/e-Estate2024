@@ -1,8 +1,5 @@
-﻿using E_EstateV2_API.Data;
-using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_EstateV2_API.Controllers

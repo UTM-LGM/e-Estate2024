@@ -1,26 +1,34 @@
 <br />
-<h1>Field Disease Utility</h1>
-<form>
-   <label>Disease Category : </label>
-  <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldDisease.diseaseCategoryId">
-    <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
-      {{ category.category }}
-    </mat-option>
-  </mat-select>
-  <label>Disease Name : </label>
-  <input type="text" name="diseaseName" [(ngModel)]="fieldDisease.diseaseName" />
+<div class="subsection">
+  <h1>Field Disease Utility</h1>
+</div>
 
-</form>
+<div class="subsection2">
+  <form>
+    <label>Disease Category : </label>
+    <mat-select placeholder="Please Choose" name="category" [(ngModel)]="fieldDisease.diseaseCategoryId">
+      <mat-option *ngFor="let category of diseaseCategory" [value]="category.id">
+        {{ category.category }}
+      </mat-option>
+    </mat-select>
+    <label>Disease Name : </label>
+    <input type="text" name="diseaseName" [(ngModel)]="fieldDisease.diseaseName" />
 
-<button style="float: right" class="btn-add" (click)="submit()">
-  Add &nbsp; <i class="fa fa-plus"></i>
-</button>
+  </form>
 
+
+  <button style="float: right" class="btn-add" (click)="submit()">
+    Add &nbsp; <i class="fa fa-plus"></i>
+  </button>
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Field Disease</h1>
-<div class="box-container">
+
+<div class="subsection">
+  <h1>List of Field Disease</h1>
+</div>
+
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Field Disease" />
   <table style="width: 100%">
     <tr>

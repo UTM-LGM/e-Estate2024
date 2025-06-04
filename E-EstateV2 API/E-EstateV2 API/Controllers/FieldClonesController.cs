@@ -1,5 +1,4 @@
-﻿using E_EstateV2_API.Data;
-using E_EstateV2_API.IRepository;
+﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.AspNetCore.Mvc;
 

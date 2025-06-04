@@ -1,24 +1,31 @@
 <br />
-<h1>Slide Announcement Utility</h1>
-<form>
-  <label>Tittle : </label>
-  <input type="text" name="tittle" [(ngModel)]="announcement.tittle" />
-  <label>File Upload <span style="color: red;">(Size: 840px X 450px)</span> : </label>
-  <input type="file" name="file" (change)="onFileSelected($event)" />
-  <label>Hierarchy (Order No) : </label>
-  <input type="number" name="hierarchy" [(ngModel)]="announcement.hierarchy" />
-</form>
+<div class="subsection">
+  <h1>Slide Announcement Utility</h1>
+</div>
 
-<button style="float: right" class="btn-add" (click)="submit()">
-  Add &nbsp; <i class="fa fa-plus"></i>
-</button>
+<div class="subsection2">
+  <form>
+    <label>Tittle : </label>
+    <input type="text" name="tittle" [(ngModel)]="announcement.tittle" />
+    <label>File Upload <span style="color: red;">(Size: 840px X 450px)</span> : </label>
+    <input type="file" name="file" (change)="onFileSelected($event)" />
+    <label>Hierarchy (Order No) : </label>
+    <input type="number" name="hierarchy" [(ngModel)]="announcement.hierarchy" />
+  </form>
 
+  <button style="float: right" class="btn-add" (click)="submit()">
+    Add &nbsp; <i class="fa fa-plus"></i>
+  </button>
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Slide Announcement</h1>
-<div class="box-container">
-  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Slide Announcement" />
+<div class="subsection">
+  <h1>List of Slide Announcement</h1>
+</div>
+
+<div class="subsection2">
+  <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)"
+    placeholder="Filter Slide Announcement" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>

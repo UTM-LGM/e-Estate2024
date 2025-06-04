@@ -9,24 +9,6 @@
     <button class="btn-update" (click)="saveNewFilesUpdate()" *ngIf="isUpdating">Save New Files</button>
     <hr />
 
-    <!-- <div *ngIf="files.length > 0 && !isUpdating">
-      <div *ngFor="let file of files; let i = index" class="file-container">
-        <p>{{ isUpdating ? file.name : file.name }}</p>
-        <div class="file-actions">
-          <label for="updateFile{{ i }}" class="btn-update">Update &nbsp; <i class="fa fa-pencil"></i></label>
-          <input *ngIf="!isUpdating" id="updateFile{{ i }}" type="file" accept=".pdf" (change)="updateFile(i, $event)"
-            style="display: none;" />
-
-            <button class="btn-del" (click)="deleteFile(i)">
-              Delete &nbsp; <i class="fa fa-trash"></i>
-            </button>
-        </div>
-
-        <embed [src]="getFileUrl(file)" type="application/pdf" width="100%" height="500px" />
-        <hr />
-      </div>
-    </div> -->
-
     <div *ngIf="fileAttachments.length > 0">
       <div *ngFor="let file of fileAttachments; let i = index" class="file-container">
         <p>{{ isUpdating ? file.fileName : file.name }}</p>

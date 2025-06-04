@@ -1,7 +1,6 @@
 ﻿using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_EstateV2_API.Controllers
@@ -19,10 +18,16 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
-        //[Route("{LOC}/{buyerLicenseNo}")]
         public async Task<IActionResult> GetRubberSaleByLOC(string LOC, string buyerLicenseNo)
         {
             var rubberSale = await _rubberSaleIntegrationRepository.GetRubberSaleByLOC(LOC, buyerLicenseNo);
+            return Ok(rubberSale);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRubberSaleByLOCUIP(string LOC)
+        {
+            var rubberSale = await _rubberSaleIntegrationRepository.GetRubberSaleByLOCUIP(LOC);
             return Ok(rubberSale);
         }
 

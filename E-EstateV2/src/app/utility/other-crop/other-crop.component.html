@@ -1,5 +1,9 @@
 <br />
-<h1>Other Crop Utility</h1>
+<div class="subsection">
+  <h1>Other Crop Utility</h1>
+</div>
+
+<div class="subsection2">
 <form>
   <label>Other Crop : </label>
   <input type="text" name="otherCrop" [(ngModel)]="otherCrop.otherCrop" />
@@ -9,17 +13,20 @@
   Add &nbsp; <i class="fa fa-plus"></i>
 </button>
 
+</div>
 <br /><br />
-<hr />
 
-<h1>List of Other Crop</h1>
-<div class="box-container">
+<div class="subsection">
+  <h1>List of Other Crop</h1>
+</div>
+
+<div class="subsection2">
   <input type="text" [(ngModel)]="term" (ngModelChange)="onFilterChange($event)" placeholder="Filter Other Crop" />
   <table style="width: 100%">
     <tr>
       <th width="30px">No</th>
-      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="otherCrops" [attr.data-order]="order"
-        [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
+      <th style="cursor: pointer;" *ngFor="let column of sortableColumns" scope="col" [appSort]="otherCrops"
+        [attr.data-order]="order" [attr.data-name]="column.columnName" (click)="toggleSort(column.columnName)">
         {{ column.displayText }}
       </th>
       <th width="90px">Action</th>

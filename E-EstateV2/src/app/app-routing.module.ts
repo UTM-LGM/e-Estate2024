@@ -78,6 +78,9 @@ import { AreaByCloneComponent } from './report-rubber-area-by-clone/area-by-clon
 import { GenerateReceiptComponent } from './generate-receipt/generate-receipt.component';
 import { PolygonComponent } from './polygon/polygon.component';
 import { RubberProductionYearComponent } from './report-production-by-year/rubber-production-year/rubber-production-year.component';
+import { ReportRubberSaleAdminComponent } from './report-rubber-sale-admin/report-rubber-sale-admin.component';
+import { ReportEstateContactComponent } from './report-estate-contact/report-estate-contact.component';
+import { AmendRubberSaleComponent } from './amend-rubber-sale/amend-rubber-sale.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -123,6 +126,7 @@ const routes: Routes = [
       { path: 'add-estate', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'add-estate/:id', component: AddEstateComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin'] } },
       { path: 'estate-list', component: EstateListComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] } },
+      { path: 'amend-rubber-sale', component: AmendRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management'] } },
       { path: 'estate-detail/:id', component: EstateDetailComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'field-info/:id', component: FieldInfoComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
       { path: 'add-field/:id', component: AddFieldComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'CompanyAdmin', 'EstateClerk'] } },
@@ -228,7 +232,16 @@ const routes: Routes = [
       {
         path: 'report-rubber-sale',
         component: ReportRubberSaleComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+      },
+      {
+        path: 'report-rubber-sale-admin',
+        component: ReportRubberSaleAdminComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
+      },
+      {
+        path: 'report-estate-contact',
+        component: ReportEstateContactComponent, canActivate: [AuthGuard], data: { permittedRoles: ['Admin', 'Management', 'EstateClerk', 'CompanyAdmin'] },
       }
+
     ],
   },
   { path: '**', redirectTo: '' }

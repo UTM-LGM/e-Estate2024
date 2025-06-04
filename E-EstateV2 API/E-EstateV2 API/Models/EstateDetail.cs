@@ -21,6 +21,7 @@ namespace E_EstateV2_API.Models
 
         public float polygonArea { get; set; }
         public bool MSNRStatus { get; set; }
+        public bool isPDPA { get; set; }
         
     }
 }

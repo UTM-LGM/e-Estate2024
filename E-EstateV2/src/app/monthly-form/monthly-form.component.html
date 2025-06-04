@@ -1,30 +1,32 @@
 <div class="box-container">
-
-  <!-- <ngx-skeleton-loader *ngIf="isLoading" appearance="line" animation="progress-dark"
-    [theme]="{height:'20px', width:'50px'}"> </ngx-skeleton-loader>
-  <h1>{{estate.name}}</h1> -->
-  <h1>Monthly Form</h1>
+  <div class="subsection">
+    <h1>Monthly Form</h1>
+  </div>
 
   <div class="monthYear">
     <p style="padding-right: 40px; margin-top: 15px;">Month and Year:</p>
     <!-- <input type="month"  value="{{ previousMonth | date : 'YYY-MM' }}" /> -->
-    <input type="month" #month value="{{ previousMonth | date : 'YYY-MM' }}" [disabled]="!isLaborTabDisabled || !isLaborShortageTabDisabled" (input)="monthSelected(month.value)" />
+    <input type="month" name="month" [(ngModel)]="selectedMonth" #month
+      [disabled]="!isLaborTabDisabled || !isLaborShortageTabDisabled" (input)="monthSelected(month.value)" />
   </div>
 
   <mat-tab-group mat-align-tabs="center" #tabGroup>
     <mat-tab label="Production" [disabled]="isProductionTabDisabled" style="color:red">
       <ng-template matTabContent>
-      <app-field-production-monthly (nextTabEvent)="goToNextTab()" [selectedMonthYear]="date"></app-field-production-monthly>
+        <app-field-production-monthly (nextTabEvent)="goToNextTab()"
+          [selectedMonthYear]="selectedMonthForTabs"></app-field-production-monthly>
       </ng-template>
     </mat-tab>
 
     <mat-tab label="Labor" [disabled]="isLaborTabDisabled">
-      <app-labor-info-monthly (backTabEvent)="goToBackTab()" (nextTabEvent)="goToNextTab1()" [selectedMonthYear]="date"></app-labor-info-monthly>
+      <app-labor-info-monthly (backTabEvent)="goToBackTab()" (nextTabEvent)="goToNextTab1()"
+        [selectedMonthYear]="selectedMonthForTabs"></app-labor-info-monthly>
     </mat-tab>
 
     <mat-tab label="Labor Shortage" [disabled]="isLaborShortageTabDisabled">
       <ng-template matTabContent>
-        <app-worker-shortage (backTabEvent)="goToBackTab1()" [selectedMonthYear]="date"></app-worker-shortage>
+        <app-worker-shortage (backTabEvent)="goToBackTab1()"
+          [selectedMonthYear]="selectedMonthForTabs"></app-worker-shortage>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

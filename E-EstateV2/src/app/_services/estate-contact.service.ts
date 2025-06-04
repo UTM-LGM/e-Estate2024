@@ -13,8 +13,12 @@ export class EstateContactService {
 
   constructor(private http: HttpClient) { }
 
-  getCompanyContact(): Observable<EstateContact[]> {
+  getEstateContact(): Observable<EstateContact[]> {
     return this.http.get<EstateContact[]>(this.baseUrl + '/EstateContacts/GetEstateContact')
+  }
+
+  getEstateContactByEstateId(estateId:number):Observable<EstateContact[]>{
+    return this.http.get<EstateContact[]>(this.baseUrl + '/EstateContacts/GetEstateContactByEstateId/' + estateId)
   }
 
   addEstateContact(estateContact: any): Observable<EstateContact> {

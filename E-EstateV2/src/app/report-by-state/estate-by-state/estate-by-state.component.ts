@@ -20,6 +20,8 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   year = ''
   startMonth = ''
   endMonth = ''
+  startDate: any
+  endDate: any
 
   pageNumber = 1
   isLoading = true
@@ -42,7 +44,6 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // this.year = new Date().getFullYear().toString()
     this.isLoading = false
   }
 
@@ -50,11 +51,21 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.stateTotalAreasArray = []
     this.getEstate()
+    if (this.endMonth) {
+      const [year, month] = this.endMonth.split('-').map(Number); // "2025-12" -> [2025, 12]
+      const endDate = new Date(year, month, 0); // Day 0 of next month = last day of current
+      endDate.setHours(23, 59, 59, 999); // Set to 23:59:59.999
+      this.endDate = endDate;
+    }
   }
 
   chageStartMonth() {
     this.endMonth = ''
     this.stateTotalAreasArray = []
+    if (this.startMonth) {
+      const [year, month] = this.startMonth.split('-').map(Number); // "2025-01" -> [2025, 1]
+      this.startDate = new Date(year, month - 1, 1, 0, 0, 0); // Set to first day of month at 00:00
+    }
   }
 
   toggleSort(columnName: string) {
@@ -79,40 +90,30 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
   }
 
   calculateTotalAllArea() {
-    const startDate = new Date(`${this.startMonth}-01`);
-    const endDate = new Date(`${this.endMonth}`);
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
-  
+
     const observables = this.estates.map(estate =>
-      this.reportService.getStateFieldAreaById(estate.id).pipe(
+      this.fieldService.getFieldByEstateId(estate.id).pipe(
         map(response => ({
           stateId: estate.stateId,
           estateId: estate.id,
           state: estate.state,
           fields: response.filter(x => {
-            const createdDate = new Date(x.createdDate); // Ensure the createdDate is correctly parsed into Date
+            const createdDate = new Date(x.createdDate);
             return (
               x.estateId === estate.id &&
-              createdDate >= startDate &&
-              createdDate <= endDate &&
+              createdDate >= this.startDate &&
+              createdDate <= this.endDate &&
               x.isActive === true &&
-              (
-                  x.fieldStatus?.toLowerCase().includes('abandoned - untapped') ||
-                  x.fieldStatus?.toLowerCase().includes('tapped area') ||
-                  // x.fieldStatus?.toLowerCase().includes('conversion other crop to rubber') ||
-                  x.fieldStatus?.toLowerCase().includes('new planting') ||
-                  x.fieldStatus?.toLowerCase().includes('replanting')
-              )
-          );
-        })
+              [1, 3, 5, 6].includes(x.fieldStatusId)
+            );
+          })
         }))
       )
     );
-  
+
     forkJoin(observables).subscribe(results => {
       this.stateTotalAreas = {};
-  
+
       // Initialize `count` based on estates
       this.estates.forEach(estate => {
         if (!this.stateTotalAreas[estate.state]) {
@@ -125,22 +126,22 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
         }
         this.stateTotalAreas[estate.state].count++;
       });
-  
+
       // Calculate `totalArea` and `registeredEstates`
       results.forEach(result => {
         if (result.fields && result.fields.length > 0) {
           const totalArea = result.fields.reduce((acc, curr) => acc + (curr.rubberArea || 0), 0);
-  
+
           const uniqueEstates = new Set(result.fields.map(field => field.estateId));
           const registeredEstateCount = uniqueEstates.size;
-  
+
           if (this.stateTotalAreas[result.state]) {
             this.stateTotalAreas[result.state].totalArea += totalArea;
             this.stateTotalAreas[result.state].registeredEstates += registeredEstateCount;
           }
         }
       });
-  
+
       // Convert object to array
       this.stateTotalAreasArray = Object.keys(this.stateTotalAreas).map(key => ({
         state: key,
@@ -149,11 +150,11 @@ export class EstateByStateComponent implements OnInit, OnDestroy {
         stateId: this.stateTotalAreas[key].stateId,
         registeredEstates: this.stateTotalAreas[key].registeredEstates,
       }));
-  
+
       this.isLoading = false;
     });
   }
-  
+
 
   yearSelected() {
     this.estates = []

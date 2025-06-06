@@ -63,7 +63,8 @@
 
   <div style="columns:2">
     <label>Driver Ic Number (xxxxxx-xx-xxxx) <span style="color: red;">*</span> :</label>
-    <input type="text" name="driverName" placeholder="xxxxxx-xx-xxxx" [(ngModel)]="rubberSale.driverIc" (change)="validateDriverIc(rubberSale.driverIc)"/>
+    <input type="text" name="driverName" placeholder="xxxxxx-xx-xxxx" [(ngModel)]="rubberSale.driverIc"  (keyup)="formatDriverIc()" 
+    maxlength="14"/>
   </div>
 
   <div>

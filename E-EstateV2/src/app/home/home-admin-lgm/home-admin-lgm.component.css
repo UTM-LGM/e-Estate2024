@@ -128,3 +128,23 @@ span {
   align-items: center;
   justify-content: center;
 }
+
+.iframe-container {
+    width: 100%;
+    height: 75vh; /* Adjust height as needed */
+}
+
+.iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.disable-tabs {
+    position: absolute;
+    width: 100%;
+    height: 50px; 
+    background: transparent; 
+    pointer-events: all; 
+    margin-top: 356px;;
+}

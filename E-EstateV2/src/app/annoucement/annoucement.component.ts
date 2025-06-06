@@ -24,7 +24,8 @@ export class AnnoucementComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           const announcement = Response
-          this.announcements = announcement.filter(x => x.isActive == true)
+          this.announcements = announcement.filter(x => x.isActive == true).sort((a, b) => b.hierarchy
+           - a.hierarchy);
         }
       )
       this.subscriptionService.add(getAnnouncement);

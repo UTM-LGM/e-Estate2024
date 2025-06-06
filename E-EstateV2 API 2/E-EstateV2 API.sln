@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-EstateV2 API", "E-EstateV2 API\E-EstateV2 API.csproj", "{7496E8FC-15B1-436E-9E9A-3A773B0095EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7496E8FC-15B1-436E-9E9A-3A773B0095EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7496E8FC-15B1-436E-9E9A-3A773B0095EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7496E8FC-15B1-436E-9E9A-3A773B0095EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7496E8FC-15B1-436E-9E9A-3A773B0095EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E33347D-6C93-47B0-898D-F7CD8A95895D}
+	EndGlobalSection
+EndGlobal

@@ -31,7 +31,8 @@ namespace E_EstateV2_API.Repository
                 fieldName = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.fieldName).FirstOrDefault(),
                 totalTask = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.totalTask).FirstOrDefault(),
                 status = x.status,
-                estateId = _context.fields.Where(y=>y.Id == x.fieldId).Select(y=>y.estateId).FirstOrDefault()
+                estateId = _context.fields.Where(y=>y.Id == x.fieldId).Select(y=>y.estateId).FirstOrDefault(),
+                fieldIsActive = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.isActive).FirstOrDefault(),
             }).ToListAsync();
 
             return production;

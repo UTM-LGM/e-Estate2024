@@ -3,9 +3,10 @@ import { FieldProductionService } from 'src/app/_services/field-production.servi
 import { MyLesenIntegrationService } from 'src/app/_services/my-lesen-integration.service';
 import { SharedService } from 'src/app/_services/shared.service';
 import { SubscriptionService } from 'src/app/_services/subscription.service';
-import { forkJoin, map, switchMap } from 'rxjs';
+import { forkJoin, map, switchMap, tap } from 'rxjs';
 import * as XLSX from 'xlsx';
 import swal from 'sweetalert2';
+import { ReportService } from 'src/app/_services/report.service';
 
 
 @Component({
@@ -26,6 +27,11 @@ export class RubberProductionYearComponent {
   currentSortedColumn = ''
   pageNumber = 1
   itemperpage = 10
+
+
+  totalCuplumpDry = 0
+  totalLatexDry = 0
+  totalAllDry = 0
 
 
   state: any[] = []
@@ -49,6 +55,7 @@ export class RubberProductionYearComponent {
     private myLesenService: MyLesenIntegrationService,
     private subscriptionService: SubscriptionService,
     private fieldProductionService: FieldProductionService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit() {
@@ -106,23 +113,17 @@ export class RubberProductionYearComponent {
 
 
   calculateTotalProduction() {
+    // Map through filtered estates to create observables
     const observables = this.filteredEstates.map(estate =>
-      this.fieldProductionService.getProduction().pipe(
-        map((response: any) => ({
+      // Use reportService to fetch production yearly data for the current year and estate
+      this.reportService.getProductionYearly(this.year).pipe(
+        map((response: any[]) => ({
           estateId: estate.id,
           state: estate.state,
-          production: response.filter((x: any) => {
-            if (!x.monthYear) return false; // Ensure monthYear exists before splitting
-
-            const yearFromMonthYear = x.monthYear.split('-')[1]; // Extract year from 'MAY-2024'
-
-            return x.estateId === estate.id &&
-              x.status === "SUBMITTED" &&
-              yearFromMonthYear === this.year.toString();
-          })
+          production: response.filter(item => item.estateId === estate.id) // Filter production data for current estate
         })),
         switchMap(estateData => {
-          // Fetch the premise for the estateId
+          // Fetch premise data for the estate
           return this.myLesenService.getOneEstate(estateData.estateId).pipe(
             map(premise => ({
               ...estateData,
@@ -135,55 +136,50 @@ export class RubberProductionYearComponent {
 
     // Combine all observables
     forkJoin(observables).subscribe(results => {
-      // Initialize the estateTotalProduction object to store totals per estate
+      // Initialize estateTotalProduction object to store totals per estate
       this.estateTotalProduction = {};
 
       results.forEach(result => {
-        // Calculate total cuplump production for each estateId
-        const totalCuplumpProduction = result.production.reduce((acc: number, curr: { cuplump: number, cuplumpDRC: number }) => {
-          return acc + (curr.cuplump * (curr.cuplumpDRC / 100));
-        }, 0);
+        // Calculate individual totals per estate
+        const totalCuplumpDry = result.production.reduce((total, item) => total + (item.cuplumpDry || 0), 0);
+        const totalLatexDry = result.production.reduce((total, item) => total + (item.latexDry || 0), 0);
+        const totalAllDry = result.production.reduce((total, item) =>
+          total + (item.cuplumpDry || 0) + (item.latexDry || 0) + (item.ussDry || 0) + (item.othersDry || 0), 0
+        );
 
-        // Calculate total latex production for each estateId
-        const totalLatexProduction = result.production.reduce((acc: number, curr: { latex: number, latexDRC: number }) => {
-          return acc + (curr.latex * (curr.latexDRC / 100));
-        }, 0);
-
-        // Initialize if estateId does not exist in the total production object
-        if (!this.estateTotalProduction[result.estateId]) {
-          this.estateTotalProduction[result.estateId] = {
-            estateId: result.estateId,  // Store the estateId
-            state: result.state,        // Store the state
-            premise: result.premise,    // Store the premise data
-            totalCuplumpProduction: 0,
-            totalLatexProduction: 0
-          };
-        }
-
-        // Add the calculated totals for cuplump and latex production to the corresponding estate
-        this.estateTotalProduction[result.estateId].totalCuplumpProduction += totalCuplumpProduction;
-        this.estateTotalProduction[result.estateId].totalLatexProduction += totalLatexProduction;
+        // Store in the estateTotalProduction object
+        this.estateTotalProduction[result.estateId] = {
+          estateId: result.estateId,
+          state: result.state,
+          premise: result.premise,
+          totalCuplumpDry: totalCuplumpDry,
+          totalLatexDry: totalLatexDry,
+          totalAllDry: totalAllDry
+        };
       });
 
-      // Convert the estateTotalProduction object to an array
+      // Convert estateTotalProduction object to an array
       this.estateTotalProductionArray = Object.keys(this.estateTotalProduction).map(key => ({
-        estateId: this.estateTotalProduction[key].estateId,  // Include estateId
-        state: this.estateTotalProduction[key].state,        // Include state
-        premise: this.estateTotalProduction[key].premise,    // Include premise
-        cuplumpProduction: this.estateTotalProduction[key].totalCuplumpProduction,
-        latexProduction: this.estateTotalProduction[key].totalLatexProduction,
-        totalProduction: this.estateTotalProduction[key].totalCuplumpProduction + this.estateTotalProduction[key].totalLatexProduction
+        estateId: this.estateTotalProduction[key].estateId,
+        state: this.estateTotalProduction[key].state,
+        premise: this.estateTotalProduction[key].premise,
+        totalCuplumpDry: this.estateTotalProduction[key].totalCuplumpDry,
+        totalLatexDry: this.estateTotalProduction[key].totalLatexDry,
+        totalAllDry: this.estateTotalProduction[key].totalAllDry
       }));
 
-      const totalProductionSum = this.estateTotalProductionArray.reduce((acc, curr) => acc + curr.totalProduction, 0);
+      this.total = this.estateTotalProductionArray.reduce((acc, curr) =>
+        acc + curr.totalAllDry, 0
+      );
 
-      // If you need to store this sum somewhere in your object
-      this.total = totalProductionSum;
+      // Store total of all dry productions
+      // total = totalCuplumpDrySum
 
-      this.isLoading = false
-
+      // Set loading state to false
+      this.isLoading = false;
     });
   }
+
 
   toggleSort(columnName: string) {
     if (this.currentSortedColumn === columnName) {
@@ -210,9 +206,9 @@ export class RubberProductionYearComponent {
       State: row.state,
       EstateName: row.premise.name,
       LicenseNo: row.premise.licenseNo,
-      CuplumpProduction: row.cuplumpProduction,
-      LatexProduction: row.latexProduction,
-      TotalProduction: row.totalProduction
+      CuplumpProduction: row.totalCuplumpDry,
+      LatexProduction: row.totalLatexDry,
+      TotalProduction: row.totalAllDry
     }))
 
     const headerRow = [

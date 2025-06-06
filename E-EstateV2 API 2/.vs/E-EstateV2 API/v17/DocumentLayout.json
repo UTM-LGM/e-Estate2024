@@ -1,0 +1,346 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\fieldhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\fieldhistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\repository\\reportrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\repository\\reportrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\repository\\rubbersalerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\repository\\rubbersalerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\repository\\rubbersaleintegrationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\repository\\rubbersaleintegrationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\workershortage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\workershortage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\rubberstock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\rubberstock.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\rubbersales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\rubbersales.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\rubbersalehistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\rubbersalehistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\laborinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\laborinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\field.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\field.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\estatedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\estatedetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\estatecontacthistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\estatecontacthistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\estatecontact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\estatecontact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\costamount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\costamount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\buyer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\buyer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\migrations\\20250604052130_licenseid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\migrations\\20250604052130_licenseid.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|c:\\users\\sabariah\\onedrive - lembaga getah malaysia\\desktop\\e-estate2024\\e-estate2024\\e-estatev2 api 2\\e-estatev2 api\\models\\license.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7496E8FC-15B1-436E-9E9A-3A773B0095EC}|E-EstateV2 API\\E-EstateV2 API.csproj|solutionrelative:e-estatev2 api\\models\\license.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 1097,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20250604070151_removelicenseid.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Migrations\\20250604070151_removelicenseid.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBIAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:01:52.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ReportRepository.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\ReportRepository.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Repository\\ReportRepository.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\ReportRepository.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Repository\\ReportRepository.cs",
+              "ViewState": "AgIAAAcEAAAAAAAAAAAcwBAEAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:01:18.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "RubberSaleRepository.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\RubberSaleRepository.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Repository\\RubberSaleRepository.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\RubberSaleRepository.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Repository\\RubberSaleRepository.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAcwGAAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:00:58.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RubberSaleIntegrationRepository.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\RubberSaleIntegrationRepository.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Repository\\RubberSaleIntegrationRepository.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Repository\\RubberSaleIntegrationRepository.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Repository\\RubberSaleIntegrationRepository.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAUwBsAAABqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:00:51.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FieldHistory.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\FieldHistory.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\FieldHistory.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\FieldHistory.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\FieldHistory.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAA8wBwAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:14.452Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "LaborInfo.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\LaborInfo.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\LaborInfo.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\LaborInfo.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\LaborInfo.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAA2wBkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:05.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RubberSaleHistory.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberSaleHistory.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\RubberSaleHistory.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberSaleHistory.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\RubberSaleHistory.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAxwBsAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:19:52.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RubberSales.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberSales.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\RubberSales.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberSales.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\RubberSales.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAxwBwAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:19:44.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RubberStock.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberStock.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\RubberStock.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\RubberStock.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\RubberStock.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA5wBAAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:19:38.5Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "WorkerShortage.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\WorkerShortage.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\WorkerShortage.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\WorkerShortage.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\WorkerShortage.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA3wBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:19:31.394Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Field.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\Field.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\Field.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\Field.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\Field.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAABwAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:23.136Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "EstateDetail.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateDetail.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\EstateDetail.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateDetail.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\EstateDetail.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA0wBcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:31.077Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "EstateContactHistory.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateContactHistory.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\EstateContactHistory.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateContactHistory.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\EstateContactHistory.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAA/wBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:39.085Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "EstateContact.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateContact.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\EstateContact.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\EstateContact.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\EstateContact.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA9wBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:46.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CostAmount.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\CostAmount.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\CostAmount.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\CostAmount.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\CostAmount.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAA/wBYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:54.118Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Buyer.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\Buyer.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\Buyer.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\Buyer.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\Buyer.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA2wAoAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:21:01.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\ApplicationUser.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\ApplicationUser.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:21:08.628Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "20250604052130_licenseId.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Migrations\\20250604052130_licenseId.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Migrations\\20250604052130_licenseId.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Migrations\\20250604052130_licenseId.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Migrations\\20250604052130_licenseId.cs",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAQwIsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:21:30.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "License.cs",
+              "DocumentMoniker": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\License.cs",
+              "RelativeDocumentMoniker": "E-EstateV2 API\\Models\\License.cs",
+              "ToolTip": "C:\\Users\\sabariah\\OneDrive - LEMBAGA GETAH MALAYSIA\\Desktop\\e-Estate2024\\e-Estate2024\\E-EstateV2 API 2\\E-EstateV2 API\\Models\\License.cs",
+              "RelativeToolTip": "E-EstateV2 API\\Models\\License.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAzwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T05:20:02.472Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 ﻿using E_EstateV2_API.Data;
 using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
+using E_EstateV2_API.Models;
 using E_EstateV2_API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
@@ -20,24 +21,33 @@ namespace E_EstateV2_API.Repository
         //LGMAdmin
         public async Task<object> GetCurrentProduction(int year)
         {
-            var fieldProduction = await _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString())).Select(x => new
-            {
-                estateId = _context.fields.Where(y => y.Id == x.fieldId).Select(y => y.estateId).FirstOrDefault(),
-                cuplumpDry = x.cuplump * (x.cuplumpDRC / 100),
-                latexDry = x.latex * (x.latexDRC / 100),
-            }).ToListAsync();
+            var fieldProduction = await (
+                from fp in _context.fieldProductions
+                join f in _context.fields on fp.fieldId equals f.Id
+                where fp.status == "SUBMITTED"
+                      && fp.monthYear.Contains(year.ToString())
+                      && f.isActive == true
+                select new
+                {
+                    estateId = f.estateId,
+                    cuplumpDry = fp.cuplump * (fp.cuplumpDRC / 100),
+                    latexDry = fp.latex * (fp.latexDRC / 100)
+                }
+            ).ToListAsync();
 
-            var groupdFieldProduction = fieldProduction
+            var groupedFieldProduction = fieldProduction
                 .GroupBy(x => x.estateId)
-                 .Select(group => new
-                 {
-                     estateId = group.First().estateId,
-                     cuplumpDry = group.Sum(x => x.cuplumpDry),
-                     latexDry = group.Sum(x => x.latexDry),
-                 })
-                 .ToList();
-            return groupdFieldProduction;
+                .Select(group => new
+                {
+                    estateId = group.Key,
+                    cuplumpDry = Math.Round(group.Sum(x => x.cuplumpDry),2),
+                    latexDry = Math.Round(group.Sum(x => x.latexDry),2)
+                })
+                .ToList();
+
+            return groupedFieldProduction;
         }
+
 
         public async Task<object> GetProduction()
         {
@@ -265,27 +275,40 @@ namespace E_EstateV2_API.Repository
 
         public List<DTO_FieldProduction> GetProductionYearly(int year)
         {
-            var fieldProduction = _context.fieldProductions.Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString()))
-                .Join(_context.fields, prod => prod.fieldId, field => field.Id, (prod, field) => new
+            // Step 1: Query with only EF supported operations, no Math.Round, no GroupBy in EF
+            var query = _context.fieldProductions
+                .Where(x => x.status == "SUBMITTED" && x.monthYear.Contains(year.ToString()))
+                .Join(_context.fields,
+                    prod => prod.fieldId,
+                    field => field.Id,
+                    (prod, field) => new
+                    {
+                        prod.monthYear,
+                        cuplumpDryRaw = prod.cuplump * (prod.cuplumpDRC / 100.0), // keep raw values, no rounding
+                        latexDryRaw = prod.latex * (prod.latexDRC / 100.0),
+                        field.estateId,
+                        field.isActive
+                    })
+                .Where(x => x.isActive)
+                .ToList(); // fetch data into memory
+
+            // Step 2: Now group, sum, and round in-memory (LINQ to Objects)
+            var result = query
+                .GroupBy(x => new { x.monthYear, x.estateId })
+                .Select(g => new DTO_FieldProduction
                 {
-                    prod.monthYear,
-                    cuplumpDry = prod.cuplump * (prod.cuplumpDRC / 100),
-                    latexDry = prod.latex * (prod.latexDRC / 100),
-                    field.estateId
-                }).GroupBy(x => new { x.monthYear, x.estateId })
-                .Select(x => new DTO_FieldProduction
-                {
-                    monthYear = x.Key.monthYear,
-                    cuplumpDry = x.Sum(x => x.cuplumpDry),
-                    latexDry = x.Sum(x => x.latexDry),
-                    estateId = x.Key.estateId
+                    monthYear = g.Key.monthYear,
+                    // Cast to float if DTO expects float; round to 2 decimals
+                    cuplumpDry = (float)Math.Round(g.Sum(x => x.cuplumpDryRaw), 2),
+                    latexDry = (float)Math.Round(g.Sum(x => x.latexDryRaw), 2),
+                    estateId = g.Key.estateId
                 })
-                //CultureInfo to ensures that the parsing is done using a culture-independent format
-                .ToList() // Switch to client-side evaluation
                 .OrderBy(x => DateTime.ParseExact(x.monthYear, "MMM-yyyy", CultureInfo.InvariantCulture))
                 .ToList();
-            return fieldProduction;
+
+            return result;
         }
+
 
         //EstateClerk
         public async Task<object> GetStateFieldArea(string start, string end, int estateId)

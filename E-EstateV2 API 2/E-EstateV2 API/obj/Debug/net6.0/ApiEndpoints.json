@@ -1,0 +1,3524 @@
+[
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.AnnouncementsController",
+    "Method": "AddAnnouncement",
+    "RelativePath": "api/Announcements/AddAnnouncement",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "tittle",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isActive",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "createdBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "createdDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "updatedBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "updatedDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "filePath",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "hierarchy",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.AnnouncementsController",
+    "Method": "GetAnnouncements",
+    "RelativePath": "api/Announcements/GetAnnouncements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.AnnouncementsController",
+    "Method": "UpdateAnnouncement",
+    "RelativePath": "api/Announcements/UpdateAnnouncement",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "announcement",
+        "Type": "E_EstateV2_API.Models.Announcement",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "AddUser",
+    "RelativePath": "api/ApplicationUsers/AddUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "AddUserRole",
+    "RelativePath": "api/ApplicationUsers/AddUserRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.ViewModel.DTO_User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "ChangePassword",
+    "RelativePath": "api/ApplicationUsers/ChangePassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.ViewModel.DTO_User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "CheckLicenseNo",
+    "RelativePath": "api/ApplicationUsers/CheckLicenseNo/{licenseNo}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "licenseNo",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "CheckOldPassword",
+    "RelativePath": "api/ApplicationUsers/CheckOldPassword/{userId}/{oldPassword}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "oldPassword",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "CheckUsername",
+    "RelativePath": "api/ApplicationUsers/CheckUsername/{username}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "DeactiveAccount",
+    "RelativePath": "api/ApplicationUsers/DeactiveAccount",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.ViewModel.DTO_User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "GetAllUser",
+    "RelativePath": "api/ApplicationUsers/GetAllUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "GetUser",
+    "RelativePath": "api/ApplicationUsers/GetUser/{username}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "Login",
+    "RelativePath": "api/ApplicationUsers/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "E_EstateV2_API.Models.Login",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "Register",
+    "RelativePath": "api/ApplicationUsers/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "SendWelcomeEmail",
+    "RelativePath": "api/ApplicationUsers/SendWelcomeEmail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ApplicationUsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/ApplicationUsers/UpdateUser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ArgisIntegrationController",
+    "Method": "GetLandTitles",
+    "RelativePath": "api/ArgisIntegration/GetLandTitles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
+    "Method": "AddBuyer",
+    "RelativePath": "api/Buyers/AddBuyer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "buyer",
+        "Type": "E_EstateV2_API.Models.Buyer",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
+    "Method": "GetBuyers",
+    "RelativePath": "api/Buyers/GetBuyers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
+    "Method": "GetBuyersByEstateId",
+    "RelativePath": "api/Buyers/GetBuyersByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.BuyersController",
+    "Method": "UpdateBuyer",
+    "RelativePath": "api/Buyers/UpdateBuyer",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "buyer",
+        "Type": "E_EstateV2_API.Models.Buyer",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ClonesController",
+    "Method": "AddClone",
+    "RelativePath": "api/Clones/AddClone",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clone",
+        "Type": "E_EstateV2_API.Models.Clone",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ClonesController",
+    "Method": "GetClones",
+    "RelativePath": "api/Clones/GetClones",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ClonesController",
+    "Method": "UpdateClone",
+    "RelativePath": "api/Clones/UpdateClone",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clone",
+        "Type": "E_EstateV2_API.Models.Clone",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompaniesController",
+    "Method": "GetCompanies",
+    "RelativePath": "api/Companies/GetCompanies",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompaniesController",
+    "Method": "GetOneCompany",
+    "RelativePath": "api/Companies/GetOneCompany/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompaniesController",
+    "Method": "UpdateCompany",
+    "RelativePath": "api/Companies/UpdateCompany",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "company",
+        "Type": "E_EstateV2_API.Models.Company",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyContactsController",
+    "Method": "AddCompanyContact",
+    "RelativePath": "api/CompanyContacts/AddCompanyContact",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contact",
+        "Type": "E_EstateV2_API.Models.CompanyContact",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyContactsController",
+    "Method": "GetCompanyContact",
+    "RelativePath": "api/CompanyContacts/GetCompanyContact",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyContactsController",
+    "Method": "GetCompanyContactByCompanyId",
+    "RelativePath": "api/CompanyContacts/GetCompanyContactByCompanyId/{companyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyContactsController",
+    "Method": "UpdateCompanyContact",
+    "RelativePath": "api/CompanyContacts/UpdateCompanyContact",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contact",
+        "Type": "E_EstateV2_API.Models.CompanyContact",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyDetailsController",
+    "Method": "AddCompanyDetail",
+    "RelativePath": "api/CompanyDetails/AddCompanyDetail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyDetail",
+        "Type": "E_EstateV2_API.Models.CompanyDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyDetailsController",
+    "Method": "GetCompanyDetailByCompanyId",
+    "RelativePath": "api/CompanyDetails/GetCompanyDetailByCompanyId/{companyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CompanyDetailsController",
+    "Method": "UpdateCompanyDetail",
+    "RelativePath": "api/CompanyDetails/UpdateCompanyDetail",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyDetail",
+        "Type": "E_EstateV2_API.Models.CompanyDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostAmountsController",
+    "Method": "AddCostAmount",
+    "RelativePath": "api/CostAmounts/AddCostAmount",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "E_EstateV2_API.Models.CostAmount[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostAmountsController",
+    "Method": "GetCostAmounts",
+    "RelativePath": "api/CostAmounts/GetCostAmounts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostAmountsController",
+    "Method": "UpdateCostAmount",
+    "RelativePath": "api/CostAmounts/UpdateCostAmount",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "amount",
+        "Type": "E_EstateV2_API.Models.CostAmount[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostCategoriesController",
+    "Method": "AddCostCategory",
+    "RelativePath": "api/CostCategories/AddCostCategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costCategory",
+        "Type": "E_EstateV2_API.Models.CostCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostCategoriesController",
+    "Method": "GetCostCategories",
+    "RelativePath": "api/CostCategories/GetCostCategories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostCategoriesController",
+    "Method": "UpdateCostCategory",
+    "RelativePath": "api/CostCategories/UpdateCostCategory",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costCategory",
+        "Type": "E_EstateV2_API.Models.CostCategory",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostItemsController",
+    "Method": "AddCostItem",
+    "RelativePath": "api/CostItems/AddCostItem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cost",
+        "Type": "E_EstateV2_API.Models.Cost",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostItemsController",
+    "Method": "GetCostItems",
+    "RelativePath": "api/CostItems/GetCostItems",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostItemsController",
+    "Method": "UpdateCostItem",
+    "RelativePath": "api/CostItems/UpdateCostItem",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cost",
+        "Type": "E_EstateV2_API.Models.Cost",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostsController",
+    "Method": "GetCostCategoryM",
+    "RelativePath": "api/Costs/GetCostCategoryM",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostsController",
+    "Method": "GetCostIndirects",
+    "RelativePath": "api/Costs/GetCostIndirects/{costTypeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costTypeId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostsController",
+    "Method": "GetCostSubCategoryIM",
+    "RelativePath": "api/Costs/GetCostSubCategoryIM",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostsController",
+    "Method": "GetCostSubCategoryM",
+    "RelativePath": "api/Costs/GetCostSubCategoryM",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories1Controller",
+    "Method": "AddSubCatategory",
+    "RelativePath": "api/CostSubcategories1/AddSubCatategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costSubcategory1",
+        "Type": "E_EstateV2_API.Models.CostSubcategory1",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories1Controller",
+    "Method": "GetSubCategories",
+    "RelativePath": "api/CostSubcategories1/GetSubCategories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories1Controller",
+    "Method": "UpdateSubCategory",
+    "RelativePath": "api/CostSubcategories1/UpdateSubCategory",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costSubcategory1",
+        "Type": "E_EstateV2_API.Models.CostSubcategory1",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories2Controller",
+    "Method": "AddSubCategory",
+    "RelativePath": "api/CostSubcategories2/AddSubCategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costSubcategory2",
+        "Type": "E_EstateV2_API.Models.CostSubcategory2",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories2Controller",
+    "Method": "GetSubCategories",
+    "RelativePath": "api/CostSubcategories2/GetSubCategories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostSubcategories2Controller",
+    "Method": "UpdateCategory",
+    "RelativePath": "api/CostSubcategories2/UpdateCategory",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costSubcategory2",
+        "Type": "E_EstateV2_API.Models.CostSubcategory2",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostTypesController",
+    "Method": "AddCostType",
+    "RelativePath": "api/CostTypes/AddCostType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costType",
+        "Type": "E_EstateV2_API.Models.CostType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostTypesController",
+    "Method": "GetCostTypes",
+    "RelativePath": "api/CostTypes/GetCostTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CostTypesController",
+    "Method": "UpdateCostType",
+    "RelativePath": "api/CostTypes/UpdateCostType",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "costType",
+        "Type": "E_EstateV2_API.Models.CostType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CountriesController",
+    "Method": "AddCountry",
+    "RelativePath": "api/Countries/AddCountry",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "country",
+        "Type": "E_EstateV2_API.Models.Country",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CountriesController",
+    "Method": "GetCountries",
+    "RelativePath": "api/Countries/GetCountries",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CountriesController",
+    "Method": "GetCountriesAsc",
+    "RelativePath": "api/Countries/GetCountriesAsc",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CountriesController",
+    "Method": "UpdateCountry",
+    "RelativePath": "api/Countries/UpdateCountry",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "country",
+        "Type": "E_EstateV2_API.Models.Country",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CropTypesController",
+    "Method": "AddCropType",
+    "RelativePath": "api/CropTypes/AddCropType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cropType",
+        "Type": "E_EstateV2_API.Models.CropType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CropTypesController",
+    "Method": "GetCropTypes",
+    "RelativePath": "api/CropTypes/GetCropTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.CropTypesController",
+    "Method": "UpdateCropType",
+    "RelativePath": "api/CropTypes/UpdateCropType",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cropType",
+        "Type": "E_EstateV2_API.Models.CropType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.DiseaseCategoriesController",
+    "Method": "GetDiseaseCategory",
+    "RelativePath": "api/DiseaseCategories/GetDiseaseCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EmailsController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/Emails/ResetPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.ViewModel.DTO_User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EmailsController",
+    "Method": "SendEmailCountry",
+    "RelativePath": "api/Emails/SendEmailCountry",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "E_EstateV2_API.Models.Email",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EmailsController",
+    "Method": "SendEmailVerification",
+    "RelativePath": "api/Emails/SendEmailVerification",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "E_EstateV2_API.Models.Email",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EmailsController",
+    "Method": "SendResetPasswordEmail",
+    "RelativePath": "api/Emails/SendResetPasswordEmail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "E_EstateV2_API.Models.User",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EmailsController",
+    "Method": "VerifyEmail",
+    "RelativePath": "api/Emails/VerifyEmail/{encodedData}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "encodedData",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstablishmentsController",
+    "Method": "AddEstablishment",
+    "RelativePath": "api/Establishments/AddEstablishment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "establishment",
+        "Type": "E_EstateV2_API.Models.Establishment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstablishmentsController",
+    "Method": "GetEstablishments",
+    "RelativePath": "api/Establishments/GetEstablishments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstablishmentsController",
+    "Method": "UpdateEstablishment",
+    "RelativePath": "api/Establishments/UpdateEstablishment",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "establishment",
+        "Type": "E_EstateV2_API.Models.Establishment",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateContactsController",
+    "Method": "AddEstateContact",
+    "RelativePath": "api/EstateContacts/AddEstateContact",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contact",
+        "Type": "E_EstateV2_API.Models.EstateContact",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateContactsController",
+    "Method": "GetEstateContact",
+    "RelativePath": "api/EstateContacts/GetEstateContact",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateContactsController",
+    "Method": "GetEstateContactByEstateId",
+    "RelativePath": "api/EstateContacts/GetEstateContactByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateContactsController",
+    "Method": "UpdateEstateContact",
+    "RelativePath": "api/EstateContacts/UpdateEstateContact",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "contact",
+        "Type": "E_EstateV2_API.Models.EstateContact",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
+    "Method": "AddEstateDetail",
+    "RelativePath": "api/EstateDetails/AddEstateDetail",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estate",
+        "Type": "E_EstateV2_API.Models.EstateDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
+    "Method": "GetEstateDetailbyEstateId",
+    "RelativePath": "api/EstateDetails/GetEstateDetailbyEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
+    "Method": "GetEstateDetails",
+    "RelativePath": "api/EstateDetails/GetEstateDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstateDetailsController",
+    "Method": "UpdateEstateDetail",
+    "RelativePath": "api/EstateDetails/UpdateEstateDetail",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estate",
+        "Type": "E_EstateV2_API.Models.EstateDetail",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstatesController",
+    "Method": "AddEstate",
+    "RelativePath": "api/Estates/AddEstate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estate",
+        "Type": "E_EstateV2_API.Models.Estate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstatesController",
+    "Method": "CheckEstateName",
+    "RelativePath": "api/Estates/CheckEstateName/{estateName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstatesController",
+    "Method": "GetEstates",
+    "RelativePath": "api/Estates/GetEstates",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstatesController",
+    "Method": "GetOneEstate",
+    "RelativePath": "api/Estates/GetOneEstate/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.EstatesController",
+    "Method": "UpdateEstate",
+    "RelativePath": "api/Estates/UpdateEstate",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estate",
+        "Type": "E_EstateV2_API.Models.Estate",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldAttachmentsController",
+    "Method": "GetFieldAttachment",
+    "RelativePath": "api/FieldAttachments/GetFieldAttachment",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldClonesController",
+    "Method": "AddClone",
+    "RelativePath": "api/FieldClones/AddClone",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldClone",
+        "Type": "E_EstateV2_API.Models.FieldClone[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldClonesController",
+    "Method": "UpdateFieldCloneStatus",
+    "RelativePath": "api/FieldClones/UpdateFieldCloneStatus",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldClone",
+        "Type": "E_EstateV2_API.Models.FieldClone",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldConversionsController",
+    "Method": "AddConversion",
+    "RelativePath": "api/FieldConversions/AddConversion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldConversion",
+        "Type": "E_EstateV2_API.Models.FieldConversion",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldConversionsController",
+    "Method": "GetConversions",
+    "RelativePath": "api/FieldConversions/GetConversions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldConversionsController",
+    "Method": "UpdateConversion",
+    "RelativePath": "api/FieldConversions/UpdateConversion",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldConversion",
+        "Type": "E_EstateV2_API.Models.FieldConversion",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldDiseasesController",
+    "Method": "AddFieldDisease",
+    "RelativePath": "api/FieldDiseases/AddFieldDisease",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldDisease",
+        "Type": "E_EstateV2_API.Models.FieldDisease",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldDiseasesController",
+    "Method": "GetFieldDisease",
+    "RelativePath": "api/FieldDiseases/GetFieldDisease",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldDiseasesController",
+    "Method": "UpdateFieldDisease",
+    "RelativePath": "api/FieldDiseases/UpdateFieldDisease",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldDisease",
+        "Type": "E_EstateV2_API.Models.FieldDisease",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldGrantsController",
+    "Method": "AddFieldGrant",
+    "RelativePath": "api/FieldGrants/AddFieldGrant",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldGrants",
+        "Type": "E_EstateV2_API.Models.FieldGrant[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldGrantsController",
+    "Method": "AddGrant",
+    "RelativePath": "api/FieldGrants/AddGrant",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grant",
+        "Type": "E_EstateV2_API.Models.FieldGrant",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldGrantsController",
+    "Method": "DeleteGrant",
+    "RelativePath": "api/FieldGrants/DeleteGrant/{grantId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "grantId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldGrantsController",
+    "Method": "GetFieldGrantByFieldId",
+    "RelativePath": "api/FieldGrants/GetFieldGrantByFieldId/{fieldId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldGrantsController",
+    "Method": "UpdateFieldGrant",
+    "RelativePath": "api/FieldGrants/UpdateFieldGrant",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldGrants",
+        "Type": "E_EstateV2_API.Models.FieldGrant",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "AddFieldInfected",
+    "RelativePath": "api/FieldInfecteds/AddFieldInfected",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldInfected",
+        "Type": "E_EstateV2_API.Models.FieldInfected",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "GetFieldInfected",
+    "RelativePath": "api/FieldInfecteds/GetFieldInfected",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "GetFieldInfectedByEstateId",
+    "RelativePath": "api/FieldInfecteds/GetFieldInfectedByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "GetFieldInfectedById",
+    "RelativePath": "api/FieldInfecteds/GetFieldInfectedById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "UpdateFieldInfected",
+    "RelativePath": "api/FieldInfecteds/UpdateFieldInfected",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldInfected",
+        "Type": "E_EstateV2_API.Models.FieldInfected",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfectedsController",
+    "Method": "UpdateFieldInfectedRemark",
+    "RelativePath": "api/FieldInfecteds/UpdateFieldInfectedRemark",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldInfected",
+        "Type": "E_EstateV2_API.Models.FieldInfected",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfoYearlyController",
+    "Method": "AddFieldInfoYearly",
+    "RelativePath": "api/FieldInfoYearly/AddFieldInfoYearly",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldInfo",
+        "Type": "E_EstateV2_API.Models.FieldInfoYearly[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldInfoYearlyController",
+    "Method": "GetFieldInfoYearly",
+    "RelativePath": "api/FieldInfoYearly/GetFieldInfoYearly/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldProductionsController",
+    "Method": "AddFieldProduction",
+    "RelativePath": "api/FieldProductions/AddFieldProduction",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldProduction",
+        "Type": "E_EstateV2_API.Models.FieldProduction[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldProductionsController",
+    "Method": "GetFieldProductions",
+    "RelativePath": "api/FieldProductions/GetFieldProductions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldProductionsController",
+    "Method": "UpdateProduction",
+    "RelativePath": "api/FieldProductions/UpdateProduction",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldProduction",
+        "Type": "E_EstateV2_API.Models.FieldProduction",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldProductionsController",
+    "Method": "UpdateProductionDraft",
+    "RelativePath": "api/FieldProductions/UpdateProductionDraft",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldProductionDraft",
+        "Type": "E_EstateV2_API.Models.FieldProduction[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "AddClone",
+    "RelativePath": "api/Fields/AddClone",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clone",
+        "Type": "E_EstateV2_API.Models.FieldClone",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "AddField",
+    "RelativePath": "api/Fields/AddField",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "field",
+        "Type": "E_EstateV2_API.Models.Field",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "AddFieldAttachments",
+    "RelativePath": "api/Fields/AddFieldAttachments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "files",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "fieldGrantId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "AddFieldWithDetails",
+    "RelativePath": "api/Fields/AddFieldWithDetails",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "E_EstateV2_API.DTO.DTO_FieldWithDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "DeleteClone",
+    "RelativePath": "api/Fields/DeleteClone/{cloneId}/{fieldId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "fieldId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "DeleteFieldAttachment",
+    "RelativePath": "api/Fields/DeleteFieldAttachment",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetFieldDescStatus",
+    "RelativePath": "api/Fields/GetFieldDescStatus",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetFields",
+    "RelativePath": "api/Fields/GetFields",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetFieldsByEstateId",
+    "RelativePath": "api/Fields/GetFieldsByEstateId/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetOneField",
+    "RelativePath": "api/Fields/GetOneField/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "GetOneFieldHistory",
+    "RelativePath": "api/Fields/GetOneFieldHistory/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "UpdateField",
+    "RelativePath": "api/Fields/UpdateField",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "field",
+        "Type": "E_EstateV2_API.Models.Field",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "UpdateFieldAttachments",
+    "RelativePath": "api/Fields/UpdateFieldAttachments",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "fieldGrantId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "userId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "attachmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "UpdateFieldInfected",
+    "RelativePath": "api/Fields/UpdateFieldInfected",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "field",
+        "Type": "E_EstateV2_API.Models.Field",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldsController",
+    "Method": "UpdateFieldWithDetails",
+    "RelativePath": "api/Fields/UpdateFieldWithDetails",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "E_EstateV2_API.DTO.DTO_FieldWithDetails",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldStatusesController",
+    "Method": "AddFieldStatus",
+    "RelativePath": "api/FieldStatuses/AddFieldStatus",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldStatus",
+        "Type": "E_EstateV2_API.Models.FieldStatus",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldStatusesController",
+    "Method": "GetFieldStatuses",
+    "RelativePath": "api/FieldStatuses/GetFieldStatuses",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FieldStatusesController",
+    "Method": "UpdateFieldStatus",
+    "RelativePath": "api/FieldStatuses/UpdateFieldStatus",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldStatus",
+        "Type": "E_EstateV2_API.Models.FieldStatus",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FinancialYearsController",
+    "Method": "AddFinancialYear",
+    "RelativePath": "api/FinancialYears/AddFinancialYear",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "financialYear",
+        "Type": "E_EstateV2_API.Models.FinancialYear",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FinancialYearsController",
+    "Method": "GetFinancialYears",
+    "RelativePath": "api/FinancialYears/GetFinancialYears",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.FinancialYearsController",
+    "Method": "UpdateFinancialYear",
+    "RelativePath": "api/FinancialYears/UpdateFinancialYear",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "financialYear",
+        "Type": "E_EstateV2_API.Models.FinancialYear",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ForeignLaborsController",
+    "Method": "AddLabor",
+    "RelativePath": "api/ForeignLabors/AddLabor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "labor",
+        "Type": "E_EstateV2_API.Models.LaborInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ForeignLaborsController",
+    "Method": "DeleteLabor",
+    "RelativePath": "api/ForeignLabors/DeleteLabor/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ForeignLaborsController",
+    "Method": "GetLabors",
+    "RelativePath": "api/ForeignLabors/GetLabors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ForeignLaborsController",
+    "Method": "UpdateLabor",
+    "RelativePath": "api/ForeignLabors/UpdateLabor",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "labor",
+        "Type": "E_EstateV2_API.Models.LaborInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.HistoryLogsController",
+    "Method": "AddHistoryLog",
+    "RelativePath": "api/HistoryLogs/AddHistoryLog",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "historyLog",
+        "Type": "E_EstateV2_API.Models.HistoryLog",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "AddLaborByCategory",
+    "RelativePath": "api/LaborInformations/AddLaborByCategory",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "laborByCategory",
+        "Type": "E_EstateV2_API.Models.LaborByCategory[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "AddLaborInfo",
+    "RelativePath": "api/LaborInformations/AddLaborInfo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "laborInfo",
+        "Type": "E_EstateV2_API.Models.LaborInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "AddLaborWithCategories",
+    "RelativePath": "api/LaborInformations/AddLaborWithCategories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "E_EstateV2_API.DTO.DTO_LaborWithCategories",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "DeleteLabor",
+    "RelativePath": "api/LaborInformations/DeleteLabor/{laborInfoId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "laborInfoId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "GetLaborCategory",
+    "RelativePath": "api/LaborInformations/GetLaborCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "GetLaborCategoryByLaborInfoId",
+    "RelativePath": "api/LaborInformations/GetLaborCategoryByLaborInfoId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "GetLaborInfoByEstateId",
+    "RelativePath": "api/LaborInformations/GetLaborInfoByEstateId/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "GetLabors",
+    "RelativePath": "api/LaborInformations/GetLabors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "UpdateLaborCategory",
+    "RelativePath": "api/LaborInformations/UpdateLaborCategory",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "laborByCategory",
+        "Type": "E_EstateV2_API.Models.LaborByCategory[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LaborInformationsController",
+    "Method": "UpdateLaborInfo",
+    "RelativePath": "api/LaborInformations/UpdateLaborInfo",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "laborInfo",
+        "Type": "E_EstateV2_API.Models.LaborInfo",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LocalLaborsController",
+    "Method": "AddLabor",
+    "RelativePath": "api/LocalLabors/AddLabor",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "labor",
+        "Type": "E_EstateV2_API.Models.LocalLabor[]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LocalLaborTypesController",
+    "Method": "AddLaborType",
+    "RelativePath": "api/LocalLaborTypes/AddLaborType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "type",
+        "Type": "E_EstateV2_API.Models.LaborType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LocalLaborTypesController",
+    "Method": "GetLaborTypes",
+    "RelativePath": "api/LocalLaborTypes/GetLaborTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.LocalLaborTypesController",
+    "Method": "UpdateLaborType",
+    "RelativePath": "api/LocalLaborTypes/UpdateLaborType",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "type",
+        "Type": "E_EstateV2_API.Models.LaborType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.MembershipsController",
+    "Method": "AddMembership",
+    "RelativePath": "api/Memberships/AddMembership",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "membershipType",
+        "Type": "E_EstateV2_API.Models.MembershipType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.MembershipsController",
+    "Method": "GetMemberships",
+    "RelativePath": "api/Memberships/GetMemberships",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.MembershipsController",
+    "Method": "UpdateMembership",
+    "RelativePath": "api/Memberships/UpdateMembership",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "membershipType",
+        "Type": "E_EstateV2_API.Models.MembershipType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherCropsController",
+    "Method": "AddOtherCrop",
+    "RelativePath": "api/OtherCrops/AddOtherCrop",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otherCrop",
+        "Type": "E_EstateV2_API.Models.OtherCrop",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherCropsController",
+    "Method": "GetOtherCrop",
+    "RelativePath": "api/OtherCrops/GetOtherCrop",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherCropsController",
+    "Method": "UpdateOtherCrop",
+    "RelativePath": "api/OtherCrops/UpdateOtherCrop",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otherCrop",
+        "Type": "E_EstateV2_API.Models.OtherCrop",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherFieldsController",
+    "Method": "AddOtherField",
+    "RelativePath": "api/OtherFields/AddOtherField",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otherField",
+        "Type": "E_EstateV2_API.Models.OtherField",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherFieldsController",
+    "Method": "CheckFieldName",
+    "RelativePath": "api/OtherFields/CheckFieldName/{fieldName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fieldName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherFieldsController",
+    "Method": "GetOneOtherField",
+    "RelativePath": "api/OtherFields/GetOneOtherField/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherFieldsController",
+    "Method": "GetOtherFields",
+    "RelativePath": "api/OtherFields/GetOtherFields",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OtherFieldsController",
+    "Method": "UpdateOtherField",
+    "RelativePath": "api/OtherFields/UpdateOtherField",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otherField",
+        "Type": "E_EstateV2_API.Models.OtherField",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OwnershipsController",
+    "Method": "AddOwnership",
+    "RelativePath": "api/Ownerships/AddOwnership",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ownership",
+        "Type": "E_EstateV2_API.Models.Ownership",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OwnershipsController",
+    "Method": "GetOwnership",
+    "RelativePath": "api/Ownerships/GetOwnership",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.OwnershipsController",
+    "Method": "UpdateOwnership",
+    "RelativePath": "api/Ownerships/UpdateOwnership",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ownership",
+        "Type": "E_EstateV2_API.Models.Ownership",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.PlantingMaterialsController",
+    "Method": "AddPlantingMaterial",
+    "RelativePath": "api/PlantingMaterials/AddPlantingMaterial",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "plantingMaterial",
+        "Type": "E_EstateV2_API.Models.PlantingMaterial",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.PlantingMaterialsController",
+    "Method": "GetPlantingMaterial",
+    "RelativePath": "api/PlantingMaterials/GetPlantingMaterial",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.PlantingMaterialsController",
+    "Method": "UpdatePlantingMaterial",
+    "RelativePath": "api/PlantingMaterials/UpdatePlantingMaterial",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "plantingMaterial",
+        "Type": "E_EstateV2_API.Models.PlantingMaterial",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ProductComparisonsController",
+    "Method": "AddProductionComparison",
+    "RelativePath": "api/ProductComparisons/AddProductionComparison",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "production",
+        "Type": "E_EstateV2_API.Models.ProductionComparison",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ProductComparisonsController",
+    "Method": "GetProductionComparisons",
+    "RelativePath": "api/ProductComparisons/GetProductionComparisons",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "CurrentProductions",
+    "RelativePath": "api/Reports/CurrentProductions/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllCostInformation",
+    "RelativePath": "api/Reports/GetAllCostInformation",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllLaborInformationCategory",
+    "RelativePath": "api/Reports/GetAllLaborInformationCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllProductivityYearlyByClone",
+    "RelativePath": "api/Reports/GetAllProductivityYearlyByClone",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllRubberSale",
+    "RelativePath": "api/Reports/GetAllRubberSale",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllTapperAndFieldWorker",
+    "RelativePath": "api/Reports/GetAllTapperAndFieldWorker",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAllWorkerShortageEstate",
+    "RelativePath": "api/Reports/GetAllWorkerShortageEstate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAreaByAllClone",
+    "RelativePath": "api/Reports/GetAreaByAllClone",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetAreaByClone",
+    "RelativePath": "api/Reports/GetAreaByClone/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetCostInformation",
+    "RelativePath": "api/Reports/GetCostInformation/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetCurrentField",
+    "RelativePath": "api/Reports/GetCurrentField",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetCurrentTapperAndFieldWorker",
+    "RelativePath": "api/Reports/GetCurrentTapperAndFieldWorker/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetFieldArea",
+    "RelativePath": "api/Reports/GetFieldArea/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetFieldAreaByDate",
+    "RelativePath": "api/Reports/GetFieldAreaByDate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "start",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "end",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetLaborInformationCategory",
+    "RelativePath": "api/Reports/GetLaborInformationCategory/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetProductions",
+    "RelativePath": "api/Reports/GetProductions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetProductivity",
+    "RelativePath": "api/Reports/GetProductivity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetSales",
+    "RelativePath": "api/Reports/GetSales",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetStateFieldAreaById",
+    "RelativePath": "api/Reports/GetStateFieldAreaById/{estateId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estateId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetStocks",
+    "RelativePath": "api/Reports/GetStocks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetTapperAndFieldWorker",
+    "RelativePath": "api/Reports/GetTapperAndFieldWorker/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "GetWorkerShortageEstate",
+    "RelativePath": "api/Reports/GetWorkerShortageEstate/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "ProductionYearly",
+    "RelativePath": "api/Reports/ProductionYearly/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "ProductionYearlyByClone",
+    "RelativePath": "api/Reports/ProductionYearlyByClone/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "ProductionYearlyByField",
+    "RelativePath": "api/Reports/ProductionYearlyByField/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.ReportsController",
+    "Method": "ProductivityYearlyByClone",
+    "RelativePath": "api/Reports/ProductivityYearlyByClone/{year}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "year",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RolesController",
+    "Method": "AddRole",
+    "RelativePath": "api/Roles/AddRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RolesController",
+    "Method": "GetRoles",
+    "RelativePath": "api/Roles/GetRoles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberPurchasesController",
+    "Method": "AddPurchase",
+    "RelativePath": "api/RubberPurchases/AddPurchase",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "E_EstateV2_API.Models.RubberPurchase",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberPurchasesController",
+    "Method": "GetRubberPurchases",
+    "RelativePath": "api/RubberPurchases/GetRubberPurchases",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberPurchasesController",
+    "Method": "UpdateRubberPurchase",
+    "RelativePath": "api/RubberPurchases/UpdateRubberPurchase",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "purchase",
+        "Type": "E_EstateV2_API.Models.RubberPurchase",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesController",
+    "Method": "AddSales",
+    "RelativePath": "api/RubberSales/AddSales",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sales",
+        "Type": "E_EstateV2_API.Models.RubberSales",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesController",
+    "Method": "GetRubberSaleById",
+    "RelativePath": "api/RubberSales/GetRubberSaleById/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesController",
+    "Method": "GetRubberSales",
+    "RelativePath": "api/RubberSales/GetRubberSales",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesController",
+    "Method": "UpdateRubberSales",
+    "RelativePath": "api/RubberSales/UpdateRubberSales",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rubberSales",
+        "Type": "E_EstateV2_API.Models.RubberSales",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "GetRubberSaleByLOC",
+    "RelativePath": "api/RubberSalesIntegration/GetRubberSaleByLOC",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "buyerLicenseNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "GetRubberSaleByLOCUIP",
+    "RelativePath": "api/RubberSalesIntegration/GetRubberSaleByLOCUIP",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "UpdateReceiptNo",
+    "RelativePath": "api/RubberSalesIntegration/UpdateReceiptNo/{LOC}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "rubberSales",
+        "Type": "E_EstateV2_API.Models.RubberSales",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "UpdateReceiptNoRimNiaga",
+    "RelativePath": "api/RubberSalesIntegration/UpdateReceiptNoRimNiaga/{LOC}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "rubberSales",
+        "Type": "E_EstateV2_API.Models.RubberSales",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "UpdateWeightSlipNo",
+    "RelativePath": "api/RubberSalesIntegration/UpdateWeightSlipNo/{LOC}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "LOC",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "rubberSales",
+        "Type": "E_EstateV2_API.Models.RubberSales",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberStocksController",
+    "Method": "AddRubberStock",
+    "RelativePath": "api/RubberStocks/AddRubberStock",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rubberStock",
+        "Type": "E_EstateV2_API.Models.RubberStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberStocksController",
+    "Method": "GetRubberStocks",
+    "RelativePath": "api/RubberStocks/GetRubberStocks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberStocksController",
+    "Method": "UpdateRubberStock",
+    "RelativePath": "api/RubberStocks/UpdateRubberStock",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rubberStock",
+        "Type": "E_EstateV2_API.Models.RubberStock",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.SellersController",
+    "Method": "AddSeller",
+    "RelativePath": "api/Sellers/AddSeller",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "seller",
+        "Type": "E_EstateV2_API.Models.Seller",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.SellersController",
+    "Method": "GetSellers",
+    "RelativePath": "api/Sellers/GetSellers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.SellersController",
+    "Method": "UpdateSeller",
+    "RelativePath": "api/Sellers/UpdateSeller",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "seller",
+        "Type": "E_EstateV2_API.Models.Seller",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.StatesController",
+    "Method": "AddState",
+    "RelativePath": "api/States/AddState",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "state",
+        "Type": "E_EstateV2_API.Models.State",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.StatesController",
+    "Method": "GetStates",
+    "RelativePath": "api/States/GetStates",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.StatesController",
+    "Method": "UpdateState",
+    "RelativePath": "api/States/UpdateState",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "state",
+        "Type": "E_EstateV2_API.Models.State",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TappingSystemsController",
+    "Method": "AddTappingSystem",
+    "RelativePath": "api/TappingSystems/AddTappingSystem",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tappingSystem",
+        "Type": "E_EstateV2_API.Models.TappingSystem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TappingSystemsController",
+    "Method": "GetTappingSystem",
+    "RelativePath": "api/TappingSystems/GetTappingSystem",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TappingSystemsController",
+    "Method": "UpdateTappingSystem",
+    "RelativePath": "api/TappingSystems/UpdateTappingSystem",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tappingSystem",
+        "Type": "E_EstateV2_API.Models.TappingSystem",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TownsController",
+    "Method": "AddTown",
+    "RelativePath": "api/Towns/AddTown",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "town",
+        "Type": "E_EstateV2_API.Models.Town",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TownsController",
+    "Method": "GetTowns",
+    "RelativePath": "api/Towns/GetTowns",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.TownsController",
+    "Method": "UpdateTown",
+    "RelativePath": "api/Towns/UpdateTown",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "town",
+        "Type": "E_EstateV2_API.Models.Town",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.UserActivityLogsController",
+    "Method": "AddActivityLog",
+    "RelativePath": "api/UserActivityLogs/AddActivityLog",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "activityLog",
+        "Type": "E_EstateV2_API.Models.UserActivityLog",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.WorkerShortagesController",
+    "Method": "AddWorkerShortage",
+    "RelativePath": "api/WorkerShortages/AddWorkerShortage",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "workerShortage",
+        "Type": "E_EstateV2_API.Models.WorkerShortage",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.WorkerShortagesController",
+    "Method": "GetWorkerShortage",
+    "RelativePath": "api/WorkerShortages/GetWorkerShortage",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.WorkerShortagesController",
+    "Method": "UpdateWorkerShortage",
+    "RelativePath": "api/WorkerShortages/UpdateWorkerShortage",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "workerShortage",
+        "Type": "E_EstateV2_API.Models.WorkerShortage",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -323,15 +323,17 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
     this.subscriptionService.add(getAllEstate);
   }
 
+
+
   getProduction() {
     this.totalCuplumpDry = 0
     this.totalLatexDry = 0
     this.totalProduction = 0
-    const getProduction = this.reportService.getCurrentCropProduction(this.yearNow.toString())
+    const getProduction = this.reportService.getProductionYearly(this.yearNow.toString())
       .subscribe(
         Response => {
           const estateIdSet = new Set(this.listEstateId);
-          this.productions = Response.filter(worker => estateIdSet.has(worker.estateId));
+          this.productions = Response.filter(production => estateIdSet.has(production.estateId));
           if (this.productions.length === 0) {
             const product: any = {
               cuplumpDry: 0,
@@ -340,15 +342,12 @@ export class HomeAdminLGMComponent implements OnInit, OnDestroy {
               othersDry: 0,
             };
             this.productions.push(product)
-
           }
           else {
-            for (const production of this.productions) {
-              this.totalCuplumpDry += production.cuplumpDry || 0;
-              this.totalLatexDry += production.latexDry || 0;
-              this.totalProduction = this.totalCuplumpDry + this.totalLatexDry
-              this.isLoadingProduction = false
-            }
+            this.totalCuplumpDry = this.productions.reduce((total, item) => total + (item.cuplumpDry || 0), 0);
+            this.totalLatexDry = this.productions.reduce((total, item) => total + (item.latexDry || 0), 0);
+            this.totalProduction = this.totalCuplumpDry + this.totalLatexDry
+            this.isLoadingProduction = false
           }
         }
       )

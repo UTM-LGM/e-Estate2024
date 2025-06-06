@@ -97,7 +97,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
 
   fieldGrants: FieldGrant[] = []
   fieldGrant = {} as FieldGrant
-  abandoned : any []=[]
+  abandoned: any[] = []
 
 
   sortableColumn = [
@@ -139,6 +139,17 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     this.getOtherCrop()
   }
 
+  getField() {
+    const getField = this.fieldService.getFieldByEstateId(this.field.estateId)
+      .subscribe(
+        Response => {
+          this.fields = Response
+        }
+      )
+    this.subscriptionService.add(getField);
+
+  }
+
   getOtherCrop() {
     const getOtherCrop = this.otherCropService.getOtherCrop()
       .subscribe(
@@ -159,7 +170,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
               this.field = Response
               this.getGrant()
               this.getClone()
-
+              this.getField()
               if (this.field.rubberArea == this.field.area) {
                 this.rubberArea = 'yes'
               }
@@ -266,7 +277,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   }
 
   updateField(field: Field) {
-    if (field.rubberArea == null || (field.remark == null && this.rubberArea == 'no')) {
+    if (field.rubberArea == null || (field.remark == null && this.rubberArea == 'no')|| field.fieldName == '') {
       swal.fire({
         text: 'Please fill up the form',
         icon: 'error'
@@ -516,13 +527,13 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
     this.checkAbandoned()
   }
 
-  checkAbandoned(){
-    this.abandoned = this.fieldStatus.filter(x=>x.fieldStatus.toLowerCase().includes('abandoned') || x.fieldStatus.toLowerCase().includes('acquired'))
-    if(this.abandoned.some(category => category.id === this.field.fieldStatusId)){
+  checkAbandoned() {
+    this.abandoned = this.fieldStatus.filter(x => x.fieldStatus.toLowerCase().includes('abandoned') || x.fieldStatus.toLowerCase().includes('acquired'))
+    if (this.abandoned.some(category => category.id === this.field.fieldStatusId)) {
       this.abandonedInput = true
       this.field.dateOpenTapping = null
     }
-    else{
+    else {
       this.abandonedInput = false
     }
   }
@@ -712,7 +723,7 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
         this.selectedFile.forEach(file => {
           this.selectedFiles.push(file); // Ensure each file is added to the array
         });
-        
+
         swal.fire({
           title: 'Done!',
           text: 'Grant successfully added!',
@@ -785,47 +796,47 @@ export class FieldDetailComponent implements OnInit, OnDestroy {
   }
 
 
-  checkTreeInitial(){
-      if(this.field.initialTreeStand > 800){
-        swal.fire({
-          text: 'Initial Tree Stand cannot be more than 800',
-          icon: 'error'
-        });
-        this.field.initialTreeStand = 0
-      }
-        else if (!Number.isInteger(this.field.initialTreeStand)) {
-          swal.fire({
-            text: 'Initial Tree Stand cannot have decimal points',
-            icon: 'error'
-          });
-          this.field.initialTreeStand = Math.floor(this.field.initialTreeStand); // Round down to the nearest integer
-        }
+  checkTreeInitial() {
+    if (this.field.initialTreeStand > 800) {
+      swal.fire({
+        text: 'Initial Tree Stand cannot be more than 800',
+        icon: 'error'
+      });
+      this.field.initialTreeStand = 0
     }
-  
-    checkTreeCurrent(){
-      if(this.field.currentTreeStand > 800){
-        swal.fire({
-          text: 'Current Tree Stand cannot be more than 800',
-          icon: 'error'
-        });
-        this.field.currentTreeStand = 0
-      }
-      else if(this.field.currentTreeStand > this.field.initialTreeStand){
-        swal.fire({
-          text: 'Current Tree Stand cannot be more than Initial Tree Stand',
-          icon: 'error'
-        });
-        this.field.currentTreeStand = 0
-      }
-      else if (!Number.isInteger(this.field.currentTreeStand)) {
-        swal.fire({
-          text: 'Current Tree Stand cannot have decimal points',
-          icon: 'error'
-        });
-        this.field.currentTreeStand = Math.floor(this.field.currentTreeStand); // Round down to the nearest integer
-      }
-      
+    else if (!Number.isInteger(this.field.initialTreeStand)) {
+      swal.fire({
+        text: 'Initial Tree Stand cannot have decimal points',
+        icon: 'error'
+      });
+      this.field.initialTreeStand = Math.floor(this.field.initialTreeStand); // Round down to the nearest integer
     }
+  }
+
+  checkTreeCurrent() {
+    if (this.field.currentTreeStand > 800) {
+      swal.fire({
+        text: 'Current Tree Stand cannot be more than 800',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = 0
+    }
+    else if (this.field.currentTreeStand > this.field.initialTreeStand) {
+      swal.fire({
+        text: 'Current Tree Stand cannot be more than Initial Tree Stand',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = 0
+    }
+    else if (!Number.isInteger(this.field.currentTreeStand)) {
+      swal.fire({
+        text: 'Current Tree Stand cannot have decimal points',
+        icon: 'error'
+      });
+      this.field.currentTreeStand = Math.floor(this.field.currentTreeStand); // Round down to the nearest integer
+    }
+
+  }
 
 
 }

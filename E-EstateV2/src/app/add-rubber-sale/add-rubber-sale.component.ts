@@ -125,88 +125,134 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
 
   }
 
-  addSale() {
-    if (this.rubberSale.drc == 0) {
-      swal.fire({
-        title: 'Error!',
-        text: 'DRC cannot be 0. Please enter a valid percentage.',
-        icon: 'error',
-        showConfirmButton: true
+  async addSale() {
+    const selectedDate = new Date(this.rubberSale.saleDateTime);
+    const today = new Date(this.todayDate);
+    if (selectedDate < today) {
+      const result = await swal.fire({
+        title: 'Warning!',
+        text: 'The selected sale date is in the past. Do you want to proceed?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, continue',
+        cancelButtonText: 'Back'
       });
-    } else if (this.rubberSale.deliveryAgent == '' && this.deliveryAgent == 'yes') {
-      swal.fire({
-        title: 'Error!',
-        text: 'Please enter the delivery agent name',
-        icon: 'error',
-        showConfirmButton: true
-      });
-    } else if (this.rubberSale.rubberType == "0") {
-      swal.fire({
-        title: 'Error!',
-        text: 'Please choose rubber type!',
-        icon: 'error',
-        showConfirmButton: true
-      });
+
+      if (!result.isConfirmed) {
+        return; // Stop here if user clicks "Back"
+      }
     }
-    else if (this.rubberSale.transportPlateNo?.trim()) {
-      // this.isTodayOrFutureDate(this.rubberSale.saleDateTime)
-      // if (this.isTodayOrFutureDate(this.rubberSale.saleDateTime)) {
 
-      // }
+    // Execute the main logic whether confirmed (for past date) or if date is today/future
+    this.processRubberSale();
+  }
 
-      const selectedDate = new Date(this.rubberSale.saleDateTime);
-      const today = new Date(this.todayDate);
+  processRubberSale() {
+    const selectedDate = new Date(this.rubberSale.saleDateTime);
+    const today = new Date(this.todayDate);
+    if (this.rubberSale.saleDateTime) {
+      if (this.rubberSale.drc == 0) {
+        swal.fire({
+          title: 'Error!',
+          text: 'DRC cannot be 0. Please enter a valid percentage.',
+          icon: 'error',
+          showConfirmButton: true
+        });
+        return;
+      }
 
-      this.generateLetterOfConsetnNo();
+      if (this.rubberSale.deliveryAgent == '' && this.deliveryAgent == 'yes') {
+        swal.fire({
+          title: 'Error!',
+          text: 'Please enter the delivery agent name',
+          icon: 'error',
+          showConfirmButton: true
+        });
+        return;
+      }
 
-      this.spinnerService.requestStarted()
-      this.rubberSale.isActive = true
-      this.rubberSale.createdBy = this.sharedService.userId.toString()
-      this.rubberSale.createdDate = new Date()
-      this.rubberSale.estateId = this.sharedService.estateId
-      this.rubberSale.paymentStatusId = 1
-      this.rubberSale.letterOfConsentNo = this.letterOfConsentNo
-      this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
-      this.rubberSale.msnrStatus = this.estateDetail.msnrStatus
-      this.rubberSale.polygonArea = this.estateDetail.polygonArea
-      this.isSubmit = true
-      this.rubberSaleService.addSale(this.rubberSale)
-        .subscribe(
-          {
-            next: (Response) => {
-              swal.fire({
-                title: 'Done!',
-                text: 'Rubber Sale successfully submitted!',
-                icon: 'success',
-                showConfirmButton: false,
-                timer: 1000
-              });
-              this.ngOnInit()
-              this.spinnerService.requestEnded();
-              this.print(Response)
-              this.location.back()
-            },
-            error: (err) => {
-              this.spinnerService.requestEnded();
-              swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Please fill up the form',
-              });
-              this.isSubmit = false
-            }
-          })
-    }
-    else {
-      this.spinnerService.requestEnded();
-      swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please fill up the form',
-      });
-      this.isSubmit = false
+      if (this.rubberSale.rubberType == "0") {
+        swal.fire({
+          title: 'Error!',
+          text: 'Please choose rubber type!',
+          icon: 'error',
+          showConfirmButton: true
+        });
+        return;
+      }
+
+      if (this.rubberSale.transportPlateNo?.trim()) {
+        if (selectedDate >= today) {
+          this.generateLetterOfConsetnNo();
+
+        }
+
+        this.spinnerService.requestStarted();
+        this.rubberSale.isActive = true;
+        this.rubberSale.createdBy = this.sharedService.userId.toString();
+        this.rubberSale.createdDate = new Date();
+        this.rubberSale.estateId = this.sharedService.estateId;
+        this.rubberSale.paymentStatusId = 1;
+        this.rubberSale.letterOfConsentNo = this.letterOfConsentNo;
+        this.rubberSale.transportPlateNo = this.rubberSale.transportPlateNo.replace(/\s+/g, '');
+        this.rubberSale.msnrStatus = this.estateDetail.msnrStatus;
+        this.rubberSale.polygonArea = this.estateDetail.polygonArea;
+        this.isSubmit = true;
+
+        this.rubberSaleService.addSale(this.rubberSale).subscribe({
+          next: (Response) => {
+            swal.fire({
+              title: 'Done!',
+              text: 'Rubber Sale successfully submitted!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.ngOnInit();
+            this.spinnerService.requestEnded();
+            this.print(Response);
+            this.location.back();
+          },
+          error: (err) => {
+            this.spinnerService.requestEnded();
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Please fill up the form',
+            });
+            this.isSubmit = false;
+          }
+        });
+      } else {
+        this.spinnerService.requestEnded();
+        swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please fill up the form',
+        });
+        this.isSubmit = false;
+      }
     }
   }
+
+  formatDriverIc() {
+    if (!this.rubberSale.driverIc) return;
+
+    let ic = this.rubberSale.driverIc.replace(/\D/g, ''); // Remove non-digit characters
+
+    if (ic.length > 6) {
+      ic = ic.slice(0, 6) + '-' + ic.slice(6);
+    }
+    if (ic.length > 9) {
+      ic = ic.slice(0, 9) + '-' + ic.slice(9);
+    }
+    if (ic.length > 14) {
+      ic = ic.slice(0, 14); // Limit max formatted length
+    }
+
+    this.rubberSale.driverIc = ic;
+  }
+
 
 
   back() {

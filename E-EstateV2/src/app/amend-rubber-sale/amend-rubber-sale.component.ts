@@ -89,6 +89,7 @@ export class AmendRubberSaleComponent implements OnInit {
 
 
   status(sale: RubberSale) {
+    
     sale.updatedBy = this.sharedService.userId.toString()
     sale.updatedDate = new Date()
     sale.isActive = !sale.isActive

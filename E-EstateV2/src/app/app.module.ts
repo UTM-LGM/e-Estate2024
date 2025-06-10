@@ -342,19 +342,19 @@ register()
         }
 
         //Staging
-        //   auth: {
-        //     clientId: "91409c1e-06ba-4c11-89b6-6002d296a769", // Application (client) ID from the app registration
-        //     authority:
-        //       "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
-        //      //redirectUri: "https://lgm20.lgm.gov.my/RRIMestet", // This is your redirect URI
-        //      redirectUri: "https://www5.lgm.gov.my/trainingE-estate", // This is your redirect URI
-        //     // redirectUri: "http://localhost:4200", // This is your redirect URI
-        //   },
-        //   cache: {
-        //     cacheLocation: BrowserCacheLocation.LocalStorage,
-        //     //Can be set true or false
-        //     storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
-        //   },
+          // auth: {
+          //   clientId: "91409c1e-06ba-4c11-89b6-6002d296a769", // Application (client) ID from the app registration
+          //   authority:
+          //     "https://login.microsoftonline.com/22f0712b-5def-4d21-a16e-30e5e334541e", // The Azure cloud instance and the app's sign-in audience (tenant ID, common, organizations, or consumers)
+          //    //redirectUri: "https://lgm20.lgm.gov.my/RRIMestet", // This is your redirect URI
+          //    redirectUri: "https://www5.lgm.gov.my/trainingE-estate", // This is your redirect URI
+          //   // redirectUri: "http://localhost:4200", // This is your redirect URI
+          // },
+          // cache: {
+          //   cacheLocation: BrowserCacheLocation.LocalStorage,
+          //   //Can be set true or false
+          //   storeAuthStateInCookie: true, // Set to true for Internet Explorer 11
+          // },
       }),
       {
         interactionType: InteractionType.Redirect, // MSAL Guard Configuration

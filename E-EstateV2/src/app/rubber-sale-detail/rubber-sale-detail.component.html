@@ -84,7 +84,7 @@
       <textarea name="remark" [(ngModel)]="rubberSale.remark" [disabled]="isComplete === 'yes'"></textarea>
     </div>
 
-    <div>
+    <!-- <div>
       <div class="radio-container">
         <label>
           <input type="radio" name="complete" value="yes" [(ngModel)]="isComplete"> Rubber Sale Completed
@@ -125,7 +125,7 @@
           <input type="text" name="amount" [value]="rubberSale.total | number: '1.2-2'" disabled />
         </div><br />
       </div>
-    </div>
+    </div> -->
 
     <div style="margin-top: 10px">
       <button style="float: right" class="btn-update" (click)="update()">

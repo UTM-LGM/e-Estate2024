@@ -27,6 +27,7 @@ namespace E_EstateV2_API.Repository
                 if (!exists)
                 {
                     sales.createdDate = DateTime.Now;
+                    sales.saleDateTime = sales.saleDateTime.Date + DateTime.Now.TimeOfDay;
                     // Add the sales record
                     await _context.rubberSales.AddAsync(sales);
                 }
@@ -60,7 +61,7 @@ namespace E_EstateV2_API.Repository
                 weightSlipNo = x.weightSlipNo,
                 weightSlipNoDate = x.weightSlipNoDate,
                 isActive = x.isActive,
-                buyerId = x.buyerId,
+                buyerId = x.buyerId ?? 0,
                 buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y=>y.licenseNo).FirstOrDefault(),
                 paymentStatusId = x.paymentStatusId,
                 paymentStatus = _context.paymentStatuses.Where(y=>y.id ==  x.paymentStatusId).Select(y=>y.status).FirstOrDefault(),
@@ -93,7 +94,7 @@ namespace E_EstateV2_API.Repository
                 total = x.total,
                 weightSlipNo = x.weightSlipNo,
                 isActive = x.isActive,
-                buyerId = x.buyerId,
+                buyerId = x.buyerId ?? 0,
                 buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.licenseNo).FirstOrDefault(),
                 paymentStatusId = x.paymentStatusId,
                 estateId = x.estateId,
@@ -140,7 +141,7 @@ namespace E_EstateV2_API.Repository
                     createdDate = existingSale.createdDate,
                     updatedBy = existingSale.updatedBy,
                     updatedDate = existingSale.updatedDate,
-                    buyerId = existingSale.buyerId,
+                    buyerId = existingSale.buyerId ?? 0,
                     paymentStatusId = existingSale.paymentStatusId,
                     MSNRStatus = existingSale.MSNRStatus
                 };

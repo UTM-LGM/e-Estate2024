@@ -57,9 +57,9 @@ export class RubberStockDetailComponent implements OnInit {
     private sharedService: SharedService,
     public dialogRef: MatDialogRef<RubberStockComponent>,
     private rubberSaleService: RubberSaleService,
-    private subscriptionService:SubscriptionService,
+    private subscriptionService: SubscriptionService,
     private changeDetectorRef: ChangeDetectorRef,
-    private spinnerService:SpinnerService,
+    private spinnerService: SpinnerService,
     private datePipe: DatePipe,
     private fieldProductionService: FieldProductionService,
   ) {
@@ -81,16 +81,16 @@ export class RubberStockDetailComponent implements OnInit {
   }
 
   calculateWaterDepletion() {
-    if(this.stock.rubberType == 'CUPLUMP'){
+    if (this.stock.rubberType == 'CUPLUMP') {
       const production = this.totalCuplumpDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
-      this.stock.weightLoss = ((production - stock) / production) * 100 
-    }else if(this.stock.rubberType == 'LATEX'){
+      this.stock.weightLoss = ((production - stock) / production) * 100
+    } else if (this.stock.rubberType == 'LATEX') {
       const production = this.totalLatexDry + this.stock.previousStock
       const stock = this.stock.totalSale + this.stock.currentStock
       this.stock.weightLoss = ((production - stock) / production) * 100
     }
-    if(this.stock.weightLoss < 0){
+    if (this.stock.weightLoss < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -99,7 +99,7 @@ export class RubberStockDetailComponent implements OnInit {
       this.stock.weightLoss = 0
       this.stock.currentStock = 0
     }
-    else if(this.stock.weightLoss >= 15){
+    else if (this.stock.weightLoss >= 15) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -116,12 +116,12 @@ export class RubberStockDetailComponent implements OnInit {
         Response => {
           const productions = Response
 
-          this.filterProductions = productions.filter(e =>e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear?.toUpperCase() == this.stock.monthYear)
+          this.filterProductions = productions.filter(e => e.status == "SUBMITTED" && e.estateId == this.sharedService.estateId && e.monthYear?.toUpperCase() == this.stock.monthYear)
 
-          if(this.stock.rubberType == 'CUPLUMP'){
+          if (this.stock.rubberType == 'CUPLUMP') {
             this.TotalCuplump()
           }
-          else if(this.stock.rubberType == 'LATEX'){
+          else if (this.stock.rubberType == 'LATEX') {
             this.TotalLatex()
           }
           // this.calculateTotal()
@@ -148,27 +148,36 @@ export class RubberStockDetailComponent implements OnInit {
 
   update() {
     this.stock.updatedBy = this.sharedService.userId
-    if(this.stock.rubberType == 'CUPLUMP'){
+    if (this.stock.rubberType == 'CUPLUMP') {
       this.stock.totalProduction = this.totalCuplumpDry
     }
-    else if(this.stock.rubberType == 'LATEX'){
+    else if (this.stock.rubberType == 'LATEX') {
       this.stock.totalProduction = this.totalLatexDry
     }
-    this.spinnerService.requestStarted()
-    this.rubberStockService.updateRubberStock(this.stock)
-      .subscribe(
-        Response => {
-          this.spinnerService.requestEnded()
-          swal.fire({
-            title: 'Done!',
-            text: 'Stock successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
-          });
-          this.dialogRef.close()
-        }
-      )
+    if (this.stock.currentStock == 0) {
+      swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Current Stock cannot be below 0',
+      });
+    } else {
+      this.spinnerService.requestStarted()
+      this.rubberStockService.updateRubberStock(this.stock)
+        .subscribe(
+          Response => {
+            this.spinnerService.requestEnded()
+            swal.fire({
+              title: 'Done!',
+              text: 'Stock successfully updated!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000
+            });
+            this.dialogRef.close()
+          }
+        )
+    }
+
   }
 
   getSales() {
@@ -180,7 +189,7 @@ export class RubberStockDetailComponent implements OnInit {
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
 
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() +1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() + 1) && sale.estateId == this.sharedService.estateId && sale.rubberType == this.stock.rubberType && sale.isActive == true;
           });
           this.calculateSale()
           this.calculateWaterDepletion()

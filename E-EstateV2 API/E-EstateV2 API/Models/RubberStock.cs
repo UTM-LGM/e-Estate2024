@@ -14,7 +14,7 @@ namespace E_EstateV2_API.Models
         public float weightLoss { get; set; }
         public float previousStock { get; set; }
         public int estateId { get; set; }
-        public bool isActive { get; set; }
+        //public bool isActive { get; set; }
 
         public string createdBy { get; set; }
         public DateTime createdDate { get; set; }

@@ -1,4 +1,5 @@
-﻿using E_EstateV2_API.Models;
+﻿using E_EstateV2_API.DTO;
+using E_EstateV2_API.Models;
 
 namespace E_EstateV2_API.IRepository
 {
@@ -9,5 +10,6 @@ namespace E_EstateV2_API.IRepository
         Task<object> GetRubberSaleByLOC(string LOC, string buyerLicenseNo);
         Task<RubberSales> UpdateReceiptNoRimNiaga(string LOC, RubberSales rubberSales);
         Task<object> GetRubberSaleByLOCUIP(string LOC);
+        Task<SaleTransactionResponse> GetLastSaleTransaction(string licenseNo);
     }
 }

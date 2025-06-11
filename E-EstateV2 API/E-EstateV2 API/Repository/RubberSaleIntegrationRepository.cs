@@ -1,7 +1,9 @@
 ﻿using E_EstateV2_API.Data;
+using E_EstateV2_API.DTO;
 using E_EstateV2_API.IRepository;
 using E_EstateV2_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Web;
 
 namespace E_EstateV2_API.Repository
@@ -14,12 +16,51 @@ namespace E_EstateV2_API.Repository
             _context = context;
         }
 
+        
+
         public string ConvertEncodedRouteToNormal(string encodedRoute)
         {
             // Decode the URL encoding
             string decodedRoute = HttpUtility.UrlDecode(encodedRoute);
             return decodedRoute;
         }
+
+        public async Task<SaleTransactionResponse> GetLastSaleTransaction(string licenseNo)
+        {
+            string apiUrl = $"https://api02.lgm.gov.my/Api_MyLesen/api/estate/GetDetailByLicense/{licenseNo}";
+            int estateId = 0;
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync(apiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResponse = await response.Content.ReadAsStringAsync();
+                    dynamic nurseryData = JsonConvert.DeserializeObject<dynamic>(apiResponse);
+
+                    // Safely get premiseId
+                    estateId = nurseryData?.premiseId != null ? (int)nurseryData.premiseId : 0;
+                }
+            }
+
+            DateTime cutoffDate = DateTime.Now.AddMonths(-4);
+
+            var salesTransactions = await _context.rubberSales
+                .Where(x => x.estateId == estateId && x.saleDateTime >= cutoffDate)
+                .OrderBy(x => x.saleDateTime)
+                .Select(x => new SaleTransactionDto
+                {
+                    TransactionDate = x.saleDateTime
+                })
+                .ToListAsync();
+
+            return new SaleTransactionResponse
+            {
+                TransactionCount = salesTransactions.Count,
+                Transactions = salesTransactions
+            };
+        }
+
 
         public async Task<object> GetRubberSaleByLOC(string LOC, string buyerLicenseNo)
         {

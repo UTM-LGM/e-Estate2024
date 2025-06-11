@@ -9,5 +9,6 @@ namespace E_EstateV2_API.IRepository
         Task<List<DTO_RubberSale>> GetRubberSales();
         Task<RubberSales> UpdateRubberSale(RubberSales sales);
         Task<DTO_RubberSale> GetRubberSaleById(int id);
+        
     }
 }

@@ -3192,6 +3192,22 @@
   },
   {
     "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
+    "Method": "GetSaleLastTransaction",
+    "RelativePath": "api/RubberSalesIntegration/GetSaleLastTransaction",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "licenseNo",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "E_EstateV2_API.Controllers.RubberSalesIntegrationController",
     "Method": "UpdateReceiptNo",
     "RelativePath": "api/RubberSalesIntegration/UpdateReceiptNo/{LOC}",
     "HttpMethod": "PUT",

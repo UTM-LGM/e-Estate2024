@@ -48,6 +48,7 @@ C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estat
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.OpenApi.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Microsoft.Win32.SystemEvents.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\MimeKit.dll
+C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\sabariah\OneDrive - LEMBAGA GETAH MALAYSIA\Desktop\e-Estate2024\e-Estate2024\E-EstateV2 API\E-EstateV2 API\obj\Release\net6.0\PubTmp\Out\Swashbuckle.AspNetCore.SwaggerUI.dll

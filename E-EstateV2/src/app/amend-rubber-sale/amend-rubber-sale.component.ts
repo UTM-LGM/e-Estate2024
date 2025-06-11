@@ -89,25 +89,55 @@ export class AmendRubberSaleComponent implements OnInit {
 
 
   status(sale: RubberSale) {
-    
-    sale.updatedBy = this.sharedService.userId.toString()
-    sale.updatedDate = new Date()
-    sale.isActive = !sale.isActive
-    const { paymentStatus, ...obj } = sale
-    const filteredSale = obj
-    this.rubberSaleService.updateSale(filteredSale)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Rubber Sale successfully updated!',
-            icon: 'success',
-            showConfirmButton: true
-          });
-          this.getSales()
-        }
-      )
-  }
+    const fixedText = `Estate Sale deactivated by LGMAdmin`;
+    swal.fire({
+      title: 'Deactive Estate Sale',
+      html: `
+              <div style="text-align: left;">
+                <label style="font-weight: bold; font-size:17px !important">
+                  <span style="color:red;">${fixedText}</span>
+                </label><br/><br/>
+                <textarea style="width:82%" id="remark-textarea" class="swal2-textarea" placeholder="Enter additional remark here..."></textarea>
+              </div>
+            `,
+      showCancelButton: true,
+      showConfirmButton: true,
+      cancelButtonText: 'Back',
+      confirmButtonText: 'Agree',
+      customClass: {
+        title: 'swal-title',
+        inputLabel: 'swal-title',
+        input: 'swal-title'
+      },
+      preConfirm: () => {
+        const userRemark = (document.getElementById('remark-textarea') as HTMLTextAreaElement)?.value || '';
+        const finalRemark = `${fixedText}; ${userRemark}`.trim();
 
-
+        return {
+          remark: finalRemark,
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sale.updatedBy = this.sharedService.userId.toString()
+        sale.updatedDate = new Date()
+        sale.isActive = !sale.isActive
+        sale.remark = result.value.remark
+        const { paymentStatus, ...obj } = sale
+        const filteredSale = obj
+        this.rubberSaleService.updateSale(filteredSale)
+          .subscribe(
+            Response => {
+              swal.fire({
+                title: 'Done!',
+                text: 'Rubber Sale successfully updated!',
+                icon: 'success',
+                showConfirmButton: true
+              });
+              this.getSales()
+            }
+          )
+      }
+    })
+}
 }

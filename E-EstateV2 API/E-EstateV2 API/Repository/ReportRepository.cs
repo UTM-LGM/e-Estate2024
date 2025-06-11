@@ -1060,7 +1060,7 @@ namespace E_EstateV2_API.Repository
                 total = x.total,
                 weightSlipNo = x.weightSlipNo,
                 isActive = x.isActive,
-                buyerId = x.buyerId,
+                buyerId = x.buyerId ?? 0,
                 buyerLicenseNo = _context.buyers.Where(y => y.Id == x.buyerId).Select(y => y.licenseNo).FirstOrDefault(),
                 paymentStatusId = x.paymentStatusId,
                 paymentStatus = _context.paymentStatuses.Where(y => y.id == x.paymentStatusId).Select(y => y.status).FirstOrDefault(),

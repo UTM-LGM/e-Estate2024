@@ -94,7 +94,6 @@ export class LaborInfoMonthlyComponent implements OnInit, OnDestroy {
           const labors = Response
           const previousMonth = this.getPreviousMonth(this.date);
           this.previousFilterLabors = labors.filter(e => e.monthYear == previousMonth.toUpperCase() && e.estateId == this.sharedService.estateId && e.countryId == this.labor.countryId)
-          console.log(this.previousFilterLabors, labors)
           if(this.previousFilterLabors.length > 0){
             this.previousWorker = true
             this.radioSelected = "yes"

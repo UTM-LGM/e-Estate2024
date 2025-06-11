@@ -101,38 +101,85 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
   getSales() {
     setTimeout(() => {
       const getSale = this.rubberSaleService.getSale()
-        .subscribe(
-          Response => {
-            const rubberSales = Response
-            this.filterSales = rubberSales.filter((e) => e.estateId == this.sharedService.estateId 
-            && e.isActive == true 
-            && e.paymentStatusId != 3 
-            && e.letterOfConsentNo != '')
-            this.isLoading = false
-          })
-      this.subscriptionService.add(getSale);
+        .subscribe(Response => {
+          const rubberSales = Response;
+          this.filterSales = rubberSales.filter((e) =>
+            e.estateId == this.sharedService.estateId &&
+            e.isActive == true &&
+            e.paymentStatusId != 3 &&
+            e.letterOfConsentNo != ''
+          );
 
-    }, 2000)
-  }
+          this.isLoading = false;
+          const today = new Date();
+          const firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          const lastDayOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
 
-  status(sale: RubberSale) {
-    sale.updatedBy = this.sharedService.userId.toString()
-    sale.updatedDate = new Date()
-    sale.isActive = !sale.isActive
-    this.rubberSaleService.updateSale(sale)
-      .subscribe(
-        Response => {
-          swal.fire({
-            title: 'Done!',
-            text: 'Sale Status successfully updated!',
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1000
+          const lastMonthSale = this.filterSales.filter(e => {
+            const saleDate = new Date(e.saleDateTime);
+            return saleDate >= firstDayOfLastMonth && saleDate <= lastDayOfLastMonth;
           });
-          this.ngOnInit()
-        }
-      );
+
+        //   if (lastMonthSale.length <= 0) {
+        //     const formattedMonth = lastDayOfLastMonth.toLocaleString('en-US', {
+        //       month: 'long',
+        //       year: 'numeric'
+        //     });
+        //     const fixedText = `No sale for month: ${formattedMonth}`;
+
+        //     swal.fire({
+        //       title: 'Declare last month sale',
+        //       html: `
+        //       <div style="text-align: left;">
+        //         <label style="font-weight: bold; font-size:17px !important">
+        //           <span style="color:red;">${fixedText}</span>
+        //         </label><br/><br/>
+        //         <textarea style="width:82%" id="remark-textarea" class="swal2-textarea" placeholder="Enter additional remark here..."></textarea>
+        //       </div>
+        //     `,
+        //       showCancelButton: true,
+        //       showConfirmButton: true,
+        //       cancelButtonText: 'Back',
+        //       confirmButtonText: 'Agree',
+        //       customClass: {
+        //         title: 'swal-title',
+        //         inputLabel: 'swal-title',
+        //         input: 'swal-title'
+        //       },
+        //       preConfirm: () => {
+        //         const userRemark = (document.getElementById('remark-textarea') as HTMLTextAreaElement)?.value || '';
+        //         const finalRemark = `${fixedText}; ${userRemark}`.trim();
+
+        //         return {
+        //           id: 0,
+        //           estateId: this.sharedService.estateId,
+        //           saleDateTime: lastDayOfLastMonth.toISOString(),
+        //           remark: finalRemark,
+        //           isActive: true,
+        //           updatedBy: this.sharedService.userId.toString(),
+        //           updatedDate: new Date().toISOString(),
+        //           buyerId: null,
+        //           paymentStatusId:1
+        //         };
+        //       }
+        //     }).then((result) => {
+        //       if (result.isConfirmed) {
+        //         this.rubberSaleService.addSale(result.value)
+        //           .subscribe(
+        //             Response => {
+        //               console.log('Rubber sale declared:', Response);
+        //               this.ngOnInit(); // ✅ Refresh data
+        //             }
+        //           );
+        //       }
+        //     });
+        //   }
+        });
+
+      this.subscriptionService.add(getSale);
+    }, 2000);
   }
+
 
   openDialog(sale: RubberSale): void {
     const dialogRef = this.dialog.open(RubberSaleDetailComponent, {

@@ -18,6 +18,13 @@ namespace E_EstateV2_API.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetSaleLastTransaction([FromQuery] string licenseNo)
+        {
+            var transaction = await _rubberSaleIntegrationRepository.GetLastSaleTransaction(licenseNo);
+            return Ok(transaction);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetRubberSaleByLOC(string LOC, string buyerLicenseNo)
         {
             var rubberSale = await _rubberSaleIntegrationRepository.GetRubberSaleByLOC(LOC, buyerLicenseNo);

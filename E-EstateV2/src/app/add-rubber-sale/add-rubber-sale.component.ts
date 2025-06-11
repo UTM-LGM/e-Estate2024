@@ -184,7 +184,6 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
       if (this.rubberSale.transportPlateNo?.trim()) {
         if (selectedDate >= today) {
           this.generateLetterOfConsetnNo();
-
         }
 
         this.spinnerService.requestStarted();
@@ -210,7 +209,9 @@ export class AddRubberSaleComponent implements OnInit, OnDestroy {
             });
             this.ngOnInit();
             this.spinnerService.requestEnded();
-            this.print(Response);
+            if (Response.letterOfConsentNo != '') {
+              this.print(Response);
+            }
             this.location.back();
           },
           error: (err) => {

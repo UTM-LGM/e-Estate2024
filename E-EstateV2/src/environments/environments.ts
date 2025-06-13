@@ -1,7 +1,7 @@
-export const environment = {
-    production: false,
-    apiUrl: 'https://localhost:44381/api'
-  };
+// export const environment = {
+//     production: false,
+//     apiUrl: 'https://localhost:44381/api'
+//   };
 
 export const MyLesenEnv = {
   production:false,
@@ -19,10 +19,10 @@ export const RRIMGeoRubber = {
 //   apiUrl: 'https://lgm20.lgm.gov.my/RRIMestetApi/api'
 // };
 
-// export const environment = {
-//   production:true,
-//   apiUrl: 'https://api02.lgm.gov.my/RRIMestetApi/api'
-// }
+export const environment = {
+  production:true,
+  apiUrl: 'https://api02.lgm.gov.my/RRIMestetApi/api'
+}
 
 // export const environment = {
 //   production:false,

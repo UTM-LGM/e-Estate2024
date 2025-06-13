@@ -95,14 +95,12 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
     this.getDate()
     this.monthFormatted = this.datePipe.transform(this.previousMonth, 'yyyy-MM');
     this.selectedMonth = this.datePipe.transform(this.monthFormatted, 'MMM-yyyy');
-
   }
 
   chooseRubberType() {
     this.stock.previousStock = 0
     this.getSales()
     this.getStock()
-
   }
 
   calculateStockCuplump() {
@@ -119,13 +117,20 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
   }
 
   getStock() {
-    console.log(this.selectedMonth)
+    const selectedDate = new Date(`01-${this.selectedMonth}`);
+    selectedDate.setMonth(selectedDate.getMonth() - 1);
+
+    const previousMonth = selectedDate.toLocaleString('default', { month: 'short' }).toUpperCase();
+    const previousYear = selectedDate.getFullYear();
+
+    const previousMonthFormatted = `${previousMonth}-${previousYear}`; 
+
     const getStock = this.rubberStockService.getRubberStock()
       .subscribe(
         Response => {
           this.allRubberStock = Response
-          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == this.selectedMonth 
-            && e.isActive == true && e.rubberType == this.stock.rubberType)
+          this.rubberStocks = Response.filter(e => e.estateId == this.sharedService.estateId && e.monthYear == previousMonthFormatted
+            &&  e.rubberType == this.stock.rubberType)
           if (this.rubberStocks.length != 0) {
             let latestItem = this.rubberStocks[this.rubberStocks.length - 1];
             this.stock.previousStock = latestItem.currentStock;
@@ -190,7 +195,7 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
         title: 'Error',
         text: 'Please fill up the form',
       });
-    } else if(this.stock.currentStock < 0){
+    } else if (this.stock.currentStock < 0) {
       swal.fire({
         icon: 'error',
         title: 'Error',
@@ -326,8 +331,8 @@ export class AddRubberStockComponent implements OnInit, OnDestroy {
           const date = new Date(this.selectedMonth)
           this.filterSales = rubberSales.filter(sale => {
             const saleDate = new Date(sale.saleDateTime);
-            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() + 1) && sale.estateId == this.sharedService.estateId 
-            && sale.rubberType == this.stock.rubberType && sale.isActive == true;
+            return saleDate.getFullYear() == date.getFullYear() && (saleDate.getMonth() + 1) == (date.getMonth() + 1) && sale.estateId == this.sharedService.estateId
+              && sale.rubberType == this.stock.rubberType && sale.isActive == true;
           });
 
           this.calculateSale()

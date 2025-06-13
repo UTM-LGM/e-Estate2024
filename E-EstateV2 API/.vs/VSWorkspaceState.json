@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\E-EstateV2 API"
+    "\\E-EstateV2 API",
+    "\\E-EstateV2 API\\Migrations",
+    "\\E-EstateV2 API\\Models"
   ],
   "SelectedNode": "\\E-EstateV2 API.sln",
   "PreviewInSolutionExplorer": false

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RubberSaleService } from '../_services/rubber-sale.service';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-generate-receipt',
@@ -21,10 +22,10 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private rubberSaleService: RubberSaleService,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
-
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService
   ) { }
-  
+
   ngOnInit(): void {
     this.getRubberSale()
     this.dateNow = new Date()
@@ -32,6 +33,7 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
   }
 
   getRubberSale() {
+    this.spinnerService.requestStarted()
     this.route.params.subscribe((routerParams) => {
       if (routerParams['id'] != null) {
         const getRubberSale = this.rubberSaleService.getRubberSaleById(routerParams['id'])
@@ -39,10 +41,10 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
             Response => {
               this.rubberSale = Response
               this.getEstateDetail()
-              this.getBuyerDetail()
+
             }
           )
-      this.subscriptionService.add(getRubberSale);
+        this.subscriptionService.add(getRubberSale);
 
       }
     })
@@ -53,9 +55,11 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.estate = Response
+          this.getBuyerDetail()
+
         }
       )
-      this.subscriptionService.add(getEstateDetail);
+    this.subscriptionService.add(getEstateDetail);
 
   }
 
@@ -64,12 +68,13 @@ export class GenerateReceiptComponent implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.buyer = Response
+          this.spinnerService.requestEnded()
         }
       )
-      this.subscriptionService.add(getLicenseNo);
+    this.subscriptionService.add(getLicenseNo);
 
   }
-  
+
   print() {
     window.print()
   }

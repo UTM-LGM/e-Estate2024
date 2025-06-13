@@ -175,7 +175,7 @@ export class EditEstateDetailComponent implements OnInit, OnDestroy {
           title: 'PDPA Consent Required',
           html: `
                 <div style="position: relative; height: 348px; overflow: hidden;">
-                  <iframe src="../assets/PDPA-LGM.pdf" 
+                  <iframe src="assets/PDPA-LGM.pdf" 
                           width="100%" 
                           height="100%" 
                           style="border: none; pointer-events: auto;"></iframe>

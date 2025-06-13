@@ -128,13 +128,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.filteredResults = this.filterProductions.filter(prod => {
       const sale = this.filterSales.find(s => s.saleMonth === prod.monthYear);
       const stock = stockMap.get(prod.monthYear);
-
       // Ensure sale exists and rubberDry < saleDry
       if (sale && prod.rubberDry < sale.saleDry) {
-        // Check if stock is 0 or not listed
-        if (!stock || (stock.currentStock == 0 && stock.previousStock == 0)) {
-          return true;
-        }
+        return true;
       }
       return false;
     });
@@ -178,7 +174,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   updateBadge() {
     const badgeCount = (this.showAlertField ? 1 : 0) + (this.showAlertProduction ? 1 : 0) + (this.warningProductionDrafted ? 1 : 0) + (this.warningCostDrafted ? 1 : 0)
-      + (this.warningGrantTitle ? 1 : 0) + this.warningStock + (this.warningContact ? 1: 0)
+      + (this.warningGrantTitle ? 1 : 0) + this.warningStock + (this.warningContact ? 1 : 0)
     this.badgeService.updateBadgeCount(badgeCount)
     if (badgeCount === 0) {
       this.showEmptyMessage = true

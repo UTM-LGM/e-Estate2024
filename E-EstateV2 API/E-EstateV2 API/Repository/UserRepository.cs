@@ -258,11 +258,11 @@ namespace E_EstateV2_API.Repository
                     claims.Add(new Claim("estateId", estateID));
                     claims.Add(new Claim("companyId", companyID));
 
-                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, baseUrls["RRIMestet"]));
-                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, baseUrls["RRIMestetApi"]));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Iss, baseUrls["RRIMestet"]));
+                    claims.Add(new Claim(JwtRegisteredClaimNames.Aud, baseUrls["RRIMestetApi"]));
 
-                    claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://lgm20.lgm.gov.my/RRIMestet"));
-                    claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://lgm20.lgm.gov.my/RRIMestetApi"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Iss, "https://lgm20.lgm.gov.my/RRIMestet"));
+                    //claims.Add(new Claim(JwtRegisteredClaimNames.Aud, "https://lgm20.lgm.gov.my/RRIMestetApi"));
 
                 }
 

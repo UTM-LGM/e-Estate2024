@@ -107,18 +107,18 @@ export class RubberSalesComponent implements OnInit, OnDestroy {
             e.estateId == this.sharedService.estateId &&
             e.isActive == true &&
             e.paymentStatusId != 3 &&
-            e.letterOfConsentNo != ''
+            (e.letterOfConsentNo != '' && e.letterOfConsentNo != null) 
           );
 
           this.isLoading = false;
-          const today = new Date();
-          const firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-          const lastDayOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        //   const today = new Date();
+        //   const firstDayOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        //   const lastDayOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
 
-          const lastMonthSale = this.filterSales.filter(e => {
-            const saleDate = new Date(e.saleDateTime);
-            return saleDate >= firstDayOfLastMonth && saleDate <= lastDayOfLastMonth;
-          });
+        //   const lastMonthSale = this.filterSales.filter(e => {
+        //     const saleDate = new Date(e.saleDateTime);
+        //     return saleDate >= firstDayOfLastMonth && saleDate <= lastDayOfLastMonth;
+        //   });
 
         //   if (lastMonthSale.length <= 0) {
         //     const formattedMonth = lastDayOfLastMonth.toLocaleString('en-US', {

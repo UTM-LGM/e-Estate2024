@@ -49,7 +49,7 @@
       <label>Previous Month End Stock <span style="color: red;">*</span> :</label>
       <input type="number" name="previousStock" [(ngModel)]="stock.previousStock" [disabled]="isPreviousStock" />
       <label>Month End Stock <span style="color: red;">*</span> :</label>
-      <input type="number" name="currentStock" (change)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" />
+      <input type="number" name="currentStock" (change)="calculateWaterDepletion()" [(ngModel)]="stock.currentStock" step="0.01" />
     </div>
     <div>
       <div style="columns: 2;">

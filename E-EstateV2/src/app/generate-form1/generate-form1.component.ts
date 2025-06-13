@@ -4,6 +4,7 @@ import { RubberSaleService } from '../_services/rubber-sale.service';
 import { RubberSale } from '../_interface/rubberSale';
 import { MyLesenIntegrationService } from '../_services/my-lesen-integration.service';
 import { SubscriptionService } from '../_services/subscription.service';
+import { SpinnerService } from '../_services/spinner.service';
 
 @Component({
   selector: 'app-generate-form1',
@@ -22,7 +23,8 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private rubberSaleService: RubberSaleService,
     private myLesenService: MyLesenIntegrationService,
-    private subscriptionService:SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private spinnerService: SpinnerService
 
   ) { }
 
@@ -32,6 +34,7 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
   }
 
   getRubberSale() {
+    this.spinnerService.requestStarted()
     this.route.params.subscribe((routerParams) => {
       if (routerParams['id'] != null) {
         const getRubberSale = this.rubberSaleService.getRubberSaleById(routerParams['id'])
@@ -43,10 +46,9 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
                 buyerid: this.rubberSale.buyerLicenseNo
               })
               this.getEstateDetail()
-              this.getBuyerDetail()
             }
           )
-      this.subscriptionService.add(getRubberSale);
+        this.subscriptionService.add(getRubberSale);
 
       }
     })
@@ -57,9 +59,11 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.estate = Response
+          this.getBuyerDetail()
+
         }
       )
-      this.subscriptionService.add(getEstateDetail);
+    this.subscriptionService.add(getEstateDetail);
 
   }
 
@@ -68,9 +72,11 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
       .subscribe(
         Response => {
           this.buyer = Response
+          this.spinnerService.requestEnded()
+
         }
       )
-      this.subscriptionService.add(getLicenseNo);
+    this.subscriptionService.add(getLicenseNo);
 
   }
 
@@ -81,5 +87,5 @@ export class GenerateForm1Component implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionService.unsubscribeAll();
   }
-  
+
 }
